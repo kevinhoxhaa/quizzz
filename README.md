@@ -12,6 +12,8 @@ Add your own name (do not add the names for others!) to the section below.
 |---|---|---|
 | ![](https://eu.ui-avatars.com/api/?name=OOPP&length=4&size=50&color=DDD&background=777&font-size=0.325) | Your Name Here | Y.NameHere@student.tudelft.nl |
 | <img src="https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/4977/avatar.png?width=90" width="50" height="50"> | Boris Goranov | B.G.Goranov@student.tudelft.nl |
+| <img src="https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/4885/avatar.png?width=400" width="50" height="50"> | Pál Patrik Varga | VargaPalPatrik@student.tudelft.nl |
+| <img src = "https://cutewallpaper.org/21/starcraft-zerg-wallpaper/Download-1920x1080-HD-Wallpaper-starcraft-2-face-kerrigan-.jpg" width="50" height="50"> | Calin | Georgescu-2@student.tudelft.nl | 
 | <img src="https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/4843/avatar.png?width=400" width="50" height="50"> | Kevin Hoxha | K.Hoxha@student.tudelft.nl |
 
 <!-- Instructions (remove once assignment has been completed -->
