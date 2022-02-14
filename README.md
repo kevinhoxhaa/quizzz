@@ -15,7 +15,7 @@ Add your own name (do not add the names for others!) to the section below.
 | <img src="https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/4885/avatar.png?width=400" width="50" height="50"> | Pál Patrik Varga | VargaPalPatrik@student.tudelft.nl |
 | <img src = "https://cutewallpaper.org/21/starcraft-zerg-wallpaper/Download-1920x1080-HD-Wallpaper-starcraft-2-face-kerrigan-.jpg" width="50" height="50"> | Calin | Georgescu-2@student.tudelft.nl | 
 | <img src="https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/4843/avatar.png?width=400" width="50" height="50"> | Kevin Hoxha | K.Hoxha@student.tudelft.nl |
-
+| <img src="https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/5036/avatar.png?width=400" width="50" height="50"> | Alican Ekşi | A.Eksi@student.tudelft.nl |
 <!-- Instructions (remove once assignment has been completed -->
 <!-- - Add (only!) your own name to the table above (use Markdown formatting) -->
 <!-- - Mention your *student* email address -->
