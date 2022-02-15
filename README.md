@@ -10,7 +10,7 @@ Add your own name (do not add the names for others!) to the section below.
 
 | Profile Picture | Name | Email |
 |---|---|---|
-| <img src="https://secure.gravatar.com/avatar/58348b1be1a0225bbfc22f2bdb9f091a?s=800&d=identicon" width="50" height="50"> | Bink Boëtius| B.J.Boetius@student.tudelft.nl |
+| <img src="https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/4912/avatar.png?width=400" width="50" height="50"> | Bink Boëtius| B.J.Boetius@student.tudelft.nl |
 | <img src="https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/4977/avatar.png?width=90" width="50" height="50"> | Boris Goranov | B.G.Goranov@student.tudelft.nl |
 | <img src="https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/4885/avatar.png?width=400" width="50" height="50"> | Pál Patrik Varga | VargaPalPatrik@student.tudelft.nl |
 | <img src = "https://cutewallpaper.org/21/starcraft-zerg-wallpaper/Download-1920x1080-HD-Wallpaper-starcraft-2-face-kerrigan-.jpg" width="50" height="50"> | Calin | Georgescu-2@student.tudelft.nl | 
