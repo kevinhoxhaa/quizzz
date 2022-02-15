@@ -14,7 +14,7 @@
 
 | Must have | Should have | Could have | Won’t have |
 | --- | --- | --- | --- |
-| As a user in a waiting room, I want to be able to start a multiplayer game so that I can play quizz with my friends. | As a user in a waiting room, I want to be able to see how many players there are in the waiting room so that I can determine how many players I will be playing with. | As a user in a waiting room, I want to be able to see an interactive text animation, so that the page does not look so static. | As a player, I want to be able to chat with other players in my room during the waiting time in the waiting page, so that there is internal communication within the game. |
+| As a user in a waiting room, I want to be able to start a multiplayer game so that I can play quizz with my friends. | As a user in a waiting room, I want to be able to see how many players there are in the waiting room so that I can determine how many players I will be playing with. | As a user in a waiting room, I want to be able to see an interactive text animation, so that the page does not look so static. | As a user in a waiting room, I want to be able to chat with other users in my room during the waiting time in the waiting page, so that there is internal communication within the game. |
 
 ## Question page
 
