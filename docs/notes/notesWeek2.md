@@ -66,11 +66,11 @@ _Give an overview of the division of tasks. What is expected from whom and when?
 
 | Action items | Who is responsible | Deadline |
 | --- | --- | --- |
-| _Plan division of issues_ | _Everyone_ | _22.02_ |
-| _Check out Spring and JavaFX_ | _Everyone_ | _22.02_ |
-| _Prepare to be chair next week_ | _Kevin_ | _20.02_ |
-| _Revise the backlog_ | _Boris_ | _18.02_ |
-| _Prepare to be secretary next week_ | _Calin_ | _20.02_|
+| _Plan division of issues_ | _Everyone_ | _22.02.2022_ |
+| _Check out Spring and JavaFX_ | _Everyone_ | _22.02.2022_ |
+| _Prepare to be chair next week_ | _Kevin_ | _20.02.2022_ |
+| _Revise the backlog_ | _Boris_ | _18.02.2022_ |
+| _Prepare to be secretary next week_ | _Calin_ | _20.02.2022_|
 
 ### Feedback round 
 
