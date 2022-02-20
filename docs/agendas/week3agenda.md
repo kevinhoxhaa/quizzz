@@ -5,7 +5,7 @@ Date:           22.02.2022\
 Location:       Drebbelweg\
 Chair:          Kevin Hoxha\
 Note taker:     Calin Georgescu\
-Attendees:      Bink Boëtius, Alican Ekşi, Calin Georgescu, Boris Goranov, Kevin Hoxha, Varga Pál Patrik/
+Attendees:      Bink Boëtius, Alican Ekşi, Calin Georgescu, Boris Goranov, Kevin Hoxha, Varga Pál Patrik, Nada Mouman/
 
 ## Opening by Chair 13.45
 
