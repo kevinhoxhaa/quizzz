@@ -13,11 +13,13 @@ Attendees:      Bink Boëtius, Alican Ekşi, Calin Georgescu, Boris Goranov, Kev
 
 ## Approval of the agenda
 
-* Checking progress of HCI Assignment  <em><b>15.50 - 15.55</b></em>
-* Discussion over JavaFX and Spring  <em><b>15.55 - 16.00</b></em>
-* Assignment 3B  <em><b> 16.00 - 16.10 </b></em>
-* Information Literacy Assignment <em><b>16.10 - 16.15</b></em>
-* Activities for the Activity Bank <em><b>16.15 - 16.25</b></em>
+* Code of Conduct feedback <em><b>15.50 - 15.55</b></em>
+* Backlog feedback <em><b>15.55 - 16.00</b></em>
+* API Endpoints  <em><b>16.00 - 16.05</b></em>
+* Good GitLab Practices  <em><b>16.05 - 16.10</b></em>
+* Checking progress of HCI Assignment  <em><b>16.10 - 16.15</b></em>
+* Assignment 3B  <em><b> 16.15 - 16.20 </b></em>
+* Activities for the Activity Bank <em><b>16.20 - 16.25</b></em>
 * Programming part <em><b>16.25 - 16.35</b></em>
 * Summary of the Important Points <em><b>16.35 - 16.40</b></em>
 * Feedback Round <em><b>16.40 - 16.45</b></em>
@@ -25,18 +27,23 @@ Attendees:      Bink Boëtius, Alican Ekşi, Calin Georgescu, Boris Goranov, Kev
 
 ## Points of action
 
+- Code of Conduct Feedback
+  - Getting feedback from the TA on the Code of Conduct
+  - Reflecting on our Code of Conduct after the feedback
+- Backlog feedback
+  - Getting feedback from the TA on the feedback
+  - Reflecting on our backlog after the feedback
+- API Endpoints
+  - Discussion about API Endpoints
+- Good GitLab Practices
+  - Discussion about what are considered good and bad practices on GitLab
+  - Ensuring that everyone is informed and will follow these good practices
 - Checking progress of HCI Assignment
     - Discussing the feedback of other groups to our GUI
     - Reflection on other groups' GUI design
-- Discussion over JavaFX and Spring
-    - Ensuring everyone followed the tutorial setup.
-    - Talking about extra resources to help us get started with JavaFX and Spring.
 - Assignment 3B
     - Discussion over the assignment
     - Deciding on some questions for the Q&A
-- Information Literacy Assignment
-    - Ensuring everyone is enrolled for the Information Literacy assignment.
-    - Checking everybody's progress on the assignment.
 - Activities for the Activity Bank
     - Ensuring everybody knows the required format for the activities.
     - Brainstorming on some activities
