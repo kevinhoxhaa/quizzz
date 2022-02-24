@@ -30,17 +30,31 @@ public class MainCtrl {
     private AddQuoteCtrl addCtrl;
     private Scene add;
 
+    private HomeCtrl homeCtrl;
+    private Scene home;
+
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add) {
+            Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home) {
         this.primaryStage = primaryStage;
+        primaryStage.setMinHeight(512.0);
+        primaryStage.setMinWidth(768.0);
+
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
 
         this.addCtrl = add.getKey();
         this.add = new Scene(add.getValue());
 
-        showOverview();
+        this.homeCtrl = home.getKey();
+        this.home = new Scene(home.getValue());
+
+        showHome();
         primaryStage.show();
+    }
+
+    public void showHome() {
+        primaryStage.setTitle("Quizzz");
+        primaryStage.setScene(home);
     }
 
     public void showOverview() {

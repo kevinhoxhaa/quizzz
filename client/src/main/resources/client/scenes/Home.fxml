@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="512.0" prefWidth="768.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+   <center>
+             <VBox alignment="CENTER" fillWidth="false" prefHeight="200.0" prefWidth="100.0" spacing="16.0" HBox.hgrow="ALWAYS">
+                 <padding>
+                     <Insets top="32.0" />
+                 </padding>
+                 <children>
+                     <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0">
+                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Quizzz" HBox.hgrow="ALWAYS">
+                             <font>
+                                 <Font name="Monospaced Bold" size="64.0" />
+                             </font>
+                         </Text>
+                         <ImageView fx:id="bulbView" fitWidth="96.0" pickOnBounds="true" preserveRatio="true" rotate="24.0">
+                             <image>
+                                 <Image url="/client/icons/bulb.png" />
+                             </image>
+                         </ImageView>
+                     </HBox>
+                     <TextField fx:id="usernameField" prefWidth="256.0" promptText="Username" style="-fx-font-size: 1.4em; -fx-pref-width: 28em;" />
+                     <TextField fx:id="urlField" prefWidth="256.0" promptText="Server URL" style="-fx-font-size: 1.4em; -fx-pref-width: 28em;" />
+                     <VBox alignment="CENTER" prefHeight="200.0" prefWidth="128.0" spacing="8.0" style="-fx-pref-width: 14em;">
+                         <padding>
+                             <Insets bottom="10.0" left="20.0" right="20.0" />
+                         </padding>
+                         <children>
+                             <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-font-size: 1.4em;" text="Solo" textAlignment="CENTER">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                             <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-font-size: 1.4em;" text="Multiplayer" textAlignment="CENTER">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                         </children>
+                     </VBox>
+                 </children>
+             </VBox>
+   </center>
+</BorderPane>
