@@ -3,14 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.transform.Scale;
-
-import java.awt.*;
-import java.util.Objects;
 
 public class HomeCtrl {
     private final ServerUtils server;
@@ -19,6 +12,13 @@ public class HomeCtrl {
     @FXML
     private ImageView bulbView;
 
+    /**
+     * Creates a new home controller instance.
+     * @param server the server utils used for communication
+     *               with the Spring server.
+     * @param mainCtrl the main controller used for transition
+     *                 between different scenes.
+     */
     @Inject
     public HomeCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;

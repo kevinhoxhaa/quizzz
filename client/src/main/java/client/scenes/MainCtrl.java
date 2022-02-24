@@ -22,6 +22,9 @@ import javafx.util.Pair;
 
 public class MainCtrl {
 
+    public static final double MIN_WIDTH = 768.0;
+    public static final double MIN_HEIGHT = 512.0;
+
     private Stage primaryStage;
 
     private QuoteOverviewCtrl overviewCtrl;
@@ -36,8 +39,8 @@ public class MainCtrl {
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
             Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home) {
         this.primaryStage = primaryStage;
-        primaryStage.setMinHeight(512.0);
-        primaryStage.setMinWidth(768.0);
+        primaryStage.setMinHeight(MIN_HEIGHT);
+        primaryStage.setMinWidth(MIN_WIDTH);
 
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
