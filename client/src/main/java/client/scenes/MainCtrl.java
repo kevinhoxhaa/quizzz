@@ -22,6 +22,9 @@ import javafx.util.Pair;
 
 public class MainCtrl {
 
+    public static final double MIN_WIDTH = 768.0;
+    public static final double MIN_HEIGHT = 512.0;
+
     private Stage primaryStage;
 
     private QuoteOverviewCtrl overviewCtrl;
@@ -30,17 +33,31 @@ public class MainCtrl {
     private AddQuoteCtrl addCtrl;
     private Scene add;
 
+    private WaitingCtrl waitingCtrl;
+    private Scene waiting;
+
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add) {
+            Pair<AddQuoteCtrl, Parent> add, Pair<WaitingCtrl, Parent> waiting) {
         this.primaryStage = primaryStage;
+        primaryStage.setMinHeight(MIN_HEIGHT);
+        primaryStage.setMinWidth(MIN_WIDTH);
+
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
 
         this.addCtrl = add.getKey();
         this.add = new Scene(add.getValue());
 
-        showOverview();
+        this.waitingCtrl = waiting.getKey();
+        this.waiting = new Scene(waiting.getValue());
+
+        showWaiting();
         primaryStage.show();
+    }
+
+    public void showWaiting() {
+        primaryStage.setTitle("Quizzz: Waiting");
+        primaryStage.setScene(waiting);
     }
 
     public void showOverview() {
