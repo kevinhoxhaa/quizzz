@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="512.0" prefWidth="768.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="512.0" prefWidth="768.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.HomeCtrl">
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
    </padding>
@@ -36,18 +36,43 @@
                              <Insets bottom="10.0" left="20.0" right="20.0" />
                          </padding>
                          <children>
-                             <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-font-size: 1.4em;" text="Solo" textAlignment="CENTER">
+                             <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Solo" textAlignment="CENTER">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
                         </Button>
-                             <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-font-size: 1.4em;" text="Multiplayer" textAlignment="CENTER">
+                             <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Multiplayer" textAlignment="CENTER">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
                         </Button>
                          </children>
                      </VBox>
+            <VBox alignment="BOTTOM_LEFT" minHeight="108.0" prefHeight="108.0" prefWidth="748.0">
+               <padding>
+                  <Insets top="16.0" />
+               </padding>
+               <children>
+                  <Button onAction="#onHelpButtonClick" mnemonicParsing="false" style="-fx-background-color: transparent;">
+                      <graphic>
+                          <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                  <Image url="/client/icons/help.png" />
+                              </image>
+                          </ImageView>
+                      </graphic>
+                      <cursor>
+                          <Cursor fx:constant="HAND" />
+                      </cursor>
+                  </Button>
+               </children>
+            </VBox>
                  </children>
              </VBox>
    </center>

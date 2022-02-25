@@ -3,11 +3,23 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class HomeCtrl {
+
+    private static final double HELP_WIDTH = 532.0;
+    private static final double HELP_HEIGHT = 404.0;
+
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+
+    private Stage dialog;
 
     @FXML
     private ImageView bulbView;
@@ -23,5 +35,28 @@ public class HomeCtrl {
     public HomeCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+    }
+
+    @FXML
+    protected void onHelpButtonClick() throws IOException {
+        if(dialog != null) {
+            dialog.show();
+            return;
+        }
+
+        dialog = new Stage();
+        dialog.setMinHeight(HELP_HEIGHT);
+        dialog.setMinWidth(HELP_WIDTH);
+        dialog.setMaxHeight(HELP_HEIGHT);
+        dialog.setMaxWidth(HELP_WIDTH);
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/client/scenes/Help.fxml"));
+        loader.setController(this);
+
+        ScrollPane dialogPane = loader.load();
+        Scene dialogScene = new Scene(dialogPane);
+        dialog.setScene(dialogScene);
+        dialog.show();
     }
 }

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<ScrollPane prefHeight="384.0" prefWidth="512.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1">
+   <content>
+      <VBox fillWidth="false" prefHeight="384.0" prefWidth="492.0" spacing="5.0">
+         <children>
+            <Label  prefWidth="492.0" text="Welcome to Quizzz!" wrapText="true">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label prefWidth="492.0" text="Raise your energy consumption awareness by playing a fast-paced quiz game." wrapText="true">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label  prefWidth="492.0" text="Enter your username and the server URL." wrapText="true">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label  prefWidth="492.0" text="Start a solo game and answer questions consecutively." wrapText="true">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label  prefWidth="492.0" text="Start a multiplayer game, join a waiting room and compete with your friends! Be quick to answer though, points are based on correctness and time." wrapText="true">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label  prefWidth="492.0" text="Pick one of the three jokers to boost your gameplay:" wrapText="true">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label  prefWidth="492.0" text="- Remove one wrong answer" wrapText="true">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label  prefWidth="492.0" text="- Double your points for that question" wrapText="true">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label  prefWidth="492.0" text="- Shorten the time for everyone else" wrapText="true">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label  prefWidth="492.0" text="Show your emotions to other players by using our list of emojis." wrapText="true">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label  prefWidth="492.0" text="What are you waiting for? Fun is one click away!" wrapText="true">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets></VBox>
+   </content>
+</ScrollPane>
