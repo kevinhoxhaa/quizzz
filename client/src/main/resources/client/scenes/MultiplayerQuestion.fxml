@@ -1,25 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Accordion?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Arc?>
-<?import javafx.scene.shape.Circle?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.text.TextFlow?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.MultiplayerQuestion">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.MultiplayerQuestionCtrl">
    <children>
       <Accordion layoutX="98.0" layoutY="81.0" />
       <Pane layoutX="23.0" layoutY="90.0" prefHeight="296.0" prefWidth="344.0" style="-fx-border-color: black;">
@@ -78,6 +66,12 @@
               </items>
             </SplitPane>
             <Arc fx:id="timer" fill="DODGERBLUE" layoutX="321.0" layoutY="206.0" length="120.0" radiusX="50.0" radiusY="50.0" scaleX="-1.0" startAngle="90.0" stroke="BLACK" strokeLineCap="ROUND" strokeType="INSIDE" type="ROUND" />
+            <TextFlow layoutX="240.0" layoutY="263.0" prefHeight="19.0" prefWidth="62.0" textAlignment="CENTER">
+               <children>
+                  <Text fx:id="remainingSeconds" strokeType="OUTSIDE" strokeWidth="0.0" text="6" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" s" />
+               </children>
+            </TextFlow>
          </children>
       </Pane>
       <HBox alignment="CENTER" layoutX="23.0" layoutY="34.0" prefHeight="17.0" prefWidth="344.0" spacing="4.0">
@@ -279,7 +273,7 @@
                   <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                </VBox.margin>
                <children>
-                  <Text fx:id="reduceTime" strokeType="OUTSIDE" strokeWidth="0.0" text="Reduce time for other players" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Reduce time for other players" />
                </children>
             </StackPane>
          </children>

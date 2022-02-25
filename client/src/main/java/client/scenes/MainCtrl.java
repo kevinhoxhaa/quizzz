@@ -30,8 +30,11 @@ public class MainCtrl {
     private AddQuoteCtrl addCtrl;
     private Scene add;
 
+    private MultiplayerQuestionCtrl multiplayerQuestionCtrl;
+    private Scene questionScene;
+
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add) {
+            Pair<AddQuoteCtrl, Parent> add, Pair<MultiplayerQuestionCtrl, Parent> question) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -39,7 +42,10 @@ public class MainCtrl {
         this.addCtrl = add.getKey();
         this.add = new Scene(add.getValue());
 
-        showOverview();
+        this.multiplayerQuestionCtrl = question.getKey();
+        this.questionScene = new Scene(question.getValue());
+
+        showQuestion();
         primaryStage.show();
     }
 
@@ -53,5 +59,11 @@ public class MainCtrl {
         primaryStage.setTitle("Quotes: Adding Quote");
         primaryStage.setScene(add);
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
+    }
+
+    public void showQuestion() {
+        primaryStage.setTitle("Question screen");
+        primaryStage.setScene(questionScene);
+        overviewCtrl.refresh();
     }
 }
