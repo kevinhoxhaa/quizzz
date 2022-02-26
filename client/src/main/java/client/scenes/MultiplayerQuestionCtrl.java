@@ -3,8 +3,6 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Arc;
@@ -16,14 +14,12 @@ public class MultiplayerQuestionCtrl {
     private final MainCtrl mainCtrl;
 
     @FXML
-    private StackPane answer1;
+    private StackPane answerTop;
     @FXML
-    private StackPane answer2;
+    private StackPane answerMid;
     @FXML
-    private StackPane answer3;
+    private StackPane answerBot;
 
-    @FXML
-    private ImageView questionImg;
     @FXML
     private Text question;
     @FXML
@@ -38,22 +34,6 @@ public class MultiplayerQuestionCtrl {
     private HBox circles;
 
     @FXML
-    private GridPane emojiBoard;
-
-    @FXML
-    private ImageView thumbsup;
-    @FXML
-    private ImageView thumbsdown;
-    @FXML
-    private ImageView sad;
-    @FXML
-    private ImageView heart;
-    @FXML
-    private ImageView angry;
-    @FXML
-    private ImageView xd;
-
-    @FXML
     private StackPane doublePoints;
     @FXML
     private StackPane disableIncorrect;
@@ -61,6 +41,10 @@ public class MultiplayerQuestionCtrl {
     private StackPane reduceTime;
 
 
+    /** Creates a controller for the multiplayer question screen, with the given server and main controller.
+     * @param server
+     * @param mainCtrl
+     */
     @Inject
     public MultiplayerQuestionCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
