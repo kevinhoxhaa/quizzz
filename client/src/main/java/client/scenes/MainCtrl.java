@@ -55,6 +55,9 @@ public class MainCtrl {
         primaryStage.show();
     }
 
+    /**
+     * Displays the waiting page of the quiz application
+     */
     public void showWaiting() {
         primaryStage.setTitle("Quizzz: Waiting");
         primaryStage.setScene(waiting);
