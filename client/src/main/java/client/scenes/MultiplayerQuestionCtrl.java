@@ -41,7 +41,8 @@ public class MultiplayerQuestionCtrl {
     private StackPane reduceTime;
 
 
-    /** Creates a controller for the multiplayer question screen, with the given server and main controller.
+    /**
+     * Creates a controller for the multiplayer question screen, with the given server and main controller.
      * @param server
      * @param mainCtrl
      */

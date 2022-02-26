@@ -61,8 +61,8 @@ public class MainCtrl {
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
     }
 
-    /**Sets the scene in the primary stage to the one corresponding to a multiplayer question screen.
-     *
+    /**
+     * Sets the scene in the primary stage to the one corresponding to a multiplayer question screen.
      */
     public void showQuestion() {
         primaryStage.setTitle("Question screen");
