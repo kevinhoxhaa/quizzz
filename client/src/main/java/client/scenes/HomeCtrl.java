@@ -37,6 +37,10 @@ public class HomeCtrl {
         this.server = server;
     }
 
+    /**
+     * Shows a dialog displaying the rules of the game.
+     * @throws IOException in case the static how-to layout file is not found
+     */
     @FXML
     protected void onHelpButtonClick() throws IOException {
         if(dialog != null) {
