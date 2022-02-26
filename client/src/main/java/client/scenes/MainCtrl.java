@@ -55,6 +55,10 @@ public class MainCtrl {
         primaryStage.show();
     }
 
+    /**
+     * Shows the home page of the quiz application on the primary
+     * stage
+     */
     public void showHome() {
         primaryStage.setTitle("Quizzz");
         primaryStage.setScene(home);
