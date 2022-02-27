@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
 import javafx.fxml.FXML;
-import javafx.scene.control.Slider;
+import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Arc;
@@ -32,15 +32,7 @@ public class MultiplayerAnswerCtrl {
     private HBox circles;
 
     @FXML
-    private Text correctPlayer1;
-    @FXML
-    private Text correctPlayer2;
-    @FXML
-    private Text correctPlayer3;
-    @FXML
-    private Text correctPlayer4;
-    @FXML
-    private Slider slider;
+    private ListView<String> correctPlayers;
     
     @FXML
     private ImageView thumbsup;
