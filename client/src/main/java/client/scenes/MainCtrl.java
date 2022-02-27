@@ -111,6 +111,7 @@ public class MainCtrl {
     public void showAnswerPage() {
         primaryStage.setTitle("Answer screen");
         primaryStage.setScene(answerScene);
+    }
 
     /**
      * Sets the scene in the primary stage to the one corresponding to a multiplayer question screen.
