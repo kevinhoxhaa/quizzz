@@ -22,6 +22,9 @@ import javafx.util.Pair;
 
 public class MainCtrl {
 
+    public static final double MIN_WIDTH = 768.0;
+    public static final double MIN_HEIGHT = 512.0;
+
     private Stage primaryStage;
 
     private QuoteOverviewCtrl overviewCtrl;
@@ -30,17 +33,56 @@ public class MainCtrl {
     private AddQuoteCtrl addCtrl;
     private Scene add;
 
+    private HomeCtrl homeCtrl;
+    private Scene home;
+
+    private MultiplayerQuestionCtrl multiplayerQuestionCtrl;
+    private Scene questionScene;
+
+    private WaitingCtrl waitingCtrl;
+    private Scene waiting;
+
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add) {
+            Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home, 
+            Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> question) {
         this.primaryStage = primaryStage;
+        primaryStage.setMinHeight(MIN_HEIGHT);
+        primaryStage.setMinWidth(MIN_WIDTH);
+
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
 
         this.addCtrl = add.getKey();
         this.add = new Scene(add.getValue());
 
-        showOverview();
+        this.homeCtrl = home.getKey();
+        this.home = new Scene(home.getValue());
+
+        this.multiplayerQuestionCtrl = question.getKey();
+        this.questionScene = new Scene(question.getValue());
+
+        this.waitingCtrl = waiting.getKey();
+        this.waiting = new Scene(waiting.getValue());
+
+        showHome();
         primaryStage.show();
+    }
+
+    /**
+     * Shows the home page of the quiz application on the primary
+     * stage
+     */
+    public void showHome() {
+        primaryStage.setTitle("Quizzz");
+        primaryStage.setScene(home);
+    }
+    /**
+     * Displays the waiting page of the quiz application
+     */
+    public void showWaiting() {
+        primaryStage.setTitle("Quizzz: Waiting");
+        primaryStage.setScene(waiting);
+        waitingCtrl.scaleButton();
     }
 
     public void showOverview() {
@@ -53,5 +95,13 @@ public class MainCtrl {
         primaryStage.setTitle("Quotes: Adding Quote");
         primaryStage.setScene(add);
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
+    }
+
+    /**
+     * Sets the scene in the primary stage to the one corresponding to a multiplayer question screen.
+     */
+    public void showQuestion() {
+        primaryStage.setTitle("Question screen");
+        primaryStage.setScene(questionScene);
     }
 }
