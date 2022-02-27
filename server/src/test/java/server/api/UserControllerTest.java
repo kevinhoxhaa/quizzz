@@ -25,9 +25,6 @@ import commons.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import commons.Person;
-import commons.Quote;
-
 public class UserControllerTest {
 
     public int nextInt;

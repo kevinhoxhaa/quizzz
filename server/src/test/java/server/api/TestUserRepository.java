@@ -27,7 +27,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuery;
 
-import commons.Quote;
 import server.database.UserRepository;
 
 public class TestUserRepository implements UserRepository {
