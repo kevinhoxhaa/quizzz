@@ -61,6 +61,7 @@ public class MainCtrl {
     public void showWaiting() {
         primaryStage.setTitle("Quizzz: Waiting");
         primaryStage.setScene(waiting);
+        waitingCtrl.scaleButton();
     }
 
     public void showOverview() {
