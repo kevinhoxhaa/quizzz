@@ -11,7 +11,7 @@ import javafx.scene.shape.Arc;
 import javafx.scene.text.Text;
 
 public class MultiplayerAnswerCtrl {
-	private final ServerUtils server;
+    private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
     @FXML

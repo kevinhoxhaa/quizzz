@@ -66,7 +66,7 @@ public class MainCtrl {
      * and gives the primary stage a corresponding title.
      */
     public void showAnswerPage() {
-    	primaryStage.setTitle("Answer screen");
-    	primaryStage.setScene(answerScene);
+        primaryStage.setTitle("Answer screen");
+        primaryStage.setScene(answerScene);
     }
 }
