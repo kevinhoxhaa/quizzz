@@ -7,7 +7,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
@@ -53,6 +55,8 @@ public class HomeCtrl {
         dialog.setMinWidth(HELP_WIDTH);
         dialog.setMaxHeight(HELP_HEIGHT);
         dialog.setMaxWidth(HELP_WIDTH);
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.setResizable(false);
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/client/scenes/Help.fxml"));
