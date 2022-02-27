@@ -1,12 +1,11 @@
-
 # Agenda: Start of week 4
 
-Location: 		Drebbelweg
-Datum: 		    01-03-2022
-Time: 		    16:45 – 17:30
-Attendees:		Alican Ekşi, Calin Georgescu, Boris Goranov, Kevin Hoxha, Varga Pál Patrik, Bink Boëtius, Nada Mouman
-Chair: 	        Bink Boëtius
-Notetaker:	    Alican Ekşi
+Location: 		Drebbelweg  
+Datum: 		    01-03-2022  
+Time: 		    16:45 – 17:30  
+Attendees:		Alican Ekşi, Calin Georgescu, Boris Goranov, Kevin Hoxha, Varga Pál Patrik, Bink Boëtius, Nada Mouman  
+Chair: 	        Bink Boëtius  
+Notetaker:	    Alican Ekşi  
 
 ## Agenda items
 
