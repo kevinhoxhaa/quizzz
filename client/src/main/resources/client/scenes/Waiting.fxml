@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="492.0" minWidth="748.0" prefHeight="492.0" prefWidth="748.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.WaitingCtrl">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+    <center>
+        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="16.0" HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets top="32.0" />
+            </padding>
+         <children>
+            <Label text="Waiting for other players to join..." textAlignment="CENTER" textOverrun="CLIP" wrapText="true" VBox.vgrow="ALWAYS">
+               <font>
+                  <Font name="Monospaced Bold" size="48.0" />
+               </font>
+            </Label>
+            <VBox alignment="TOP_CENTER" maxWidth="768.0" minWidth="512.0" prefHeight="224.0" spacing="16.0">
+               <children>
+                  <Label fx:id="counterLabel" text="24 players in this room:" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" VBox.vgrow="ALWAYS">
+                     <font>
+                        <Font name="Monospaced Regular" size="24.0" />
+                     </font>
+                  </Label>
+                  <ListView minWidth="400.0" prefHeight="200.0" prefWidth="512.0" />
+                  <Button onAction="#onStartButtonClick" fx:id="startButton" mnemonicParsing="false" text="Start">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+               </children>
+            </VBox>
+         </children>
+        </VBox>
+    </center>
+   <top>
+      <VBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button onAction="#onBackButtonClick" mnemonicParsing="false">
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="/client/icons/back.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </VBox>
+   </top>
+</BorderPane>
