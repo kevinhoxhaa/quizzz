@@ -39,9 +39,12 @@ public class MainCtrl {
     private MultiplayerQuestionCtrl multiplayerQuestionCtrl;
     private Scene questionScene;
 
+    private WaitingCtrl waitingCtrl;
+    private Scene waiting;
+
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
             Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home, 
-            Pair<MultiplayerQuestionCtrl, Parent> question) {
+            Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> question) {
         this.primaryStage = primaryStage;
         primaryStage.setMinHeight(MIN_HEIGHT);
         primaryStage.setMinWidth(MIN_WIDTH);
@@ -58,6 +61,9 @@ public class MainCtrl {
         this.multiplayerQuestionCtrl = question.getKey();
         this.questionScene = new Scene(question.getValue());
 
+        this.waitingCtrl = waiting.getKey();
+        this.waiting = new Scene(waiting.getValue());
+
         showHome();
         primaryStage.show();
     }
@@ -69,6 +75,14 @@ public class MainCtrl {
     public void showHome() {
         primaryStage.setTitle("Quizzz");
         primaryStage.setScene(home);
+    }
+    /**
+     * Displays the waiting page of the quiz application
+     */
+    public void showWaiting() {
+        primaryStage.setTitle("Quizzz: Waiting");
+        primaryStage.setScene(waiting);
+        waitingCtrl.scaleButton();
     }
 
     public void showOverview() {
