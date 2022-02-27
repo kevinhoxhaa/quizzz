@@ -33,11 +33,18 @@ public class MainCtrl {
     private AddQuoteCtrl addCtrl;
     private Scene add;
 
+    private HomeCtrl homeCtrl;
+    private Scene home;
+
+    private MultiplayerQuestionCtrl multiplayerQuestionCtrl;
+    private Scene questionScene;
+
     private WaitingCtrl waitingCtrl;
     private Scene waiting;
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add, Pair<WaitingCtrl, Parent> waiting) {
+            Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home, 
+            Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> question) {
         this.primaryStage = primaryStage;
         primaryStage.setMinHeight(MIN_HEIGHT);
         primaryStage.setMinWidth(MIN_WIDTH);
@@ -48,13 +55,27 @@ public class MainCtrl {
         this.addCtrl = add.getKey();
         this.add = new Scene(add.getValue());
 
+        this.homeCtrl = home.getKey();
+        this.home = new Scene(home.getValue());
+
+        this.multiplayerQuestionCtrl = question.getKey();
+        this.questionScene = new Scene(question.getValue());
+
         this.waitingCtrl = waiting.getKey();
         this.waiting = new Scene(waiting.getValue());
 
-        showWaiting();
+        showHome();
         primaryStage.show();
     }
 
+    /**
+     * Shows the home page of the quiz application on the primary
+     * stage
+     */
+    public void showHome() {
+        primaryStage.setTitle("Quizzz");
+        primaryStage.setScene(home);
+    }
     /**
      * Displays the waiting page of the quiz application
      */
@@ -74,5 +95,13 @@ public class MainCtrl {
         primaryStage.setTitle("Quotes: Adding Quote");
         primaryStage.setScene(add);
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
+    }
+
+    /**
+     * Sets the scene in the primary stage to the one corresponding to a multiplayer question screen.
+     */
+    public void showQuestion() {
+        primaryStage.setTitle("Question screen");
+        primaryStage.setScene(questionScene);
     }
 }
