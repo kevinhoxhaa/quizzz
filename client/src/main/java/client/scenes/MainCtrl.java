@@ -36,8 +36,12 @@ public class MainCtrl {
     private HomeCtrl homeCtrl;
     private Scene home;
 
+    private MultiplayerQuestionCtrl multiplayerQuestionCtrl;
+    private Scene questionScene;
+
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home) {
+            Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home, 
+            Pair<MultiplayerQuestionCtrl, Parent> question) {
         this.primaryStage = primaryStage;
         primaryStage.setMinHeight(MIN_HEIGHT);
         primaryStage.setMinWidth(MIN_WIDTH);
@@ -50,6 +54,9 @@ public class MainCtrl {
 
         this.homeCtrl = home.getKey();
         this.home = new Scene(home.getValue());
+
+        this.multiplayerQuestionCtrl = question.getKey();
+        this.questionScene = new Scene(question.getValue());
 
         showHome();
         primaryStage.show();
@@ -74,5 +81,13 @@ public class MainCtrl {
         primaryStage.setTitle("Quotes: Adding Quote");
         primaryStage.setScene(add);
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
+    }
+
+    /**
+     * Sets the scene in the primary stage to the one corresponding to a multiplayer question screen.
+     */
+    public void showQuestion() {
+        primaryStage.setTitle("Question screen");
+        primaryStage.setScene(questionScene);
     }
 }
