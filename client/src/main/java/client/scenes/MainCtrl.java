@@ -29,9 +29,12 @@ public class MainCtrl {
 
     private AddQuoteCtrl addCtrl;
     private Scene add;
+    
+    private MultiplayerAnswerCtrl multiplayerAnswerCtrl;
+    private Scene answerScene;
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add) {
+            Pair<AddQuoteCtrl, Parent> add, Pair<MultiplayerAnswerCtrl, Parent> answerPage) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -39,7 +42,10 @@ public class MainCtrl {
         this.addCtrl = add.getKey();
         this.add = new Scene(add.getValue());
 
-        showOverview();
+        this.multiplayerAnswerCtrl = answerPage.getKey();
+        this.answerScene = new Scene(answerPage.getValue());
+        
+        showAnswerPage();
         primaryStage.show();
     }
 
@@ -53,5 +59,14 @@ public class MainCtrl {
         primaryStage.setTitle("Quotes: Adding Quote");
         primaryStage.setScene(add);
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
+    }
+    
+    /**
+     * Sets the multiplayer answer screen as the scene in the primary stage 
+     * and gives the primary stage a corresponding title.
+     */
+    public void showAnswerPage() {
+    	primaryStage.setTitle("Answer screen");
+    	primaryStage.setScene(answerScene);
     }
 }
