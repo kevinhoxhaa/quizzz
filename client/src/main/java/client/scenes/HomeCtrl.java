@@ -66,4 +66,27 @@ public class HomeCtrl {
         dialog.setScene(dialogScene);
         dialog.show();
     }
+
+    /**
+     * Adds the user to the database and redirects them to the
+     * first solo game question scene
+     */
+    @FXML
+    protected void onSoloButtonClick() {
+        // TODO: check if the server is valid and
+        //  add the user to the database
+        mainCtrl.showQuestion();
+    }
+
+    /**
+     * Adds the user to the waiting room database and redirects them
+     * to the first multiplayer game question scene
+     */
+    @FXML
+    protected void onMultiplayerButtonClick() {
+        // TODO: check if the server is valid,
+        //  the username is not a duplicate and
+        //  add the user to the waiting room in the database
+        mainCtrl.showWaiting();
+    }
 }

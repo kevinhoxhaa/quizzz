@@ -53,4 +53,24 @@ public class WaitingCtrl {
         transition.setCycleCount(Animation.INDEFINITE);
         transition.play();
     }
+
+    /**
+     * Remove the user from the waiting room and redirect
+     * them to the home scene
+     */
+    @FXML
+    protected void onBackButtonClick() {
+        // TODO: remove user from the waiting room in the database
+        mainCtrl.showHome();
+    }
+
+    /**
+     * Start a game on the server and redirect all participants
+     * to their first question scene
+     */
+    @FXML
+    protected void onStartButtonClick() {
+        // TODO: start a game on the server
+        mainCtrl.showQuestion();
+    }
 }
