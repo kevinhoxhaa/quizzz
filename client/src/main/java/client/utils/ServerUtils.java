@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.List;
 
+import commons.User;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
@@ -58,5 +59,21 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
+    }
+
+    public List<User> getUsers(String serverUrl) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path("api/users")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<User>>() {});
+    }
+
+    public User addUser(String serverUrl, User user) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path("api/users")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(user, APPLICATION_JSON), User.class);
     }
 }

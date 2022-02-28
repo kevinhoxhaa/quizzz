@@ -4,8 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import commons.User;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,11 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import commons.User;
 import server.database.UserRepository;
-
-import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.caseSensitive;
-import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.ignoreCase;
 
 @RestController
 @RequestMapping("/api/users")
@@ -49,14 +44,15 @@ public class UserController {
     public ResponseEntity<User> add(@RequestBody User user) {
 // || isNullOrEmpty(server) has to be added
         if (isNullOrEmpty(user.username)) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
         if(repo.existsUserByUsername(user.username)) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
         User saved = repo.save(user);
+        System.out.println(saved);
         return ResponseEntity.ok(saved);
     }
 
