@@ -71,11 +71,11 @@ public class UserController {
      */
     @DeleteMapping(path = {"/{id}"})
     public ResponseEntity<User> delete(@PathVariable("id") long id) {
-    	if (id < 0 || !repo.existsById(id)) {
-    		return ResponseEntity.badRequest().build();
-    	}
-    	
-    	repo.deleteById(id);
-    	return ResponseEntity.ok().build();
+        if (id < 0 || !repo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        repo.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }
