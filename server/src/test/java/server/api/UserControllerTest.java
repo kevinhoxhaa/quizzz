@@ -66,21 +66,21 @@ public class UserControllerTest {
     
     @Test
     public void cannotDeleteNegativeID() {
-    	var actual = sut.delete(-1);
-    	assertEquals(BAD_REQUEST, actual.getStatusCode());
+        var actual = sut.delete(-1);
+        assertEquals(BAD_REQUEST, actual.getStatusCode());
     }
     
     @Test
     public void cannotDeleteNonExistingPerson() {
-    	var actual = sut.delete(getUser("q1").id);
-    	assertEquals(BAD_REQUEST, actual.getStatusCode());
+        var actual = sut.delete(getUser("q1").id);
+        assertEquals(BAD_REQUEST, actual.getStatusCode());
     }
     
     @Test
     public void deleteRightPerson() {
-    	var savedUser = sut.add(getUser("q1"));
-    	var actual = sut.delete(savedUser.getBody().id);
-    	assertTrue(actual.getStatusCode().is2xxSuccessful());
+        var savedUser = sut.add(getUser("q1"));
+        var actual = sut.delete(savedUser.getBody().id);
+        assertTrue(actual.getStatusCode().is2xxSuccessful());
         assertFalse(repo.existsById(savedUser.getBody().id));
     }
 

@@ -157,10 +157,10 @@ public class TestUserRepository implements UserRepository {
         return users.size();
     }
 
-	@Override
+    @Override
     public void deleteById(Long id) {
-    	call("deleteById");
-    	users.remove((int)(long) id);
+        call("deleteById");
+        users.remove((int)(long) id);
     }
 
     @Override
