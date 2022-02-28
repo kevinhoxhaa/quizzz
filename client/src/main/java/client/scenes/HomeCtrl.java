@@ -134,6 +134,12 @@ public class HomeCtrl {
 
             alert.showAndWait();
             return;
+        } catch(Exception e) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText("Invalid server URL!");
+            alert.showAndWait();
+            return;
         }
         mainCtrl.showWaiting();
     }
