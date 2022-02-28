@@ -15,7 +15,7 @@ Notetaker:	    Alican Ekşi
 
 16:50 – 16:55		**Reflection:** A short reflection on learnings (tips/tops) last week. (informing)
 
-16:55 – 17:05		**Code of Conduct:** Are we still on track? Do we need to make adjustments?  Activity bank, four API endpoints, front-end and back-end. (informing)
+16:55 – 17:05		**Code of Conduct:** Are we still on track? Do we need to make adjustments? => Activity bank, four API endpoints, front-end and back-end. (informing)
 
 17:05 – 17:10	    **Upcoming tasks:** Which tasks need to be done next week and who is going to do which tasks? (discussing/deciding)
 
