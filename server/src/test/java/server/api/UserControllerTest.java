@@ -24,6 +24,7 @@ import java.util.Random;
 import commons.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.ResponseEntity;
 
 public class UserControllerTest {
 
@@ -55,6 +56,12 @@ public class UserControllerTest {
 
         assertTrue(random.wasCalled);
         assertEquals("q2", actual.getBody().username);
+    }
+
+    @Test
+    public void duplicateUsername() {
+        sut.add(getUser("q1"));
+        assertTrue(sut.add(getUser("q1")).getStatusCode().is4xxClientError());
     }
 
     @Test
