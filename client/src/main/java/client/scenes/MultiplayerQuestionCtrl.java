@@ -51,4 +51,51 @@ public class MultiplayerQuestionCtrl {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
+
+
+    /**
+     * A placeholder method that navigates the user from the WIP static question
+     * screen to the WIP static answer screen. In the future, this should just
+     * save the game state, as the transition would happen when the timer runs out.
+     * @param answerNum The corresponding "ID" of the answer button pressed:
+     *                   - answerTop: 1
+     *                   - answerMid: 2
+     *                   - answerBot: 3
+     */
+    private void onAnswerClicked(int answerNum){
+        //TODO figure out state-transit between the scenes:
+        //  - what parameters are we passing through
+        //  - which side checks the correctness of the answer
+        //  - the code structure of the transit itself
+        // also, the body of this method should actually be called when the
+        // timer runs out, on click, only a sort of saving (and point-calculation)
+        // should occur
+        mainCtrl.showAnswerPage();
+    }
+
+    /**
+     * Calls the generic method for clicking an answer, specifying that it was the top button.
+     */
+    @FXML
+    protected void onAnswerTopClicked(){
+        onAnswerClicked(1);
+    }
+
+    /**
+     * Calls the generic method for clicking an answer, specifying that it was the middle button.
+     */
+    @FXML
+    protected void onAnswerMidClicked(){
+        onAnswerClicked(2);
+    }
+
+    /**
+     * Calls the generic method for clicking an answer, specifying that it was the bottom button.
+     */
+    @FXML
+    protected void onAnswerBotClicked(){
+        onAnswerClicked(3);
+    }
+
+
 }

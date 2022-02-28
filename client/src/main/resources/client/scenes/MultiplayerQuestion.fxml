@@ -179,7 +179,7 @@
                      <children>
                         <VBox prefHeight="149.0" prefWidth="194.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <StackPane fx:id="answerTop" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;">
+                              <StackPane fx:id="answerTop" onMouseClicked="#onAnswerTopClicked" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;">
                                  <VBox.margin>
                                     <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                  </VBox.margin>
@@ -187,7 +187,7 @@
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Answer 1" />
                                  </children>
                               </StackPane>
-                              <StackPane fx:id="answerMid" prefHeight="150.0" prefWidth="190.0" style="-fx-border-color: black;">
+                              <StackPane fx:id="answerMid" onMouseClicked="#onAnswerMidClicked" prefHeight="150.0" prefWidth="190.0" style="-fx-border-color: black;">
                                  <opaqueInsets>
                                     <Insets />
                                  </opaqueInsets>
@@ -198,7 +198,7 @@
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Answer 2" />
                                  </children>
                               </StackPane>
-                              <StackPane fx:id="answerBot" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;">
+                              <StackPane fx:id="answerBot" onMouseClicked="#onAnswerBotClicked" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;">
                                  <VBox.margin>
                                     <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                  </VBox.margin>
