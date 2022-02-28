@@ -84,9 +84,17 @@ public class HomeCtrl {
      * a User object with the given username
      * @return parsed User object
      */
-    protected User getUser() {
+    public User getUser() {
         String username = usernameField.getText();
         return new User(username);
+    }
+
+    /**
+     * Returns the server URL the user has connected to
+     * @return the server URL
+     */
+    protected String getServerUrl() {
+        return urlField.getText();
     }
 
     /**
