@@ -13,6 +13,10 @@ public class MultiplayerQuestionCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
+    private static final int ANSWER_TOP_ID = 1;
+    private static final int ANSWER_MID_ID = 2;
+    private static final int ANSWER_BOT_ID = 3;
+
     @FXML
     private StackPane answerTop;
     @FXML
@@ -78,7 +82,7 @@ public class MultiplayerQuestionCtrl {
      */
     @FXML
     protected void onAnswerTopClicked(){
-        onAnswerClicked(1);
+        onAnswerClicked(ANSWER_TOP_ID);
     }
 
     /**
@@ -86,7 +90,7 @@ public class MultiplayerQuestionCtrl {
      */
     @FXML
     protected void onAnswerMidClicked(){
-        onAnswerClicked(2);
+        onAnswerClicked(ANSWER_MID_ID);
     }
 
     /**
@@ -94,7 +98,7 @@ public class MultiplayerQuestionCtrl {
      */
     @FXML
     protected void onAnswerBotClicked(){
-        onAnswerClicked(3);
+        onAnswerClicked(ANSWER_BOT_ID);
     }
 
 
