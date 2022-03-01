@@ -83,7 +83,7 @@ public class ServerUtils {
      * A method that removes the user from the repository
      * @param serverUrl
      * @param user
-     * @return
+     * @return the user that was removed
      */
     public User removeUser(String serverUrl, User user) {
         return ClientBuilder.newClient(new ClientConfig())

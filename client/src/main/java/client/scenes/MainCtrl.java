@@ -96,6 +96,7 @@ public class MainCtrl {
 
     /**
      * Getter for the user
+     * @return user
      */
     public User getUser(){
         return this.user;
