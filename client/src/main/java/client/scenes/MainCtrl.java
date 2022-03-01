@@ -15,10 +15,13 @@
  */
 package client.scenes;
 
+import commons.User;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Pair;
 
 import java.util.Timer;
@@ -51,6 +54,8 @@ public class MainCtrl {
     private WaitingCtrl waitingCtrl;
     private Scene waiting;
 
+    private User user;
+
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
             Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home, 
             Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> question,
@@ -81,6 +86,20 @@ public class MainCtrl {
         primaryStage.show();
     }
 
+    /**
+     * Binder for the User in the client side
+     * @param user
+     */
+    public void bindUser(User user){
+        this.user=user;
+    }
+
+    /**
+     * Getter for the user
+     */
+    public User getUser(){
+        return this.user;
+    }
     /**
      * Shows the home page of the quiz application on the primary
      * stage
@@ -134,5 +153,26 @@ public class MainCtrl {
     public void showQuestion() {
         primaryStage.setTitle("Question screen");
         primaryStage.setScene(questionScene);
+    }
+
+    /**
+     * Deletes user from database when the close button is clicked
+     */
+    public void onClose(){
+        primaryStage.setOnHiding(new EventHandler<WindowEvent>() {
+
+            @Override
+            public void handle(WindowEvent event) {
+                Platform.runLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        homeCtrl.getServer().removeUser(homeCtrl.getServer().getURL(),user);
+                        user=null;
+                        System.exit(0);
+                    }
+                });
+            }
+        });
     }
 }
