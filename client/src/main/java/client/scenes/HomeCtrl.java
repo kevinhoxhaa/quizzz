@@ -22,6 +22,7 @@ public class HomeCtrl {
     private static final double HELP_HEIGHT = 404.0;
     private static final int UNAUTHORIZED = 401;
     private static final int FORBIDDEN = 403;
+    private static final int USERNAME_LENGTH = 15;
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -116,7 +117,16 @@ public class HomeCtrl {
     protected void onMultiplayerButtonClick() {
         try {
             String serverUrl = urlField.getText();
-            server.addUser(serverUrl, getUser());
+            User user = getUser();
+
+            if(user.username.contains(" ") || user.username.length() > USERNAME_LENGTH) {
+                var alert = new Alert(Alert.AlertType.ERROR);
+                alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setContentText("Invalid username!");
+                alert.showAndWait();
+                return;
+            }
+            server.addUser(serverUrl, user);
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
