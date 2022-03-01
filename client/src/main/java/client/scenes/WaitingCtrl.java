@@ -43,6 +43,7 @@ public class WaitingCtrl {
      *               necessary REST API functionality
      * @param mainCtrl the main controller used for changing
      *                 scenes in the application
+     * @param homeCtrl the home page controller of the application
      */
     @Inject
     public WaitingCtrl(ServerUtils server, MainCtrl mainCtrl, HomeCtrl homeCtrl) {
