@@ -2,10 +2,14 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.User;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -16,6 +20,9 @@ public class HomeCtrl {
 
     private static final double HELP_WIDTH = 532.0;
     private static final double HELP_HEIGHT = 404.0;
+    private static final int UNAUTHORIZED = 401;
+    private static final int FORBIDDEN = 403;
+    private static final int USERNAME_LENGTH = 15;
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -24,6 +31,12 @@ public class HomeCtrl {
 
     @FXML
     private ImageView bulbView;
+
+    @FXML
+    private TextField usernameField;
+
+    @FXML
+    private TextField urlField;
 
     /**
      * Creates a new home controller instance.
@@ -68,6 +81,24 @@ public class HomeCtrl {
     }
 
     /**
+     * Parses the info from the user input form and creates
+     * a User object with the given username
+     * @return parsed User object
+     */
+    public User getUser() {
+        String username = usernameField.getText();
+        return new User(username);
+    }
+
+    /**
+     * Returns the server URL the user has connected to
+     * @return the server URL
+     */
+    protected String getServerUrl() {
+        return urlField.getText();
+    }
+
+    /**
      * Adds the user to the database and redirects them to the
      * first solo game question scene
      */
@@ -84,9 +115,42 @@ public class HomeCtrl {
      */
     @FXML
     protected void onMultiplayerButtonClick() {
-        // TODO: check if the server is valid,
-        //  the username is not a duplicate and
-        //  add the user to the waiting room in the database
+        try {
+            String serverUrl = urlField.getText();
+            User user = getUser();
+
+            if(user.username.contains(" ") || user.username.length() > USERNAME_LENGTH) {
+                var alert = new Alert(Alert.AlertType.ERROR);
+                alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setContentText("Invalid username!");
+                alert.showAndWait();
+                return;
+            }
+            server.addUser(serverUrl, user);
+        } catch (WebApplicationException e) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+
+            switch(e.getResponse().getStatus()) {
+                case UNAUTHORIZED:
+                    alert.setContentText("A user with that name already exists on the server!");
+                    break;
+                case FORBIDDEN:
+                    alert.setContentText("Username cannot be null or empty!");
+                    break;
+                default:
+                    alert.setContentText(e.getMessage());
+            }
+
+            alert.showAndWait();
+            return;
+        } catch(Exception e) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText("Invalid server URL!");
+            alert.showAndWait();
+            return;
+        }
         mainCtrl.showWaiting();
     }
 }

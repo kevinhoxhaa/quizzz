@@ -216,4 +216,14 @@ public class TestUserRepository implements UserRepository {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public boolean existsUserByUsername(String username) {
+        for(User user : users) {
+            if(user.username.equals(username)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

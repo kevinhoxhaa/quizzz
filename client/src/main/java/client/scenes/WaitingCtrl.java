@@ -2,13 +2,21 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.User;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.animation.Animation;
 import javafx.animation.PauseTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.SequentialTransition;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.stage.Modality;
 import javafx.util.Duration;
+
+import java.util.List;
 
 public class WaitingCtrl {
 
@@ -21,6 +29,12 @@ public class WaitingCtrl {
 
     @FXML
     private Button startButton;
+
+    @FXML
+    private ListView usersList;
+
+    @FXML
+    private Label counterLabel;
 
     /**
      * Creates a new waiting controller instance
@@ -52,6 +66,28 @@ public class WaitingCtrl {
         transition.setAutoReverse(true);
         transition.setCycleCount(Animation.INDEFINITE);
         transition.play();
+    }
+
+    /**
+     * Fetches the users in the current waiting room and updates
+     * the list view
+     * @param serverUrl the url of the server to fetch the users from
+     */
+    public void fetchUsers(String serverUrl) {
+        usersList.getItems().clear();
+        try {
+            List<User> users = server.getUsers(serverUrl);
+            for(User user : users) {
+                usersList.getItems().add(user.username);
+            }
+            counterLabel.setText(String.format("%d players in this room:", users.size()));
+        } catch (WebApplicationException e) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            return;
+        }
     }
 
     /**

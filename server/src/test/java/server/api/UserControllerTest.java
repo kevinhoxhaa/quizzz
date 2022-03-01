@@ -19,6 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 import java.util.Random;
 
@@ -44,7 +46,7 @@ public class UserControllerTest {
     @Test
     public void cannotAddNullPerson() {
         var actual = sut.add(getUser(null));
-        assertEquals(BAD_REQUEST, actual.getStatusCode());
+        assertEquals(FORBIDDEN, actual.getStatusCode());
     }
 
     @Test
@@ -56,6 +58,13 @@ public class UserControllerTest {
 
         assertTrue(random.wasCalled);
         assertEquals("q2", actual.getBody().username);
+    }
+
+    @Test
+    public void duplicateUsername() {
+        sut.add(getUser("q1"));
+        var actual = sut.add(getUser("q1"));
+        assertEquals(UNAUTHORIZED, actual.getStatusCode());
     }
 
     @Test

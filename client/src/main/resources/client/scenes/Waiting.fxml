@@ -29,7 +29,7 @@
                         <Font name="Monospaced Regular" size="24.0" />
                      </font>
                   </Label>
-                  <ListView minWidth="400.0" prefHeight="200.0" prefWidth="512.0" />
+                  <ListView fx:id="usersList" minWidth="400.0" prefHeight="200.0" prefWidth="512.0" />
                   <Button onAction="#onStartButtonClick" fx:id="startButton" mnemonicParsing="false" text="Start">
                      <font>
                         <Font size="18.0" />

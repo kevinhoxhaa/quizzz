@@ -90,6 +90,7 @@ public class MainCtrl {
         primaryStage.setTitle("Quizzz: Waiting");
         primaryStage.setScene(waiting);
         waitingCtrl.scaleButton();
+        waitingCtrl.fetchUsers(homeCtrl.getServerUrl());
     }
 
     public void showOverview() {

@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+import commons.User;
+import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import commons.User;
 import server.database.UserRepository;
 
 @RestController
@@ -44,11 +46,16 @@ public class UserController {
     @PostMapping(path = { "", "/" })
     public ResponseEntity<User> add(@RequestBody User user) {
 // || isNullOrEmpty(server) has to be added
-        if (isNullOrEmpty(user.username) ) {
-            return ResponseEntity.badRequest().build();
+        if (isNullOrEmpty(user.username)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        if(repo.existsUserByUsername(user.username)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
         User saved = repo.save(user);
+        System.out.println(saved);
         return ResponseEntity.ok(saved);
     }
 
