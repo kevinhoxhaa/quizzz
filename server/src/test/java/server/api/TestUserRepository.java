@@ -159,8 +159,8 @@ public class TestUserRepository implements UserRepository {
 
     @Override
     public void deleteById(Long id) {
-        // TODO Auto-generated method stub
-
+        call("deleteById");
+        users.remove((int)(long) id);
     }
 
     @Override
