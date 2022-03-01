@@ -22,6 +22,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
+import java.util.Objects;
 import java.util.Random;
 
 import commons.User;
@@ -47,6 +48,29 @@ public class UserControllerTest {
     public void cannotAddNullPerson() {
         var actual = sut.add(getUser(null));
         assertEquals(FORBIDDEN, actual.getStatusCode());
+    }
+
+    @Test
+    public void cannotPutNullPerson() {
+        User user = getUser("q1");
+        sut.add(user);
+        user.username = null;
+        var actual = sut.update(user);
+        assertEquals(FORBIDDEN, actual.getStatusCode());
+    }
+
+    @Test
+    public void putUpdatesDatabase() {
+        User user = getUser("q1");
+        var added = sut.add(user);
+        user.username = "q2";
+        sut.update(user);
+        for(User u : repo.users) {
+            if(u.id == Objects.requireNonNull(added.getBody()).id) {
+                assertEquals("q2", u.username);
+                break;
+            }
+        }
     }
 
     @Test
