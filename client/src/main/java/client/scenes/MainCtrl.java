@@ -15,15 +15,21 @@
  */
 package client.scenes;
 
+import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class MainCtrl {
 
     public static final double MIN_WIDTH = 768.0;
     public static final double MIN_HEIGHT = 512.0;
+    private static final int POLLING_DELAY = 0;
+    private static final int POLLING_INTERVAL = 1500;
 
     private Stage primaryStage;
 
@@ -90,7 +96,15 @@ public class MainCtrl {
         primaryStage.setTitle("Quizzz: Waiting");
         primaryStage.setScene(waiting);
         waitingCtrl.scaleButton();
-        waitingCtrl.fetchUsers(homeCtrl.getServerUrl());
+        new Timer().schedule(
+                new TimerTask() {
+
+                    @Override
+                    public void run() {
+                        System.out.println("REFRESH");
+                        Platform.runLater(() -> waitingCtrl.fetchUsers(homeCtrl.getServerUrl()));
+                    }
+                }, POLLING_DELAY, POLLING_INTERVAL);
     }
 
     public void showOverview() {
