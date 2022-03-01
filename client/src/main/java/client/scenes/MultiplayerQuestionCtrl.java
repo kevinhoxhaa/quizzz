@@ -3,8 +3,13 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.text.Text;
 
@@ -101,5 +106,38 @@ public class MultiplayerQuestionCtrl {
         onAnswerClicked(ANSWER_BOT_ID);
     }
 
+    /**
+     * Sets answerTop's background color to dark gray
+     */
+    @FXML
+    protected void enterAnswerTop(){
+        answerTop.setBackground(new Background(new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+    }
+
+    /**
+     * Sets answerMid's background color to dark gray
+     */
+    @FXML
+    protected void enterAnswerMid(){
+        answerMid.setBackground(new Background(new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+    }
+
+    /**
+     * Sets answerBot's background color to dark gray
+     */
+    @FXML
+    protected void enterAnswerBot(){
+        answerBot.setBackground(new Background(new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+    }
+
+    /**
+     * Resets all answer boxes' background color to light gray
+     */
+    @FXML
+    protected void resetAnswerColors(){
+        answerTop.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+        answerMid.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+        answerBot.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+    }
 
 }

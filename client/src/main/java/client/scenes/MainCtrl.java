@@ -117,6 +117,7 @@ public class MainCtrl {
      * Sets the scene in the primary stage to the one corresponding to a multiplayer question screen.
      */
     public void showQuestion() {
+        multiplayerQuestionCtrl.resetAnswerColors();
         primaryStage.setTitle("Question screen");
         primaryStage.setScene(questionScene);
     }
