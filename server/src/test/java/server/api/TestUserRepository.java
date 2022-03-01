@@ -159,8 +159,8 @@ public class TestUserRepository implements UserRepository {
 
     @Override
     public void deleteById(Long id) {
-        // TODO Auto-generated method stub
-
+        call("deleteById");
+        users.remove((int)(long) id);
     }
 
     @Override
@@ -215,5 +215,15 @@ public class TestUserRepository implements UserRepository {
     public <S extends User, R> R findBy(Example<S> example, Function<FetchableFluentQuery<S>, R> queryFunction) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public boolean existsUserByUsername(String username) {
+        for(User user : users) {
+            if(user.username.equals(username)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

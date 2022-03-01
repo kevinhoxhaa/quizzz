@@ -15,15 +15,21 @@
  */
 package client.scenes;
 
+import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class MainCtrl {
 
     public static final double MIN_WIDTH = 768.0;
     public static final double MIN_HEIGHT = 512.0;
+    private static final int POLLING_DELAY = 0;
+    private static final int POLLING_INTERVAL = 1500;
 
     private Stage primaryStage;
 
@@ -32,6 +38,9 @@ public class MainCtrl {
 
     private AddQuoteCtrl addCtrl;
     private Scene add;
+    
+    private MultiplayerAnswerCtrl multiplayerAnswerCtrl;
+    private Scene answerScene;
 
     private HomeCtrl homeCtrl;
     private Scene home;
@@ -44,7 +53,8 @@ public class MainCtrl {
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
             Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home, 
-            Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> question) {
+            Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> question,
+            Pair<MultiplayerAnswerCtrl, Parent> answerPage) {
         this.primaryStage = primaryStage;
         primaryStage.setMinHeight(MIN_HEIGHT);
         primaryStage.setMinWidth(MIN_WIDTH);
@@ -55,6 +65,9 @@ public class MainCtrl {
         this.addCtrl = add.getKey();
         this.add = new Scene(add.getValue());
 
+        this.multiplayerAnswerCtrl = answerPage.getKey();
+        this.answerScene = new Scene(answerPage.getValue());
+        
         this.homeCtrl = home.getKey();
         this.home = new Scene(home.getValue());
 
@@ -83,6 +96,15 @@ public class MainCtrl {
         primaryStage.setTitle("Quizzz: Waiting");
         primaryStage.setScene(waiting);
         waitingCtrl.scaleButton();
+        new Timer().schedule(
+                new TimerTask() {
+
+                    @Override
+                    public void run() {
+                        System.out.println("REFRESH");
+                        Platform.runLater(() -> waitingCtrl.fetchUsers(homeCtrl.getServerUrl()));
+                    }
+                }, POLLING_DELAY, POLLING_INTERVAL);
     }
 
     public void showOverview() {
@@ -95,6 +117,15 @@ public class MainCtrl {
         primaryStage.setTitle("Quotes: Adding Quote");
         primaryStage.setScene(add);
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
+    }
+    
+    /**
+     * Sets the multiplayer answer screen as the scene in the primary stage 
+     * and gives the primary stage a corresponding title.
+     */
+    public void showAnswerPage() {
+        primaryStage.setTitle("Answer screen");
+        primaryStage.setScene(answerScene);
     }
 
     /**

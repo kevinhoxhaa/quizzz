@@ -16,9 +16,13 @@
 package server.api;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
+import java.util.Objects;
 import java.util.Random;
 
 import commons.User;
@@ -43,7 +47,30 @@ public class UserControllerTest {
     @Test
     public void cannotAddNullPerson() {
         var actual = sut.add(getUser(null));
-        assertEquals(BAD_REQUEST, actual.getStatusCode());
+        assertEquals(FORBIDDEN, actual.getStatusCode());
+    }
+
+    @Test
+    public void cannotPutNullPerson() {
+        User user = getUser("q1");
+        sut.add(user);
+        user.username = null;
+        var actual = sut.update(user);
+        assertEquals(FORBIDDEN, actual.getStatusCode());
+    }
+
+    @Test
+    public void putUpdatesDatabase() {
+        User user = getUser("q1");
+        var added = sut.add(user);
+        user.username = "q2";
+        sut.update(user);
+        for(User u : repo.users) {
+            if(u.id == Objects.requireNonNull(added.getBody()).id) {
+                assertEquals("q2", u.username);
+                break;
+            }
+        }
     }
 
     @Test
@@ -58,9 +85,36 @@ public class UserControllerTest {
     }
 
     @Test
+    public void duplicateUsername() {
+        sut.add(getUser("q1"));
+        var actual = sut.add(getUser("q1"));
+        assertEquals(UNAUTHORIZED, actual.getStatusCode());
+    }
+
+    @Test
     public void databaseIsUsed() {
         sut.add(getUser("q1"));
         repo.calledMethods.contains("save");
+    }
+    
+    @Test
+    public void cannotDeleteNegativeID() {
+        var actual = sut.delete(-1);
+        assertEquals(BAD_REQUEST, actual.getStatusCode());
+    }
+    
+    @Test
+    public void cannotDeleteNonExistingPerson() {
+        var actual = sut.delete(getUser("q1").id);
+        assertEquals(BAD_REQUEST, actual.getStatusCode());
+    }
+    
+    @Test
+    public void deleteRightPerson() {
+        var savedUser = sut.add(getUser("q1"));
+        var actual = sut.delete(savedUser.getBody().id);
+        assertTrue(actual.getStatusCode().is2xxSuccessful());
+        assertFalse(repo.existsById(savedUser.getBody().id));
     }
 
     private static User getUser(String q) {

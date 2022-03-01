@@ -26,6 +26,7 @@ import com.google.inject.Injector;
 
 import client.scenes.AddQuoteCtrl;
 import client.scenes.MainCtrl;
+import client.scenes.MultiplayerAnswerCtrl;
 import client.scenes.MultiplayerQuestionCtrl;
 import client.scenes.QuoteOverviewCtrl;
 import javafx.application.Application;
@@ -45,12 +46,14 @@ public class Main extends Application {
 
         var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
         var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
+        var answerPage = FXML.load(MultiplayerAnswerCtrl.class, "client", "scenes", "MultiplayerAnswer.fxml");
+
         var home = FXML.load(HomeCtrl.class, "client", "scenes", "Home.fxml");
         var question = FXML.load(MultiplayerQuestionCtrl.class, "client", "scenes", "MultiplayerQuestion.fxml");
 
         var waiting = FXML.load(WaitingCtrl.class, "client", "scenes", "Waiting.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, overview, add, home, waiting, question);
+        mainCtrl.initialize(primaryStage, overview, add, home, waiting, question, answerPage);
     }
 }
