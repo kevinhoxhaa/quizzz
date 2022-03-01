@@ -8,13 +8,14 @@ import commons.User;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import server.database.UserRepository;
 
@@ -55,7 +56,26 @@ public class UserController {
         }
 
         User saved = repo.save(user);
-        System.out.println(saved);
+        return ResponseEntity.ok(saved);
+    }
+
+    /**
+     * Updates the username of a user with a given ID if present
+     * in the repository. Otherwise, creates a new user entity with that
+     * username and ID in the repository.
+     * If the username is null or empty returns a response with a
+     * FORBIDDEN status code.
+     * @param user the user to update in the database
+     * @return the updated user
+     */
+    @PutMapping(path = { "", "/" })
+    public ResponseEntity<User> update(@RequestBody User user) {
+// || isNullOrEmpty(server) has to be added
+        if (isNullOrEmpty(user.username)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        User saved = repo.save(user);
         return ResponseEntity.ok(saved);
     }
 
