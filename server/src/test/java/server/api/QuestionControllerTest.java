@@ -6,11 +6,14 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 import java.util.Random;
 
 public class QuestionControllerTest {
+
+    private static final long NUMBER = 5;
 
     public int nextInt;
     private MyRandom random;
@@ -36,26 +39,49 @@ public class QuestionControllerTest {
 
     @Test
     public void cannotAddNullTitle() {
-        var actual = sut.add(getQuestion(null, 5, "random"));
+        var actual = sut.add(getQuestion(null, NUMBER, "random"));
         assertEquals(FORBIDDEN, actual.getStatusCode());
     }
 
     @Test
     public void cannotAddEmptySource() {
-        var actual = sut.add(getQuestion("random", 5, ""));
+        var actual = sut.add(getQuestion("random", NUMBER, ""));
         assertEquals(FORBIDDEN, actual.getStatusCode());
     }
 
     @Test
     public void cannotAddNegativeConsumption() {
-        var actual = sut.add(getQuestion("random", -5, "random"));
+        var actual = sut.add(getQuestion("random", -NUMBER, "random"));
         assertEquals(FORBIDDEN, actual.getStatusCode());
     }
 
     @Test
     public void addIncreasesQuestionsSize() {
-        var actual = sut.add(getQuestion("random", 5, "random"));
+        var actual = sut.add(getQuestion("random", NUMBER, "random"));
         assertEquals(1, repo.questions.size());
+    }
+
+    @Test
+    public void getByIdRetrievesQuestion() {
+        Question question = getQuestion("random", NUMBER, "random");
+        var expected = sut.add(question);
+        var actual = sut.getById(expected.getBody().id);
+        assertTrue(actual.getBody().isPresent());
+        assertEquals(expected.getBody(), actual.getBody().get());
+    }
+
+    @Test
+    public void cannotGetNegativeId() {
+        Question question = getQuestion("random", NUMBER, "random");
+        var actual = sut.getById(-NUMBER);
+        assertTrue(actual.getStatusCode().is4xxClientError());
+    }
+
+    @Test
+    public void cannotGetNonexistentId() {
+        Question question = getQuestion("random", NUMBER, "random");
+        var actual = sut.getById(NUMBER);
+        assertTrue(actual.getStatusCode().is4xxClientError());
     }
 
     @SuppressWarnings("serial")

@@ -97,8 +97,9 @@ public class TestQuestionRepository implements QuestionRepository {
     }
 
     @Override
-    public Optional<Question> findById(Long aLong) {
-        return Optional.empty();
+    public Optional<Question> findById(Long id) {
+        call("findById");
+        return find(id);
     }
 
     @Override

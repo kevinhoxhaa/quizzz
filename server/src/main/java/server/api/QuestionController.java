@@ -4,6 +4,7 @@ import commons.Question;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import server.database.QuestionRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @RestController
@@ -71,5 +73,20 @@ public class QuestionController {
 
         Question saved = repo.save(question);
         return ResponseEntity.ok(saved);
+    }
+
+    /**
+     * Retrieves a question by a given id and
+     * returns a bad request if a question with that
+     * id does not exist
+     * @param id the id of the question to retrieve
+     * @return the requested question
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<Question>> getById(@PathVariable("id") long id) {
+        if (id < 0 || !repo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(repo.findById(id));
     }
 }
