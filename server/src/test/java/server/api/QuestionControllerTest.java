@@ -5,8 +5,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 import java.util.Random;
@@ -93,6 +95,32 @@ public class QuestionControllerTest {
 
         assertTrue(random.wasCalled);
         assertEquals("q2", actual.getBody().get().title);
+    }
+
+    @Test
+    public void databaseIsUsed() {
+        sut.add(getQuestion("q1", NUMBER, "src"));
+        repo.calledMethods.contains("save");
+    }
+
+    @Test
+    public void cannotDeleteNegativeID() {
+        var actual = sut.delete(-NUMBER);
+        assertEquals(BAD_REQUEST, actual.getStatusCode());
+    }
+
+    @Test
+    public void cannotDeleteNonExistingPerson() {
+        var actual = sut.delete(NUMBER);
+        assertEquals(BAD_REQUEST, actual.getStatusCode());
+    }
+
+    @Test
+    public void deleteRightPerson() {
+        var question = sut.add(getQuestion("q1", NUMBER, "src"));
+        var actual = sut.delete(question.getBody().id);
+        assertTrue(actual.getStatusCode().is2xxSuccessful());
+        assertFalse(repo.existsById(question.getBody().id));
     }
 
     @SuppressWarnings("serial")

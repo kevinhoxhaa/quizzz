@@ -3,6 +3,7 @@ package server.api;
 import commons.Question;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -98,5 +99,21 @@ public class QuestionController {
     public ResponseEntity<Optional<Question>> getRandom() {
         var idx = random.nextInt((int) repo.count());
         return ResponseEntity.ok(repo.findById((long) idx));
+    }
+
+    /**
+     * Deletes a question from the database if a question
+     * with the given id exists. Otherwise, returns a bad request
+     * @param id the id of the question to delete
+     * @return the deleted question if it exists
+     */
+    @DeleteMapping(path = {"/{id}"})
+    public ResponseEntity<Question> delete(@PathVariable("id") long id) {
+        if (id < 0 || !repo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        repo.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }

@@ -59,8 +59,8 @@ public class TestQuestionRepository implements QuestionRepository {
     }
 
     @Override
-    public void deleteById(Long aLong) {
-
+    public void deleteById(Long id) {
+        questions.remove(find(id).get());
     }
 
     @Override
