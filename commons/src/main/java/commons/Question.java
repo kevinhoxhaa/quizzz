@@ -35,16 +35,31 @@ public class Question {
         this.source = source;
     }
 
+    /**
+     * Compares the current Question object with another objects
+     * @param obj the object to compare the current object with
+     * @return true if the reflections of the two objects are equal
+     */
     @Override
     public boolean equals(Object obj) {
         return EqualsBuilder.reflectionEquals(this, obj);
     }
 
+    /**
+     * Generates the hash code of the current Question object
+     * using the HashCodeBuilder
+     * @return the question hash code
+     */
     @Override
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
     }
 
+    /**
+     * Returns a String representation of the current question
+     * object
+     * @return a String representation of the current question
+     */
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
