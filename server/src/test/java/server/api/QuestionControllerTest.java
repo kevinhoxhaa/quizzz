@@ -1,9 +1,12 @@
 package server.api;
 
+import commons.Question;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 import java.util.Random;
 
@@ -15,6 +18,10 @@ public class QuestionControllerTest {
 
     private QuestionController sut;
 
+    private Question getQuestion(String title, long consumption, String source) {
+        return new Question(title, consumption, source);
+    }
+
     @BeforeEach
     public void setup() {
         random = new MyRandom();
@@ -25,6 +32,30 @@ public class QuestionControllerTest {
     @Test
     public void getAllReturnsList() {
         assertNotNull(sut.getAll());
+    }
+
+    @Test
+    public void cannotAddNullTitle() {
+        var actual = sut.add(getQuestion(null, 5, "random"));
+        assertEquals(FORBIDDEN, actual.getStatusCode());
+    }
+
+    @Test
+    public void cannotAddEmptySource() {
+        var actual = sut.add(getQuestion("random", 5, ""));
+        assertEquals(FORBIDDEN, actual.getStatusCode());
+    }
+
+    @Test
+    public void cannotAddNegativeConsumption() {
+        var actual = sut.add(getQuestion("random", -5, "random"));
+        assertEquals(FORBIDDEN, actual.getStatusCode());
+    }
+
+    @Test
+    public void addIncreasesQuestionsSize() {
+        var actual = sut.add(getQuestion("random", 5, "random"));
+        assertEquals(1, repo.questions.size());
     }
 
     @SuppressWarnings("serial")

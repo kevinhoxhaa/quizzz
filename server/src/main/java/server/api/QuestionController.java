@@ -1,7 +1,11 @@
 package server.api;
 
 import commons.Question;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import server.database.QuestionRepository;
@@ -27,6 +31,15 @@ public class QuestionController {
     }
 
     /**
+     * Checks whether a String is null or empty
+     * @param s the string to check
+     * @return true if the string is null or empty
+     */
+    private static boolean isNullOrEmpty(String s) {
+        return s == null || s.isEmpty();
+    }
+
+    /**
      * Retrieves all questions from the repository and sends them
      * to the client
      * @return a list of all questions in the repository
@@ -34,5 +47,29 @@ public class QuestionController {
     @GetMapping(path = { "", "/" })
     public List<Question> getAll() {
         return repo.findAll();
+    }
+
+    /**
+     * Saves a question sent by the client to the question repository
+     * @param question the question to save
+     * @return the saved question entity
+     */
+    @PostMapping(path = { "", "/" })
+    public ResponseEntity<Question> add(@RequestBody Question question) {
+// || isNullOrEmpty(server) has to be added
+        if (isNullOrEmpty(question.title)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        if (isNullOrEmpty(question.source)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        if(question.consumption < 0) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        Question saved = repo.save(question);
+        return ResponseEntity.ok(saved);
     }
 }
