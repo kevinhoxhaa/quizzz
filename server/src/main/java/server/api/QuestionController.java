@@ -89,4 +89,14 @@ public class QuestionController {
         }
         return ResponseEntity.ok(repo.findById(id));
     }
+
+    /**
+     * Retrieves a random question from the questions repo
+     * @return the random question requested
+     */
+    @GetMapping("/rnd")
+    public ResponseEntity<Optional<Question>> getRandom() {
+        var idx = random.nextInt((int) repo.count());
+        return ResponseEntity.ok(repo.findById((long) idx));
+    }
 }

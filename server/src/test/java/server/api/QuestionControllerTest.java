@@ -84,6 +84,17 @@ public class QuestionControllerTest {
         assertTrue(actual.getStatusCode().is4xxClientError());
     }
 
+    @Test
+    public void randomSelection() {
+        sut.add(getQuestion("q1", NUMBER, "source"));
+        sut.add(getQuestion("q2", NUMBER, "source"));
+        nextInt = 1;
+        var actual = sut.getRandom();
+
+        assertTrue(random.wasCalled);
+        assertEquals("q2", actual.getBody().get().title);
+    }
+
     @SuppressWarnings("serial")
     public class MyRandom extends Random {
 
