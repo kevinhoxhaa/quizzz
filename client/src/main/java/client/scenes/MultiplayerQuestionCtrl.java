@@ -83,6 +83,7 @@ public class MultiplayerQuestionCtrl {
     }
 
     /**
+     * The method called when the button answerTop is clicked.
      * Calls the generic method for clicking an answer, specifying that it was the top button.
      */
     @FXML
@@ -91,6 +92,7 @@ public class MultiplayerQuestionCtrl {
     }
 
     /**
+     * The method called when the button answerMid is clicked.
      * Calls the generic method for clicking an answer, specifying that it was the middle button.
      */
     @FXML
@@ -99,6 +101,7 @@ public class MultiplayerQuestionCtrl {
     }
 
     /**
+     * The method called when the button answerBot is clicked.
      * Calls the generic method for clicking an answer, specifying that it was the bottom button.
      */
     @FXML
@@ -107,7 +110,8 @@ public class MultiplayerQuestionCtrl {
     }
 
     /**
-     * Sets answerTop's background color to dark gray
+     * The method called when the cursor enters the button answerTop.
+     * Sets answerTop's background color to dark gray.
      */
     @FXML
     protected void enterAnswerTop(){
@@ -115,7 +119,8 @@ public class MultiplayerQuestionCtrl {
     }
 
     /**
-     * Sets answerMid's background color to dark gray
+     * The method called when the cursor enters the button answerMid.
+     * Sets answerMid's background color to dark gray.
      */
     @FXML
     protected void enterAnswerMid(){
@@ -123,7 +128,8 @@ public class MultiplayerQuestionCtrl {
     }
 
     /**
-     * Sets answerBot's background color to dark gray
+     * The method called when the cursor enters the button answerBot.
+     * Sets answerBot's background color to dark gray.
      */
     @FXML
     protected void enterAnswerBot(){
@@ -131,7 +137,8 @@ public class MultiplayerQuestionCtrl {
     }
 
     /**
-     * Resets all answer boxes' background color to light gray
+     * The method called upon loading the question scene, and when the cursor leaves either one of the answer buttons.
+     * Resets all answer boxes' background color to light gray.
      */
     @FXML
     protected void resetAnswerColors(){
