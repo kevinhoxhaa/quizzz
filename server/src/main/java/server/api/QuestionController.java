@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.Random;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/questions")
 public class QuestionController {
 
     private final Random random;
