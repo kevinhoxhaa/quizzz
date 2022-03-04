@@ -63,8 +63,8 @@ public class ConsumptionQuestion extends Question {
      * @param seconds the time it took the user to answer the
      *                question in seconds
      */
-    public void setUserAnswer(long answer, long seconds) {
-        this.userAnswer = answer;
+    public void setUserAnswer(Answer answer, double seconds) {
+        this.userAnswer = (Long) answer.getAnswer();
         this.seconds = seconds;
     }
 
@@ -108,7 +108,7 @@ public class ConsumptionQuestion extends Question {
      */
     @Override
     public long getPoints() {
-        return (activity.consumption == userAnswer ? 1 : 0) * (TRUE_FACTOR + TIME_FACTOR / (seconds + 1));
+        return (long) ((activity.consumption == userAnswer ? 1 : 0) * (TRUE_FACTOR + TIME_FACTOR / (seconds + 1)));
     }
 
     /**

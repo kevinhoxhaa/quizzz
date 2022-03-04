@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public abstract class Question {
     protected QuestionType type;
-    protected long seconds;
+    protected double seconds;
 
     /**
      * Constructs a question object with a given type
@@ -38,7 +38,7 @@ public abstract class Question {
      * in seconds
      * @return time in seconds
      */
-    public long getSeconds() {
+    public double getSeconds() {
         return seconds;
     }
 
@@ -82,4 +82,6 @@ public abstract class Question {
     public int hashCode() {
         return Objects.hash(type);
     }
+
+    public abstract void setUserAnswer(Answer answer, double seconds);
 }

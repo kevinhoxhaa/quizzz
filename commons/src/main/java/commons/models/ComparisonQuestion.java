@@ -71,11 +71,11 @@ public class ComparisonQuestion extends Question {
     /**
      * Sets the user answer and the time it took them in seconds
      * to answer the question
-     * @param userAnswer the user answer
+     * @param answer the user answer
      * @param seconds the time it took them to answer in seconds
      */
-    public void setUserAnswer(CompareType userAnswer, long seconds) {
-        this.userAnswer = userAnswer;
+    public void setUserAnswer(Answer answer, double seconds) {
+        this.userAnswer = (CompareType) answer.getAnswer();
         this.seconds = seconds;
     }
 
@@ -102,7 +102,7 @@ public class ComparisonQuestion extends Question {
      */
     @Override
     public long getPoints() {
-        return (answerIsCorrect() ? 1 : 0) * (TRUE_FACTOR + TIME_FACTOR / (seconds + 1));
+        return (long) ((answerIsCorrect() ? 1 : 0) * (TRUE_FACTOR + TIME_FACTOR / (seconds + 1)));
     }
 
     /**

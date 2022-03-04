@@ -2,6 +2,9 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.entities.Activity;
+import commons.models.*;
+import commons.utils.CompareType;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -19,10 +22,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static commons.utils.CompareType.SMALLER;
+import static commons.utils.CompareType.EQUAL;
+import static commons.utils.CompareType.LARGER;
+
 
 public class MultiplayerQuestionCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+
+    private Question currentQuestion;
 
     @FXML
     private StackPane answerTop;
@@ -30,15 +39,25 @@ public class MultiplayerQuestionCtrl {
     private StackPane answerMid;
     @FXML
     private StackPane answerBot;
+    @FXML
+    private Text answerTopText;
+    @FXML
+    private Text answerMidText;
+    @FXML
+    private Text answerBotText;
+
+    private Answer answerTopAnswer;
+    private Answer answerMidAnswer;
+    private Answer answerBotAnswer;
 
     private List<StackPane> answerButtons;
     private StackPane selectedAnswerButton;
 
     private double secondsTaken;
-    private String userAnswer;
+    private Answer userAnswer;
 
     @FXML
-    private Text question;
+    private Text activityText;
     @FXML
     private Text questionNum;
 
@@ -68,20 +87,114 @@ public class MultiplayerQuestionCtrl {
     public MultiplayerQuestionCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
-
-        this.answerButtons = new ArrayList<>();
     }
 
     /**
      * Sets up the question page scene:
+     *  - Sets up the question/answers according to the type of the question given
      *  - Fills the answerButtons list for iterations
      *  - Resets all buttons to their default colors
      */
-    protected void setup() {
+    protected void setup(Question question) {
+        this.currentQuestion = question;
+
+        switch (question.getType()){
+            case CONSUMPTION:
+                setupConsumptionQuestion(question);
+                break;
+            case COMPARISON:
+                setupComparisonQuestion(question);
+                break;
+            case CHOICE:
+                setupChoiceQuestion(question);
+                break;
+            case ESTIMATION:
+                setupEstimationQuestion(question);
+                break;
+        }
+
+        this.answerButtons = new ArrayList<>();
         this.answerButtons.add(answerTop);
         this.answerButtons.add(answerMid);
         this.answerButtons.add(answerBot);
+
         resetAnswerColors();
+    }
+
+    /**
+     * Sets up the questions and answers on the page for the given comparison question
+     * @param generalQuestion the given question
+     */
+    private void setupComparisonQuestion(Question generalQuestion) {
+        ComparisonQuestion question = (ComparisonQuestion) generalQuestion;
+
+        activityText.setText(
+                String.format("Does %s use more, less, or the same amount of energy as %s?",
+                        question.getFirstActivity().title, question.getSecondActivity().title)
+        );
+        answerTopText.setText("MORE");
+        answerMidText.setText("EQUAL");
+        answerBotText.setText("LESS");
+
+        answerTopAnswer = new Answer(LARGER);
+        answerMidAnswer = new Answer(EQUAL);
+        answerBotAnswer = new Answer(SMALLER);
+    }
+
+    /**
+     * Sets up the questions and answers on the page for the given consumption question
+     * @param generalQuestion the given question
+     */
+    private void setupConsumptionQuestion(Question generalQuestion) {
+        ConsumptionQuestion question = (ConsumptionQuestion) generalQuestion;
+
+        activityText.setText(
+                String.format("How much energy does %s cost?",
+                        question.getActivity().title)
+        );
+
+        List<Long> answers = question.getAnswers();
+
+        answerTopText.setText(answers.get(0).toString());
+        answerMidText.setText(answers.get(1).toString());
+        answerBotText.setText(answers.get(2).toString());
+
+        answerTopAnswer = new Answer(answers.get(0));
+        answerMidAnswer = new Answer(answers.get(1));
+        answerBotAnswer = new Answer(answers.get(2));
+    }
+
+    /**
+     * Sets up the questions and answers on the page for the given choice question
+     * @param generalQuestion the given question
+     */
+    private void setupChoiceQuestion(Question generalQuestion) {
+        ChoiceQuestion question = (ChoiceQuestion) generalQuestion;
+
+        activityText.setText(
+                String.format("What could you do instead of %s to consume less energy?",
+                        question.getComparedActivity().title)
+        );
+
+        List<Activity> answers = question.getActivities();
+
+        //TODO figure out how the answers work exactly (shuffling)
+        answerTopText.setText(answers.get(0).toString());
+        answerMidText.setText(answers.get(1).toString());
+        answerBotText.setText(answers.get(2).toString());
+
+        answerTopAnswer = new Answer(answers.get(0));
+        answerMidAnswer = new Answer(answers.get(1));
+        answerBotAnswer = new Answer(answers.get(2));
+    }
+
+    /**
+     * Sets up the questions and answers on the page for the given estimation question
+     * Needs to be thought through, will probably be in a different class
+     * @param generalQuestion the given question
+     */
+    private void setupEstimationQuestion(Question generalQuestion) {
+        //TODO Deal with estimation questions (they need a whole different scene most probably)
     }
 
 
@@ -93,10 +206,8 @@ public class MultiplayerQuestionCtrl {
     private void onAnswerClicked(StackPane answerButton){
 
         if(!answerButton.equals(selectedAnswerButton)) {
-            secondsTaken = getSeconds();
 
-            Text answerText = (Text) answerButton.getChildren().get(0);
-            userAnswer = answerText.getText();
+            currentQuestion.setUserAnswer(userAnswer, getSeconds());
 
             selectedAnswerButton = answerButton;
             resetAnswerColors();
@@ -107,13 +218,14 @@ public class MultiplayerQuestionCtrl {
                 answerBtnLoop.setStyle("-fx-border-width: 1; -fx-border-color: black");
                 ((Text) answerBtnLoop.getChildren().get(0)).setStyle("-fx-font-weight: normal");
             }
-            answerText.setStyle("-fx-font-weight: bold");
+            ((Text) answerButton.getChildren().get(0)).setStyle("-fx-font-weight: bold");
             answerButton.setStyle("-fx-border-width: 2; -fx-border-color: black");
         }
 
     }
 
     /**
+     * Returns the time since the timer started, in seconds.
      * For now, a placeholder method.
      * @return the time since the timer started, in seconds.
      */
@@ -131,7 +243,7 @@ public class MultiplayerQuestionCtrl {
      *  - Redirecting to the answer page
      */
     private void finalizeAndSend(){
-        //TODO sending the not-yet-existing question instance back to the server
+        //TODO sending the question instance back to the server
         // and waiting for the list of people who got it right
         mainCtrl.showAnswerPage();
     }

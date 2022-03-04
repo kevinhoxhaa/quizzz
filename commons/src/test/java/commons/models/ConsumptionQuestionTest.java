@@ -41,13 +41,13 @@ public class ConsumptionQuestionTest {
 
     @Test
     public void setUserAnswerSetsUserAnswer() {
-        question.setUserAnswer(POSITIVE * POSITIVE, POSITIVE);
+        question.setUserAnswer(new Answer(POSITIVE * POSITIVE), POSITIVE);
         assertEquals(POSITIVE * POSITIVE, question.getUserAnswer());
     }
 
     @Test
     public void getSecondsReturnsSecondsItTook() {
-        question.setUserAnswer(POSITIVE * POSITIVE, POSITIVE);
+        question.setUserAnswer(new Answer(POSITIVE * POSITIVE), POSITIVE);
         assertEquals(POSITIVE, question.getSeconds());
     }
 
@@ -71,7 +71,7 @@ public class ConsumptionQuestionTest {
 
     @Test
     public void getPointsShouldReturnPointsForAnswer() {
-        question.setUserAnswer(POSITIVE, 1);
+        question.setUserAnswer(new Answer(POSITIVE), 1);
         long expected = TOTAL;
         assertEquals(expected, question.getPoints());
     }
