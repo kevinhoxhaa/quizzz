@@ -15,7 +15,10 @@
  */
 package client.scenes;
 
-import commons.User;
+import commons.entities.Activity;
+import commons.entities.User;
+import commons.models.ConsumptionQuestion;
+import commons.models.Question;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
@@ -23,6 +26,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Pair;
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -152,9 +156,22 @@ public class MainCtrl {
      * Sets the scene in the primary stage to the one corresponding to a multiplayer question screen.
      */
     public void showQuestion() {
-        multiplayerQuestionCtrl.setup();
+        Question question = getNextQuestion();
+
+        multiplayerQuestionCtrl.setup(question);
         primaryStage.setTitle("Question screen");
         primaryStage.setScene(questionScene);
+    }
+
+    /**
+     * Fetches a random question from the server. For now, it just returns a placeholder for testing.
+     * @return a random question
+     */
+    private Question getNextQuestion() {
+        //TODO instead of this, return a random question fetched from the server
+        Activity activity = new Activity(
+                "testing the question models", 42, "it was me. I said it. haha");
+        return new ConsumptionQuestion(activity);
     }
 
     /**

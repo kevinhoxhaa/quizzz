@@ -41,12 +41,13 @@ public class EstimationQuestion extends Question {
     /**
      * Sets the user answer to the given question and
      * the seconds it took the user to answer it
-     * @param userAnswer the user answer
+     * @param answer the user answer
      * @param seconds the time it took the user to answer
      *                it in seconds
      */
-    public void setUserAnswer(long userAnswer, long seconds) {
-        this.userAnswer = userAnswer;
+    @Override
+    public void setUserAnswer(Answer answer, double seconds) {
+        this.userAnswer = (Long) answer.getAnswer();
         this.seconds = seconds;
     }
 

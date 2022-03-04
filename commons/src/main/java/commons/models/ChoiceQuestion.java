@@ -91,8 +91,9 @@ public class ChoiceQuestion extends Question {
      * @param seconds the time it took the user to answer the
      *                question in seconds
      */
-    public void setUserAnswer(Activity answer, long seconds) {
-        this.userAnswer = answer;
+    @Override
+    public void setUserAnswer(Answer answer, double seconds) {
+        this.userAnswer = (Activity) answer.getAnswer();
         this.seconds = seconds;
     }
 
@@ -123,7 +124,7 @@ public class ChoiceQuestion extends Question {
      */
     @Override
     public long getPoints() {
-        return (answer == userAnswer ? 1 : 0) * (TRUE_FACTOR + TIME_FACTOR / (seconds + 1));
+        return (long) ((answer == userAnswer ? 1 : 0) * (TRUE_FACTOR + TIME_FACTOR / (seconds + 1)));
     }
 
     /**

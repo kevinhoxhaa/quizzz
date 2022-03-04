@@ -66,19 +66,19 @@ public class ChoiceQuestionTest {
 
     @Test
     public void setUserAnswerSetsUserAnswer() {
-        question.setUserAnswer(question.getActivities().get(0), POSITIVE);
+        question.setUserAnswer(new Answer(question.getActivities().get(0)), POSITIVE);
         assertEquals("q1", question.getUserAnswer().title);
     }
 
     @Test
     public void getSecondsReturnsSeconds() {
-        question.setUserAnswer(question.getActivities().get(0), POSITIVE);
+        question.setUserAnswer(new Answer(question.getActivities().get(0)), POSITIVE);
         assertEquals(POSITIVE, question.getSeconds());
     }
 
     @Test
     public void getPointsCalculatesPoints() {
-        question.setUserAnswer(question.getActivities().get(0), 1);
+        question.setUserAnswer(new Answer(question.getActivities().get(0)), 1);
         assertEquals(TOTAL, question.getPoints());
     }
 
