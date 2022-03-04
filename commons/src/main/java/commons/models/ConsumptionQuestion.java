@@ -1,0 +1,151 @@
+package commons.models;
+
+import commons.entities.Activity;
+import commons.utils.QuestionType;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+
+public class ConsumptionQuestion extends Question {
+    private static final long TRUE_FACTOR = 500;
+    private static final long TIME_FACTOR = 800;
+
+    private Activity activity;
+    private long answer;
+    private long seconds;
+    private List<Long> answers;
+
+    /**
+     * Constructs a new consumption question object based
+     * on the provided activity
+     * Generates a list of alternative answers to the question
+     * @param activity the activity this question is based on
+     */
+    public ConsumptionQuestion(Activity activity) {
+        super(QuestionType.CONSUMPTION);
+        this.activity = activity;
+        this.seconds = 1;
+        this.answer = -1;
+        setAnswers(activity.consumption);
+    }
+
+    /**
+     * Returns the activity the question is based on
+     * @return the activity the question is based on
+     */
+    public Activity getActivity() {
+        return activity;
+    }
+
+    /**
+     * Sets the activity this question is based on
+     * @param activity the activity the question
+     *                 is based on
+     */
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+        setAnswers(activity.consumption);
+    }
+
+    /**
+     * Returns the consumption guessed by the user
+     * @return the user's answer to the question
+     */
+    public long getAnswer() {
+        return answer;
+    }
+
+    /**
+     * Sets the user's answer and the time it took them
+     * in seconds to answer the question
+     * @param answer the user's answer
+     * @param seconds the time it took the user to answer the
+     *                question in seconds
+     */
+    public void setAnswer(long answer, long seconds) {
+        this.answer = answer;
+        this.seconds = seconds;
+    }
+
+    /**
+     * Returns the seconds it took the user to answer
+     * the question; if it has not already been answered,
+     * the returned value is -1
+     * @return the seconds it took the user to answer
+     */
+    public long getSeconds() {
+        return seconds;
+    }
+
+    /**
+     * Returns a list of two numbers which are a little
+     * greater or smaller than the correct answer, in order
+     * to confuse the user
+     * Note: ignoring checkstyle because of too many
+     * magic numbers
+     * @param correctAnswer the correct answer
+     */
+    // CHECKSTYLE:OFF
+    public void setAnswers(long correctAnswer) {
+        answers = new ArrayList<>();
+        answers.add(correctAnswer);
+
+        long firstAlternative = (long) (correctAnswer + 3 + (Math.random() < 0.5 ? -1 : 1) *
+                ((Math.random() * 0.1 + 0.01) * correctAnswer));
+        answers.add(firstAlternative);
+
+        long secondAlternative = (long) (correctAnswer + 5 + (Math.random() < 0.5 ? -1 : 1) *
+                ((Math.random() * 0.1 + 0.01) * correctAnswer));
+        answers.add(secondAlternative);
+        Collections.shuffle(answers);
+    }
+    // CHECKSTYLE:ON
+
+    /**
+     * Returns the generated answers to the question
+     * @return the question alternative answers
+     */
+    public List<Long> getAnswers() {
+        return answers;
+    }
+
+    /**
+     * Calculates the points based on whether
+     * the user's answer is correct and the time
+     * it took them to answer the question
+     * @return the current answer points
+     */
+    @Override
+    public long getPoints() {
+        return (activity.consumption == answer ? 1 : 0) * (TRUE_FACTOR + TIME_FACTOR / (seconds + 1));
+    }
+
+    @Override
+    public String toString() {
+        return "ConsumptionQuestion{" +
+                "activity=" + activity +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        ConsumptionQuestion that = (ConsumptionQuestion) o;
+        return activity.equals(that.activity);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), activity, answer, seconds, answers);
+    }
+}
