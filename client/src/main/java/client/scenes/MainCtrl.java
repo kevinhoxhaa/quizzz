@@ -153,8 +153,9 @@ public class MainCtrl {
      * Sets the timer to an initial 10 seconds for the players to answer the question.
      */
     public void showQuestion() {
+        int totalSeconds = 10;
         multiplayerQuestionCtrl.resetAnswerColors();
-        multiplayerQuestionCtrl.countDown(10);
+        multiplayerQuestionCtrl.countDown(totalSeconds);
         multiplayerQuestionCtrl.setStartTime();
         primaryStage.setTitle("Question screen");
         primaryStage.setScene(questionScene);
