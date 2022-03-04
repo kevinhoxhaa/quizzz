@@ -1,4 +1,4 @@
-package commons;
+package commons.entities;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -13,7 +13,7 @@ import javax.persistence.Id;
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
-public class Question {
+public class Activity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,18 +25,18 @@ public class Question {
     public String source;
 
     @SuppressWarnings("unused")
-    private Question() {
+    private Activity() {
         // for object mapper
     }
 
-    public Question(String title, long consumption, String source) {
+    public Activity(String title, long consumption, String source) {
         this.title = title;
         this.consumption = consumption;
         this.source = source;
     }
 
     /**
-     * Compares the current Question object with another objects
+     * Compares the current Activity object with another objects
      * @param obj the object to compare the current object with
      * @return true if the reflections of the two objects are equal
      */
@@ -46,7 +46,7 @@ public class Question {
     }
 
     /**
-     * Generates the hash code of the current Question object
+     * Generates the hash code of the current Activity object
      * using the HashCodeBuilder
      * @return the question hash code
      */
@@ -56,9 +56,9 @@ public class Question {
     }
 
     /**
-     * Returns a String representation of the current question
+     * Returns a String representation of the current activity
      * object
-     * @return a String representation of the current question
+     * @return a String representation of the current activity
      */
     @Override
     public String toString() {

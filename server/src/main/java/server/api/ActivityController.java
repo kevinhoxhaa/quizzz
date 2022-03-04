@@ -1,6 +1,6 @@
 package server.api;
 
-import commons.Question;
+import commons.entities.Activity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,25 +10,25 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import server.database.QuestionRepository;
+import server.database.ActivityRepository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
 @RestController
-@RequestMapping("/api/questions")
-public class QuestionController {
+@RequestMapping("/api/activities")
+public class ActivityController {
 
     private final Random random;
-    private final QuestionRepository repo;
+    private final ActivityRepository repo;
 
     /**
-     * Constructs a new question controller object
-     * @param random the random generator of questions
-     * @param repo the question repository
+     * Constructs a new activity controller object
+     * @param random the random generator of activities
+     * @param repo the activity repository
      */
-    public QuestionController(Random random, QuestionRepository repo) {
+    public ActivityController(Random random, ActivityRepository repo) {
         this.random = random;
         this.repo = repo;
     }
@@ -43,48 +43,48 @@ public class QuestionController {
     }
 
     /**
-     * Retrieves all questions from the repository and sends them
+     * Retrieves all activities from the repository and sends them
      * to the client
-     * @return a list of all questions in the repository
+     * @return a list of all activities in the repository
      */
     @GetMapping(path = { "", "/" })
-    public List<Question> getAll() {
+    public List<Activity> getAll() {
         return repo.findAll();
     }
 
     /**
-     * Saves a question sent by the client to the question repository
-     * @param question the question to save
-     * @return the saved question entity
+     * Saves an activity sent by the client to the activity repository
+     * @param activity the activity to save
+     * @return the saved activity entity
      */
     @PostMapping(path = { "", "/" })
-    public ResponseEntity<Question> add(@RequestBody Question question) {
+    public ResponseEntity<Activity> add(@RequestBody Activity activity) {
 // || isNullOrEmpty(server) has to be added
-        if (isNullOrEmpty(question.title)) {
+        if (isNullOrEmpty(activity.title)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        if (isNullOrEmpty(question.source)) {
+        if (isNullOrEmpty(activity.source)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        if(question.consumption < 0) {
+        if(activity.consumption < 0) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        Question saved = repo.save(question);
+        Activity saved = repo.save(activity);
         return ResponseEntity.ok(saved);
     }
 
     /**
-     * Retrieves a question by a given id and
-     * returns a bad request if a question with that
+     * Retrieves an activity by a given id and
+     * returns a bad request if an activity with that
      * id does not exist
-     * @param id the id of the question to retrieve
-     * @return the requested question
+     * @param id the id of the activity to retrieve
+     * @return the requested activity
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Question>> getById(@PathVariable("id") long id) {
+    public ResponseEntity<Optional<Activity>> getById(@PathVariable("id") long id) {
         if (id < 0 || !repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
@@ -92,23 +92,23 @@ public class QuestionController {
     }
 
     /**
-     * Retrieves a random question from the questions repo
-     * @return the random question requested
+     * Retrieves a random activity from the activities repo
+     * @return the random activity requested
      */
     @GetMapping("/rnd")
-    public ResponseEntity<Optional<Question>> getRandom() {
+    public ResponseEntity<Optional<Activity>> getRandom() {
         var idx = random.nextInt((int) repo.count());
         return ResponseEntity.ok(repo.findById((long) idx));
     }
 
     /**
-     * Deletes a question from the database if a question
+     * Deletes an activity from the database if an activity
      * with the given id exists. Otherwise, returns a bad request
-     * @param id the id of the question to delete
-     * @return the deleted question if it exists
+     * @param id the id of the activity to delete
+     * @return the deleted activity if it exists
      */
     @DeleteMapping(path = {"/{id}"})
-    public ResponseEntity<Question> delete(@PathVariable("id") long id) {
+    public ResponseEntity<Activity> delete(@PathVariable("id") long id) {
         if (id < 0 || !repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }

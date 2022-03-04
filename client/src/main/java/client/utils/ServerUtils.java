@@ -23,10 +23,10 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.List;
 
-import commons.User;
+import commons.entities.User;
 import org.glassfish.jersey.client.ClientConfig;
 
-import commons.Quote;
+import commons.entities.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;

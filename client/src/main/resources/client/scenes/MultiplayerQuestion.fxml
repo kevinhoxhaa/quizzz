@@ -166,7 +166,7 @@
                         </StackPane>
                         <StackPane prefHeight="110.0" prefWidth="214.0">
                            <children>
-                              <Text fx:id="question" strokeType="OUTSIDE" strokeWidth="0.0" text="What is the answer to this question?" wrappingWidth="182.0">
+                              <Text fx:id="activity" strokeType="OUTSIDE" strokeWidth="0.0" text="What is the answer to this activity?" wrappingWidth="182.0">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>

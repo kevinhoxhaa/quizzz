@@ -168,7 +168,7 @@
                <children>
                   <Pane prefHeight="57.0" prefWidth="708.0">
                      <children>
-                        <Text fx:id="question" layoutX="138.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="What is the answer to this question?" wrappingWidth="362.40002212524405">
+                        <Text fx:id="activity" layoutX="138.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="What is the answer to this activity?" wrappingWidth="362.40002212524405">
                            <font>
                               <Font size="20.0" />
                            </font>
@@ -186,7 +186,7 @@
                <children>
                   <Pane prefHeight="46.0" prefWidth="706.0">
                      <children>
-                        <Text fx:id="answer" layoutX="136.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This is the answer to the question." wrappingWidth="362.40002212524405">
+                        <Text fx:id="answer" layoutX="136.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This is the answer to the activity." wrappingWidth="362.40002212524405">
                            <font>
                               <Font size="20.0" />
                            </font>
@@ -222,7 +222,7 @@
                <children>
                   <Pane prefHeight="103.0" prefWidth="202.0">
                      <children>
-                        <Text layoutX="48.0" layoutY="93.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Next question in:" wrappingWidth="105.14047241210938" />
+                        <Text layoutX="48.0" layoutY="93.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Next activity in:" wrappingWidth="105.14047241210938" />
                      </children>
                   </Pane>
                   <Pane prefHeight="72.0" prefWidth="202.0">
