@@ -4,7 +4,9 @@ import commons.entities.Activity;
 import commons.utils.AnswerType;
 import commons.utils.CompareType;
 
-import static commons.utils.AnswerType.*;
+import static commons.utils.AnswerType.LONG;
+import static commons.utils.AnswerType.ACTIVITY;
+import static commons.utils.AnswerType.COMPARETYPE;
 
 public class Answer {
     private Long longAnswer;
