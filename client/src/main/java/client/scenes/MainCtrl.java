@@ -150,9 +150,12 @@ public class MainCtrl {
 
     /**
      * Sets the scene in the primary stage to the one corresponding to a multiplayer question screen.
+     * Sets the timer to an initial 10 seconds for the players to answer the question.
      */
     public void showQuestion() {
         multiplayerQuestionCtrl.resetAnswerColors();
+        multiplayerQuestionCtrl.countDown(10);
+        multiplayerQuestionCtrl.setStartTime();
         primaryStage.setTitle("Question screen");
         primaryStage.setScene(questionScene);
     }
