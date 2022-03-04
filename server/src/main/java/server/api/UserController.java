@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-import commons.User;
+import commons.entities.User;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;

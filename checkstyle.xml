@@ -9,6 +9,7 @@
         <property name="max" value="120"/>
     </module>
     <module name="TreeWalker">
+        <module name="SuppressionCommentFilter"/>
         <module name="UnusedImports" />
         <module name="NeedBraces" />
         <module name="OneStatementPerLine" />

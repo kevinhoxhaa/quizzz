@@ -1,4 +1,4 @@
-package commons;
+package commons.entities;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
@@ -19,6 +19,7 @@ public class User {
     public long id;
 
     public String username;
+    public Long correctAnswers;
 
     @SuppressWarnings("unused")
     private User() {
@@ -27,6 +28,7 @@ public class User {
 
     public User(String username) {
         this.username = username;
+        this.correctAnswers = Long.valueOf(0);
     }
 
     @Override
