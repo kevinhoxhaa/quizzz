@@ -3,12 +3,13 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.entities.Activity;
-import commons.models.*;
-import commons.utils.CompareType;
-import javafx.event.EventHandler;
+import commons.models.Answer;
+import commons.models.Question;
+import commons.models.ConsumptionQuestion;
+import commons.models.ChoiceQuestion;
+import commons.models.ComparisonQuestion;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.Background;
@@ -19,7 +20,6 @@ import javafx.scene.shape.Arc;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import static commons.utils.CompareType.SMALLER;
@@ -94,6 +94,7 @@ public class MultiplayerQuestionCtrl {
      *  - Sets up the question/answers according to the type of the question given
      *  - Fills the answerButtons list for iterations
      *  - Resets all buttons to their default colors
+     * @param question the question instance upon which the setup is based
      */
     protected void setup(Question question) {
         this.currentQuestion = question;
