@@ -2,6 +2,8 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
@@ -12,6 +14,12 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
+
+import java.awt.event.MouseEvent;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 
 public class MultiplayerQuestionCtrl {
@@ -49,6 +57,7 @@ public class MultiplayerQuestionCtrl {
     @FXML
     private StackPane reduceTime;
 
+    private double startTime;
 
     /**
      * Creates a controller for the multiplayer question screen, with the given server and main controller.
@@ -79,7 +88,12 @@ public class MultiplayerQuestionCtrl {
         // also, the body of this method should actually be called when the
         // timer runs out, on click, only a sort of saving (and point-calculation)
         // should occur
+        double answeringTime = System.currentTimeMillis() - startTime;
         mainCtrl.showAnswerPage();
+    }
+
+    protected void setStartTime() {
+        startTime = System.currentTimeMillis();
     }
 
     /**
@@ -147,4 +161,39 @@ public class MultiplayerQuestionCtrl {
         answerBot.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
     }
 
+    /**
+     * Counts down from a specific amount of seconds to 0 and shows this on the question page
+     * to indicate the amount of time a player has left to answer the question. <br>
+     * If the timer reaches zero, the player will no longer be able to interact with the answer buttons
+     * and will send its received Question object back to the server. <br>
+     * The player will be automatically redirected to the answer page when the information about which
+     * players got the question right is received from the server.
+     * @param totalSeconds The total amount of seconds a players has to answer the question.
+     */
+    protected void countDown(int totalSeconds) {
+        remainingSeconds.setText(Integer.toString(totalSeconds));
+        Timeline questionTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            int newRemainingSeconds = Integer.parseInt(remainingSeconds.getText()) - 1;
+            remainingSeconds.setText(Integer.toString(newRemainingSeconds));
+            if (newRemainingSeconds == 0) {
+                resetAnswerColors();
+                disableAnswers();
+                //TODO:
+                // - Send Question Object back to the server.
+                // - Wait for information about which players answered correctly.
+                mainCtrl.showAnswerPage();
+            }
+        }));
+        questionTimeline.setCycleCount(totalSeconds);
+        questionTimeline.play();
+    }
+
+    private void disableAnswers() {
+        answerTop.setOnMouseEntered(null);
+        answerMid.setOnMouseEntered(null);
+        answerBot.setOnMouseEntered(null);
+        answerTop.setOnMouseClicked(null);
+        answerMid.setOnMouseClicked(null);
+        answerBot.setOnMouseClicked(null);
+    }
 }
