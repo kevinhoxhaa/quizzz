@@ -4,24 +4,19 @@ import commons.entities.Activity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class ConsumptionQuestionTest {
+public class EstimationQuestionTest {
     private static final long POSITIVE = 8;
-    private static final long ZERO = 0;
-    private static final long NEGATIVE = -1;
-    private static final long TOTAL = 900;
+    private static final long TOTAL = 1000;
 
-    private ConsumptionQuestion question;
+    private EstimationQuestion question;
     private Activity activity = new Activity("act", POSITIVE, "src");
 
     @BeforeEach
     public void startup() {
-        question = new ConsumptionQuestion(activity);
+        question = new EstimationQuestion(activity);
     }
 
     @Test
@@ -36,7 +31,7 @@ public class ConsumptionQuestionTest {
 
     @Test
     public void getUserAnswerReturnsUserAnswer() {
-        assertEquals(NEGATIVE, question.getUserAnswer());
+        assertEquals(-1, question.getUserAnswer());
     }
 
     @Test
@@ -46,32 +41,14 @@ public class ConsumptionQuestionTest {
     }
 
     @Test
-    public void getSecondsReturnsSecondsItTook() {
+    public void getSecondsReturnsSeconds() {
         question.setUserAnswer(POSITIVE * POSITIVE, POSITIVE);
         assertEquals(POSITIVE, question.getSeconds());
     }
 
     @Test
-    public void getSecondsReturnsPositiveIfNotAnswered() {
-        assertEquals(-NEGATIVE, question.getSeconds());
-    }
-
-    @Test
-    public void getAnswersReturnsDifferentAnswers() {
-        System.out.println(question.getAnswers());
-        List<Long> answers = question.getAnswers();
-        long firstAnswer = answers.remove((int) ZERO);
-        long secondAnswer = answers.remove((int) ZERO);
-        long thirdAnswer = answers.remove((int) ZERO);
-
-        assertNotEquals(firstAnswer, secondAnswer);
-        assertNotEquals(secondAnswer, thirdAnswer);
-        assertNotEquals(firstAnswer, thirdAnswer);
-    }
-
-    @Test
-    public void getPointsShouldReturnPointsForAnswer() {
-        question.setUserAnswer(POSITIVE, 1);
+    public void getPointsReturnsPoints() {
+        question.setUserAnswer(POSITIVE, POSITIVE);
         long expected = TOTAL;
         assertEquals(expected, question.getPoints());
     }
@@ -79,7 +56,7 @@ public class ConsumptionQuestionTest {
     @Test
     public void toStringReturnsStringRepresentation() {
         assertEquals(
-                String.format("ConsumptionQuestion{activity=%s}",
+                String.format("EstimationQuestion{activity=%s}",
                         question.getActivity().toString()), question.toString()
         );
     }

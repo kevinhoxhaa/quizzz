@@ -122,6 +122,10 @@ public class ConsumptionQuestion extends Question {
         return (activity.consumption == userAnswer ? 1 : 0) * (TRUE_FACTOR + TIME_FACTOR / (seconds + 1));
     }
 
+    /**
+     * Returns a string representation of the given object
+     * @return a string representation of the given object
+     */
     @Override
     public String toString() {
         return "ConsumptionQuestion{" +
@@ -129,6 +133,13 @@ public class ConsumptionQuestion extends Question {
                 '}';
     }
 
+    /**
+     * Checks whether another object is of the same instance
+     * and has fields equal to the given object
+     * @param o the object to compare the current object with
+     * @return true of the two objects are the same or are of
+     * the same instance and have equal fields
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -144,6 +155,11 @@ public class ConsumptionQuestion extends Question {
         return activity.equals(that.activity);
     }
 
+    /**
+     * Generates a hash code for the given object based
+     * on its fields
+     * @return object hash code
+     */
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), activity, userAnswer, seconds, answers);
