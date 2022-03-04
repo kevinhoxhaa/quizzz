@@ -22,6 +22,9 @@ public class MultiplayerQuestionCtrl {
     private static final int ANSWER_MID_ID = 2;
     private static final int ANSWER_BOT_ID = 3;
 
+    private static final int TOTAL_QUESTIONS = 20;
+    private static final int HALFWAY_QUESTIONS = 10;
+
     @FXML
     private StackPane answerTop;
     @FXML
@@ -80,8 +83,8 @@ public class MultiplayerQuestionCtrl {
         // also, the body of this method should actually be called when the
         // timer runs out, on click, only a sort of saving (and point-calculation)
         // should occur
-        if(mainCtrl.getQuestionCount()<=20){
-            if(mainCtrl.getQuestionCount()==10){
+        if(mainCtrl.getQuestionCount()<=TOTAL_QUESTIONS){
+            if(mainCtrl.getQuestionCount()==HALFWAY_QUESTIONS){
 //                mainCtrl.showRankingPage();
                 // The ranking page will be showed here
             }
