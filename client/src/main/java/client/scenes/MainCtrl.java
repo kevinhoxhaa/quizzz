@@ -26,7 +26,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Pair;
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -37,6 +36,7 @@ public class MainCtrl {
     public static final double MIN_HEIGHT = 512.0;
     private static final int POLLING_DELAY = 0;
     private static final int POLLING_INTERVAL = 1500;
+    private static final long ANSWER_TO_THE_ULTIMATE_QUESTION = 42;
 
     private Stage primaryStage;
 
@@ -170,7 +170,7 @@ public class MainCtrl {
     private Question getNextQuestion() {
         //TODO instead of this, return a random question fetched from the server
         Activity activity = new Activity(
-                "testing the question models", 42, "it was me. I said it. haha");
+                "testing the question models", ANSWER_TO_THE_ULTIMATE_QUESTION, "it was me. I said it. haha");
         return new ConsumptionQuestion(activity);
     }
 
