@@ -44,7 +44,9 @@ public class ServerUtils {
             System.out.println(line);
         }
     }
-
+    public String getURL(){
+        return SERVER;
+    }
     public List<Quote> getQuotes() {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/quotes") //
@@ -75,5 +77,19 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(user, APPLICATION_JSON), User.class);
+    }
+
+    /**
+     * A method that removes the user from the repository
+     * @param serverUrl
+     * @param user
+     * @return the user that was removed
+     */
+    public User removeUser(String serverUrl, User user) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path("api/users/"+user.id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete(User.class);
     }
 }
