@@ -35,19 +35,19 @@ public class ConsumptionQuestionTest {
     }
 
     @Test
-    public void getAnswerReturnsUserAnswer() {
-        assertEquals(NEGATIVE, question.getAnswer());
+    public void getUserAnswerReturnsUserAnswer() {
+        assertEquals(NEGATIVE, question.getUserAnswer());
     }
 
     @Test
-    public void setAnswerSetsUserAnswer() {
-        question.setAnswer(POSITIVE * POSITIVE, POSITIVE);
-        assertEquals(POSITIVE * POSITIVE, question.getAnswer());
+    public void setUserAnswerSetsUserAnswer() {
+        question.setUserAnswer(POSITIVE * POSITIVE, POSITIVE);
+        assertEquals(POSITIVE * POSITIVE, question.getUserAnswer());
     }
 
     @Test
     public void getSecondsReturnsSecondsItTook() {
-        question.setAnswer(POSITIVE * POSITIVE, POSITIVE);
+        question.setUserAnswer(POSITIVE * POSITIVE, POSITIVE);
         assertEquals(POSITIVE, question.getSeconds());
     }
 

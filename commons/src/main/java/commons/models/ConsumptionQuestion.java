@@ -13,7 +13,7 @@ public class ConsumptionQuestion extends Question {
     private static final long TIME_FACTOR = 800;
 
     private Activity activity;
-    private long answer;
+    private long userAnswer;
     private long seconds;
     private List<Long> answers;
 
@@ -27,7 +27,7 @@ public class ConsumptionQuestion extends Question {
         super(QuestionType.CONSUMPTION);
         this.activity = activity;
         this.seconds = 1;
-        this.answer = -1;
+        this.userAnswer = -1;
         setAnswers(activity.consumption);
     }
 
@@ -53,8 +53,8 @@ public class ConsumptionQuestion extends Question {
      * Returns the consumption guessed by the user
      * @return the user's answer to the question
      */
-    public long getAnswer() {
-        return answer;
+    public long getUserAnswer() {
+        return userAnswer;
     }
 
     /**
@@ -64,8 +64,8 @@ public class ConsumptionQuestion extends Question {
      * @param seconds the time it took the user to answer the
      *                question in seconds
      */
-    public void setAnswer(long answer, long seconds) {
-        this.answer = answer;
+    public void setUserAnswer(long answer, long seconds) {
+        this.userAnswer = answer;
         this.seconds = seconds;
     }
 
@@ -119,7 +119,7 @@ public class ConsumptionQuestion extends Question {
      */
     @Override
     public long getPoints() {
-        return (activity.consumption == answer ? 1 : 0) * (TRUE_FACTOR + TIME_FACTOR / (seconds + 1));
+        return (activity.consumption == userAnswer ? 1 : 0) * (TRUE_FACTOR + TIME_FACTOR / (seconds + 1));
     }
 
     @Override
@@ -146,6 +146,6 @@ public class ConsumptionQuestion extends Question {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), activity, answer, seconds, answers);
+        return Objects.hash(super.hashCode(), activity, userAnswer, seconds, answers);
     }
 }
