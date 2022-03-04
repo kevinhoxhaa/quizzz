@@ -16,11 +16,6 @@ import javafx.scene.shape.Arc;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
-import java.awt.event.MouseEvent;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
-
 
 public class MultiplayerQuestionCtrl {
     private final ServerUtils server;
