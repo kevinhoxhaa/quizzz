@@ -14,7 +14,6 @@ public class ChoiceQuestion extends Question {
     private List<Activity> activities;
     private Activity answer;
     private Activity userAnswer;
-    private long seconds;
 
     /**
      * Constructs a choice question (what will you do instead of...?)
@@ -26,7 +25,6 @@ public class ChoiceQuestion extends Question {
         super(QuestionType.CHOICE);
         setActivities(activities);
         this.userAnswer = null;
-        this.seconds = 1;
     }
 
     /**
@@ -96,16 +94,6 @@ public class ChoiceQuestion extends Question {
     public void setUserAnswer(Activity answer, long seconds) {
         this.userAnswer = answer;
         this.seconds = seconds;
-    }
-
-    /**
-     * Returns the seconds it took the user to answer
-     * the question; if it has not already been answered,
-     * the returned value is -1
-     * @return the seconds it took the user to answer
-     */
-    public long getSeconds() {
-        return seconds;
     }
 
     /**

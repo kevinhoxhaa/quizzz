@@ -6,6 +6,7 @@ import java.util.Objects;
 
 public abstract class Question {
     protected QuestionType type;
+    protected long seconds;
 
     /**
      * Constructs a question object with a given type
@@ -14,6 +15,7 @@ public abstract class Question {
      */
     public Question(QuestionType type) {
         this.type = type;
+        this.seconds = 1;
     }
 
     /**
@@ -29,6 +31,15 @@ public abstract class Question {
      */
     public QuestionType getType() {
         return type;
+    }
+
+    /**
+     * The time it took the user to answer the question
+     * in seconds
+     * @return time in seconds
+     */
+    public long getSeconds() {
+        return seconds;
     }
 
     /**

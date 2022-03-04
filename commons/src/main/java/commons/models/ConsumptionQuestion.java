@@ -14,7 +14,6 @@ public class ConsumptionQuestion extends Question {
 
     private Activity activity;
     private long userAnswer;
-    private long seconds;
     private List<Long> answers;
 
     /**
@@ -67,16 +66,6 @@ public class ConsumptionQuestion extends Question {
     public void setUserAnswer(long answer, long seconds) {
         this.userAnswer = answer;
         this.seconds = seconds;
-    }
-
-    /**
-     * Returns the seconds it took the user to answer
-     * the question; if it has not already been answered,
-     * the returned value is -1
-     * @return the seconds it took the user to answer
-     */
-    public long getSeconds() {
-        return seconds;
     }
 
     /**

@@ -10,7 +10,6 @@ public class EstimationQuestion extends Question {
 
     private Activity activity;
     private long userAnswer;
-    private long seconds;
 
     /**
      * Constructs a new estimation question object based
@@ -21,7 +20,6 @@ public class EstimationQuestion extends Question {
         super(QuestionType.ESTIMATION);
         this.activity = activity;
         this.userAnswer = -1;
-        this.seconds = 1;
     }
 
     /**
@@ -50,15 +48,6 @@ public class EstimationQuestion extends Question {
     public void setUserAnswer(long userAnswer, long seconds) {
         this.userAnswer = userAnswer;
         this.seconds = seconds;
-    }
-
-    /**
-     * The time it took the user to answer the question
-     * in seconds
-     * @return time in seconds
-     */
-    public long getSeconds() {
-        return seconds;
     }
 
     /**
