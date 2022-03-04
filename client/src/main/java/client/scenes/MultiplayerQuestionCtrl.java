@@ -18,10 +18,6 @@ public class MultiplayerQuestionCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
-    private static final int ANSWER_TOP_ID = 1;
-    private static final int ANSWER_MID_ID = 2;
-    private static final int ANSWER_BOT_ID = 3;
-
     @FXML
     private StackPane answerTop;
     @FXML
@@ -66,12 +62,9 @@ public class MultiplayerQuestionCtrl {
      * A placeholder method that navigates the user from the WIP static question
      * screen to the WIP static answer screen. In the future, this should just
      * save the game state, as the transition would happen when the timer runs out.
-     * @param answerNum The corresponding "ID" of the answer button pressed:
-     *                   - answerTop: 1
-     *                   - answerMid: 2
-     *                   - answerBot: 3
+     * @param answerButton the answer button pressed:
      */
-    private void onAnswerClicked(int answerNum){
+    private void onAnswerClicked(StackPane answerButton){
         //TODO figure out state-transit between the scenes:
         //  - what parameters are we passing through
         //  - which side checks the correctness of the answer
@@ -88,7 +81,7 @@ public class MultiplayerQuestionCtrl {
      */
     @FXML
     protected void onAnswerTopClicked(){
-        onAnswerClicked(ANSWER_TOP_ID);
+        onAnswerClicked(answerTop);
     }
 
     /**
@@ -97,7 +90,7 @@ public class MultiplayerQuestionCtrl {
      */
     @FXML
     protected void onAnswerMidClicked(){
-        onAnswerClicked(ANSWER_MID_ID);
+        onAnswerClicked(answerMid);
     }
 
     /**
@@ -106,7 +99,7 @@ public class MultiplayerQuestionCtrl {
      */
     @FXML
     protected void onAnswerBotClicked(){
-        onAnswerClicked(ANSWER_BOT_ID);
+        onAnswerClicked(answerBot);
     }
 
     /**
