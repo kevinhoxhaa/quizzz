@@ -19,7 +19,7 @@ public class User {
     public long id;
 
     public String username;
-    public long correctAnswers;
+    public Long correctAnswers;
 
     @SuppressWarnings("unused")
     private User() {
@@ -28,7 +28,7 @@ public class User {
 
     public User(String username) {
         this.username = username;
-        this.correctAnswers = 0;
+        this.correctAnswers = Long.valueOf(0);
     }
 
     @Override
