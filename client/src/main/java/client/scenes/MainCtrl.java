@@ -55,6 +55,7 @@ public class MainCtrl {
     private Scene waiting;
 
     private User user;
+    private static int questionCount;
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
             Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home, 
@@ -152,9 +153,18 @@ public class MainCtrl {
      * Sets the scene in the primary stage to the one corresponding to a multiplayer question screen.
      */
     public void showQuestion() {
+        questionCount++;
         multiplayerQuestionCtrl.resetAnswerColors();
         primaryStage.setTitle("Question screen");
         primaryStage.setScene(questionScene);
+    }
+
+    /**
+     * A getter for the number of the current question
+     * @return questionCount, which is the count of the number of questions that have already been shown.
+     */
+    public int getQuestionCount(){
+        return questionCount;
     }
 
     /**

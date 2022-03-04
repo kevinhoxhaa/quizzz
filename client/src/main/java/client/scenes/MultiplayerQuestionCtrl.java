@@ -56,6 +56,7 @@ public class MultiplayerQuestionCtrl {
      * @param mainCtrl
      */
     @Inject
+
     public MultiplayerQuestionCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
@@ -79,7 +80,17 @@ public class MultiplayerQuestionCtrl {
         // also, the body of this method should actually be called when the
         // timer runs out, on click, only a sort of saving (and point-calculation)
         // should occur
-        mainCtrl.showAnswerPage();
+        if(mainCtrl.getQuestionCount()<=20){
+            if(mainCtrl.getQuestionCount()==10){
+//                mainCtrl.showRankingPage();
+                // The ranking page will be showed here
+            }
+            mainCtrl.showAnswerPage();
+        }
+        else {
+//            mainCtrl.showResultsPage();
+            // Once the game is over, the results page should be shown
+        }
     }
 
     /**
