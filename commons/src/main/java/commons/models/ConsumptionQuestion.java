@@ -83,14 +83,22 @@ public class ConsumptionQuestion extends Question {
     // CHECKSTYLE:OFF
     public void setAnswers(long correctAnswer) {
         answers = new ArrayList<>();
+
+        long firstAlternative;
+        long secondAlternative;
+
+        do {
+             firstAlternative = (long) (correctAnswer +
+                    (random.nextDouble() < 0.5 ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
+        } while (correctAnswer == firstAlternative);
+
+        do {
+            secondAlternative = (long) (correctAnswer +
+                    (random.nextDouble() < 0.5 ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
+        } while (correctAnswer == secondAlternative || firstAlternative == secondAlternative);
+
         answers.add(correctAnswer);
-
-        long firstAlternative = (long) (correctAnswer +
-                (random.nextDouble() < 0.5 ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
         answers.add(firstAlternative);
-
-        long secondAlternative = (long) (correctAnswer +
-                (random.nextDouble() < 0.5 ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
         answers.add(secondAlternative);
         Collections.shuffle(answers);
     }
