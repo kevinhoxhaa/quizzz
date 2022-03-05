@@ -1,12 +1,9 @@
 package client.scenes;
 
-import client.Main;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ProgressIndicator;
@@ -24,7 +21,7 @@ public class RankingCtrl implements Initializable {
     private final MainCtrl mainCtrl;
 
     private static Timeline countdown;
-    private static int i = 10;
+    private static final int RANKING_TIMEOUT = 10;
 
     /**
      * Creates a controller for the ranking page screen, with the given server and mainCtrl parameters.
@@ -59,7 +56,6 @@ public class RankingCtrl implements Initializable {
      * Resets timer value back to 10, and initializes the countdown sequence.
      */
     public static void startTimeline() {
-        i = 10;
         countdown.play();
     }
 
@@ -71,13 +67,13 @@ public class RankingCtrl implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        countdownText.setText(String.valueOf(i));
+        countdownText.setText(String.valueOf(RANKING_TIMEOUT));
         countdown = new Timeline(new KeyFrame(Duration.seconds(1), e ->{
-            i--;
-            countdownText.setText(String.valueOf(i));
+            int timeLeft = Integer.parseInt(countdownText.getText());
+            countdownText.setText(String.valueOf(timeLeft-1));
         }));
 
-        countdown.setCycleCount(10);
+        countdown.setCycleCount(RANKING_TIMEOUT);
         countdown.onFinishedProperty().set(event -> {
             mainCtrl.showQuestion();
             countdownText.setText("10");
