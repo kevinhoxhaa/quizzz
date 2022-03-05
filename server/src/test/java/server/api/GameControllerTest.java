@@ -34,9 +34,9 @@ public class GameControllerTest {
     public int nextInt;
     private MyRandom random;
     private GameList gameList;
-    private TestUserRepository waitingRepo;
+    private TestWaitingUserRepository waitingUserRepo;
     private TestActivityRepository activityRepo;
-    private TestGameUserRepository userRepo;
+    private TestGameUserRepository gameUserRepo;
 
     private GameController sut;
 
@@ -44,17 +44,17 @@ public class GameControllerTest {
     public void setup() {
         random = new MyRandom();
         gameList = new GameList();
-        waitingRepo = new TestUserRepository();
+        waitingUserRepo = new TestWaitingUserRepository();
         activityRepo = new TestActivityRepository();
-        userRepo = new TestGameUserRepository();
-        sut = new GameController(random, gameList, waitingRepo, activityRepo, userRepo);
+        gameUserRepo = new TestGameUserRepository();
+        sut = new GameController(random, gameList, waitingUserRepo, activityRepo, gameUserRepo);
 
         for(int i = 0; i < NUMBER; i++) {
             activityRepo.save(getActivity("title", NUMBER, "src"));
         }
 
         for(int i = 0; i < NUMBER; i++) {
-            waitingRepo.save(getUser("name"));
+            waitingUserRepo.save(getUser("name"));
         }
     }
 
@@ -79,8 +79,8 @@ public class GameControllerTest {
     @Test
     public void startGameMovesUsers() {
         sut.startGame((int) NUMBER);
-        assertEquals(0, waitingRepo.count());
-        assertEquals(NUMBER, userRepo.count());
+        assertEquals(0, waitingUserRepo.count());
+        assertEquals(NUMBER, gameUserRepo.count());
     }
 
     @Test

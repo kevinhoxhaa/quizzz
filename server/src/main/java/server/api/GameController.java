@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
 import server.database.ActivityRepository;
 import server.database.GameUserRepository;
-import server.database.UserRepository;
+import server.database.WaitingUserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,9 +43,9 @@ public class GameController {
 
     private final Random random;
     private final GameList gameList;
-    private final UserRepository waitingRepo;
+    private final WaitingUserRepository waitingUserRepo;
     private final ActivityRepository activityRepo;
-    private final GameUserRepository userRepo;
+    private final GameUserRepository gameUserRepo;
     private ExecutorService threads = Executors.newFixedThreadPool(THREAD_COUNT);
 
     /**
@@ -53,15 +53,15 @@ public class GameController {
      * and the game state object stored on the server
      * @param random random generator
      * @param gameList game state object
-     * @param waitingRepo waiting user repository
+     * @param waitingUserRepo waiting user repository
      * @param activityRepo activity repository
-     * @param userRepo user repository
+     * @param gameUserRepo user repository
      */
-    public GameController(Random random, GameList gameList, UserRepository waitingRepo,
-                          ActivityRepository activityRepo, GameUserRepository userRepo) {
+    public GameController(Random random, GameList gameList, WaitingUserRepository waitingUserRepo,
+                          ActivityRepository activityRepo, GameUserRepository gameUserRepo) {
         this.random = random;
-        this.waitingRepo = waitingRepo;
-        this.userRepo = userRepo;
+        this.waitingUserRepo = waitingUserRepo;
+        this.gameUserRepo = gameUserRepo;
         this.activityRepo = activityRepo;
         this.gameList = gameList;
     }
@@ -145,7 +145,7 @@ public class GameController {
      */
     private boolean allUsersHaveAnswered(List<Long> userIds, int questionNumber) {
         for(Long id : userIds) {
-            User user = userRepo.findById(id).get();
+            User user = gameUserRepo.findById(id).get();
             if(user.correctAnswers < questionNumber) {
                 return false;
             }
@@ -168,13 +168,13 @@ public class GameController {
     public ResponseEntity<Integer> startGame(@PathVariable("count") int count) {
         Game game = new Game();
 
-        if(waitingRepo.count() == 0) {
+        if(waitingUserRepo.count() == 0) {
             return ResponseEntity.badRequest().build();
         }
 
-        List<User> users = waitingRepo.findAll();
-        userRepo.saveAll(users);
-        waitingRepo.deleteAll();
+        List<User> users = waitingUserRepo.findAll();
+        gameUserRepo.saveAll(users);
+        waitingUserRepo.deleteAll();
 
         users.forEach(u -> game.getUserIds().add(u.id));
         for(int i = 0; i < count; i++) {
@@ -228,7 +228,7 @@ public class GameController {
                @PathVariable(name = "questionIndex") int questionIndex,
                @RequestBody Question answeredQuestion) {
         DeferredResult<ResponseEntity<List<User>>> output = new DeferredResult<>();
-        if(!userRepo.existsById(userId)) {
+        if(!gameUserRepo.existsById(userId)) {
             output.setResult(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
             return output;
         }
@@ -245,7 +245,7 @@ public class GameController {
             return output;
         }
 
-        User user = userRepo.findById(userId).get();
+        User user = gameUserRepo.findById(userId).get();
         user.points += answeredQuestion.getPoints();
         user.totalAnswers += 1;
         user.correctAnswers += answeredQuestion.getPoints() == 0 ? 0 : 1;
@@ -275,7 +275,7 @@ public class GameController {
 
         List<User> rightUsers = new ArrayList<>();
         for(long id : game.getUserIds()) {
-            User u = userRepo.findById(id).get();
+            User u = gameUserRepo.findById(id).get();
             if(u.lastAnswerCorrect) {
                 rightUsers.add(u);
             }
