@@ -42,8 +42,9 @@ public class TestGameUserRepository implements GameUserRepository {
 
     @Override
     public <S extends User> List<S> saveAll(Iterable<S> entities) {
-        // TODO Auto-generated method stub
-        return null;
+        List<S> usersToSave = (List<S>) entities;
+        users.addAll(usersToSave);
+        return usersToSave;
     }
 
     @Override

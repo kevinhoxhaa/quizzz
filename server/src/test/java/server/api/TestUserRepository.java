@@ -183,8 +183,7 @@ public class TestUserRepository implements UserRepository {
 
     @Override
     public void deleteAll() {
-        // TODO Auto-generated method stub
-
+        users.clear();
     }
 
     @Override
