@@ -27,9 +27,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Pair;
 
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class MainCtrl {
 
@@ -157,10 +155,24 @@ public class MainCtrl {
      * Sets the multiplayer answer screen as the scene in the primary stage
      * and gives the primary stage a corresponding title.
      */
-    public void showAnswerPage() {
+    public void showAnswerPage(Question prevQuestion) {
         answerCount++;
+        multiplayerAnswerCtrl.setup(prevQuestion, getCorrectPlayersMock());
         primaryStage.setTitle("Answer screen");
         primaryStage.setScene(answerScene);
+    }
+
+    /**
+     * Mock method to create a simple list of strings that should later be replaced by players that
+     * answered correctly.
+     */
+    public List<String> getCorrectPlayersMock() {
+        //TODO: Instead get list from server.
+        List<String> correctPlayers = new ArrayList<>();
+        correctPlayers.add("Patrik");
+        correctPlayers.add("Bink");
+        correctPlayers.add("Boris");
+        return correctPlayers;
     }
 
     /**

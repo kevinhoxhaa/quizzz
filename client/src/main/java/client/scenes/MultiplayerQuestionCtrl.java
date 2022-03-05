@@ -8,6 +8,7 @@ import commons.models.Question;
 import commons.models.ConsumptionQuestion;
 import commons.models.ChoiceQuestion;
 import commons.models.ComparisonQuestion;
+import commons.utils.CompareType;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -61,6 +62,8 @@ public class MultiplayerQuestionCtrl {
     private double secondsTaken;
     private Answer userAnswer;
 
+    private List<String> correctPlayers;
+
     @FXML
     private Text activityText;
     @FXML
@@ -95,9 +98,9 @@ public class MultiplayerQuestionCtrl {
     }
 
     /**
-     * Sets up the question page scene:
-     *  - Sets up the question/answers according to the type of the question given
-     *  - Fills the answerButtons list for iterations
+     * Sets up the question page scene: <br>
+     *  - Sets up the question/answers according to the type of the question given <br>
+     *  - Fills the answerButtons list for iterations <br>
      *  - Resets all buttons to their default colors
      * @param question the question instance upon which the setup is based
      */
@@ -209,11 +212,11 @@ public class MultiplayerQuestionCtrl {
      * Changes the scene visuals accordingly.
      * @param answerButton the answer button pressed.
      */
-    private void onAnswerClicked(StackPane answerButton){
+    private void onAnswerClicked(StackPane answerButton, Answer answer){
 
         if(!answerButton.equals(selectedAnswerButton)) {
 
-            currentQuestion.setUserAnswer(userAnswer, getSeconds());
+            currentQuestion.setUserAnswer(answer, getSeconds());
 
             selectedAnswerButton = answerButton;
             resetAnswerColors();
@@ -236,7 +239,7 @@ public class MultiplayerQuestionCtrl {
      * @return the time since the timer started, in seconds.
      */
     private double getSeconds() {
-        return Math.random(); //placeholder for timer value
+        return (System.currentTimeMillis() - startTime)/1000.0;
     }
 
     /**
@@ -251,9 +254,16 @@ public class MultiplayerQuestionCtrl {
     private void finalizeAndSend(){
         //TODO sending the question instance back to the server
         // and waiting for the list of people who got it right
-        mainCtrl.showAnswerPage();
+        disableAnswers();
+        mainCtrl.showAnswerPage(currentQuestion);
     }
 
+
+
+    /**
+     * Captures the exact time the question page started showing used for measuring the time
+     * players needed for answering the question.
+     */
     protected void setStartTime() {
         startTime = System.currentTimeMillis();
     }
@@ -264,7 +274,7 @@ public class MultiplayerQuestionCtrl {
      */
     @FXML
     protected void onAnswerTopClicked(){
-        onAnswerClicked(answerTop);
+        onAnswerClicked(answerTop, answerTopAnswer);
     }
 
     /**
@@ -273,7 +283,7 @@ public class MultiplayerQuestionCtrl {
      */
     @FXML
     protected void onAnswerMidClicked(){
-        onAnswerClicked(answerMid);
+        onAnswerClicked(answerMid, answerMidAnswer);
     }
 
     /**
@@ -282,7 +292,7 @@ public class MultiplayerQuestionCtrl {
      */
     @FXML
     protected void onAnswerBotClicked(){
-        onAnswerClicked(answerBot);
+        onAnswerClicked(answerBot, answerBotAnswer);
     }
 
     /**
@@ -360,18 +370,16 @@ public class MultiplayerQuestionCtrl {
             int newRemainingSeconds = Integer.parseInt(remainingSeconds.getText()) - 1;
             remainingSeconds.setText(Integer.toString(newRemainingSeconds));
             if (newRemainingSeconds == 0) {
-                resetAnswerColors();
-                disableAnswers();
-                //TODO:
-                // - Send Question Object back to the server.
-                // - Wait for information about which players answered correctly.
-                mainCtrl.showAnswerPage();
+                finalizeAndSend();
             }
         }));
         questionTimeline.setCycleCount(totalSeconds);
         questionTimeline.play();
     }
 
+    /**
+     * Disables all interaction with the answer buttons.
+     */
     private void disableAnswers() {
         answerTop.setOnMouseEntered(null);
         answerMid.setOnMouseEntered(null);
