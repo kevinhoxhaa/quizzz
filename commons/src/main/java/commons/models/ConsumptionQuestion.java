@@ -23,6 +23,7 @@ public class ConsumptionQuestion extends Question {
      * on the provided activity
      * Generates a list of alternative answers to the question
      * @param activity the activity this question is based on
+     * @param random the random generator to use
      */
     public ConsumptionQuestion(Activity activity, Random random) {
         super(QuestionType.CONSUMPTION);
@@ -83,10 +84,12 @@ public class ConsumptionQuestion extends Question {
         answers = new ArrayList<>();
         answers.add(correctAnswer);
 
-        long firstAlternative = (long) (correctAnswer + (random.nextDouble() < 0.5 ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
+        long firstAlternative = (long) (correctAnswer +
+                (random.nextDouble() < 0.5 ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
         answers.add(firstAlternative);
 
-        long secondAlternative = (long) (correctAnswer + (random.nextDouble() < 0.5 ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
+        long secondAlternative = (long) (correctAnswer +
+                (random.nextDouble() < 0.5 ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
         answers.add(secondAlternative);
         Collections.shuffle(answers);
     }
