@@ -17,7 +17,7 @@ package server;
 
 import java.util.Random;
 
-import commons.models.GameState;
+import commons.models.GameList;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -30,7 +30,7 @@ public class Config {
     }
 
     @Bean
-    public GameState getGameState() {
-        return new GameState();
+    public GameList getGameState() {
+        return new GameList();
     }
 }

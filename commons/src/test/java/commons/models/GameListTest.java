@@ -9,36 +9,36 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class GameStateTest {
-    private GameState gameState;
+public class GameListTest {
+    private GameList gameList;
 
     @BeforeEach
     public void startup() {
-        gameState = new GameState();
+        gameList = new GameList();
     }
 
     @Test
     public void constructorConstructsValidObject() {
-        assertNotNull(gameState);
+        assertNotNull(gameList);
     }
 
     @Test
     public void getGamesReturnsList() {
-        assertEquals(new ArrayList<>(), gameState.getGames());
+        assertEquals(new ArrayList<>(), gameList.getGames());
     }
 
     @Test
     public void toStringReturnsValidStringRepresentation() {
-        assertTrue(gameState.toString().contains("games"));
+        assertTrue(gameList.toString().contains("games"));
     }
 
     @Test
     public void equalsReturnsTrueForSameObjects() {
-        assertEquals(gameState, gameState);
+        assertEquals(gameList, gameList);
     }
 
     @Test
     public void hashCodeReturnsSameForSameObjects() {
-        assertEquals(gameState.hashCode(), gameState.hashCode());
+        assertEquals(gameList.hashCode(), gameList.hashCode());
     }
 }

@@ -7,7 +7,7 @@ import commons.models.ComparisonQuestion;
 import commons.models.ConsumptionQuestion;
 import commons.models.EstimationQuestion;
 import commons.models.Game;
-import commons.models.GameState;
+import commons.models.GameList;
 import commons.models.Question;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +42,7 @@ public class GameController {
     private static final long TIMEOUT = 5000;
 
     private final Random random;
-    private final GameState gameState;
+    private final GameList gameList;
     private final UserRepository waitingRepo;
     private final ActivityRepository activityRepo;
     private final GameUserRepository userRepo;
@@ -52,18 +52,18 @@ public class GameController {
      * Constructs a game controller with the given repositories
      * and the game state object stored on the server
      * @param random random generator
-     * @param gameState game state object
+     * @param gameList game state object
      * @param waitingRepo waiting user repository
      * @param activityRepo activity repository
      * @param userRepo user repository
      */
-    public GameController(Random random, GameState gameState, UserRepository waitingRepo,
+    public GameController(Random random, GameList gameList, UserRepository waitingRepo,
                           ActivityRepository activityRepo, GameUserRepository userRepo) {
         this.random = random;
         this.waitingRepo = waitingRepo;
         this.userRepo = userRepo;
         this.activityRepo = activityRepo;
-        this.gameState = gameState;
+        this.gameList = gameList;
     }
 
     /**
@@ -181,8 +181,8 @@ public class GameController {
             game.getQuestions().add(generateQuestion());
         }
 
-        gameState.getGames().add(game);
-        return ResponseEntity.ok(gameState.getGames().indexOf(game));
+        gameList.getGames().add(game);
+        return ResponseEntity.ok(gameList.getGames().indexOf(game));
     }
 
     /**
@@ -197,11 +197,11 @@ public class GameController {
     @GetMapping(path =  "/{gameIndex}/question/{questionIndex}")
     public ResponseEntity<Question> getQuestion(@PathVariable(name = "gameIndex") int gameIndex,
                                 @PathVariable(name = "questionIndex") int questionIndex) {
-        if(gameIndex >= gameState.getGames().size()) {
+        if(gameIndex >= gameList.getGames().size()) {
             return ResponseEntity.badRequest().build();
         }
 
-        Game game = gameState.getGames().get(gameIndex);
+        Game game = gameList.getGames().get(gameIndex);
 
         if(questionIndex >= game.getQuestions().size()) {
             return ResponseEntity.badRequest().build();
@@ -233,12 +233,12 @@ public class GameController {
             return output;
         }
 
-        if(gameIndex >= gameState.getGames().size()) {
+        if(gameIndex >= gameList.getGames().size()) {
             output.setResult(ResponseEntity.badRequest().build());
             return output;
         }
 
-        Game game = gameState.getGames().get(gameIndex);
+        Game game = gameList.getGames().get(gameIndex);
 
         if(questionIndex >= game.getQuestions().size()) {
             output.setResult(ResponseEntity.badRequest().build());

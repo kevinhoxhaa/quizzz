@@ -3,7 +3,7 @@ package server.api;
 import commons.entities.Activity;
 import commons.entities.User;
 import commons.models.ConsumptionQuestion;
-import commons.models.GameState;
+import commons.models.GameList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +33,7 @@ public class GameControllerTest {
 
     public int nextInt;
     private MyRandom random;
-    private GameState gameState;
+    private GameList gameList;
     private TestUserRepository waitingRepo;
     private TestActivityRepository activityRepo;
     private TestGameUserRepository userRepo;
@@ -43,11 +43,11 @@ public class GameControllerTest {
     @BeforeEach
     public void setup() {
         random = new MyRandom();
-        gameState = new GameState();
+        gameList = new GameList();
         waitingRepo = new TestUserRepository();
         activityRepo = new TestActivityRepository();
         userRepo = new TestGameUserRepository();
-        sut = new GameController(random, gameState, waitingRepo, activityRepo, userRepo);
+        sut = new GameController(random, gameList, waitingRepo, activityRepo, userRepo);
 
         for(int i = 0; i < NUMBER; i++) {
             activityRepo.save(getActivity("title", NUMBER, "src"));

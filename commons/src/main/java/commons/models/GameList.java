@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class GameState {
+public class GameList {
     private List<Game> games;
 
     /**
      * Constructs a new game state object
      * with an empty list of games
      */
-    public GameState() {
+    public GameList() {
         this.games = new ArrayList<>();
     }
 
@@ -50,8 +50,8 @@ public class GameState {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        GameState gameState = (GameState) o;
-        return Objects.equals(games, gameState.games);
+        GameList gameList = (GameList) o;
+        return Objects.equals(games, gameList.games);
     }
 
     /**
