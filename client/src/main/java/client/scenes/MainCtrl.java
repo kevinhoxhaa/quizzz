@@ -56,7 +56,7 @@ public class MainCtrl {
 
     private User user;
 
-    private static int answerCount;
+    private static int answerCount = 0;
     private static final int TOTAL_ANSWERS = 20;
     private static final int HALFWAY_ANSWERS = 10;
 
