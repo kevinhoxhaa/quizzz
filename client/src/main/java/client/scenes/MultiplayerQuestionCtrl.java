@@ -2,6 +2,12 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.entities.Activity;
+import commons.models.Answer;
+import commons.models.Question;
+import commons.models.ConsumptionQuestion;
+import commons.models.ChoiceQuestion;
+import commons.models.ComparisonQuestion;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
@@ -13,14 +19,19 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.text.Text;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static commons.utils.CompareType.SMALLER;
+import static commons.utils.CompareType.EQUAL;
+import static commons.utils.CompareType.LARGER;
+
 
 public class MultiplayerQuestionCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
-    private static final int ANSWER_TOP_ID = 1;
-    private static final int ANSWER_MID_ID = 2;
-    private static final int ANSWER_BOT_ID = 3;
+    private Question currentQuestion;
 
 
     @FXML
@@ -29,9 +40,25 @@ public class MultiplayerQuestionCtrl {
     private StackPane answerMid;
     @FXML
     private StackPane answerBot;
+    @FXML
+    private Text answerTopText;
+    @FXML
+    private Text answerMidText;
+    @FXML
+    private Text answerBotText;
+
+    private Answer answerTopAnswer;
+    private Answer answerMidAnswer;
+    private Answer answerBotAnswer;
+
+    private List<StackPane> answerButtons;
+    private StackPane selectedAnswerButton;
+
+    private double secondsTaken;
+    private Answer userAnswer;
 
     @FXML
-    private Text question;
+    private Text activityText;
     @FXML
     private Text questionNum;
 
@@ -53,6 +80,7 @@ public class MultiplayerQuestionCtrl {
 
     /**
      * Creates a controller for the multiplayer question screen, with the given server and main controller.
+     * Creates the list answerButtons for iterating through all of these.
      * @param server
      * @param mainCtrl
      */
@@ -63,26 +91,164 @@ public class MultiplayerQuestionCtrl {
         this.mainCtrl = mainCtrl;
     }
 
+    /**
+     * Sets up the question page scene:
+     *  - Sets up the question/answers according to the type of the question given
+     *  - Fills the answerButtons list for iterations
+     *  - Resets all buttons to their default colors
+     * @param question the question instance upon which the setup is based
+     */
+    protected void setup(Question question) {
+        this.currentQuestion = question;
+
+        switch (question.getType()){
+            case CONSUMPTION:
+                setupConsumptionQuestion(question);
+                break;
+            case COMPARISON:
+                setupComparisonQuestion(question);
+                break;
+            case CHOICE:
+                setupChoiceQuestion(question);
+                break;
+            case ESTIMATION:
+                setupEstimationQuestion(question);
+                break;
+        }
+
+        this.answerButtons = new ArrayList<>();
+        this.answerButtons.add(answerTop);
+        this.answerButtons.add(answerMid);
+        this.answerButtons.add(answerBot);
+
+        resetAnswerColors();
+    }
 
     /**
-     * A placeholder method that navigates the user from the WIP static question
-     * screen to the WIP static answer screen. In the future, this should just
-     * save the game state, as the transition would happen when the timer runs out.
-     * @param answerNum The corresponding "ID" of the answer button pressed:
-     *                   - answerTop: 1
-     *                   - answerMid: 2
-     *                   - answerBot: 3
+     * Sets up the questions and answers on the page for the given comparison question
+     * @param generalQuestion the given question
      */
-    private void onAnswerClicked(int answerNum){
-        //TODO figure out state-transit between the scenes:
-        //  - what parameters are we passing through
-        //  - which side checks the correctness of the answer
-        //  - the code structure of the transit itself
-        // also, the body of this method should actually be called when the
-        // timer runs out, on click, only a sort of saving (and point-calculation)
-        // should occur
+    private void setupComparisonQuestion(Question generalQuestion) {
+        ComparisonQuestion question = (ComparisonQuestion) generalQuestion;
 
-            mainCtrl.showAnswerPage();
+        activityText.setText(
+                String.format("Does %s use more, less, or the same amount of energy as %s?",
+                        question.getFirstActivity().title, question.getSecondActivity().title)
+        );
+        answerTopText.setText("MORE");
+        answerMidText.setText("EQUAL");
+        answerBotText.setText("LESS");
+
+        answerTopAnswer = new Answer(LARGER);
+        answerMidAnswer = new Answer(EQUAL);
+        answerBotAnswer = new Answer(SMALLER);
+    }
+
+    /**
+     * Sets up the questions and answers on the page for the given consumption question
+     * @param generalQuestion the given question
+     */
+    private void setupConsumptionQuestion(Question generalQuestion) {
+        ConsumptionQuestion question = (ConsumptionQuestion) generalQuestion;
+
+        activityText.setText(
+                String.format("How much energy does %s cost?",
+                        question.getActivity().title)
+        );
+
+        List<Long> answers = question.getAnswers();
+
+        answerTopText.setText(answers.get(0).toString());
+        answerMidText.setText(answers.get(1).toString());
+        answerBotText.setText(answers.get(2).toString());
+
+        answerTopAnswer = new Answer(answers.get(0));
+        answerMidAnswer = new Answer(answers.get(1));
+        answerBotAnswer = new Answer(answers.get(2));
+    }
+
+    /**
+     * Sets up the questions and answers on the page for the given choice question
+     * @param generalQuestion the given question
+     */
+    private void setupChoiceQuestion(Question generalQuestion) {
+        ChoiceQuestion question = (ChoiceQuestion) generalQuestion;
+
+        activityText.setText(
+                String.format("What could you do instead of %s to consume less energy?",
+                        question.getComparedActivity().title)
+        );
+
+        List<Activity> answers = question.getActivities();
+
+        //TODO figure out how the answers work exactly (shuffling)
+        answerTopText.setText(answers.get(0).toString());
+        answerMidText.setText(answers.get(1).toString());
+        answerBotText.setText(answers.get(2).toString());
+
+        answerTopAnswer = new Answer(answers.get(0));
+        answerMidAnswer = new Answer(answers.get(1));
+        answerBotAnswer = new Answer(answers.get(2));
+    }
+
+    /**
+     * Sets up the questions and answers on the page for the given estimation question
+     * Needs to be thought through, will probably be in a different class
+     * @param generalQuestion the given question
+     */
+    private void setupEstimationQuestion(Question generalQuestion) {
+        //TODO Deal with estimation questions (they need a whole different scene most probably)
+    }
+
+
+    /**
+     * Saves the answer selected last by the user, as well as the amount of time it took.
+     * Changes the scene visuals accordingly.
+     * @param answerButton the answer button pressed.
+     */
+    private void onAnswerClicked(StackPane answerButton){
+
+        if(!answerButton.equals(selectedAnswerButton)) {
+
+            currentQuestion.setUserAnswer(userAnswer, getSeconds());
+
+            selectedAnswerButton = answerButton;
+            resetAnswerColors();
+            answerButton.setBackground(new Background(
+                    new BackgroundFill(Color.DARKCYAN, CornerRadii.EMPTY, Insets.EMPTY)));
+
+            for (StackPane answerBtnLoop: answerButtons) {
+                answerBtnLoop.setStyle("-fx-border-width: 1; -fx-border-color: black");
+                ((Text) answerBtnLoop.getChildren().get(0)).setStyle("-fx-font-weight: normal");
+            }
+            ((Text) answerButton.getChildren().get(0)).setStyle("-fx-font-weight: bold");
+            answerButton.setStyle("-fx-border-width: 2; -fx-border-color: black");
+        }
+
+    }
+
+    /**
+     * Returns the time since the timer started, in seconds.
+     * For now, a placeholder method.
+     * @return the time since the timer started, in seconds.
+     */
+    private double getSeconds() {
+        return Math.random(); //placeholder for timer value
+    }
+
+    /**
+     * Called when the timer is up.
+     * Responsible for:
+     *  - Disabling inputs
+     *  - Sending the question instance back to the server
+     *  - Waiting for the list of people who got it right
+     *  - Making sure the answer page has all the necessary information
+     *  - Redirecting to the answer page
+     */
+    private void finalizeAndSend(){
+        //TODO sending the question instance back to the server
+        // and waiting for the list of people who got it right
+        mainCtrl.showAnswerPage();
     }
 
     /**
@@ -91,7 +257,7 @@ public class MultiplayerQuestionCtrl {
      */
     @FXML
     protected void onAnswerTopClicked(){
-        onAnswerClicked(ANSWER_TOP_ID);
+        onAnswerClicked(answerTop);
     }
 
     /**
@@ -100,7 +266,7 @@ public class MultiplayerQuestionCtrl {
      */
     @FXML
     protected void onAnswerMidClicked(){
-        onAnswerClicked(ANSWER_MID_ID);
+        onAnswerClicked(answerMid);
     }
 
     /**
@@ -109,45 +275,67 @@ public class MultiplayerQuestionCtrl {
      */
     @FXML
     protected void onAnswerBotClicked(){
-        onAnswerClicked(ANSWER_BOT_ID);
+        onAnswerClicked(answerBot);
     }
 
     /**
      * The method called when the cursor enters the button answerTop.
-     * Sets answerTop's background color to dark gray.
+     * Sets answerTop's background color according to whether it is selected.
      */
     @FXML
     protected void enterAnswerTop(){
-        answerTop.setBackground(new Background(new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+        enterAnswer(answerTop);
     }
 
     /**
      * The method called when the cursor enters the button answerMid.
-     * Sets answerMid's background color to dark gray.
+     * Sets answerMid's background color according to whether it is selected.
      */
     @FXML
     protected void enterAnswerMid(){
-        answerMid.setBackground(new Background(new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+        enterAnswer(answerMid);
     }
 
     /**
      * The method called when the cursor enters the button answerBot.
-     * Sets answerBot's background color to dark gray.
+     * Sets answerBot's background color according to whether it is selected.
      */
     @FXML
     protected void enterAnswerBot(){
-        answerBot.setBackground(new Background(new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+        enterAnswer(answerBot);
+    }
+
+    /**
+     * A general method for setting an answer button's background color upon the cursor enters it,
+     * according to whether it is selected.
+     * @param answerBtn The answer button to be recolor.
+     */
+    private void enterAnswer(StackPane answerBtn){
+            if (answerBtn.equals(selectedAnswerButton)) {
+                answerBtn.setBackground(new Background(
+                        new BackgroundFill(Color.DARKCYAN, CornerRadii.EMPTY, Insets.EMPTY)));
+            } else {
+                answerBtn.setBackground(new Background(
+                        new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+            }
     }
 
     /**
      * The method called upon loading the question scene, and when the cursor leaves either one of the answer buttons.
-     * Resets all answer boxes' background color to light gray.
+     * Resets all answer boxes' background color according to whether they are selected.
      */
     @FXML
     protected void resetAnswerColors(){
-        answerTop.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
-        answerMid.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
-        answerBot.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+
+        for (StackPane answerBtn: answerButtons) {
+            if (answerBtn.equals(selectedAnswerButton)) {
+                answerBtn.setBackground(new Background(
+                        new BackgroundFill(Color.LIGHTSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+            } else {
+                answerBtn.setBackground(new Background(
+                        new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+            }
+        }
     }
 
 }
