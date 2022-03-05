@@ -109,7 +109,7 @@ public class GameControllerTest {
     public void postAnswerReturnsValidResponse() {
         sut.startGame((int) NUMBER);
         assertNotNull(sut.postAnswer(0, 0, 0,
-                new ConsumptionQuestion(getActivity("title", NUMBER, "src"))));
+                new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random)));
     }
 
     @Test
@@ -117,7 +117,7 @@ public class GameControllerTest {
         sut.startGame((int) NUMBER);
         ResponseEntity<List<User>> actual = (ResponseEntity<List<User>>) sut.postAnswer(
                 (int) NUMBER, 0, 0,
-                new ConsumptionQuestion(getActivity("title", NUMBER, "src")));
+                new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random));
         assertTrue(actual.getStatusCode().is4xxClientError());
     }
 
@@ -126,7 +126,7 @@ public class GameControllerTest {
         sut.startGame((int) NUMBER);
         ResponseEntity<List<User>> actual = (ResponseEntity<List<User>>) sut.postAnswer(
                 0, NUMBER, 0,
-                new ConsumptionQuestion(getActivity("title", NUMBER, "src")));
+                new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random));
         assertTrue(actual.getStatusCode().is4xxClientError());
     }
 
@@ -135,7 +135,7 @@ public class GameControllerTest {
         sut.startGame((int) NUMBER);
         ResponseEntity<List<User>> actual = (ResponseEntity<List<User>>) sut.postAnswer(
                 0, 0, (int) NUMBER,
-                new ConsumptionQuestion(getActivity("title", NUMBER, "src")));
+                new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random));
         assertTrue(actual.getStatusCode().is4xxClientError());
     }
 
@@ -144,7 +144,7 @@ public class GameControllerTest {
         sut.startGame((int) NUMBER);
         ResponseEntity<List<User>> actual = (ResponseEntity<List<User>>) sut.postAnswer(
                 0, 0, 1,
-                new ConsumptionQuestion(getActivity("title", NUMBER, "src")));
+                new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random));
         assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
     }
 }

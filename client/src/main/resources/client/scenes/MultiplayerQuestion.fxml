@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -166,7 +167,7 @@
                         </StackPane>
                         <StackPane prefHeight="110.0" prefWidth="214.0">
                            <children>
-                              <Text fx:id="activity" strokeType="OUTSIDE" strokeWidth="0.0" text="What is the answer to this activity?" wrappingWidth="182.0">
+                              <Text fx:id="activityText" strokeType="OUTSIDE" strokeWidth="0.0" text="What is the answer to this activity?" wrappingWidth="182.0">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
@@ -179,15 +180,21 @@
                      <children>
                         <VBox prefHeight="149.0" prefWidth="194.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <StackPane fx:id="answerTop" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;">
+                              <StackPane fx:id="answerTop" onMouseClicked="#onAnswerTopClicked" onMouseEntered="#enterAnswerTop" onMouseExited="#resetAnswerColors" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;">
                                  <VBox.margin>
                                     <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                  </VBox.margin>
                                  <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Answer 1" />
+                                    <Text fx:id="answerTopText" strokeType="OUTSIDE" strokeWidth="0.0" text="Answer 1" />
                                  </children>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </StackPane>
-                              <StackPane fx:id="answerMid" prefHeight="150.0" prefWidth="190.0" style="-fx-border-color: black;">
+                              <StackPane fx:id="answerMid" onMouseClicked="#onAnswerMidClicked" onMouseEntered="#enterAnswerMid" onMouseExited="#resetAnswerColors" prefHeight="150.0" prefWidth="190.0" style="-fx-border-color: black;">
                                  <opaqueInsets>
                                     <Insets />
                                  </opaqueInsets>
@@ -195,16 +202,22 @@
                                     <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                  </VBox.margin>
                                  <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Answer 2" />
+                                    <Text fx:id="answerMidText" strokeType="OUTSIDE" strokeWidth="0.0" text="Answer 2" />
                                  </children>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </StackPane>
-                              <StackPane fx:id="answerBot" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;">
+                              <StackPane fx:id="answerBot" onMouseClicked="#onAnswerBotClicked" onMouseEntered="#enterAnswerBot" onMouseExited="#resetAnswerColors" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;">
                                  <VBox.margin>
                                     <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                  </VBox.margin>
                                  <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Answer 3" />
+                                    <Text fx:id="answerBotText" strokeType="OUTSIDE" strokeWidth="0.0" text="Answer 3" />
                                  </children>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </StackPane>
                            </children>
                         </VBox>

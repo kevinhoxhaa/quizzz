@@ -15,12 +15,19 @@
  */
 package client.scenes;
 
+import commons.entities.Activity;
+import commons.entities.User;
+import commons.models.ConsumptionQuestion;
+import commons.models.Question;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Pair;
 
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -30,6 +37,7 @@ public class MainCtrl {
     public static final double MIN_HEIGHT = 512.0;
     private static final int POLLING_DELAY = 0;
     private static final int POLLING_INTERVAL = 1500;
+    private static final long ANSWER_TO_THE_ULTIMATE_QUESTION = 42;
 
     private Stage primaryStage;
 
@@ -50,6 +58,8 @@ public class MainCtrl {
 
     private WaitingCtrl waitingCtrl;
     private Scene waiting;
+
+    private User user;
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
             Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home, 
@@ -81,6 +91,21 @@ public class MainCtrl {
         primaryStage.show();
     }
 
+    /**
+     * Binder for the User in the client side
+     * @param user
+     */
+    public void bindUser(User user){
+        this.user=user;
+    }
+
+    /**
+     * Getter for the user
+     * @return user
+     */
+    public User getUser(){
+        return this.user;
+    }
     /**
      * Shows the home page of the quiz application on the primary
      * stage
@@ -132,7 +157,42 @@ public class MainCtrl {
      * Sets the scene in the primary stage to the one corresponding to a multiplayer question screen.
      */
     public void showQuestion() {
+        Question question = getNextQuestion();
+
+        multiplayerQuestionCtrl.setup(question);
         primaryStage.setTitle("Question screen");
         primaryStage.setScene(questionScene);
+    }
+
+    /**
+     * Fetches a random question from the server. For now, it just returns a placeholder for testing.
+     * @return a random question
+     */
+    private Question getNextQuestion() {
+        //TODO instead of this, return a random question fetched from the server
+        Activity activity = new Activity(
+                "testing the question models", ANSWER_TO_THE_ULTIMATE_QUESTION, "it was me. I said it. haha");
+        return new ConsumptionQuestion(activity, new Random());
+    }
+
+    /**
+     * Deletes user from database when the close button is clicked
+     */
+    public void onClose(){
+        primaryStage.setOnHiding(new EventHandler<WindowEvent>() {
+
+            @Override
+            public void handle(WindowEvent event) {
+                Platform.runLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        homeCtrl.getServer().removeUser(homeCtrl.getServer().getURL(),user);
+                        user=null;
+                        System.exit(0);
+                    }
+                });
+            }
+        });
     }
 }

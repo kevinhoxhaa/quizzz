@@ -7,26 +7,29 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 public class ConsumptionQuestion extends Question {
     private static final long TRUE_FACTOR = 500;
     private static final long TIME_FACTOR = 800;
 
     private Activity activity;
-    private long userAnswer;
     private List<Long> answers;
+    private final Random random;
 
     /**
      * Constructs a new consumption question object based
      * on the provided activity
      * Generates a list of alternative answers to the question
      * @param activity the activity this question is based on
+     * @param random the random generator to use
      */
-    public ConsumptionQuestion(Activity activity) {
+    public ConsumptionQuestion(Activity activity, Random random) {
         super(QuestionType.CONSUMPTION);
         this.activity = activity;
         this.seconds = 1;
-        this.userAnswer = -1;
+        this.userAnswer = new Answer(Long.valueOf(-1));
+        this.random = random;
         setAnswers(activity.consumption);
     }
 
@@ -49,26 +52,6 @@ public class ConsumptionQuestion extends Question {
     }
 
     /**
-     * Returns the consumption guessed by the user
-     * @return the user's answer to the question
-     */
-    public long getUserAnswer() {
-        return userAnswer;
-    }
-
-    /**
-     * Sets the user's answer and the time it took them
-     * in seconds to answer the question
-     * @param answer the user's answer
-     * @param seconds the time it took the user to answer the
-     *                question in seconds
-     */
-    public void setUserAnswer(long answer, long seconds) {
-        this.userAnswer = answer;
-        this.seconds = seconds;
-    }
-
-    /**
      * Returns a list of two numbers which are a little
      * greater or smaller than the correct answer, in order
      * to confuse the user
@@ -79,14 +62,22 @@ public class ConsumptionQuestion extends Question {
     // CHECKSTYLE:OFF
     public void setAnswers(long correctAnswer) {
         answers = new ArrayList<>();
+
+        long firstAlternative;
+        long secondAlternative;
+
+        do {
+             firstAlternative = (long) (correctAnswer +
+                    (random.nextDouble() < 0.5 ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
+        } while (correctAnswer == firstAlternative);
+
+        do {
+            secondAlternative = (long) (correctAnswer +
+                    (random.nextDouble() < 0.5 ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
+        } while (correctAnswer == secondAlternative || firstAlternative == secondAlternative);
+
         answers.add(correctAnswer);
-
-        long firstAlternative = (long) (correctAnswer + 3 + (Math.random() < 0.5 ? -1 : 1) *
-                ((Math.random() * 0.1 + 0.01) * correctAnswer));
         answers.add(firstAlternative);
-
-        long secondAlternative = (long) (correctAnswer + 5 + (Math.random() < 0.5 ? -1 : 1) *
-                ((Math.random() * 0.1 + 0.01) * correctAnswer));
         answers.add(secondAlternative);
         Collections.shuffle(answers);
     }
@@ -108,12 +99,12 @@ public class ConsumptionQuestion extends Question {
      */
     @Override
     public long getPoints() {
-        return (hasCorrectUserAnswer() ? 1 : 0) * (TRUE_FACTOR + TIME_FACTOR / (seconds + 1));
+        return (long) ((hasCorrectUserAnswer() ? 1 : 0) * (TRUE_FACTOR + TIME_FACTOR / (seconds + 1)));
     }
 
     @Override
     public boolean hasCorrectUserAnswer() {
-        return activity.consumption == userAnswer;
+        return activity.consumption == (Long) userAnswer.getAnswer();
     }
 
     /**
