@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox minHeight="492.0" minWidth="748.0" prefHeight="492.0" prefWidth="748.0" spacing="20.0" HBox.hgrow="ALWAYS" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.RankingCtrl">
+    <children>
+        <HBox alignment="CENTER" layoutX="23.0" layoutY="34.0" prefHeight="19.0" prefWidth="725.0" spacing="4.0" VBox.vgrow="NEVER">
+            <children>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Results" HBox.hgrow="ALWAYS">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Text>
+            </children>
+        </HBox>
+        <VBox prefHeight="637.0" prefWidth="708.0">
+            <children>
+                <HBox prefHeight="307.0" prefWidth="708.0">
+                    <children>
+                        <VBox prefHeight="305.0" prefWidth="373.0">
+                            <children>
+                                <TableView fx:id="Scor" prefHeight="277.0" prefWidth="167.0">
+                                    <columns>
+                                        <TableColumn prefWidth="240.66664123535156" text="Users" />
+                                        <TableColumn prefWidth="132.00006866455078" text="Score" />
+                                    </columns>
+                                </TableView>
+                                <HBox prefHeight="59.0" prefWidth="373.0">
+                                    <children>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="You">
+                                            <font>
+                                                <Font size="20.0" />
+                                            </font>
+                                            <HBox.margin>
+                                                <Insets left="110.0" top="10.0" />
+                                            </HBox.margin>
+                                        </Text>
+                                        <Text fx:id="userScore" strokeType="OUTSIDE" strokeWidth="0.0" text="Score">
+                                            <font>
+                                                <Font size="20.0" />
+                                            </font>
+                                            <HBox.margin>
+                                                <Insets left="120.0" top="10.0" />
+                                            </HBox.margin>
+                                        </Text>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                        <VBox prefHeight="241.0" prefWidth="229.0">
+                            <children>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Leaderboard">
+                                    <font>
+                                        <Font size="40.0" />
+                                    </font>
+                                    <VBox.margin>
+                                        <Insets left="50.0" />
+                                    </VBox.margin></Text>
+                                <HBox alignment="CENTER" prefHeight="10.0" prefWidth="172.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="1st player" />
+                           </children></HBox>
+                                <HBox prefHeight="50.0" prefWidth="335.0">
+                           <children>
+                              <TextField text="2nd player" />
+                           </children>
+                                </HBox>
+                        <TextField alignment="TOP_RIGHT" text="3rd player" />
+                                <ImageView fitHeight="201.0" fitWidth="260.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../../../../../../../../Downloads/alican.png" />
+                                    </image>
+                                    <VBox.margin>
+                                        <Insets left="45.0" />
+                                    </VBox.margin>
+                                </ImageView>
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+            <Button mnemonicParsing="false" prefHeight="70.0" prefWidth="266.0" text="Quit" />
+            </children>
+        </VBox>
+        <HBox prefHeight="100.0" prefWidth="200.0" />
+    </children>
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+</VBox>
