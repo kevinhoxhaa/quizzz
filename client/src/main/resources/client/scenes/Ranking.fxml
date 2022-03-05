@@ -4,6 +4,7 @@
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
@@ -13,7 +14,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<VBox minHeight="492.0" minWidth="748.0" prefHeight="492.0" prefWidth="748.0" spacing="20.0" HBox.hgrow="ALWAYS" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.RankingCtrl">
+<VBox fx:id="userSelf" minHeight="492.0" minWidth="748.0" prefHeight="492.0" prefWidth="748.0" spacing="20.0" HBox.hgrow="ALWAYS" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.RankingCtrl">
     <children>
         <HBox alignment="CENTER" layoutX="23.0" layoutY="34.0" prefHeight="19.0" prefWidth="725.0" spacing="4.0" VBox.vgrow="NEVER">
             <children>
@@ -151,7 +152,7 @@
                     <children>
                         <VBox prefHeight="305.0" prefWidth="373.0">
                             <children>
-                                <TableView fx:id="Scor" prefHeight="277.0" prefWidth="167.0">
+                                <TableView fx:id="scoreTable" prefHeight="277.0" prefWidth="167.0">
                                     <columns>
                                         <TableColumn prefWidth="240.66664123535156" text="Users" />
                                         <TableColumn prefWidth="132.00006866455078" text="Score" />
@@ -159,7 +160,7 @@
                                 </TableView>
                                 <HBox prefHeight="59.0" prefWidth="373.0">
                                     <children>
-                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="You">
+                                        <Text fx:id="scoreTableUserName" strokeType="OUTSIDE" strokeWidth="0.0" text="You">
                                             <font>
                                                 <Font size="20.0" />
                                             </font>
@@ -167,7 +168,7 @@
                                                 <Insets left="110.0" top="10.0" />
                                             </HBox.margin>
                                         </Text>
-                                        <Text fx:id="userScore" strokeType="OUTSIDE" strokeWidth="0.0" text="Score">
+                                        <Text fx:id="scoreTableUserSore" strokeType="OUTSIDE" strokeWidth="0.0" text="Score">
                                             <font>
                                                 <Font size="20.0" />
                                             </font>
@@ -188,29 +189,19 @@
                                     <VBox.margin>
                                         <Insets left="50.0" />
                                     </VBox.margin></Text>
-                                <HBox prefHeight="223.0" prefWidth="335.0" />
+                                <HBox alignment="CENTER" prefHeight="10.0" prefWidth="172.0">
+                                        <children>
+                                            <Text fx:id="ranking1stPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="1st player" />
+                                        </children></HBox>
                                 <HBox prefHeight="50.0" prefWidth="335.0">
                                     <children>
-                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="2nd Player">
-                                            <HBox.margin>
-                                                <Insets left="75.0" />
-                                            </HBox.margin>
-                                        </Text>
-                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="1st Player">
-                                            <HBox.margin>
-                                                <Insets left="10.0" />
-                                            </HBox.margin>
-                                        </Text>
-                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="3rd Player">
-                                            <HBox.margin>
-                                                <Insets left="15.0" />
-                                            </HBox.margin>
-                                        </Text>
-                                    </children>
+                                        <TextField fx:id="ranking2ndPlayer" text="2nd player" />
+                                        </children>
                                 </HBox>
-                                <ImageView fitHeight="201.0" fitWidth="267.0" pickOnBounds="true" preserveRatio="true">
+                                <TextField fx:id="ranking3rdPlayer" alignment="TOP_RIGHT" text="3rd player" />
+                                <ImageView fitHeight="201.0" fitWidth="260.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@../../../../../../../../../Downloads/alican.png" />
+                                        <Image url="@../images/leaderboard.png" />
                                     </image>
                                     <VBox.margin>
                                         <Insets left="45.0" />

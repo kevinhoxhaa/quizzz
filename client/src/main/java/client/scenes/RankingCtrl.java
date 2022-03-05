@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
@@ -50,7 +51,19 @@ public class RankingCtrl implements Initializable {
     private TableView<?> scoreTable;
 
     @FXML
-    private Text userScore;
+    private Text scoreTableUserSore;
+
+    @FXML
+    private Text ranking1stPlayer;
+
+    @FXML
+    private TextField ranking2ndPlayer;
+
+    @FXML
+    private TextField ranking3rdPlayer;
+
+    @FXML
+    private Text scoreTableUserName;
 
     /**
      * Resets timer value back to 10, and initializes the countdown sequence.
