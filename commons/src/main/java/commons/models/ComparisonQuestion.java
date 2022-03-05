@@ -65,9 +65,12 @@ public class ComparisonQuestion extends Question {
      */
     private boolean answerIsCorrect() {
         return userAnswer != null && (
-                (userAnswer.getAnswer().equals(CompareType.EQUAL) && firstActivity.consumption == secondActivity.consumption)
-                || (userAnswer.getAnswer().equals(CompareType.SMALLER) && firstActivity.consumption < secondActivity.consumption)
-                || (userAnswer.getAnswer().equals(CompareType.LARGER) && firstActivity.consumption > secondActivity.consumption)
+                (userAnswer.getAnswer().equals(CompareType.EQUAL)
+                        && firstActivity.consumption == secondActivity.consumption)
+                || (userAnswer.getAnswer().equals(CompareType.SMALLER)
+                        && firstActivity.consumption < secondActivity.consumption)
+                || (userAnswer.getAnswer().equals(CompareType.LARGER)
+                        && firstActivity.consumption > secondActivity.consumption)
         );
     }
 
