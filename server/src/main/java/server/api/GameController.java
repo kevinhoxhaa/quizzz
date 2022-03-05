@@ -9,6 +9,7 @@ import commons.models.EstimationQuestion;
 import commons.models.Game;
 import commons.models.GameState;
 import commons.models.Question;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -136,8 +137,12 @@ public class GameController {
      * game is easily identifiable later from the client
      */
     @GetMapping(path = { "", "/start/{count}" })
-    public Integer startGame(@PathVariable("count") int count) {
+    public ResponseEntity<Integer> startGame(@PathVariable("count") int count) {
         Game game = new Game();
+
+        if(waitingRepo.count() == 0) {
+            return ResponseEntity.badRequest().build();
+        }
 
         List<User> users = waitingRepo.findAll();
         userRepo.saveAll(users);
@@ -149,6 +154,31 @@ public class GameController {
         }
 
         gameState.getGames().add(game);
-        return gameState.getGames().indexOf(game);
+        return ResponseEntity.ok(gameState.getGames().indexOf(game));
+    }
+
+    /**
+     * Retrieves the requested question from the game state object
+     * and sends it to the user
+     * Returns a bad request if the game or question index
+     * is invalid
+     * @param gameIndex the index of the game
+     * @param questionIndex the index of the question
+     * @return the requested question
+     */
+    @GetMapping(path = { "", "/{gameIndex}/{questionIndex}" })
+    public ResponseEntity<Question> getQuestion(@PathVariable(name = "gameIndex") int gameIndex,
+                                @PathVariable(name = "questionIndex") int questionIndex) {
+        if(gameIndex >= gameState.getGames().size()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Game game = gameState.getGames().get(gameIndex);
+
+        if(questionIndex >= game.getQuestions().size()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(game.getQuestions().get(questionIndex));
     }
 }

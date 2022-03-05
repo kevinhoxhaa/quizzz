@@ -6,10 +6,11 @@ import commons.models.GameState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Random;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import java.util.Random;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GameControllerTest {
 
@@ -69,7 +70,7 @@ public class GameControllerTest {
 
     @Test
     public void startGameReturnsValidIndex() {
-        assertNotNull(sut.startGame((int) NUMBER));
+        assertTrue(sut.startGame((int) NUMBER).getStatusCode().is2xxSuccessful());
     }
 
     @Test
@@ -77,5 +78,26 @@ public class GameControllerTest {
         sut.startGame((int) NUMBER);
         assertEquals(0, waitingRepo.count());
         assertEquals(NUMBER, userRepo.count());
+    }
+
+    @Test
+    public void getQuestionReturnsValidQuestion() {
+        sut.startGame((int) NUMBER);
+        assertTrue(sut.getQuestion(0, (int) NUMBER - 1)
+                .getStatusCode().is2xxSuccessful());
+    }
+
+    @Test
+    public void getQuestionReturnsBadRequestOnInvalidGame() {
+        sut.startGame((int) NUMBER);
+        assertTrue(sut.getQuestion(1, (int) NUMBER - 1)
+                .getStatusCode().is4xxClientError());
+    }
+
+    @Test
+    public void getQuestionReturnsBadRequestOnInvalidQuestion() {
+        sut.startGame((int) NUMBER);
+        assertTrue(sut.getQuestion(0, (int) NUMBER)
+                .getStatusCode().is4xxClientError());
     }
 }
