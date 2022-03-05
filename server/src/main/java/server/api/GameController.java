@@ -279,6 +279,7 @@ public class GameController {
             if(u.lastAnswerCorrect) {
                 rightUsers.add(u);
             }
+            u.lastAnswerCorrect = false; // Reset last correct answer for next question
         }
 
         return output;
