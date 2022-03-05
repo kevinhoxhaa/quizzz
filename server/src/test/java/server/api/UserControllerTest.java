@@ -25,11 +25,23 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import java.util.Objects;
 import java.util.Random;
 
-import commons.User;
+import commons.entities.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class UserControllerTest {
+
+    @SuppressWarnings("serial")
+    public class MyRandom extends Random {
+
+        public boolean wasCalled = false;
+
+        @Override
+        public int nextInt(int bound) {
+            wasCalled = true;
+            return nextInt;
+        }
+    }
 
     public int nextInt;
     private MyRandom random;
@@ -119,17 +131,5 @@ public class UserControllerTest {
 
     private static User getUser(String q) {
         return new User(q);
-    }
-
-    @SuppressWarnings("serial")
-    public class MyRandom extends Random {
-
-        public boolean wasCalled = false;
-
-        @Override
-        public int nextInt(int bound) {
-            wasCalled = true;
-            return nextInt;
-        }
     }
 }

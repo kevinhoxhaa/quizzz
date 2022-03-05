@@ -13,44 +13,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package commons;
+package commons.entities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import commons.entities.User;
 import org.junit.jupiter.api.Test;
 
-public class PersonTest {
+public class UserTest {
 
     @Test
     public void checkConstructor() {
-        var p = new Person("f", "l");
-        assertEquals("f", p.firstName);
-        assertEquals("l", p.lastName);
+        var u = new User("f");
+        assertEquals("f", u.username);
     }
 
     @Test
     public void equalsHashCode() {
-        var a = new Person("a", "b");
-        var b = new Person("a", "b");
+        var a = new User("a");
+        var b = new User("a");
         assertEquals(a, b);
         assertEquals(a.hashCode(), b.hashCode());
     }
 
     @Test
     public void notEqualsHashCode() {
-        var a = new Person("a", "b");
-        var b = new Person("a", "c");
+        var a = new User("a");
+        var b = new User("b");
         assertNotEquals(a, b);
         assertNotEquals(a.hashCode(), b.hashCode());
     }
 
     @Test
     public void hasToString() {
-        var actual = new Person("a", "b").toString();
-        assertTrue(actual.contains(Person.class.getSimpleName()));
+        var actual = new User("a").toString();
+        assertTrue(actual.contains(User.class.getSimpleName()));
         assertTrue(actual.contains("\n"));
-        assertTrue(actual.contains("firstName"));
+        assertTrue(actual.contains("username"));
     }
 }

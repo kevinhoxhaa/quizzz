@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
-import commons.Quote;
+import commons.entities.Quote;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
