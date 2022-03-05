@@ -59,7 +59,7 @@ public class ComparisonQuestionTest {
     @Test
     public void setUserAnswerChangesUserAnswer() {
         question.setUserAnswer(new Answer(CompareType.EQUAL), POSITIVE);
-        assertEquals(CompareType.EQUAL, question.getUserAnswer());
+        assertEquals(CompareType.EQUAL, question.getUserAnswer().getAnswer());
     }
 
     @Test

@@ -58,13 +58,13 @@ public class ConsumptionQuestionTest {
 
     @Test
     public void getUserAnswerReturnsUserAnswer() {
-        assertEquals(NEGATIVE, question.getUserAnswer());
+        assertEquals(NEGATIVE, question.getUserAnswer().getAnswer());
     }
 
     @Test
     public void setUserAnswerSetsUserAnswer() {
         question.setUserAnswer(new Answer(POSITIVE * POSITIVE), POSITIVE);
-        assertEquals(POSITIVE * POSITIVE, question.getUserAnswer());
+        assertEquals(POSITIVE * POSITIVE, question.getUserAnswer().getAnswer());
     }
 
     @Test
