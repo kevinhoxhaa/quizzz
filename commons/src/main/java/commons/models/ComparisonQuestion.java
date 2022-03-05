@@ -12,7 +12,6 @@ public class ComparisonQuestion extends Question {
 
     private Activity firstActivity;
     private Activity secondActivity;
-    private CompareType userAnswer;
 
     /**
      * Constructs a new comparison question object with the given
@@ -61,22 +60,18 @@ public class ComparisonQuestion extends Question {
     }
 
     /**
-     * Returns the user answer
-     * @return user answer
+     * Checks whether the user answer matches the correct answer
+     * @return true if user answer is correct
      */
-    public CompareType getUserAnswer() {
-        return userAnswer;
-    }
-
-    /**
-     * Sets the user answer and the time it took them in seconds
-     * to answer the question
-     * @param userAnswer the user answer
-     * @param seconds the time it took them to answer in seconds
-     */
-    public void setUserAnswer(CompareType userAnswer, long seconds) {
-        this.userAnswer = userAnswer;
-        this.seconds = seconds;
+    private boolean answerIsCorrect() {
+        return userAnswer != null && (
+                (userAnswer.getAnswer().equals(CompareType.EQUAL)
+                        && firstActivity.consumption == secondActivity.consumption)
+                || (userAnswer.getAnswer().equals(CompareType.SMALLER)
+                        && firstActivity.consumption < secondActivity.consumption)
+                || (userAnswer.getAnswer().equals(CompareType.LARGER)
+                        && firstActivity.consumption > secondActivity.consumption)
+        );
     }
 
     /**
@@ -90,8 +85,8 @@ public class ComparisonQuestion extends Question {
      */
     @Override
     public long getPoints() {
-        return (hasCorrectUserAnswer() ? 1 : 0) *
-                (TRUE_FACTOR + TIME_FACTOR / (seconds + 1));
+        return (long) ((hasCorrectUserAnswer() ? 1 : 0) *
+                (TRUE_FACTOR + TIME_FACTOR / (seconds + 1)));
     }
 
     /**
@@ -101,11 +96,11 @@ public class ComparisonQuestion extends Question {
     @Override
     public boolean hasCorrectUserAnswer() {
         return userAnswer != null && (
-                (userAnswer.equals(CompareType.EQUAL) &&
+                (userAnswer.getAnswer().equals(CompareType.EQUAL) &&
                         firstActivity.consumption == secondActivity.consumption)
-                        || (userAnswer.equals(CompareType.SMALLER) &&
+                        || (userAnswer.getAnswer().equals(CompareType.SMALLER) &&
                         firstActivity.consumption < secondActivity.consumption)
-                        || (userAnswer.equals(CompareType.LARGER) &&
+                        || (userAnswer.getAnswer().equals(CompareType.LARGER) &&
                         firstActivity.consumption > secondActivity.consumption)
         );
     }

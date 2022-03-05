@@ -10,7 +10,6 @@ public class EstimationQuestion extends Question {
     private static final double ERROR_MARGIN = 0.05;
 
     private Activity activity;
-    private long userAnswer;
 
     /**
      * Constructs a new estimation question object based
@@ -20,7 +19,7 @@ public class EstimationQuestion extends Question {
     public EstimationQuestion(Activity activity) {
         super(QuestionType.ESTIMATION);
         this.activity = activity;
-        this.userAnswer = -1;
+        this.userAnswer = new Answer(Long.valueOf(-1));
     }
 
     /**
@@ -29,26 +28,6 @@ public class EstimationQuestion extends Question {
      */
     public Activity getActivity() {
         return activity;
-    }
-
-    /**
-     * Returns the user answer
-     * @return the user answer
-     */
-    public long getUserAnswer() {
-        return userAnswer;
-    }
-
-    /**
-     * Sets the user answer to the given question and
-     * the seconds it took the user to answer it
-     * @param userAnswer the user answer
-     * @param seconds the time it took the user to answer
-     *                it in seconds
-     */
-    public void setUserAnswer(long userAnswer, long seconds) {
-        this.userAnswer = userAnswer;
-        this.seconds = seconds;
     }
 
     /**
@@ -63,7 +42,7 @@ public class EstimationQuestion extends Question {
     @Override
     public long getPoints() {
         long points = (long) (POINTS - (
-                 (double) Math.abs(activity.consumption - userAnswer) / activity.consumption
+                 (double) Math.abs(activity.consumption - ((long) userAnswer.getAnswer())) / activity.consumption
         ) * POINTS);
         return points < 0 ? 0 : points;
     }
@@ -76,7 +55,7 @@ public class EstimationQuestion extends Question {
      */
     @Override
     public boolean hasCorrectUserAnswer() {
-        return Math.abs(activity.consumption - userAnswer) < ERROR_MARGIN * activity.consumption;
+        return Math.abs(activity.consumption - (Long) userAnswer.getAnswer()) < ERROR_MARGIN * activity.consumption;
     }
 
     /**

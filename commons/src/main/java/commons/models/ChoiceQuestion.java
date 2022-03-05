@@ -13,7 +13,6 @@ public class ChoiceQuestion extends Question {
     private Activity comparedActivity;
     private List<Activity> activities;
     private Activity answer;
-    private Activity userAnswer;
 
     /**
      * Constructs a choice question (what will you do instead of...?)
@@ -76,25 +75,6 @@ public class ChoiceQuestion extends Question {
         return answer;
     }
 
-    /**
-     * Returns the consumption guessed by the user
-     * @return the user's answer to the question
-     */
-    public Activity getUserAnswer() {
-        return userAnswer;
-    }
-
-    /**
-     * Sets the user's answer and the time it took them
-     * in seconds to answer the question
-     * @param answer the user's answer
-     * @param seconds the time it took the user to answer the
-     *                question in seconds
-     */
-    public void setUserAnswer(Activity answer, long seconds) {
-        this.userAnswer = answer;
-        this.seconds = seconds;
-    }
 
     /**
      * Returns the activities this question is based on
@@ -123,7 +103,7 @@ public class ChoiceQuestion extends Question {
      */
     @Override
     public long getPoints() {
-        return (hasCorrectUserAnswer() ? 1 : 0) * (TRUE_FACTOR + TIME_FACTOR / (seconds + 1));
+        return (long) ((hasCorrectUserAnswer() ? 1 : 0) * (TRUE_FACTOR + TIME_FACTOR / (seconds + 1)));
     }
 
     /**
@@ -134,7 +114,7 @@ public class ChoiceQuestion extends Question {
      */
     @Override
     public boolean hasCorrectUserAnswer() {
-        return answer == userAnswer;
+        return answer == userAnswer.getAnswer();
     }
 
     /**

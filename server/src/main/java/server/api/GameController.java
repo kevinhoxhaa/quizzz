@@ -23,7 +23,6 @@ import server.database.WaitingUserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 @RestController
@@ -91,7 +90,7 @@ public class GameController {
      * @return random consumption question
      */
     private ConsumptionQuestion generateConsumptionQuestion() {
-        return new ConsumptionQuestion(getRandomActivity());
+        return new ConsumptionQuestion(getRandomActivity(), new Random());
     }
 
     /**
