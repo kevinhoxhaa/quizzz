@@ -3,13 +3,21 @@ package client.scenes;
 import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
-import commons.models.*;
+import commons.models.EstimationQuestion;
+import commons.models.ChoiceQuestion;
+import commons.models.ComparisonQuestion;
+import commons.models.ConsumptionQuestion;
+import commons.models.Question;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.text.Text;
@@ -79,10 +87,12 @@ public class MultiplayerAnswerCtrl {
     protected void setup(Question prevQuestion, List<String> correctPlayers) {
         if (prevQuestion.hasCorrectUserAnswer()) {
             this.answerResponse.setText("Well done!");
-            answerPane.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+            answerPane.setBackground(new Background(
+                    new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
         } else {
             this.answerResponse.setText("By making mistakes, we learn!");
-            answerPane.setBackground(new Background(new BackgroundFill(Color.LIGHTCORAL, CornerRadii.EMPTY, Insets.EMPTY)));
+            answerPane.setBackground(new Background(
+                    new BackgroundFill(Color.LIGHTCORAL, CornerRadii.EMPTY, Insets.EMPTY)));
         }
 
         switch(prevQuestion.getType()) {

@@ -8,7 +8,6 @@ import commons.models.Question;
 import commons.models.ConsumptionQuestion;
 import commons.models.ChoiceQuestion;
 import commons.models.ComparisonQuestion;
-import commons.utils.CompareType;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -34,6 +33,8 @@ import static commons.utils.CompareType.LARGER;
 public class MultiplayerQuestionCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+
+    private static final double MILLISECONDS_PER_SECONDS = 1000.0;
 
     private Question currentQuestion;
 
@@ -210,7 +211,8 @@ public class MultiplayerQuestionCtrl {
     /**
      * Saves the answer selected last by the user, as well as the amount of time it took.
      * Changes the scene visuals accordingly.
-     * @param answerButton the answer button pressed.
+     * @param answerButton The answer button pressed.
+     * @param answer The answer corresponding to the answer button.
      */
     private void onAnswerClicked(StackPane answerButton, Answer answer){
 
@@ -239,7 +241,7 @@ public class MultiplayerQuestionCtrl {
      * @return the time since the timer started, in seconds.
      */
     private double getSeconds() {
-        return (System.currentTimeMillis() - startTime)/1000.0;
+        return (System.currentTimeMillis() - startTime)/MILLISECONDS_PER_SECONDS;
     }
 
     /**

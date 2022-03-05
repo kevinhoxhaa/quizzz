@@ -27,7 +27,11 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Pair;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.Random;
 
 public class MainCtrl {
 
@@ -154,6 +158,8 @@ public class MainCtrl {
     /**
      * Sets the multiplayer answer screen as the scene in the primary stage
      * and gives the primary stage a corresponding title.
+     * Furthermore, it increments the answerCount and first sets up the answer page.
+     * @param prevQuestion The question that has just been asked to the players.
      */
     public void showAnswerPage(Question prevQuestion) {
         answerCount++;
@@ -165,6 +171,7 @@ public class MainCtrl {
     /**
      * Mock method to create a simple list of strings that should later be replaced by players that
      * answered correctly.
+     * @return A list of Strings that represent players that answered the previous question correctly.
      */
     public List<String> getCorrectPlayersMock() {
         //TODO: Instead get list from server.
