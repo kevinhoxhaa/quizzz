@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 public class ConsumptionQuestion extends Question {
     private static final long TRUE_FACTOR = 500;
@@ -15,6 +16,7 @@ public class ConsumptionQuestion extends Question {
     private Activity activity;
     private long userAnswer;
     private List<Long> answers;
+    private Random random;
 
     /**
      * Constructs a new consumption question object based
@@ -22,7 +24,7 @@ public class ConsumptionQuestion extends Question {
      * Generates a list of alternative answers to the question
      * @param activity the activity this question is based on
      */
-    public ConsumptionQuestion(Activity activity) {
+    public ConsumptionQuestion(Activity activity, Random random) {
         super(QuestionType.CONSUMPTION);
         this.activity = activity;
         this.seconds = 1;
@@ -81,12 +83,10 @@ public class ConsumptionQuestion extends Question {
         answers = new ArrayList<>();
         answers.add(correctAnswer);
 
-        long firstAlternative = (long) (correctAnswer + 3 + (Math.random() < 0.5 ? -1 : 1) *
-                ((Math.random() * 0.1 + 0.01) * correctAnswer));
+        long firstAlternative = (long) (correctAnswer + (random.nextDouble() < 0.5 ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
         answers.add(firstAlternative);
 
-        long secondAlternative = (long) (correctAnswer + 5 + (Math.random() < 0.5 ? -1 : 1) *
-                ((Math.random() * 0.1 + 0.01) * correctAnswer));
+        long secondAlternative = (long) (correctAnswer + (random.nextDouble() < 0.5 ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
         answers.add(secondAlternative);
         Collections.shuffle(answers);
     }

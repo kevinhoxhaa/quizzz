@@ -27,6 +27,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Pair;
 
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -171,7 +172,7 @@ public class MainCtrl {
         //TODO instead of this, return a random question fetched from the server
         Activity activity = new Activity(
                 "testing the question models", ANSWER_TO_THE_ULTIMATE_QUESTION, "it was me. I said it. haha");
-        return new ConsumptionQuestion(activity);
+        return new ConsumptionQuestion(activity, new Random());
     }
 
     /**
