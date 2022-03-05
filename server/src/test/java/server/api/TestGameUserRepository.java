@@ -127,8 +127,7 @@ public class TestGameUserRepository implements GameUserRepository {
 
     @Override
     public Optional<User> findById(Long id) {
-        // TODO Auto-generated method stub
-        return null;
+        return find(id);
     }
 
     @Override

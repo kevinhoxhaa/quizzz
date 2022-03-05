@@ -2,10 +2,13 @@ package server.api;
 
 import commons.entities.Activity;
 import commons.entities.User;
+import commons.models.ConsumptionQuestion;
 import commons.models.GameState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.ResponseEntity;
 
+import java.util.List;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -99,5 +102,39 @@ public class GameControllerTest {
         sut.startGame((int) NUMBER);
         assertTrue(sut.getQuestion(0, (int) NUMBER)
                 .getStatusCode().is4xxClientError());
+    }
+
+    @Test
+    public void postAnswerReturnsValidResponse() {
+        sut.startGame((int) NUMBER);
+        assertNotNull(sut.postAnswer(0, 0, 0,
+                new ConsumptionQuestion(getActivity("title", NUMBER, "src"))));
+    }
+
+    @Test
+    public void postAnswerReturnsErrorOnInvalidGame() {
+        sut.startGame((int) NUMBER);
+        ResponseEntity<List<User>> actual = (ResponseEntity<List<User>>) sut.postAnswer(
+                (int) NUMBER, 0, 0,
+                new ConsumptionQuestion(getActivity("title", NUMBER, "src"))).getResult();
+        assertTrue(actual.getStatusCode().is4xxClientError());
+    }
+
+    @Test
+    public void postAnswerReturnsErrorOnInvalidUser() {
+        sut.startGame((int) NUMBER);
+        ResponseEntity<List<User>> actual = (ResponseEntity<List<User>>) sut.postAnswer(
+                0, NUMBER, 0,
+                new ConsumptionQuestion(getActivity("title", NUMBER, "src"))).getResult();
+        assertTrue(actual.getStatusCode().is4xxClientError());
+    }
+
+    @Test
+    public void postAnswerReturnsErrorOnInvalidQuestion() {
+        sut.startGame((int) NUMBER);
+        ResponseEntity<List<User>> actual = (ResponseEntity<List<User>>) sut.postAnswer(
+                0, 0, (int) NUMBER,
+                new ConsumptionQuestion(getActivity("title", NUMBER, "src"))).getResult();
+        assertTrue(actual.getStatusCode().is4xxClientError());
     }
 }
