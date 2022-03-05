@@ -33,6 +33,7 @@ public class MultiplayerQuestionCtrl {
 
     private Question currentQuestion;
 
+
     @FXML
     private StackPane answerTop;
     @FXML
@@ -84,6 +85,7 @@ public class MultiplayerQuestionCtrl {
      * @param mainCtrl
      */
     @Inject
+
     public MultiplayerQuestionCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
