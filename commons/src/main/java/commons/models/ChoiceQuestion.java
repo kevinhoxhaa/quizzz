@@ -123,7 +123,18 @@ public class ChoiceQuestion extends Question {
      */
     @Override
     public long getPoints() {
-        return (answer == userAnswer ? 1 : 0) * (TRUE_FACTOR + TIME_FACTOR / (seconds + 1));
+        return (hasCorrectUserAnswer() ? 1 : 0) * (TRUE_FACTOR + TIME_FACTOR / (seconds + 1));
+    }
+
+    /**
+     * Returns true if the answer chosen by the user
+     * is the correct option for this multiple-choice
+     * question
+     * @return true if user answer chosen is correct
+     */
+    @Override
+    public boolean hasCorrectUserAnswer() {
+        return answer == userAnswer;
     }
 
     /**

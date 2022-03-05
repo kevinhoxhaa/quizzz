@@ -249,7 +249,7 @@ public class GameController {
         user.points += answeredQuestion.getPoints();
         user.totalAnswers += 1;
         user.correctAnswers += answeredQuestion.getPoints() == 0 ? 0 : 1;
-        user.lastAnswerCorrect = answeredQuestion.getPoints() > 0;
+        user.lastAnswerCorrect = answeredQuestion.hasCorrectUserAnswer();
 
         threads.execute(() -> {
             try {

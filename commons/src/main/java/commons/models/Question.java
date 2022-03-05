@@ -43,6 +43,12 @@ public abstract class Question {
     }
 
     /**
+     * Returns true if the answer the user has chosen is correct
+     * @return true if the answer chosen by the user is the correct one
+     */
+    public abstract boolean hasCorrectUserAnswer();
+
+    /**
      * Generates a string representation of the given object
      * @return a string representation of the given object
      */

@@ -7,6 +7,7 @@ import java.util.Objects;
 
 public class EstimationQuestion extends Question {
     private static final long POINTS = 1000;
+    private static final double ERROR_MARGIN = 0.05;
 
     private Activity activity;
     private long userAnswer;
@@ -65,6 +66,17 @@ public class EstimationQuestion extends Question {
                  (double) Math.abs(activity.consumption - userAnswer) / activity.consumption
         ) * POINTS);
         return points < 0 ? 0 : points;
+    }
+
+    /**
+     * Checks whether the user's answer is within 5% range of the correct
+     * one, which is the game's criteria for a correct estimation
+     * question answer
+     * @return true if the answer is close to the correct one
+     */
+    @Override
+    public boolean hasCorrectUserAnswer() {
+        return Math.abs(activity.consumption - userAnswer) < ERROR_MARGIN * activity.consumption;
     }
 
     /**
