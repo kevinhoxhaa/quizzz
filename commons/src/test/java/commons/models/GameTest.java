@@ -33,8 +33,13 @@ public class GameTest {
     }
 
     @Test
-    public void toStringReturnsValidStringRepresentation() {
-        assertTrue(game.toString().contains("questions") && game.toString().contains("userIds"));
+    public void toStringContainsQuestions() {
+        assertTrue(game.toString().contains("questions"));
+    }
+
+    @Test
+    public void toStringContainsUserIds() {
+        assertTrue(game.toString().contains("userIds"));
     }
 
     @Test
