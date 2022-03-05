@@ -57,8 +57,8 @@ public class MainCtrl {
     private User user;
 
     private int answerCount = 0;
-    private final int TOTAL_ANSWERS = 20;
-    private final int HALFWAY_ANSWERS = 10;
+    private static final int TOTAL_ANSWERS = 20;
+    private static final int HALFWAY_ANSWERS = 10;
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home,
