@@ -13,43 +13,48 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package commons;
+package commons.entities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import commons.entities.Person;
+import commons.entities.Quote;
 import org.junit.jupiter.api.Test;
 
-public class UserTest {
+public class QuoteTest {
+
+    private static final Person SOME_PERSON = new Person("a", "b");
 
     @Test
     public void checkConstructor() {
-        var u = new User("f");
-        assertEquals("f", u.username);
+        var q = new Quote(SOME_PERSON, "q");
+        assertEquals(SOME_PERSON, q.person);
+        assertEquals("q", q.quote);
     }
 
     @Test
     public void equalsHashCode() {
-        var a = new User("a");
-        var b = new User("a");
+        var a = new Quote(new Person("a", "b"), "c");
+        var b = new Quote(new Person("a", "b"), "c");
         assertEquals(a, b);
         assertEquals(a.hashCode(), b.hashCode());
     }
 
     @Test
     public void notEqualsHashCode() {
-        var a = new User("a");
-        var b = new User("b");
+        var a = new Quote(new Person("a", "b"), "c");
+        var b = new Quote(new Person("a", "b"), "d");
         assertNotEquals(a, b);
         assertNotEquals(a.hashCode(), b.hashCode());
     }
 
     @Test
     public void hasToString() {
-        var actual = new User("a").toString();
-        assertTrue(actual.contains(User.class.getSimpleName()));
+        var actual = new Quote(new Person("a", "b"), "c").toString();
+        assertTrue(actual.contains(Quote.class.getSimpleName()));
         assertTrue(actual.contains("\n"));
-        assertTrue(actual.contains("username"));
+        assertTrue(actual.contains("person"));
     }
 }
