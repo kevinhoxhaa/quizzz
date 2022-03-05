@@ -45,14 +45,14 @@ public class UserControllerTest {
 
     public int nextInt;
     private MyRandom random;
-    private TestUserRepository repo;
+    private TestWaitingUserRepository repo;
 
     private UserController sut;
 
     @BeforeEach
     public void setup() {
         random = new MyRandom();
-        repo = new TestUserRepository();
+        repo = new TestWaitingUserRepository();
         sut = new UserController(random, repo);
     }
 

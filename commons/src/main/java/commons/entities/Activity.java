@@ -1,5 +1,6 @@
 package commons.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -21,6 +22,7 @@ public class Activity {
 
     public String title;
     @Column(name = "consumption_in_wh")
+    @JsonProperty("consumption_in_wh")
     public long consumption;
     public String source;
 

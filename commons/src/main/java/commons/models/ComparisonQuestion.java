@@ -85,7 +85,24 @@ public class ComparisonQuestion extends Question {
      */
     @Override
     public long getPoints() {
-        return (long) ((answerIsCorrect() ? 1 : 0) * (TRUE_FACTOR + TIME_FACTOR / (seconds + 1)));
+        return (hasCorrectUserAnswer() ? 1 : 0) *
+                (TRUE_FACTOR + TIME_FACTOR / (seconds + 1));
+    }
+
+    /**
+     * Checks whether the user answer matches the correct answer
+     * @return true if user answer is correct
+     */
+    @Override
+    public boolean hasCorrectUserAnswer() {
+        return userAnswer != null && (
+                (userAnswer.equals(CompareType.EQUAL) &&
+                        firstActivity.consumption == secondActivity.consumption)
+                        || (userAnswer.equals(CompareType.SMALLER) &&
+                        firstActivity.consumption < secondActivity.consumption)
+                        || (userAnswer.equals(CompareType.LARGER) &&
+                        firstActivity.consumption > secondActivity.consumption)
+        );
     }
 
     /**
