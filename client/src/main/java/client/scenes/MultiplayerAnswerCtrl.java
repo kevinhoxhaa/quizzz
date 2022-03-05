@@ -58,4 +58,6 @@ public class MultiplayerAnswerCtrl {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
+
+    //TODO After a certain amount of time in the answer screen, the afterAnswerScreen() method should be called.
 }
