@@ -31,11 +31,12 @@ public class ConsumptionQuestionTest {
         MyRandom (){
             this.counter = 0;
         }
-
+        // CHECKSTYLE:OFF
         @Override
         public double nextDouble(){
             return counter++ % 3 == 0 ? THREE_QUARTERS : counter % 3 == 1 ? ONE_QUARTER : TWO_FIFTHS;
         }
+        // CHECKSTLYE:ON
     }
 
     @BeforeEach
@@ -93,8 +94,12 @@ public class ConsumptionQuestionTest {
         List<Long> answers = question.getAnswers();
 
         assertTrue(answers.contains(POSITIVE));
-        assertTrue(answers.contains((long) (POSITIVE + (THREE_QUARTERS < 0.5 ? -1 : 1) * POSITIVE * 0.6 * ONE_QUARTER)));
-        assertTrue(answers.contains((long) (POSITIVE + (TWO_FIFTHS < 0.5 ? -1 : 1) * POSITIVE * 0.6 * THREE_QUARTERS)));
+        // CHECKSTYLE:OFF
+        assertTrue(answers.contains(
+                (long) (POSITIVE + (THREE_QUARTERS < 0.5 ? -1 : 1) * POSITIVE * 0.6 * ONE_QUARTER)));
+        assertTrue(answers.contains(
+                (long) (POSITIVE + (TWO_FIFTHS < 0.5 ? -1 : 1) * POSITIVE * 0.6 * THREE_QUARTERS)));
+        // CHECKSTYLE:ON
     }
 
     @Test
