@@ -15,7 +15,7 @@
  */
 package client.scenes;
 
-import commons.User;
+import commons.entities.User;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
