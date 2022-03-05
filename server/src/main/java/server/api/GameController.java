@@ -59,6 +59,13 @@ public class GameController {
         this.gameList = gameList;
     }
 
+    private Activity getRandomActivity() {
+        List<Activity> activitiesList = activityRepo.findAll();
+        int idx = random.nextInt(activitiesList.size());
+        // TODO: fix accessing random activities
+        return activitiesList.get(idx);
+    }
+
     /**
      * Returns a random question based on the activities
      * in the database
@@ -84,9 +91,7 @@ public class GameController {
      * @return random consumption question
      */
     private ConsumptionQuestion generateConsumptionQuestion() {
-        long idx = random.nextInt((int) activityRepo.count());
-        Optional<Activity> activity = activityRepo.findById(idx);
-        return new ConsumptionQuestion(activity.get());
+        return new ConsumptionQuestion(getRandomActivity());
     }
 
     /**
@@ -95,9 +100,7 @@ public class GameController {
      * @return random estimation question
      */
     private EstimationQuestion generateEstimationQuestion() {
-        long idx = random.nextInt((int) activityRepo.count());
-        Optional<Activity> activity = activityRepo.findById(idx);
-        return new EstimationQuestion(activity.get());
+        return new EstimationQuestion(getRandomActivity());
     }
 
     /**
@@ -108,9 +111,7 @@ public class GameController {
     private ChoiceQuestion generateChoiceQuestion() {
         List<Activity> activities = new ArrayList<>();
         for(int i = 0; i < CHOICE_COUNT; i++) {
-            long idx = random.nextInt((int) activityRepo.count());
-            Optional<Activity> activity = activityRepo.findById(idx);
-            activities.add(activity.get());
+            activities.add(getRandomActivity());
         }
         return new ChoiceQuestion(activities);
     }
@@ -121,11 +122,9 @@ public class GameController {
      * @return random comparison question
      */
     private ComparisonQuestion generateComparisonQuestion() {
-        long idx = random.nextInt((int) activityRepo.count());
-        Optional<Activity> firstActivity = activityRepo.findById(idx);
-        idx = random.nextInt((int) activityRepo.count());
-        Optional<Activity> secondActivity = activityRepo.findById(idx);
-        return new ComparisonQuestion(firstActivity.get(), secondActivity.get());
+        Activity firstActivity = getRandomActivity();
+        Activity secondActivity = getRandomActivity();
+        return new ComparisonQuestion(firstActivity, secondActivity);
     }
 
     /**
