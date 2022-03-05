@@ -6,6 +6,7 @@ import commons.models.ConsumptionQuestion;
 import commons.models.GameList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -116,7 +117,7 @@ public class GameControllerTest {
         sut.startGame((int) NUMBER);
         ResponseEntity<List<User>> actual = (ResponseEntity<List<User>>) sut.postAnswer(
                 (int) NUMBER, 0, 0,
-                new ConsumptionQuestion(getActivity("title", NUMBER, "src"))).getResult();
+                new ConsumptionQuestion(getActivity("title", NUMBER, "src")));
         assertTrue(actual.getStatusCode().is4xxClientError());
     }
 
@@ -125,7 +126,7 @@ public class GameControllerTest {
         sut.startGame((int) NUMBER);
         ResponseEntity<List<User>> actual = (ResponseEntity<List<User>>) sut.postAnswer(
                 0, NUMBER, 0,
-                new ConsumptionQuestion(getActivity("title", NUMBER, "src"))).getResult();
+                new ConsumptionQuestion(getActivity("title", NUMBER, "src")));
         assertTrue(actual.getStatusCode().is4xxClientError());
     }
 
@@ -134,7 +135,16 @@ public class GameControllerTest {
         sut.startGame((int) NUMBER);
         ResponseEntity<List<User>> actual = (ResponseEntity<List<User>>) sut.postAnswer(
                 0, 0, (int) NUMBER,
-                new ConsumptionQuestion(getActivity("title", NUMBER, "src"))).getResult();
+                new ConsumptionQuestion(getActivity("title", NUMBER, "src")));
         assertTrue(actual.getStatusCode().is4xxClientError());
+    }
+
+    @Test
+    public void postAnswerReturnsNoContentWhenNotEveryoneHasAnswered() {
+        sut.startGame((int) NUMBER);
+        ResponseEntity<List<User>> actual = (ResponseEntity<List<User>>) sut.postAnswer(
+                0, 0, 1,
+                new ConsumptionQuestion(getActivity("title", NUMBER, "src")));
+        assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
     }
 }

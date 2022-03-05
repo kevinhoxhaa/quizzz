@@ -34,19 +34,15 @@ import java.util.concurrent.Executors;
 public class GameController {
 
     private static final int CHOICE_COUNT = 4;
-    private static final int THREAD_COUNT = 5;
     private static final double CONSUMPTION_LIMIT = 0.25;
     private static final double ESTIMATION_LIMIT = 0.5;
     private static final double CHOICE_LIMIT = 0.75;
-    private static final long TIME_INTERVAL = 500;
-    private static final long TIMEOUT = 5000;
 
     private final Random random;
     private final GameList gameList;
     private final WaitingUserRepository waitingUserRepo;
     private final ActivityRepository activityRepo;
     private final GameUserRepository gameUserRepo;
-    private ExecutorService threads = Executors.newFixedThreadPool(THREAD_COUNT);
 
     /**
      * Constructs a game controller with the given repositories
@@ -146,7 +142,7 @@ public class GameController {
     private boolean allUsersHaveAnswered(List<Long> userIds, int questionNumber) {
         for(Long id : userIds) {
             User user = gameUserRepo.findById(id).get();
-            if(user.correctAnswers < questionNumber) {
+            if(user.totalAnswers < questionNumber) {
                 return false;
             }
         }
@@ -174,9 +170,9 @@ public class GameController {
 
         List<User> users = waitingUserRepo.findAll();
         gameUserRepo.saveAll(users);
+        users.forEach(u -> game.getUserIds().add(u.id));
         waitingUserRepo.deleteAll();
 
-        users.forEach(u -> game.getUserIds().add(u.id));
         for(int i = 0; i < count; i++) {
             game.getQuestions().add(generateQuestion());
         }
@@ -222,55 +218,40 @@ public class GameController {
      * correctly
      */
     @PostMapping(path =  "/{gameIndex}/user/{userId}/question/{questionIndex}")
-    public DeferredResult<ResponseEntity<List<User>>>
+    public ResponseEntity<List<User>>
     postAnswer(@PathVariable(name = "gameIndex") int gameIndex,
                @PathVariable(name = "userId") long userId,
                @PathVariable(name = "questionIndex") int questionIndex,
                @RequestBody Question answeredQuestion) {
-        DeferredResult<ResponseEntity<List<User>>> output = new DeferredResult<>();
         if(!gameUserRepo.existsById(userId)) {
-            output.setResult(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
-            return output;
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
         if(gameIndex >= gameList.getGames().size()) {
-            output.setResult(ResponseEntity.badRequest().build());
-            return output;
+            return ResponseEntity.badRequest().build();
         }
 
         Game game = gameList.getGames().get(gameIndex);
 
         if(questionIndex >= game.getQuestions().size()) {
-            output.setResult(ResponseEntity.badRequest().build());
-            return output;
+            return ResponseEntity.badRequest().build();
+        }
+
+        if(!allUsersHaveAnswered(game.getUserIds(), questionIndex + 1)) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
 
         User user = gameUserRepo.findById(userId).get();
         user.points += answeredQuestion.getPoints();
         user.totalAnswers += 1;
         user.correctAnswers += answeredQuestion.getPoints() == 0 ? 0 : 1;
+        // TODO: handle the case where the user has not answered the question at all
         user.lastAnswerCorrect = answeredQuestion.hasCorrectUserAnswer();
-
-        threads.execute(() -> {
-            try {
-                long timeAwait = 0;
-                do {
-                    if (timeAwait >= TIMEOUT) {
-                        throw new InterruptedException();
-                    }
-                    Thread.sleep(TIME_INTERVAL);
-                    timeAwait += TIME_INTERVAL;
-                } while (!allUsersHaveAnswered(game.getUserIds(), questionIndex + 1));
-            } catch(InterruptedException ex) {
-                output.setResult(ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).build());
-            }
-        });
 
         // If no next question, return FORBIDDEN and handle
         // game end on the client
         if(questionIndex + 1 >= game.getQuestions().size()) {
-            output.setResult(ResponseEntity.status(HttpStatus.FORBIDDEN).build());
-            return output;
+            ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
         List<User> rightUsers = new ArrayList<>();
@@ -279,9 +260,8 @@ public class GameController {
             if(u.lastAnswerCorrect) {
                 rightUsers.add(u);
             }
-            u.lastAnswerCorrect = false; // Reset last correct answer for next question
         }
 
-        return output;
+        return ResponseEntity.ok(rightUsers);
     }
 }
