@@ -25,6 +25,8 @@ public class MultiplayerQuestionCtrl {
     private static final int ANSWER_MID_ID = 2;
     private static final int ANSWER_BOT_ID = 3;
 
+    private double startTime;
+
     @FXML
     private StackPane answerTop;
     @FXML
@@ -51,8 +53,6 @@ public class MultiplayerQuestionCtrl {
     private StackPane disableIncorrect;
     @FXML
     private StackPane reduceTime;
-
-    private double startTime;
 
     /**
      * Creates a controller for the multiplayer question screen, with the given server and main controller.

@@ -33,6 +33,7 @@ public class MainCtrl {
     public static final double MIN_HEIGHT = 512.0;
     private static final int POLLING_DELAY = 0;
     private static final int POLLING_INTERVAL = 1500;
+    private static final int STANDARD_PAGE_TIME = 15;
 
     private Stage primaryStage;
 
@@ -153,9 +154,8 @@ public class MainCtrl {
      * Sets the timer to an initial 10 seconds for the players to answer the question.
      */
     public void showQuestion() {
-        int totalSeconds = 10;
         multiplayerQuestionCtrl.resetAnswerColors();
-        multiplayerQuestionCtrl.countDown(totalSeconds);
+        multiplayerQuestionCtrl.countDown(STANDARD_PAGE_TIME);
         multiplayerQuestionCtrl.setStartTime();
         primaryStage.setTitle("Question screen");
         primaryStage.setScene(questionScene);
