@@ -4,6 +4,8 @@ import commons.entities.Activity;
 import commons.utils.AnswerType;
 import commons.utils.CompareType;
 
+import java.util.Objects;
+
 import static commons.utils.AnswerType.LONG;
 import static commons.utils.AnswerType.ACTIVITY;
 import static commons.utils.AnswerType.COMPARETYPE;
@@ -88,5 +90,49 @@ public class Answer {
     public void setAnswer(CompareType answer){
         this.compareType = answer;
         this.answerType = COMPARETYPE;
+    }
+
+    /**
+     * A method that determines whether this is equal to another answer
+     * Two answers are equal if they have the same type and equal values for that type.
+     * @param o the other answer
+     * @return whether they are equal
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Answer answer = (Answer) o;
+        switch (this.answerType){
+            case COMPARETYPE:
+                return answer.getAnswerType() == COMPARETYPE && this.compareType.equals(answer.compareType);
+            case LONG:
+                return answer.getAnswerType() == LONG && this.longAnswer.equals(answer.longAnswer);
+            case ACTIVITY:
+                return answer.getAnswerType() == ACTIVITY && this.activity.equals(answer.activity);
+        }
+        return false;
+    }
+
+    /**
+     * A hashCode method for answers
+     * Two answers have the same hashCode if they are equal.
+     * @return the hash code
+     */
+    @Override
+    public int hashCode() {
+        switch (this.answerType){
+            case COMPARETYPE:
+                return Objects.hash(answerType, compareType);
+            case LONG:
+                return Objects.hash(answerType, longAnswer);
+            case ACTIVITY:
+                return Objects.hash(answerType, activity);
+        }
+        return Objects.hash(answerType);
     }
 }
