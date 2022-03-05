@@ -67,7 +67,7 @@ public class ChoiceQuestionTest {
     @Test
     public void setUserAnswerSetsUserAnswer() {
         question.setUserAnswer(new Answer(question.getActivities().get(0)), POSITIVE);
-        assertEquals("q1", question.getUserAnswer().title);
+        assertEquals("q1", ((Activity) question.getUserAnswer().getAnswer()).title);
     }
 
     @Test

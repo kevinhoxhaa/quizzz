@@ -14,9 +14,8 @@ public class ConsumptionQuestion extends Question {
     private static final long TIME_FACTOR = 800;
 
     private Activity activity;
-    private long userAnswer;
     private List<Long> answers;
-    private Random random;
+    private final Random random;
 
     /**
      * Constructs a new consumption question object based
@@ -29,7 +28,7 @@ public class ConsumptionQuestion extends Question {
         super(QuestionType.CONSUMPTION);
         this.activity = activity;
         this.seconds = 1;
-        this.userAnswer = -1;
+        this.userAnswer = new Answer(Long.valueOf(-1));
         this.random = random;
         setAnswers(activity.consumption);
     }
@@ -50,26 +49,6 @@ public class ConsumptionQuestion extends Question {
     public void setActivity(Activity activity) {
         this.activity = activity;
         setAnswers(activity.consumption);
-    }
-
-    /**
-     * Returns the consumption guessed by the user
-     * @return the user's answer to the question
-     */
-    public long getUserAnswer() {
-        return userAnswer;
-    }
-
-    /**
-     * Sets the user's answer and the time it took them
-     * in seconds to answer the question
-     * @param answer the user's answer
-     * @param seconds the time it took the user to answer the
-     *                question in seconds
-     */
-    public void setUserAnswer(Answer answer, double seconds) {
-        this.userAnswer = (Long) answer.getAnswer();
-        this.seconds = seconds;
     }
 
     /**
@@ -120,7 +99,8 @@ public class ConsumptionQuestion extends Question {
      */
     @Override
     public long getPoints() {
-        return (long) ((activity.consumption == userAnswer ? 1 : 0) * (TRUE_FACTOR + TIME_FACTOR / (seconds + 1)));
+        return (long) ((activity.consumption == ((long) userAnswer.getAnswer()) ? 1 : 0)
+                * (TRUE_FACTOR + TIME_FACTOR / (seconds + 1)));
     }
 
     /**

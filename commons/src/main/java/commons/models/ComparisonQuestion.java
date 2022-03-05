@@ -12,7 +12,6 @@ public class ComparisonQuestion extends Question {
 
     private Activity firstActivity;
     private Activity secondActivity;
-    private CompareType userAnswer;
 
     /**
      * Constructs a new comparison question object with the given
@@ -58,25 +57,6 @@ public class ComparisonQuestion extends Question {
      */
     public void setSecondActivity(Activity secondActivity) {
         this.secondActivity = secondActivity;
-    }
-
-    /**
-     * Returns the user answer
-     * @return user answer
-     */
-    public CompareType getUserAnswer() {
-        return userAnswer;
-    }
-
-    /**
-     * Sets the user answer and the time it took them in seconds
-     * to answer the question
-     * @param answer the user answer
-     * @param seconds the time it took them to answer in seconds
-     */
-    public void setUserAnswer(Answer answer, double seconds) {
-        this.userAnswer = (CompareType) answer.getAnswer();
-        this.seconds = seconds;
     }
 
     /**

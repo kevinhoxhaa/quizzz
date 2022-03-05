@@ -7,6 +7,7 @@ import java.util.Objects;
 public abstract class Question {
     protected QuestionType type;
     protected double seconds;
+    protected Answer userAnswer;
 
     /**
      * Constructs a question object with a given type
@@ -83,5 +84,21 @@ public abstract class Question {
         return Objects.hash(type);
     }
 
-    public abstract void setUserAnswer(Answer answer, double seconds);
+    /**
+     * A setter for the user answer, with the amount of time it took the to answer
+     * @param answer the user's answer
+     * @param seconds the amount of time it took, in seconds
+     */
+    public void setUserAnswer(Answer answer, double seconds) {
+        this.userAnswer = answer;
+        this.seconds = seconds;
+    }
+
+    /**
+     * Returns the answer the user chose
+     * @return the user's answer
+     */
+    public Answer getUserAnswer() {
+        return userAnswer;
+    }
 }
