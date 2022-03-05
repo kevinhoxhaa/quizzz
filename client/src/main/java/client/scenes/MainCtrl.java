@@ -54,12 +54,15 @@ public class MainCtrl {
     private WaitingCtrl waitingCtrl;
     private Scene waiting;
 
+    private RankingCtrl rankingCtrl;
+    private Scene ranking;
+
     private User user;
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
             Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home, 
             Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> question,
-            Pair<MultiplayerAnswerCtrl, Parent> answerPage) {
+            Pair<MultiplayerAnswerCtrl, Parent> answerPage, Pair<RankingCtrl, Parent> ranking) {
         this.primaryStage = primaryStage;
         primaryStage.setMinHeight(MIN_HEIGHT);
         primaryStage.setMinWidth(MIN_WIDTH);
@@ -81,6 +84,9 @@ public class MainCtrl {
 
         this.waitingCtrl = waiting.getKey();
         this.waiting = new Scene(waiting.getValue());
+
+        this.rankingCtrl = ranking.getKey();
+        this.ranking = new Scene(ranking.getValue());
 
         showHome();
         primaryStage.show();
@@ -138,9 +144,9 @@ public class MainCtrl {
         primaryStage.setScene(add);
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
     }
-    
+
     /**
-     * Sets the multiplayer answer screen as the scene in the primary stage 
+     * Sets the multiplayer answer screen as the scene in the primary stage
      * and gives the primary stage a corresponding title.
      */
     public void showAnswerPage() {
@@ -155,6 +161,15 @@ public class MainCtrl {
         multiplayerQuestionCtrl.resetAnswerColors();
         primaryStage.setTitle("Question screen");
         primaryStage.setScene(questionScene);
+    }
+
+    /**
+     * Sets the scene in the primary stage to the one corresponding to a ranking screen.
+     */
+    public void showRanking() {
+        primaryStage.setTitle("Ranking Screen");
+        primaryStage.setScene(ranking);
+        RankingCtrl.startTimeline();
     }
 
     /**
