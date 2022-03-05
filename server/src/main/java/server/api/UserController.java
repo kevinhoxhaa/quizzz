@@ -17,16 +17,16 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import server.database.UserRepository;
+import server.database.WaitingUserRepository;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
     private final Random random;
-    private final UserRepository repo;
+    private final WaitingUserRepository repo;
 
-    public UserController(Random random, UserRepository repo) {
+    public UserController(Random random, WaitingUserRepository repo) {
         this.random = random;
         this.repo = repo;
     }

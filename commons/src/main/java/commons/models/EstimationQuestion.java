@@ -7,9 +7,9 @@ import java.util.Objects;
 
 public class EstimationQuestion extends Question {
     private static final long POINTS = 1000;
+    private static final double ERROR_MARGIN = 0.05;
 
     private Activity activity;
-    private long userAnswer;
 
     /**
      * Constructs a new estimation question object based
@@ -19,7 +19,7 @@ public class EstimationQuestion extends Question {
     public EstimationQuestion(Activity activity) {
         super(QuestionType.ESTIMATION);
         this.activity = activity;
-        this.userAnswer = -1;
+        this.userAnswer = new Answer(Long.valueOf(-1));
     }
 
     /**
@@ -28,26 +28,6 @@ public class EstimationQuestion extends Question {
      */
     public Activity getActivity() {
         return activity;
-    }
-
-    /**
-     * Returns the user answer
-     * @return the user answer
-     */
-    public long getUserAnswer() {
-        return userAnswer;
-    }
-
-    /**
-     * Sets the user answer to the given question and
-     * the seconds it took the user to answer it
-     * @param userAnswer the user answer
-     * @param seconds the time it took the user to answer
-     *                it in seconds
-     */
-    public void setUserAnswer(long userAnswer, long seconds) {
-        this.userAnswer = userAnswer;
-        this.seconds = seconds;
     }
 
     /**
@@ -62,9 +42,20 @@ public class EstimationQuestion extends Question {
     @Override
     public long getPoints() {
         long points = (long) (POINTS - (
-                 (double) Math.abs(activity.consumption - userAnswer) / activity.consumption
+                 (double) Math.abs(activity.consumption - ((long) userAnswer.getAnswer())) / activity.consumption
         ) * POINTS);
         return points < 0 ? 0 : points;
+    }
+
+    /**
+     * Checks whether the user's answer is within 5% range of the correct
+     * one, which is the game's criteria for a correct estimation
+     * question answer
+     * @return true if the answer is close to the correct one
+     */
+    @Override
+    public boolean hasCorrectUserAnswer() {
+        return Math.abs(activity.consumption - (Long) userAnswer.getAnswer()) < ERROR_MARGIN * activity.consumption;
     }
 
     /**

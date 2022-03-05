@@ -6,7 +6,8 @@ import java.util.Objects;
 
 public abstract class Question {
     protected QuestionType type;
-    protected long seconds;
+    protected double seconds;
+    protected Answer userAnswer;
 
     /**
      * Constructs a question object with a given type
@@ -38,9 +39,15 @@ public abstract class Question {
      * in seconds
      * @return time in seconds
      */
-    public long getSeconds() {
+    public double getSeconds() {
         return seconds;
     }
+
+    /**
+     * Returns true if the answer the user has chosen is correct
+     * @return true if the answer chosen by the user is the correct one
+     */
+    public abstract boolean hasCorrectUserAnswer();
 
     /**
      * Generates a string representation of the given object
@@ -81,5 +88,23 @@ public abstract class Question {
     @Override
     public int hashCode() {
         return Objects.hash(type);
+    }
+
+    /**
+     * A setter for the user answer, with the amount of time it took the to answer
+     * @param answer the user's answer
+     * @param seconds the amount of time it took, in seconds
+     */
+    public void setUserAnswer(Answer answer, double seconds) {
+        this.userAnswer = answer;
+        this.seconds = seconds;
+    }
+
+    /**
+     * Returns the answer the user chose
+     * @return the user's answer
+     */
+    public Answer getUserAnswer() {
+        return userAnswer;
     }
 }

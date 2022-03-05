@@ -27,9 +27,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuery;
 
-import server.database.UserRepository;
+import server.database.WaitingUserRepository;
 
-public class TestUserRepository implements UserRepository {
+public class TestWaitingUserRepository implements WaitingUserRepository {
 
     public final List<User> users = new ArrayList<>();
     public final List<String> calledMethods = new ArrayList<>();

@@ -3,9 +3,10 @@ package server.api;
 import commons.entities.Activity;
 import commons.entities.User;
 import commons.models.ConsumptionQuestion;
-import commons.models.GameState;
+import commons.models.GameList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -33,28 +34,28 @@ public class GameControllerTest {
 
     public int nextInt;
     private MyRandom random;
-    private GameState gameState;
-    private TestUserRepository waitingRepo;
+    private GameList gameList;
+    private TestWaitingUserRepository waitingUserRepo;
     private TestActivityRepository activityRepo;
-    private TestGameUserRepository userRepo;
+    private TestGameUserRepository gameUserRepo;
 
     private GameController sut;
 
     @BeforeEach
     public void setup() {
         random = new MyRandom();
-        gameState = new GameState();
-        waitingRepo = new TestUserRepository();
+        gameList = new GameList();
+        waitingUserRepo = new TestWaitingUserRepository();
         activityRepo = new TestActivityRepository();
-        userRepo = new TestGameUserRepository();
-        sut = new GameController(random, gameState, waitingRepo, activityRepo, userRepo);
+        gameUserRepo = new TestGameUserRepository();
+        sut = new GameController(random, gameList, waitingUserRepo, activityRepo, gameUserRepo);
 
         for(int i = 0; i < NUMBER; i++) {
             activityRepo.save(getActivity("title", NUMBER, "src"));
         }
 
         for(int i = 0; i < NUMBER; i++) {
-            waitingRepo.save(getUser("name"));
+            waitingUserRepo.save(getUser("name"));
         }
     }
 
@@ -79,8 +80,8 @@ public class GameControllerTest {
     @Test
     public void startGameMovesUsers() {
         sut.startGame((int) NUMBER);
-        assertEquals(0, waitingRepo.count());
-        assertEquals(NUMBER, userRepo.count());
+        assertEquals(0, waitingUserRepo.count());
+        assertEquals(NUMBER, gameUserRepo.count());
     }
 
     @Test
@@ -108,7 +109,7 @@ public class GameControllerTest {
     public void postAnswerReturnsValidResponse() {
         sut.startGame((int) NUMBER);
         assertNotNull(sut.postAnswer(0, 0, 0,
-                new ConsumptionQuestion(getActivity("title", NUMBER, "src"))));
+                new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random)));
     }
 
     @Test
@@ -116,7 +117,7 @@ public class GameControllerTest {
         sut.startGame((int) NUMBER);
         ResponseEntity<List<User>> actual = (ResponseEntity<List<User>>) sut.postAnswer(
                 (int) NUMBER, 0, 0,
-                new ConsumptionQuestion(getActivity("title", NUMBER, "src"))).getResult();
+                new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random));
         assertTrue(actual.getStatusCode().is4xxClientError());
     }
 
@@ -125,7 +126,7 @@ public class GameControllerTest {
         sut.startGame((int) NUMBER);
         ResponseEntity<List<User>> actual = (ResponseEntity<List<User>>) sut.postAnswer(
                 0, NUMBER, 0,
-                new ConsumptionQuestion(getActivity("title", NUMBER, "src"))).getResult();
+                new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random));
         assertTrue(actual.getStatusCode().is4xxClientError());
     }
 
@@ -134,7 +135,16 @@ public class GameControllerTest {
         sut.startGame((int) NUMBER);
         ResponseEntity<List<User>> actual = (ResponseEntity<List<User>>) sut.postAnswer(
                 0, 0, (int) NUMBER,
-                new ConsumptionQuestion(getActivity("title", NUMBER, "src"))).getResult();
+                new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random));
         assertTrue(actual.getStatusCode().is4xxClientError());
+    }
+
+    @Test
+    public void postAnswerReturnsNoContentWhenNotEveryoneHasAnswered() {
+        sut.startGame((int) NUMBER);
+        ResponseEntity<List<User>> actual = (ResponseEntity<List<User>>) sut.postAnswer(
+                0, 0, 1,
+                new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random));
+        assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
     }
 }

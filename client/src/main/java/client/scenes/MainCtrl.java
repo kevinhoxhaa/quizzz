@@ -15,7 +15,10 @@
  */
 package client.scenes;
 
+import commons.entities.Activity;
 import commons.entities.User;
+import commons.models.ConsumptionQuestion;
+import commons.models.Question;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
@@ -24,6 +27,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Pair;
 
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -33,6 +37,7 @@ public class MainCtrl {
     public static final double MIN_HEIGHT = 512.0;
     private static final int POLLING_DELAY = 0;
     private static final int POLLING_INTERVAL = 1500;
+    private static final long ANSWER_TO_THE_ULTIMATE_QUESTION = 42;
     private static final int STANDARD_PAGE_TIME = 15;
 
     private Stage primaryStage;
@@ -42,7 +47,7 @@ public class MainCtrl {
 
     private AddQuoteCtrl addCtrl;
     private Scene add;
-    
+
     private MultiplayerAnswerCtrl multiplayerAnswerCtrl;
     private Scene answerScene;
 
@@ -57,10 +62,14 @@ public class MainCtrl {
 
     private User user;
 
+    private int answerCount = 0;
+    private static final int TOTAL_ANSWERS = 20;
+    private static final int HALFWAY_ANSWERS = 10;
+
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home, 
-            Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> question,
-            Pair<MultiplayerAnswerCtrl, Parent> answerPage) {
+                           Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home,
+                           Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> question,
+                           Pair<MultiplayerAnswerCtrl, Parent> answerPage) {
         this.primaryStage = primaryStage;
         primaryStage.setMinHeight(MIN_HEIGHT);
         primaryStage.setMinWidth(MIN_WIDTH);
@@ -73,7 +82,7 @@ public class MainCtrl {
 
         this.multiplayerAnswerCtrl = answerPage.getKey();
         this.answerScene = new Scene(answerPage.getValue());
-        
+
         this.homeCtrl = home.getKey();
         this.home = new Scene(home.getValue());
 
@@ -89,19 +98,22 @@ public class MainCtrl {
 
     /**
      * Binder for the User in the client side
+     *
      * @param user
      */
-    public void bindUser(User user){
-        this.user=user;
+    public void bindUser(User user) {
+        this.user = user;
     }
 
     /**
      * Getter for the user
+     *
      * @return user
      */
-    public User getUser(){
+    public User getUser() {
         return this.user;
     }
+
     /**
      * Shows the home page of the quiz application on the primary
      * stage
@@ -110,6 +122,7 @@ public class MainCtrl {
         primaryStage.setTitle("Quizzz");
         primaryStage.setScene(home);
     }
+
     /**
      * Displays the waiting page of the quiz application
      */
@@ -139,12 +152,13 @@ public class MainCtrl {
         primaryStage.setScene(add);
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
     }
-    
+
     /**
-     * Sets the multiplayer answer screen as the scene in the primary stage 
+     * Sets the multiplayer answer screen as the scene in the primary stage
      * and gives the primary stage a corresponding title.
      */
     public void showAnswerPage() {
+        answerCount++;
         primaryStage.setTitle("Answer screen");
         primaryStage.setScene(answerScene);
     }
@@ -154,6 +168,9 @@ public class MainCtrl {
      * Sets the timer to an initial 10 seconds for the players to answer the question.
      */
     public void showQuestion() {
+        Question question = getNextQuestion();
+
+        multiplayerQuestionCtrl.setup(question);
         multiplayerQuestionCtrl.resetAnswerColors();
         multiplayerQuestionCtrl.countDown(STANDARD_PAGE_TIME);
         multiplayerQuestionCtrl.setStartTime();
@@ -162,9 +179,28 @@ public class MainCtrl {
     }
 
     /**
+     * A getter for the number of the current question
+     *
+     * @return questionCount, which is the count of the number of questions that have already been shown.
+     */
+    public int getAnswerCount() {
+        return answerCount;
+    }
+    /**
+     * Fetches a random question from the server. For now, it just returns a placeholder for testing.
+     * @return a random question
+     */
+    private Question getNextQuestion() {
+        //TODO instead of this, return a random question fetched from the server
+        Activity activity = new Activity(
+                "testing the question models", ANSWER_TO_THE_ULTIMATE_QUESTION, "it was me. I said it. haha");
+        return new ConsumptionQuestion(activity, new Random());
+    }
+
+    /**
      * Deletes user from database when the close button is clicked
      */
-    public void onClose(){
+    public void onClose() {
         primaryStage.setOnHiding(new EventHandler<WindowEvent>() {
 
             @Override
@@ -173,12 +209,34 @@ public class MainCtrl {
 
                     @Override
                     public void run() {
-                        homeCtrl.getServer().removeUser(homeCtrl.getServer().getURL(),user);
-                        user=null;
+                        homeCtrl.getServer().removeUser(homeCtrl.getServer().getURL(), user);
+                        user = null;
                         System.exit(0);
                     }
                 });
             }
         });
+    }
+
+    /**
+     * A method that redirects the User to:
+     * - The next question if the number of previous answers is less than 20 and not equal to 10
+     * - The Ranking Page if the User is halfway through the game (10 answers so far)
+     * - The Final Results Page if the User has answered all 20 questions
+     */
+    public void afterAnswerScreen() {
+        if (getAnswerCount() <= TOTAL_ANSWERS) {
+            if (getAnswerCount() == HALFWAY_ANSWERS) {
+//                mainCtrl.showRankingPage();
+                // The ranking page will be showed here
+            }
+            //If the User is not redirected to the ranking page, they go to the next Question
+            else {
+                showQuestion();
+            }
+        } else {
+//            mainCtrl.showResultsPage();
+            // Once the game is over, the results page should be shown
+        }
     }
 }

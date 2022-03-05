@@ -7,7 +7,7 @@ import commons.models.ComparisonQuestion;
 import commons.models.ConsumptionQuestion;
 import commons.models.EstimationQuestion;
 import commons.models.Game;
-import commons.models.GameState;
+import commons.models.GameList;
 import commons.models.Question;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,53 +17,52 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.async.DeferredResult;
 import server.database.ActivityRepository;
 import server.database.GameUserRepository;
-import server.database.UserRepository;
+import server.database.WaitingUserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @RestController
 @RequestMapping("/api/games")
 public class GameController {
 
     private static final int CHOICE_COUNT = 4;
-    private static final int THREAD_COUNT = 5;
     private static final double CONSUMPTION_LIMIT = 0.25;
     private static final double ESTIMATION_LIMIT = 0.5;
     private static final double CHOICE_LIMIT = 0.75;
-    private static final long TIME_INTERVAL = 500;
-    private static final long TIMEOUT = 5000;
 
     private final Random random;
-    private final GameState gameState;
-    private final UserRepository waitingRepo;
+    private final GameList gameList;
+    private final WaitingUserRepository waitingUserRepo;
     private final ActivityRepository activityRepo;
-    private final GameUserRepository userRepo;
-    private ExecutorService threads = Executors.newFixedThreadPool(THREAD_COUNT);
+    private final GameUserRepository gameUserRepo;
 
     /**
      * Constructs a game controller with the given repositories
      * and the game state object stored on the server
      * @param random random generator
-     * @param gameState game state object
-     * @param waitingRepo waiting user repository
+     * @param gameList game state object
+     * @param waitingUserRepo waiting user repository
      * @param activityRepo activity repository
-     * @param userRepo user repository
+     * @param gameUserRepo user repository
      */
-    public GameController(Random random, GameState gameState, UserRepository waitingRepo,
-                          ActivityRepository activityRepo, GameUserRepository userRepo) {
+    public GameController(Random random, GameList gameList, WaitingUserRepository waitingUserRepo,
+                          ActivityRepository activityRepo, GameUserRepository gameUserRepo) {
         this.random = random;
-        this.waitingRepo = waitingRepo;
-        this.userRepo = userRepo;
+        this.waitingUserRepo = waitingUserRepo;
+        this.gameUserRepo = gameUserRepo;
         this.activityRepo = activityRepo;
-        this.gameState = gameState;
+        this.gameList = gameList;
+    }
+
+    private Activity getRandomActivity() {
+        List<Activity> activitiesList = activityRepo.findAll();
+        int idx = random.nextInt(activitiesList.size());
+        // TODO: fix accessing random activities
+        return activitiesList.get(idx);
     }
 
     /**
@@ -91,9 +90,7 @@ public class GameController {
      * @return random consumption question
      */
     private ConsumptionQuestion generateConsumptionQuestion() {
-        long idx = random.nextInt((int) activityRepo.count());
-        Optional<Activity> activity = activityRepo.findById(idx);
-        return new ConsumptionQuestion(activity.get());
+        return new ConsumptionQuestion(getRandomActivity(), new Random());
     }
 
     /**
@@ -102,9 +99,7 @@ public class GameController {
      * @return random estimation question
      */
     private EstimationQuestion generateEstimationQuestion() {
-        long idx = random.nextInt((int) activityRepo.count());
-        Optional<Activity> activity = activityRepo.findById(idx);
-        return new EstimationQuestion(activity.get());
+        return new EstimationQuestion(getRandomActivity());
     }
 
     /**
@@ -115,9 +110,7 @@ public class GameController {
     private ChoiceQuestion generateChoiceQuestion() {
         List<Activity> activities = new ArrayList<>();
         for(int i = 0; i < CHOICE_COUNT; i++) {
-            long idx = random.nextInt((int) activityRepo.count());
-            Optional<Activity> activity = activityRepo.findById(idx);
-            activities.add(activity.get());
+            activities.add(getRandomActivity());
         }
         return new ChoiceQuestion(activities);
     }
@@ -128,11 +121,9 @@ public class GameController {
      * @return random comparison question
      */
     private ComparisonQuestion generateComparisonQuestion() {
-        long idx = random.nextInt((int) activityRepo.count());
-        Optional<Activity> firstActivity = activityRepo.findById(idx);
-        idx = random.nextInt((int) activityRepo.count());
-        Optional<Activity> secondActivity = activityRepo.findById(idx);
-        return new ComparisonQuestion(firstActivity.get(), secondActivity.get());
+        Activity firstActivity = getRandomActivity();
+        Activity secondActivity = getRandomActivity();
+        return new ComparisonQuestion(firstActivity, secondActivity);
     }
 
     /**
@@ -145,8 +136,8 @@ public class GameController {
      */
     private boolean allUsersHaveAnswered(List<Long> userIds, int questionNumber) {
         for(Long id : userIds) {
-            User user = userRepo.findById(id).get();
-            if(user.correctAnswers < questionNumber) {
+            User user = gameUserRepo.findById(id).get();
+            if(user.totalAnswers < questionNumber) {
                 return false;
             }
         }
@@ -168,21 +159,21 @@ public class GameController {
     public ResponseEntity<Integer> startGame(@PathVariable("count") int count) {
         Game game = new Game();
 
-        if(waitingRepo.count() == 0) {
+        if(waitingUserRepo.count() == 0) {
             return ResponseEntity.badRequest().build();
         }
 
-        List<User> users = waitingRepo.findAll();
-        userRepo.saveAll(users);
-        waitingRepo.deleteAll();
-
+        List<User> users = waitingUserRepo.findAll();
+        gameUserRepo.saveAll(users);
         users.forEach(u -> game.getUserIds().add(u.id));
+        waitingUserRepo.deleteAll();
+
         for(int i = 0; i < count; i++) {
             game.getQuestions().add(generateQuestion());
         }
 
-        gameState.getGames().add(game);
-        return ResponseEntity.ok(gameState.getGames().indexOf(game));
+        gameList.getGames().add(game);
+        return ResponseEntity.ok(gameList.getGames().indexOf(game));
     }
 
     /**
@@ -197,11 +188,11 @@ public class GameController {
     @GetMapping(path =  "/{gameIndex}/question/{questionIndex}")
     public ResponseEntity<Question> getQuestion(@PathVariable(name = "gameIndex") int gameIndex,
                                 @PathVariable(name = "questionIndex") int questionIndex) {
-        if(gameIndex >= gameState.getGames().size()) {
+        if(gameIndex >= gameList.getGames().size()) {
             return ResponseEntity.badRequest().build();
         }
 
-        Game game = gameState.getGames().get(gameIndex);
+        Game game = gameList.getGames().get(gameIndex);
 
         if(questionIndex >= game.getQuestions().size()) {
             return ResponseEntity.badRequest().build();
@@ -222,66 +213,50 @@ public class GameController {
      * correctly
      */
     @PostMapping(path =  "/{gameIndex}/user/{userId}/question/{questionIndex}")
-    public DeferredResult<ResponseEntity<List<User>>>
+    public ResponseEntity<List<User>>
     postAnswer(@PathVariable(name = "gameIndex") int gameIndex,
                @PathVariable(name = "userId") long userId,
                @PathVariable(name = "questionIndex") int questionIndex,
                @RequestBody Question answeredQuestion) {
-        DeferredResult<ResponseEntity<List<User>>> output = new DeferredResult<>();
-        if(!userRepo.existsById(userId)) {
-            output.setResult(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
-            return output;
+        if(!gameUserRepo.existsById(userId)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        if(gameIndex >= gameState.getGames().size()) {
-            output.setResult(ResponseEntity.badRequest().build());
-            return output;
+        if(gameIndex >= gameList.getGames().size()) {
+            return ResponseEntity.badRequest().build();
         }
 
-        Game game = gameState.getGames().get(gameIndex);
+        Game game = gameList.getGames().get(gameIndex);
 
         if(questionIndex >= game.getQuestions().size()) {
-            output.setResult(ResponseEntity.badRequest().build());
-            return output;
+            return ResponseEntity.badRequest().build();
         }
 
-        User user = userRepo.findById(userId).get();
+        if(!allUsersHaveAnswered(game.getUserIds(), questionIndex + 1)) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+
+        User user = gameUserRepo.findById(userId).get();
         user.points += answeredQuestion.getPoints();
         user.totalAnswers += 1;
         user.correctAnswers += answeredQuestion.getPoints() == 0 ? 0 : 1;
-        user.lastAnswerCorrect = answeredQuestion.getPoints() > 0;
-
-        threads.execute(() -> {
-            try {
-                long timeAwait = 0;
-                do {
-                    if (timeAwait >= TIMEOUT) {
-                        throw new InterruptedException();
-                    }
-                    Thread.sleep(TIME_INTERVAL);
-                    timeAwait += TIME_INTERVAL;
-                } while (!allUsersHaveAnswered(game.getUserIds(), questionIndex + 1));
-            } catch(InterruptedException ex) {
-                output.setResult(ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).build());
-            }
-        });
+        // TODO: handle the case where the user has not answered the question at all
+        user.lastAnswerCorrect = answeredQuestion.hasCorrectUserAnswer();
 
         // If no next question, return FORBIDDEN and handle
         // game end on the client
         if(questionIndex + 1 >= game.getQuestions().size()) {
-            output.setResult(ResponseEntity.status(HttpStatus.FORBIDDEN).build());
-            return output;
+            ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
         List<User> rightUsers = new ArrayList<>();
         for(long id : game.getUserIds()) {
-            User u = userRepo.findById(id).get();
+            User u = gameUserRepo.findById(id).get();
             if(u.lastAnswerCorrect) {
                 rightUsers.add(u);
             }
-            u.lastAnswerCorrect = false; // Reset last correct answer for next question
         }
 
-        return output;
+        return ResponseEntity.ok(rightUsers);
     }
 }
