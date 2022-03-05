@@ -28,13 +28,15 @@ public class ConsumptionQuestionTest {
 
         private int counter;
 
-        MyRandom (){
+        protected MyRandom(){
             this.counter = 0;
         }
         // CHECKSTYLE:OFF
         @Override
         public double nextDouble(){
-            return counter++ % 3 == 0 ? THREE_QUARTERS : counter % 3 == 1 ? ONE_QUARTER : TWO_FIFTHS;
+            double out = counter % 3 == 0 ? THREE_QUARTERS : counter % 3 == 1 ? ONE_QUARTER : TWO_FIFTHS;
+            counter++;
+            return out;
         }
         // CHECKSTLYE:ON
     }
@@ -94,12 +96,14 @@ public class ConsumptionQuestionTest {
         List<Long> answers = question.getAnswers();
 
         assertTrue(answers.contains(POSITIVE));
+
         // CHECKSTYLE:OFF
-        assertTrue(answers.contains(
-                (long) (POSITIVE + (THREE_QUARTERS < 0.5 ? -1 : 1) * POSITIVE * 0.6 * ONE_QUARTER)));
-        assertTrue(answers.contains(
-                (long) (POSITIVE + (TWO_FIFTHS < 0.5 ? -1 : 1) * POSITIVE * 0.6 * THREE_QUARTERS)));
+        long expectedAlternativeFirst = (long) (POSITIVE + (THREE_QUARTERS < 0.5 ? -1 : 1) * POSITIVE * 0.6 * ONE_QUARTER);
+        long expectedAlternativeSecond = (long) (POSITIVE + (TWO_FIFTHS < 0.5 ? -1 : 1) * POSITIVE * 0.6 * THREE_QUARTERS);
         // CHECKSTYLE:ON
+
+        assertTrue(answers.contains(expectedAlternativeFirst));
+        assertTrue(answers.contains(expectedAlternativeSecond));
     }
 
     @Test
