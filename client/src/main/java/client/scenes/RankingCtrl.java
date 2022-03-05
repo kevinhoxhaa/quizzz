@@ -54,7 +54,7 @@ public class RankingCtrl implements Initializable {
     private Text scoreTableUserSore;
 
     @FXML
-    private Text ranking1stPlayer;
+    private TextField ranking1stPlayer;
 
     @FXML
     private TextField ranking2ndPlayer;
