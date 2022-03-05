@@ -103,7 +103,7 @@ public class ChoiceQuestion extends Question {
      */
     @Override
     public long getPoints() {
-        return (hasCorrectUserAnswer() ? 1 : 0) * (TRUE_FACTOR + TIME_FACTOR / (seconds + 1));
+        return (long) ((hasCorrectUserAnswer() ? 1 : 0) * (TRUE_FACTOR + TIME_FACTOR / (seconds + 1)));
     }
 
     /**
@@ -114,7 +114,7 @@ public class ChoiceQuestion extends Question {
      */
     @Override
     public boolean hasCorrectUserAnswer() {
-        return answer == userAnswer;
+        return answer == userAnswer.getAnswer();
     }
 
     /**

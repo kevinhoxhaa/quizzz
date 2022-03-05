@@ -99,12 +99,12 @@ public class ConsumptionQuestion extends Question {
      */
     @Override
     public long getPoints() {
-        return (hasCorrectUserAnswer() ? 1 : 0) * (TRUE_FACTOR + TIME_FACTOR / (seconds + 1));
+        return (long) ((hasCorrectUserAnswer() ? 1 : 0) * (TRUE_FACTOR + TIME_FACTOR / (seconds + 1)));
     }
 
     @Override
     public boolean hasCorrectUserAnswer() {
-        return activity.consumption == userAnswer;
+        return activity.consumption == (Long) userAnswer.getAnswer();
     }
 
     /**

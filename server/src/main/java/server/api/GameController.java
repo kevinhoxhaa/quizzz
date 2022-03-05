@@ -86,7 +86,7 @@ public class GameController {
     private ConsumptionQuestion generateConsumptionQuestion() {
         long idx = random.nextInt((int) activityRepo.count());
         Optional<Activity> activity = activityRepo.findById(idx);
-        return new ConsumptionQuestion(activity.get());
+        return new ConsumptionQuestion(activity.get(), new Random());
     }
 
     /**
