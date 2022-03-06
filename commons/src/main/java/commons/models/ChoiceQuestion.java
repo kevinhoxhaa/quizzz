@@ -114,6 +114,9 @@ public class ChoiceQuestion extends Question {
      */
     @Override
     public boolean hasCorrectUserAnswer() {
+        if (userAnswer == null) {
+            return false;
+        }
         return answer == userAnswer.getAnswer();
     }
 

@@ -55,6 +55,9 @@ public class EstimationQuestion extends Question {
      */
     @Override
     public boolean hasCorrectUserAnswer() {
+        if (userAnswer == null) {
+            return false;
+        }
         return Math.abs(activity.consumption - (Long) userAnswer.getAnswer()) < ERROR_MARGIN * activity.consumption;
     }
 

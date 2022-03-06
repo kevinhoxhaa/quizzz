@@ -8,6 +8,8 @@ import commons.models.Question;
 import commons.models.ConsumptionQuestion;
 import commons.models.ChoiceQuestion;
 import commons.models.ComparisonQuestion;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
@@ -18,6 +20,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +34,11 @@ public class MultiplayerQuestionCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
+    private static final double MILLISECONDS_PER_SECONDS = 1000.0;
+
     private Question currentQuestion;
 
+    private double startTime;
 
     @FXML
     private StackPane answerTop;
@@ -57,6 +63,8 @@ public class MultiplayerQuestionCtrl {
     private double secondsTaken;
     private Answer userAnswer;
 
+    private List<String> correctPlayers;
+
     @FXML
     private Text activityText;
     @FXML
@@ -77,7 +85,6 @@ public class MultiplayerQuestionCtrl {
     @FXML
     private StackPane reduceTime;
 
-
     /**
      * Creates a controller for the multiplayer question screen, with the given server and main controller.
      * Creates the list answerButtons for iterating through all of these.
@@ -92,9 +99,9 @@ public class MultiplayerQuestionCtrl {
     }
 
     /**
-     * Sets up the question page scene:
-     *  - Sets up the question/answers according to the type of the question given
-     *  - Fills the answerButtons list for iterations
+     * Sets up the question page scene: <br>
+     *  - Sets up the question/answers according to the type of the question given <br>
+     *  - Fills the answerButtons list for iterations <br>
      *  - Resets all buttons to their default colors
      * @param question the question instance upon which the setup is based
      */
@@ -204,13 +211,14 @@ public class MultiplayerQuestionCtrl {
     /**
      * Saves the answer selected last by the user, as well as the amount of time it took.
      * Changes the scene visuals accordingly.
-     * @param answerButton the answer button pressed.
+     * @param answerButton The answer button pressed.
+     * @param answer The answer corresponding to the answer button.
      */
-    private void onAnswerClicked(StackPane answerButton){
+    private void onAnswerClicked(StackPane answerButton, Answer answer){
 
         if(!answerButton.equals(selectedAnswerButton)) {
 
-            currentQuestion.setUserAnswer(userAnswer, getSeconds());
+            currentQuestion.setUserAnswer(answer, getSeconds());
 
             selectedAnswerButton = answerButton;
             resetAnswerColors();
@@ -233,7 +241,7 @@ public class MultiplayerQuestionCtrl {
      * @return the time since the timer started, in seconds.
      */
     private double getSeconds() {
-        return Math.random(); //placeholder for timer value
+        return (System.currentTimeMillis() - startTime)/MILLISECONDS_PER_SECONDS;
     }
 
     /**
@@ -248,7 +256,18 @@ public class MultiplayerQuestionCtrl {
     private void finalizeAndSend(){
         //TODO sending the question instance back to the server
         // and waiting for the list of people who got it right
-        mainCtrl.showAnswerPage();
+        disableAnswers();
+        mainCtrl.showAnswerPage(currentQuestion);
+    }
+
+
+
+    /**
+     * Captures the exact time the question page started showing used for measuring the time
+     * players needed for answering the question.
+     */
+    protected void setStartTime() {
+        startTime = System.currentTimeMillis();
     }
 
     /**
@@ -257,7 +276,7 @@ public class MultiplayerQuestionCtrl {
      */
     @FXML
     protected void onAnswerTopClicked(){
-        onAnswerClicked(answerTop);
+        onAnswerClicked(answerTop, answerTopAnswer);
     }
 
     /**
@@ -266,7 +285,7 @@ public class MultiplayerQuestionCtrl {
      */
     @FXML
     protected void onAnswerMidClicked(){
-        onAnswerClicked(answerMid);
+        onAnswerClicked(answerMid, answerMidAnswer);
     }
 
     /**
@@ -275,7 +294,7 @@ public class MultiplayerQuestionCtrl {
      */
     @FXML
     protected void onAnswerBotClicked(){
-        onAnswerClicked(answerBot);
+        onAnswerClicked(answerBot, answerBotAnswer);
     }
 
     /**
@@ -338,4 +357,37 @@ public class MultiplayerQuestionCtrl {
         }
     }
 
+    /**
+     * Counts down from a specific amount of seconds to 0 and shows this on the question page
+     * to indicate the amount of time a player has left to answer the question. <br>
+     * If the timer reaches zero, the player will no longer be able to interact with the answer buttons
+     * and will send its received Question object back to the server. <br>
+     * The player will be automatically redirected to the answer page when the information about which
+     * players got the question right is received from the server.
+     * @param totalSeconds The total amount of seconds a players has to answer the question.
+     */
+    protected void countDown(int totalSeconds) {
+        remainingSeconds.setText(Integer.toString(totalSeconds));
+        Timeline questionTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            int newRemainingSeconds = Integer.parseInt(remainingSeconds.getText()) - 1;
+            remainingSeconds.setText(Integer.toString(newRemainingSeconds));
+            if (newRemainingSeconds == 0) {
+                finalizeAndSend();
+            }
+        }));
+        questionTimeline.setCycleCount(totalSeconds);
+        questionTimeline.play();
+    }
+
+    /**
+     * Disables all interaction with the answer buttons.
+     */
+    private void disableAnswers() {
+        answerTop.setOnMouseEntered(null);
+        answerMid.setOnMouseEntered(null);
+        answerBot.setOnMouseEntered(null);
+        answerTop.setOnMouseClicked(null);
+        answerMid.setOnMouseClicked(null);
+        answerBot.setOnMouseClicked(null);
+    }
 }

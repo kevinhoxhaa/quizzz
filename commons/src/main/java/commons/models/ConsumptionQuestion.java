@@ -104,6 +104,9 @@ public class ConsumptionQuestion extends Question {
 
     @Override
     public boolean hasCorrectUserAnswer() {
+        if (userAnswer == null) {
+            return false;
+        }
         return activity.consumption == (Long) userAnswer.getAnswer();
     }
 

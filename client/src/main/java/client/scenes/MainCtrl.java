@@ -27,9 +27,11 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Pair;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Random;
 
 public class MainCtrl {
 
@@ -38,6 +40,7 @@ public class MainCtrl {
     private static final int POLLING_DELAY = 0;
     private static final int POLLING_INTERVAL = 1500;
     private static final long ANSWER_TO_THE_ULTIMATE_QUESTION = 42;
+    private static final int STANDARD_PAGE_TIME = 15;
 
     private Stage primaryStage;
 
@@ -155,20 +158,41 @@ public class MainCtrl {
     /**
      * Sets the multiplayer answer screen as the scene in the primary stage
      * and gives the primary stage a corresponding title.
+     * Furthermore, it increments the answerCount and first sets up the answer page.
+     * @param prevQuestion The question that has just been asked to the players.
      */
-    public void showAnswerPage() {
+    public void showAnswerPage(Question prevQuestion) {
         answerCount++;
+        multiplayerAnswerCtrl.setup(prevQuestion, getCorrectPlayersMock());
         primaryStage.setTitle("Answer screen");
         primaryStage.setScene(answerScene);
     }
 
     /**
+     * Mock method to create a simple list of strings that should later be replaced by players that
+     * answered correctly.
+     * @return A list of Strings that represent players that answered the previous question correctly.
+     */
+    public List<String> getCorrectPlayersMock() {
+        //TODO: Instead get list from server.
+        List<String> correctPlayers = new ArrayList<>();
+        correctPlayers.add("Patrik");
+        correctPlayers.add("Bink");
+        correctPlayers.add("Boris");
+        return correctPlayers;
+    }
+
+    /**
      * Sets the scene in the primary stage to the one corresponding to a multiplayer question screen.
+     * Sets the timer to an initial 10 seconds for the players to answer the question.
      */
     public void showQuestion() {
         Question question = getNextQuestion();
 
         multiplayerQuestionCtrl.setup(question);
+        multiplayerQuestionCtrl.resetAnswerColors();
+        multiplayerQuestionCtrl.countDown(STANDARD_PAGE_TIME);
+        multiplayerQuestionCtrl.setStartTime();
         primaryStage.setTitle("Question screen");
         primaryStage.setScene(questionScene);
     }
