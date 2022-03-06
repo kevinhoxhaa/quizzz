@@ -4,7 +4,6 @@
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
@@ -189,16 +188,21 @@
                                     <VBox.margin>
                                         <Insets left="50.0" />
                                     </VBox.margin></Text>
-                                <HBox alignment="CENTER" prefHeight="10.0" prefWidth="172.0">
-                                        <children>
-                                            <TextField fx:id="ranking1stPlayer" alignment="CENTER" text="1st player" />
-                                        </children></HBox>
-                                <HBox prefHeight="50.0" prefWidth="335.0">
-                                    <children>
-                                        <TextField fx:id="ranking2ndPlayer" alignment="CENTER" text="2nd player" />
-                                        </children>
-                                </HBox>
-                                <TextField fx:id="ranking3rdPlayer" alignment="TOP_RIGHT" text="3rd player" />
+                        <Text fx:id="ranking1stPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="1st player" textAlignment="CENTER" wrappingWidth="296.56768226623535">
+                           <VBox.margin>
+                              <Insets left="15.0" />
+                           </VBox.margin>
+                        </Text>
+                        <Text fx:id="ranking2ndPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="2nd player" wrappingWidth="201.26686716079712">
+                           <VBox.margin>
+                              <Insets left="75.0" />
+                           </VBox.margin>
+                        </Text>
+                        <Text fx:id="ranking3rdPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="3rd player" wrappingWidth="71.47009086608887">
+                           <VBox.margin>
+                              <Insets left="200.0" />
+                           </VBox.margin>
+                        </Text>
                                 <ImageView fitHeight="201.0" fitWidth="260.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
                                         <Image url="@../images/leaderboard.png" />
