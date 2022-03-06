@@ -17,6 +17,7 @@ package server;
 
 import java.util.Random;
 
+import commons.models.GameList;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -26,5 +27,10 @@ public class Config {
     @Bean
     public Random getRandom() {
         return new Random();
+    }
+
+    @Bean
+    public GameList getGameState() {
+        return new GameList();
     }
 }

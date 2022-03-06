@@ -24,10 +24,22 @@ import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import commons.Person;
-import commons.Quote;
+import commons.entities.Person;
+import commons.entities.Quote;
 
 public class QuoteControllerTest {
+
+    @SuppressWarnings("serial")
+    public class MyRandom extends Random {
+
+        public boolean wasCalled = false;
+
+        @Override
+        public int nextInt(int bound) {
+            wasCalled = true;
+            return nextInt;
+        }
+    }
 
     public int nextInt;
     private MyRandom random;
@@ -67,17 +79,5 @@ public class QuoteControllerTest {
 
     private static Quote getQuote(String q) {
         return new Quote(new Person(q, q), q);
-    }
-
-    @SuppressWarnings("serial")
-    public class MyRandom extends Random {
-
-        public boolean wasCalled = false;
-
-        @Override
-        public int nextInt(int bound) {
-            wasCalled = true;
-            return nextInt;
-        }
     }
 }
