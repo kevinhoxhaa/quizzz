@@ -2,7 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.User;
+import commons.entities.User;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.animation.Animation;
 import javafx.animation.PauseTransition;
@@ -24,8 +24,8 @@ public class WaitingCtrl {
     public static final double SCALE_END = 0.2;
     public static final int SCALE_DELAY = 1000;
 
-    private ServerUtils server;
-    private MainCtrl mainCtrl;
+    private final ServerUtils server;
+    private final MainCtrl mainCtrl;
 
     @FXML
     private Button startButton;
@@ -92,13 +92,17 @@ public class WaitingCtrl {
 
     /**
      * Remove the user from the waiting room and redirect
-     * them to the home scene
+     * them to the home scene, while deleting them from the database
      */
     @FXML
     protected void onBackButtonClick() {
-        // TODO: remove user from the waiting room in the database
+        User user= mainCtrl.getUser();
+        System.out.println(user);
+        server.removeUser(server.getURL(),user);
+        mainCtrl.bindUser(null);
         mainCtrl.showHome();
     }
+
 
     /**
      * Start a game on the server and redirect all participants

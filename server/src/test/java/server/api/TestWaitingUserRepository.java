@@ -20,16 +20,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-import commons.User;
+import commons.entities.User;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuery;
 
-import server.database.UserRepository;
+import server.database.WaitingUserRepository;
 
-public class TestUserRepository implements UserRepository {
+public class TestWaitingUserRepository implements WaitingUserRepository {
 
     public final List<User> users = new ArrayList<>();
     public final List<String> calledMethods = new ArrayList<>();
@@ -183,8 +183,7 @@ public class TestUserRepository implements UserRepository {
 
     @Override
     public void deleteAll() {
-        // TODO Auto-generated method stub
-
+        users.clear();
     }
 
     @Override

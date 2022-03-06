@@ -2,7 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.User;
+import commons.entities.User;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -91,6 +91,14 @@ public class HomeCtrl {
     }
 
     /**
+     * Getter for the server
+     * @return server
+     */
+    public ServerUtils getServer() {
+       return server;
+    }
+
+    /**
      * Returns the server URL the user has connected to
      * @return the server URL
      */
@@ -126,7 +134,7 @@ public class HomeCtrl {
                 alert.showAndWait();
                 return;
             }
-            server.addUser(serverUrl, user);
+            mainCtrl.bindUser(server.addUser(serverUrl, user));
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
@@ -152,5 +160,6 @@ public class HomeCtrl {
             return;
         }
         mainCtrl.showWaiting();
+        mainCtrl.onClose();
     }
 }
