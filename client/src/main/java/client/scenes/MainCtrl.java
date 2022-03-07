@@ -23,6 +23,8 @@ import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Pair;
@@ -34,6 +36,11 @@ import java.util.TimerTask;
 import java.util.Random;
 
 public class MainCtrl {
+
+    private static final double TIMEOUT = 8.0;
+    private static final double START_TIME = 7.95;
+    private static final double INTERVAL = 0.05;
+    private static final int MILLIS = 50;
 
     public static final double MIN_WIDTH = 768.0;
     public static final double MIN_HEIGHT = 512.0;
@@ -204,7 +211,7 @@ public class MainCtrl {
 
         multiplayerQuestionCtrl.setup(question);
         multiplayerQuestionCtrl.resetAnswerColors();
-        multiplayerQuestionCtrl.countDown(STANDARD_PAGE_TIME);
+        multiplayerQuestionCtrl.startTimer();
         multiplayerQuestionCtrl.setStartTime();
         primaryStage.setTitle("Question screen");
         primaryStage.setScene(questionScene);
@@ -216,7 +223,7 @@ public class MainCtrl {
     public void showRanking() {
         primaryStage.setTitle("Ranking Screen");
         primaryStage.setScene(ranking);
-        RankingCtrl.startTimeline();
+        rankingCtrl.startTimer();
     }
 
     /**
@@ -288,5 +295,41 @@ public class MainCtrl {
 //            mainCtrl.showResultsPage();
             // Once the game is over, the results page should be shown
         }
+    }
+
+    /**
+     * Starts a particular countdown timer and initiates the
+     * timer animation
+     * @param countdownCircle the circle to perform the
+     *                        animation on
+     */
+    public void startTimer(ProgressIndicator countdownCircle) {
+        countdownCircle.applyCss();
+        Text text = (Text) countdownCircle.lookup(".text.percentage");
+        new Thread(() -> {
+            double countdown = START_TIME;
+            while(countdown >= 0.0) {
+                try {
+                    double finalCountdown = countdown;
+                    Platform.runLater(() -> {
+                        countdownCircle.setProgress(finalCountdown / TIMEOUT);
+                        if(text != null) {
+                            text.setText(Math.round(finalCountdown) + "s");
+                        }
+                    });
+
+                    Thread.sleep(MILLIS);
+                    countdown -= INTERVAL;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            // TODO: submit answer and redirect to answer page
+            Platform.runLater(() -> {
+                if(text != null) {
+                    text.setText("Timeout");
+                }
+            });
+        }).start();
     }
 }

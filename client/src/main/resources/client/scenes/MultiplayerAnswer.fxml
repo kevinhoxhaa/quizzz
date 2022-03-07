@@ -1,22 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Arc?>
-<?import javafx.scene.shape.Circle?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.text.TextFlow?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
-<VBox minHeight="492.0" minWidth="748.0" prefHeight="492.0" prefWidth="748.0" spacing="20.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.MultiplayerAnswerCtrl">
+<VBox minHeight="492.0" minWidth="748.0" prefHeight="492.0" prefWidth="748.0" spacing="20.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.MultiplayerAnswerCtrl">
    <children>
       <HBox alignment="CENTER" layoutX="23.0" layoutY="34.0" prefHeight="17.0" prefWidth="344.0" spacing="4.0" VBox.vgrow="NEVER">
          <children>
@@ -217,24 +208,16 @@
                   <ListView fx:id="correctPlayers" prefHeight="194.0" prefWidth="245.0" style="-fx-border-color: black;" />
                </children>
             </VBox>
-            <VBox prefHeight="223.0" prefWidth="360.0">
+            <VBox alignment="CENTER" prefHeight="223.0" prefWidth="360.0">
                <children>
                   <Pane prefHeight="103.0" prefWidth="202.0">
                      <children>
-                        <Text layoutX="48.0" layoutY="93.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Next activity in:" wrappingWidth="105.14047241210938" />
+                        <Text layoutX="64.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Next activity in:" wrappingWidth="96.34042358398432" />
                      </children>
                   </Pane>
-                  <Pane prefHeight="72.0" prefWidth="202.0">
-                     <children>
-                        <Arc fx:id="timer" fill="DODGERBLUE" layoutX="103.0" layoutY="34.0" length="270.0" radiusX="32.0" radiusY="32.0" startAngle="45.0" stroke="BLACK" strokeType="INSIDE" type="ROUND" />
-                     </children>
-                  </Pane>
-                  <TextFlow prefHeight="50.0" prefWidth="202.0" textAlignment="CENTER">
-                     <children>
-                        <Text fx:id="remainingSeconds" strokeType="OUTSIDE" strokeWidth="0.0" text="8" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="s" />
-                     </children>
-                  </TextFlow>
+                  <ProgressIndicator fx:id="countdownCircle" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="70.0" progress="0.0">
+
+                  </ProgressIndicator>
                </children>
             </VBox>
             <Pane prefHeight="223.0" prefWidth="418.0">

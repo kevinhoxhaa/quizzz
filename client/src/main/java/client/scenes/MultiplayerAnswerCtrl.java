@@ -12,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Background;
@@ -25,6 +26,7 @@ import javafx.scene.text.Text;
 import java.util.List;
 
 public class MultiplayerAnswerCtrl {
+
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
@@ -40,9 +42,7 @@ public class MultiplayerAnswerCtrl {
     private Text questionNum;
 
     @FXML
-    private Arc timer;
-    @FXML
-    private Text remainingSeconds;
+    private ProgressIndicator countdownCircle;
 
     @FXML
     private HBox circles;
@@ -110,6 +110,7 @@ public class MultiplayerAnswerCtrl {
                 break;
         }
 
+        startTimer();
         this.correctPlayers.setItems(FXCollections.observableArrayList(correctPlayers));
     }
 
@@ -178,6 +179,13 @@ public class MultiplayerAnswerCtrl {
         );
 
         this.answer.setText(Long.toString(prevEstimQuestion.getActivity().consumption));
+    }
+
+    /**
+     * Initiates the timer countdown and animation
+     */
+    public void startTimer() {
+        mainCtrl.startTimer(countdownCircle);
     }
     //TODO After a certain amount of time in the answer screen, the afterAnswerScreen() method should be called.
 }

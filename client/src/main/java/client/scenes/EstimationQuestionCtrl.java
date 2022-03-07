@@ -39,26 +39,6 @@ public class EstimationQuestionCtrl {
      * Initiates the timer countdown and animation
      */
     public void startTimer() {
-        countdownCircle.applyCss();
-        Text text = (Text) countdownCircle.lookup(".text.percentage");
-        new Thread(() -> {
-            double countdown = START_TIME;
-            while(countdown >= 0.0) {
-                try {
-                    double finalCountdown = countdown;
-                    Platform.runLater(() -> {
-                        countdownCircle.setProgress(finalCountdown / TIMEOUT);
-                        text.setText(Math.round(finalCountdown) + "s");
-                    });
-
-                    Thread.sleep(MILLIS);
-                    countdown -= INTERVAL;
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            // TODO: submit answer and redirect to answer page
-            text.setText("Timeout");
-        }).start();
+        mainCtrl.startTimer(countdownCircle);
     }
 }
