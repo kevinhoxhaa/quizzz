@@ -3,10 +3,8 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.models.Question;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressIndicator;
-import javafx.scene.text.Text;
 
 public class EstimationQuestionCtrl {
 
