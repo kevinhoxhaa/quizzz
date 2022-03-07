@@ -8,11 +8,6 @@ import javafx.scene.control.ProgressIndicator;
 
 public class EstimationQuestionCtrl {
 
-    private static final double TIMEOUT = 8.0;
-    private static final double START_TIME = 7.95;
-    private static final double INTERVAL = 0.05;
-    private static final int MILLIS = 50;
-
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private Question currentQuestion;
