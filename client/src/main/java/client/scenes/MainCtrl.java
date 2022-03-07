@@ -65,6 +65,9 @@ public class MainCtrl {
     private RankingCtrl rankingCtrl;
     private Scene ranking;
 
+    private EstimationQuestionCtrl estimationQuestionCtrl;
+    private Scene estimation;
+
     private User user;
 
     private int answerCount = 0;
@@ -74,7 +77,8 @@ public class MainCtrl {
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
             Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home, 
             Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> question,
-            Pair<MultiplayerAnswerCtrl, Parent> answerPage, Pair<RankingCtrl, Parent> ranking) {
+            Pair<MultiplayerAnswerCtrl, Parent> answerPage, Pair<RankingCtrl, Parent> ranking,
+            Pair<EstimationQuestionCtrl, Parent> estimation) {
         this.primaryStage = primaryStage;
         primaryStage.setMinHeight(MIN_HEIGHT);
         primaryStage.setMinWidth(MIN_WIDTH);
@@ -99,6 +103,9 @@ public class MainCtrl {
 
         this.rankingCtrl = ranking.getKey();
         this.ranking = new Scene(ranking.getValue());
+
+        this.estimationQuestionCtrl = estimation.getKey();
+        this.estimation = new Scene(estimation.getValue());
 
         showHome();
         primaryStage.show();
@@ -210,6 +217,14 @@ public class MainCtrl {
         primaryStage.setTitle("Ranking Screen");
         primaryStage.setScene(ranking);
         RankingCtrl.startTimeline();
+    }
+
+    /**
+     * Sets the scene in the primary stage to the estimation screen
+     */
+    public void showEstimation() {
+        primaryStage.setTitle("Estimation");
+        primaryStage.setScene(estimation);
     }
 
     /**
