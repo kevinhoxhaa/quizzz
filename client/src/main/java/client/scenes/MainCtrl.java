@@ -225,6 +225,7 @@ public class MainCtrl {
     public void showEstimation() {
         primaryStage.setTitle("Estimation");
         primaryStage.setScene(estimation);
+        estimationQuestionCtrl.startTimer();
     }
 
     /**
