@@ -51,11 +51,11 @@ public class GameControllerTest {
         sut = new GameController(random, gameList, waitingUserRepo, activityRepo, gameUserRepo);
 
         for(int i = 0; i < NUMBER; i++) {
-            activityRepo.save(getActivity("title", NUMBER, "src"));
+            activityRepo.save(getActivity("title" + i, NUMBER, "src" + i));
         }
 
         for(int i = 0; i < NUMBER; i++) {
-            waitingUserRepo.save(getUser("name"));
+            waitingUserRepo.save(getUser("name" + i));
         }
     }
 

@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ProgressIndicator?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Circle?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.text.TextFlow?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
-<VBox fx:id="userSelf" minHeight="492.0" minWidth="748.0" prefHeight="492.0" prefWidth="748.0" spacing="20.0" HBox.hgrow="ALWAYS" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.RankingCtrl">
+<VBox fx:id="userSelf" minHeight="492.0" minWidth="748.0" prefHeight="492.0" prefWidth="748.0" spacing="20.0" HBox.hgrow="ALWAYS" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.RankingCtrl">
     <children>
         <HBox alignment="CENTER" layoutX="23.0" layoutY="34.0" prefHeight="19.0" prefWidth="725.0" spacing="4.0" VBox.vgrow="NEVER">
             <children>
@@ -231,14 +225,6 @@
                         <Insets left="50.0" top="15.0" />
                     </HBox.margin>
                 </ProgressIndicator>
-                <Text fx:id="countdownText" strokeType="OUTSIDE" strokeWidth="0.0" text="text">
-                    <HBox.margin>
-                        <Insets left="30.0" top="15.0" />
-                    </HBox.margin>
-                    <font>
-                        <Font size="40.0" />
-                    </font>
-                </Text>
             </children>
         </HBox>
     </children>

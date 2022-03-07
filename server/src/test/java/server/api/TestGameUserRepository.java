@@ -43,7 +43,9 @@ public class TestGameUserRepository implements GameUserRepository {
     @Override
     public <S extends User> List<S> saveAll(Iterable<S> entities) {
         List<S> usersToSave = (List<S>) entities;
-        users.addAll(usersToSave);
+        for(S user : usersToSave) {
+            save(user);
+        }
         return usersToSave;
     }
 
@@ -120,6 +122,11 @@ public class TestGameUserRepository implements GameUserRepository {
     @Override
     public <S extends User> S save(S entity) {
         call("save");
+        User existingEntity = users.stream().filter(u -> u.username.equals(entity.username)).findAny().orElse(null);
+        if(existingEntity != null) {
+            users.set(users.indexOf(existingEntity), entity);
+            return entity;
+        }
         entity.id = (long) users.size();
         users.add(entity);
         return entity;
