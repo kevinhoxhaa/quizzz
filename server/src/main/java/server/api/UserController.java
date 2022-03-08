@@ -44,6 +44,29 @@ public class UserController {
         return ResponseEntity.ok(repo.findById(id));
     }
 
+    /**
+     * Retrieves all users in the waiting room a user with a particular id
+     * is
+     * This endpoint is supposed to be used in the waiting room using standard
+     * polling to retrieve all users and check if the game has been started
+     * If a game with that user has been started, the user won't be in
+     * the waiting room and the response will be NO_CONTENT
+     * @param id the id of the user, the teammates of which to retrieve
+     * @return the teammates of a user
+     */
+    @GetMapping("/{id}/all")
+    public ResponseEntity<List<User>> getAllById(@PathVariable("id") long id) {
+        if (id < 0) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        if(!repo.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+
+        return ResponseEntity.ok(repo.findAll());
+    }
+
     @PostMapping(path = { "", "/" })
     public ResponseEntity<User> add(@RequestBody User user) {
 // || isNullOrEmpty(server) has to be added

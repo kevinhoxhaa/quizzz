@@ -28,6 +28,7 @@ import java.util.Random;
 import commons.entities.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 
 public class UserControllerTest {
 
@@ -101,6 +102,20 @@ public class UserControllerTest {
         sut.add(getUser("q1"));
         var actual = sut.add(getUser("q1"));
         assertEquals(UNAUTHORIZED, actual.getStatusCode());
+    }
+
+    @Test
+    public void getAllByIdReturnsList() {
+        var user = sut.add(getUser("q1"));
+        sut.add(getUser("q2"));
+        assertTrue(sut.getAllById(user.getBody().id).getBody().size() > 0);
+    }
+
+    @Test
+    public void getAllByIdReturnsNoContent() {
+        sut.add(getUser("q1"));
+        var user = sut.add(getUser("q2"));
+        assertEquals(HttpStatus.NO_CONTENT, sut.getAllById(user.getBody().id + 1).getStatusCode());
     }
 
     @Test
