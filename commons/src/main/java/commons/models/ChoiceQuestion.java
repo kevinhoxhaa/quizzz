@@ -24,6 +24,7 @@ public class ChoiceQuestion extends Question {
         super(QuestionType.CHOICE);
         setActivities(activities);
         this.userAnswer = null;
+        this.imagePath = comparedActivity.imagePath;
     }
 
     /**

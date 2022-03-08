@@ -8,6 +8,7 @@ public abstract class Question {
     protected QuestionType type;
     protected double seconds;
     protected Answer userAnswer;
+    protected String imagePath;
 
     /**
      * Constructs a question object with a given type
@@ -106,5 +107,26 @@ public abstract class Question {
      */
     public Answer getUserAnswer() {
         return userAnswer;
+    }
+
+
+    /**
+     * A setter for the image path
+     * @param imagePath the image path
+     */
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    /**
+     * A getter for the image path
+     * If the path is null, it returns a default image path
+     * @return the image path
+     */
+    public String getImagePath() {
+        if (imagePath == null) {
+            return "client/images/thonk.png";
+        }
+        return imagePath;
     }
 }

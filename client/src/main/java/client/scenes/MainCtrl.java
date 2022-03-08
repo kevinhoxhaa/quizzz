@@ -227,7 +227,8 @@ public class MainCtrl {
     private Question getNextQuestion() {
         //TODO instead of this, return a random question fetched from the server
         Activity activity = new Activity(
-                "testing the question models", ANSWER_TO_THE_ULTIMATE_QUESTION, "it was me. I said it. haha");
+                "testing the question models", ANSWER_TO_THE_ULTIMATE_QUESTION,
+                "it was me. I said it. haha", "client/images/xd.png");
         return new ConsumptionQuestion(activity, new Random());
     }
 

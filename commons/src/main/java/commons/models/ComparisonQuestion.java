@@ -9,6 +9,7 @@ import java.util.Objects;
 public class ComparisonQuestion extends Question {
     private static final long TRUE_FACTOR = 500;
     private static final long TIME_FACTOR = 800;
+    private static final double HALF = 0.5;
 
     private Activity firstActivity;
     private Activity secondActivity;
@@ -25,6 +26,7 @@ public class ComparisonQuestion extends Question {
         this.firstActivity = firstActivity;
         this.secondActivity = secondActivity;
         this.userAnswer = null;
+        this.imagePath = Math.random() < HALF ? firstActivity.imagePath : secondActivity.imagePath;
     }
 
     /**

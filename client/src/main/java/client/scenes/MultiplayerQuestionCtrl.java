@@ -12,6 +12,8 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.Background;
@@ -71,6 +73,9 @@ public class MultiplayerQuestionCtrl {
     private Text questionNum;
 
     @FXML
+    private ImageView questionImg;
+
+    @FXML
     private Arc timer;
     @FXML
     private Text remainingSeconds;
@@ -107,6 +112,7 @@ public class MultiplayerQuestionCtrl {
      */
     protected void setup(Question question) {
         this.currentQuestion = question;
+        questionImg.setImage(new Image(currentQuestion.getImagePath()));
 
         switch (question.getType()){
             case CONSUMPTION:

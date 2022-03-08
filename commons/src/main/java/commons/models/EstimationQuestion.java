@@ -20,6 +20,7 @@ public class EstimationQuestion extends Question {
         super(QuestionType.ESTIMATION);
         this.activity = activity;
         this.userAnswer = new Answer(Long.valueOf(-1));
+        this.imagePath = activity.imagePath;
     }
 
     /**
