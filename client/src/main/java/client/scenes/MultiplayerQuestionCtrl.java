@@ -68,6 +68,8 @@ public class MultiplayerQuestionCtrl {
     private Text activityText;
     @FXML
     private Text questionNum;
+    @FXML
+    private ImageView questionImg;
 
     @FXML
     private ProgressIndicator countdownCircle;
