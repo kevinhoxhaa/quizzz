@@ -371,6 +371,9 @@ public class MultiplayerQuestionCtrl {
         answerBot.setOnMouseClicked(null);
     }
 
+    /**
+     * Updates the number of the current question (e.g 11/20)
+     */
     public void updateQuestionNumber(){
         questionNum.setText(""+(mainCtrl.getAnswerCount()+1));
     }
