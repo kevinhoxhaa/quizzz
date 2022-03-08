@@ -211,6 +211,7 @@ public class MainCtrl {
 
         multiplayerQuestionCtrl.setup(question);
         multiplayerQuestionCtrl.resetAnswerColors();
+        multiplayerQuestionCtrl.updateQuestionNumber();
         multiplayerQuestionCtrl.startTimer();
         multiplayerQuestionCtrl.setStartTime();
         primaryStage.setTitle("Question screen");

@@ -370,4 +370,8 @@ public class MultiplayerQuestionCtrl {
         answerMid.setOnMouseClicked(null);
         answerBot.setOnMouseClicked(null);
     }
+
+    public void updateQuestionNumber(){
+        questionNum.setText(""+(mainCtrl.getAnswerCount()+1));
+    }
 }
