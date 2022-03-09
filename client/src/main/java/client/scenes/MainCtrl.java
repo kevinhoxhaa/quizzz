@@ -24,6 +24,8 @@ import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -76,6 +78,7 @@ public class MainCtrl {
     private Scene estimation;
 
     private User user;
+    private List<Color> colors;
 
     private int answerCount = 0;
     private static final int TOTAL_ANSWERS = 20;
@@ -182,7 +185,16 @@ public class MainCtrl {
      * @param prevQuestion The question that has just been asked to the players.
      */
     public void showAnswerPage(Question prevQuestion) {
+        updateQuestionNumber(multiplayerAnswerCtrl);
+        //Adds the color of the answer correctness to a list of answers
+        if(prevQuestion.hasCorrectUserAnswer()){
+            colors.add(Color.GREEN);
+        }
+        else{
+            colors.add(Color.RED);
+        }
         answerCount++;
+        updateCircleColor(multiplayerAnswerCtrl, colors);
         multiplayerAnswerCtrl.setup(prevQuestion, getCorrectPlayersMock());
         primaryStage.setTitle("Answer screen");
         primaryStage.setScene(answerScene);
@@ -209,9 +221,11 @@ public class MainCtrl {
     public void showQuestion() {
         Question question = getNextQuestion();
 
+        updateCircleColor(multiplayerQuestionCtrl,colors);
+        multiplayerQuestionCtrl.highlightCurrentCircle();
         multiplayerQuestionCtrl.setup(question);
         multiplayerQuestionCtrl.resetAnswerColors();
-        multiplayerQuestionCtrl.updateQuestionNumber();
+        updateQuestionNumber(multiplayerQuestionCtrl);
         multiplayerQuestionCtrl.startTimer();
         multiplayerQuestionCtrl.setStartTime();
         primaryStage.setTitle("Question screen");
@@ -285,7 +299,7 @@ public class MainCtrl {
     public void afterAnswerScreen() {
         if (getAnswerCount() <= TOTAL_ANSWERS) {
             if (getAnswerCount() == HALFWAY_ANSWERS) {
-//                mainCtrl.showRankingPage();
+                showRanking();
                 // The ranking page will be showed here
             }
             //If the User is not redirected to the ranking page, they go to the next Question
@@ -293,7 +307,7 @@ public class MainCtrl {
                 showQuestion();
             }
         } else {
-//            mainCtrl.showResultsPage();
+//            showResultsPage();
             // Once the game is over, the results page should be shown
         }
     }
@@ -332,5 +346,38 @@ public class MainCtrl {
                 }
             });
         }).start();
+    }
+
+    /**
+     * Updates the number of the current question (e.g 11/20)
+     */
+    public void updateQuestionNumber(Object o) {
+        if (o instanceof MultiplayerQuestionCtrl) {
+            MultiplayerQuestionCtrl m = (MultiplayerQuestionCtrl) o;
+            m.getQuestionNum().setText("" + (getAnswerCount() + 1));
+        } else if (o instanceof MultiplayerAnswerCtrl) {
+            MultiplayerAnswerCtrl m = (MultiplayerAnswerCtrl) o;
+            m.getQuestionNum().setText("" + (getAnswerCount() + 1));
+        }
+    }
+    /**
+     * Updates the color of the past questions' circles on the circle bar (green/red depending on the correctness of the answer)
+     */
+    public void updateCircleColor(Object o, List<Color>colors){
+        if (o instanceof MultiplayerQuestionCtrl) {
+            MultiplayerQuestionCtrl m = (MultiplayerQuestionCtrl) o;
+            for(int i=0;i<getAnswerCount();i++){
+                Circle c= (Circle) m.getCircles().getChildren().get(i);
+                c.setFill(colors.get(i));
+            }
+
+        }
+        else if (o instanceof MultiplayerAnswerCtrl) {
+            MultiplayerAnswerCtrl m = (MultiplayerAnswerCtrl) o;
+            for(int i=0;i<getAnswerCount();i++){
+                Circle c= (Circle) m.getCircles().getChildren().get(i);
+                c.setFill(colors.get(i));
+            }
+        }
     }
 }

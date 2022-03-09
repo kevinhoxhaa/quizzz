@@ -20,6 +20,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 import java.util.List;
@@ -187,4 +188,19 @@ public class MultiplayerAnswerCtrl {
         mainCtrl.startTimer(countdownCircle);
     }
     //TODO After a certain amount of time in the answer screen, the afterAnswerScreen() method should be called.
+
+    /**
+     * Getter for the current question number
+     * @return questionNum
+     */
+    public Text getQuestionNum(){
+        return questionNum;
+    }
+    /**
+     * Getter for the circles bar
+     * @return circles
+     */
+    public HBox getCircles(){
+        return circles;
+    }
 }

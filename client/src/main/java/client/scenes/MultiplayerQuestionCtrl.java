@@ -17,6 +17,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
@@ -372,9 +373,27 @@ public class MultiplayerQuestionCtrl {
     }
 
     /**
-     * Updates the number of the current question (e.g 11/20)
+     * Getter for the circles bar
+     * @return circles
      */
-    public void updateQuestionNumber(){
-        questionNum.setText(""+(mainCtrl.getAnswerCount()+1));
+    public HBox getCircles(){
+        return circles;
+    }
+
+    /**
+     * Getter for the current question number
+     * @return questionNum
+     */
+    public Text getQuestionNum(){
+        return questionNum;
+    }
+
+    /**
+     * Highlights current question so the user is aware which circle corresponds to his current question
+     */
+    public void highlightCurrentCircle() {
+        Circle c = (Circle) circles.getChildren().get(mainCtrl.getAnswerCount());
+        c.setFill(Color.AQUAMARINE);
+        c.setStrokeWidth(1.7);
     }
 }
