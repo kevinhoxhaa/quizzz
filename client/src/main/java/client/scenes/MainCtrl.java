@@ -350,6 +350,7 @@ public class MainCtrl {
 
     /**
      * Updates the number of the current question (e.g 11/20)
+     * @param o Is either MultiplayerQuestionCtrl or MultiplayerAnswerCtrl
      */
     public void updateQuestionNumber(Object o) {
         if (o instanceof MultiplayerQuestionCtrl) {
@@ -361,7 +362,10 @@ public class MainCtrl {
         }
     }
     /**
-     * Updates the color of the past questions' circles on the circle bar (green/red depending on the correctness of the answer)
+     * Updates the color of the past questions' circles on the circle bar
+     * (green/red depending on the correctness of the answer)
+     * @param colors Is the list of colors of previous answers(green/red depending on their correctness)
+     * @param o Is either MultiplayerQuestionCtrl or MultiplayerAnswerCtrl
      */
     public void updateCircleColor(Object o, List<Color>colors){
         if (o instanceof MultiplayerQuestionCtrl) {

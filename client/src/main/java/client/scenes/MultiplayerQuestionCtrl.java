@@ -33,6 +33,7 @@ public class MultiplayerQuestionCtrl {
     private final MainCtrl mainCtrl;
 
     private static final double MILLISECONDS_PER_SECONDS = 1000.0;
+    private static final double CIRCLE_BORDER_SIZE = 1.7;
 
     private Question currentQuestion;
 
@@ -394,6 +395,6 @@ public class MultiplayerQuestionCtrl {
     public void highlightCurrentCircle() {
         Circle c = (Circle) circles.getChildren().get(mainCtrl.getAnswerCount());
         c.setFill(Color.AQUAMARINE);
-        c.setStrokeWidth(1.7);
+        c.setStrokeWidth(CIRCLE_BORDER_SIZE);
     }
 }
