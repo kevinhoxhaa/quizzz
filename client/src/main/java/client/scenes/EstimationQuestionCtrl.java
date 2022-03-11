@@ -6,7 +6,7 @@ import commons.models.Question;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressIndicator;
 
-public class EstimationQuestionCtrl {
+public class EstimationQuestionCtrl implements SceneController {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -32,6 +32,13 @@ public class EstimationQuestionCtrl {
      * Initiates the timer countdown and animation
      */
     public void startTimer() {
-        mainCtrl.startTimer(countdownCircle);
+        mainCtrl.startTimer(countdownCircle, this);
+        //TODO figure out if the estimation question has been called by a solo game
+        // OR create a new, solo estimation question scene
+    }
+
+    @Override
+    public void redirect() {
+        //TODO
     }
 }

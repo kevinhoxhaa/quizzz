@@ -12,7 +12,7 @@ import javafx.scene.text.Text;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class RankingCtrl implements Initializable {
+public class RankingCtrl implements Initializable, SceneController {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -59,7 +59,7 @@ public class RankingCtrl implements Initializable {
      * Initiates the timer countdown and animation
      */
     public void startTimer() {
-        mainCtrl.startTimer(countdownCircle);
+        mainCtrl.startTimer(countdownCircle, this);
     }
 
     /**
@@ -70,7 +70,7 @@ public class RankingCtrl implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        startTimer();
+        //startTimer();
         countdownCircle.progressProperty().addListener((ov, oldValue, newValue) -> {
             countdownCircle.applyCss();
             Text text = (Text) countdownCircle.lookup(".text.percentage");
@@ -79,5 +79,10 @@ public class RankingCtrl implements Initializable {
                 // TODO: handle next question
             }
         });
+    }
+
+    @Override
+    public void redirect() {
+        //TODO
     }
 }
