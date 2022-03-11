@@ -20,16 +20,16 @@ import static com.google.inject.Guice.createInjector;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import client.scenes.EstimationQuestionCtrl;
-import client.scenes.RankingCtrl;
 import client.scenes.AddQuoteCtrl;
 import client.scenes.HomeCtrl;
-import client.scenes.MainCtrl;
-import client.scenes.MultiplayerQuestionCtrl;
 import client.scenes.MultiplayerAnswerCtrl;
 import client.scenes.QuoteOverviewCtrl;
+import client.scenes.MultiplayerQuestionCtrl;
 import client.scenes.WaitingCtrl;
-
+import client.scenes.RankingCtrl;
+import client.scenes.SoloResultsCtrl;
+import client.scenes.EstimationQuestionCtrl;
+import client.scenes.MainCtrl;
 import com.google.inject.Injector;
 
 import javafx.application.Application;
@@ -57,9 +57,11 @@ public class Main extends Application {
         var waiting = FXML.load(WaitingCtrl.class, "client", "scenes", "Waiting.fxml");
         var ranking = FXML.load(RankingCtrl.class, "client", "scenes", "Ranking.fxml");
 
+        var soloResults = FXML.load(SoloResultsCtrl.class, "client", "scenes", "SoloResults.fxml");
+
         var estimation = FXML.load(EstimationQuestionCtrl.class, "client", "scenes", "Estimation.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, overview, add, home, waiting, question, answerPage, ranking, estimation);
+        mainCtrl.initialize(primaryStage, overview, add, home, waiting, question, answerPage, ranking, soloResults, estimation);
     }
 }
