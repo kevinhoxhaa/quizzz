@@ -62,6 +62,7 @@ public class Main extends Application {
         var estimation = FXML.load(EstimationQuestionCtrl.class, "client", "scenes", "Estimation.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, overview, add, home, waiting, question, answerPage, ranking, soloResults, estimation);
+        mainCtrl.initialize(primaryStage, overview, add, home, waiting, question, answerPage,
+                ranking, soloResults, estimation);
     }
 }

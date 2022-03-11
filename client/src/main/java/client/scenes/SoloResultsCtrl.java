@@ -26,7 +26,7 @@ public class SoloResultsCtrl {
     @FXML
     private Text scoreTableUserName;
     @FXML
-    private Text ScoreTableUserScore;
+    private Text scoreTableUserScore;
 
     @FXML
     private Text ranking1stPlayer;
