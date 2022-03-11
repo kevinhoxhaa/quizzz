@@ -117,6 +117,8 @@ public class MainCtrl {
         this.estimationQuestionCtrl = estimation.getKey();
         this.estimation = new Scene(estimation.getValue());
 
+        colors=new ArrayList<>();
+
         showHome();
         primaryStage.show();
     }
