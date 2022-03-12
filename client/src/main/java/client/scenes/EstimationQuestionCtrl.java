@@ -32,6 +32,6 @@ public class EstimationQuestionCtrl {
      * Initiates the timer countdown and animation
      */
     public void startTimer() {
-        mainCtrl.startTimer(countdownCircle);
+        mainCtrl.startTimer(countdownCircle,this);
     }
 }

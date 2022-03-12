@@ -103,6 +103,7 @@ public class MultiplayerQuestionCtrl {
      * @param question the question instance upon which the setup is based
      */
     protected void setup(Question question) {
+        selectedAnswerButton=null;
         this.currentQuestion = question;
 
         switch (question.getType()){
@@ -124,6 +125,11 @@ public class MultiplayerQuestionCtrl {
         this.answerButtons.add(answerTop);
         this.answerButtons.add(answerMid);
         this.answerButtons.add(answerBot);
+
+        for (StackPane answerBtnLoop: answerButtons) {
+            answerBtnLoop.setStyle("-fx-border-width: 1; -fx-border-color: black");
+            ((Text) answerBtnLoop.getChildren().get(0)).setStyle("-fx-font-weight: normal");
+        }
 
         resetAnswerColors();
     }
@@ -250,10 +256,11 @@ public class MultiplayerQuestionCtrl {
      *  - Making sure the answer page has all the necessary information
      *  - Redirecting to the answer page
      */
-    private void finalizeAndSend(){
+    public void finalizeAndSend(){
         //TODO sending the question instance back to the server
         // and waiting for the list of people who got it right
-        disableAnswers();
+        resetAnswerColors();
+//        disableAnswers();
         mainCtrl.showAnswerPage(currentQuestion);
     }
 
@@ -341,7 +348,7 @@ public class MultiplayerQuestionCtrl {
      * Resets all answer boxes' background color according to whether they are selected.
      */
     @FXML
-    protected void resetAnswerColors(){
+    public void resetAnswerColors(){
 
         for (StackPane answerBtn: answerButtons) {
             if (answerBtn.equals(selectedAnswerButton)) {
@@ -358,13 +365,13 @@ public class MultiplayerQuestionCtrl {
      * Initiates the timer countdown and animation
      */
     public void startTimer() {
-        mainCtrl.startTimer(countdownCircle);
+        mainCtrl.startTimer(countdownCircle,this);
     }
 
     /**
      * Disables all interaction with the answer buttons.
      */
-    private void disableAnswers() {
+    public void disableAnswers() {
         answerTop.setOnMouseEntered(null);
         answerMid.setOnMouseEntered(null);
         answerBot.setOnMouseEntered(null);
@@ -394,7 +401,7 @@ public class MultiplayerQuestionCtrl {
      */
     public void highlightCurrentCircle() {
         Circle c = (Circle) circles.getChildren().get(mainCtrl.getAnswerCount());
-        c.setFill(Color.AQUAMARINE);
+        c.setFill(Color.DARKGRAY);
         c.setStrokeWidth(CIRCLE_BORDER_SIZE);
     }
 }

@@ -184,9 +184,8 @@ public class MultiplayerAnswerCtrl {
      * Initiates the timer countdown and animation
      */
     public void startTimer() {
-        mainCtrl.startTimer(countdownCircle);
+        mainCtrl.startTimer(countdownCircle,this);
     }
-    //TODO After a certain amount of time in the answer screen, the afterAnswerScreen() method should be called.
 
     /**
      * Getter for the current question number

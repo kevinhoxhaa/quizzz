@@ -85,10 +85,10 @@ public class MainCtrl {
     private static final int HALFWAY_ANSWERS = 10;
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home, 
-            Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> question,
-            Pair<MultiplayerAnswerCtrl, Parent> answerPage, Pair<RankingCtrl, Parent> ranking,
-            Pair<EstimationQuestionCtrl, Parent> estimation) {
+                           Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home,
+                           Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> question,
+                           Pair<MultiplayerAnswerCtrl, Parent> answerPage, Pair<RankingCtrl, Parent> ranking,
+                           Pair<EstimationQuestionCtrl, Parent> estimation) {
         this.primaryStage = primaryStage;
         primaryStage.setMinHeight(MIN_HEIGHT);
         primaryStage.setMinWidth(MIN_WIDTH);
@@ -117,7 +117,7 @@ public class MainCtrl {
         this.estimationQuestionCtrl = estimation.getKey();
         this.estimation = new Scene(estimation.getValue());
 
-        colors=new ArrayList<>();
+        colors = new ArrayList<>();
 
         showHome();
         primaryStage.show();
@@ -184,16 +184,16 @@ public class MainCtrl {
      * Sets the multiplayer answer screen as the scene in the primary stage
      * and gives the primary stage a corresponding title.
      * Furthermore, it increments the answerCount and first sets up the answer page.
+     *
      * @param prevQuestion The question that has just been asked to the players.
      */
     public void showAnswerPage(Question prevQuestion) {
         updateQuestionNumber(multiplayerAnswerCtrl);
         //Adds the color of the answer correctness to a list of answers
-        if(prevQuestion.hasCorrectUserAnswer()){
-            colors.add(Color.GREEN);
-        }
-        else{
-            colors.add(Color.RED);
+        if (prevQuestion.hasCorrectUserAnswer()) {
+            colors.add(Color.LIGHTGREEN);
+        } else {
+            colors.add(Color.INDIANRED);
         }
         answerCount++;
         updateCircleColor(multiplayerAnswerCtrl, colors);
@@ -205,6 +205,7 @@ public class MainCtrl {
     /**
      * Mock method to create a simple list of strings that should later be replaced by players that
      * answered correctly.
+     *
      * @return A list of Strings that represent players that answered the previous question correctly.
      */
     public List<String> getCorrectPlayersMock() {
@@ -223,7 +224,7 @@ public class MainCtrl {
     public void showQuestion() {
         Question question = getNextQuestion();
 
-        updateCircleColor(multiplayerQuestionCtrl,colors);
+        updateCircleColor(multiplayerQuestionCtrl, colors);
         multiplayerQuestionCtrl.highlightCurrentCircle();
         multiplayerQuestionCtrl.setup(question);
         multiplayerQuestionCtrl.resetAnswerColors();
@@ -238,6 +239,8 @@ public class MainCtrl {
      * Sets the scene in the primary stage to the one corresponding to a ranking screen.
      */
     public void showRanking() {
+        updateCircleColor(rankingCtrl, colors);
+        updateQuestionNumber(rankingCtrl);
         primaryStage.setTitle("Ranking Screen");
         primaryStage.setScene(ranking);
         rankingCtrl.startTimer();
@@ -260,8 +263,10 @@ public class MainCtrl {
     public int getAnswerCount() {
         return answerCount;
     }
+
     /**
      * Fetches a random question from the server. For now, it just returns a placeholder for testing.
+     *
      * @return a random question
      */
     private Question getNextQuestion() {
@@ -306,6 +311,7 @@ public class MainCtrl {
             }
             //If the User is not redirected to the ranking page, they go to the next Question
             else {
+                multiplayerQuestionCtrl.resetAnswerColors();
                 showQuestion();
             }
         } else {
@@ -317,20 +323,21 @@ public class MainCtrl {
     /**
      * Starts a particular countdown timer and initiates the
      * timer animation
+     *
      * @param countdownCircle the circle to perform the
      *                        animation on
      */
-    public void startTimer(ProgressIndicator countdownCircle) {
+    public void startTimer(ProgressIndicator countdownCircle, Object o) {
         countdownCircle.applyCss();
         Text text = (Text) countdownCircle.lookup(".text.percentage");
         new Thread(() -> {
             double countdown = START_TIME;
-            while(countdown >= 0.0) {
+            while (countdown >= 0.0) {
                 try {
                     double finalCountdown = countdown;
                     Platform.runLater(() -> {
                         countdownCircle.setProgress(finalCountdown / TIMEOUT);
-                        if(text != null) {
+                        if (text != null) {
                             text.setText(Math.round(finalCountdown) + "s");
                         }
                     });
@@ -341,10 +348,21 @@ public class MainCtrl {
                     e.printStackTrace();
                 }
             }
-            // TODO: submit answer and redirect to answer page
+
             Platform.runLater(() -> {
-                if(text != null) {
+                if (text != null) {
                     text.setText("Timeout");
+                    if (o instanceof MultiplayerQuestionCtrl) {
+                        multiplayerQuestionCtrl.finalizeAndSend();
+                    }
+                    if (o instanceof MultiplayerAnswerCtrl) {
+                        afterAnswerScreen();
+                    }
+                    if (o instanceof RankingCtrl) {
+                        multiplayerQuestionCtrl.resetAnswerColors();
+                        showQuestion();
+                    }
+                    //TODO Add instanceof ResultsCtrl
                 }
             });
         }).start();
@@ -352,6 +370,7 @@ public class MainCtrl {
 
     /**
      * Updates the number of the current question (e.g 11/20)
+     *
      * @param o Is either MultiplayerQuestionCtrl or MultiplayerAnswerCtrl
      */
     public void updateQuestionNumber(Object o) {
@@ -361,27 +380,38 @@ public class MainCtrl {
         } else if (o instanceof MultiplayerAnswerCtrl) {
             MultiplayerAnswerCtrl m = (MultiplayerAnswerCtrl) o;
             m.getQuestionNum().setText("" + (getAnswerCount() + 1));
+        } else if (o instanceof RankingCtrl) {
+            RankingCtrl m = (RankingCtrl) o;
+            m.getQuestionNum().setText("" + (getAnswerCount()));
         }
     }
+
     /**
      * Updates the color of the past questions' circles on the circle bar
      * (green/red depending on the correctness of the answer)
+     *
      * @param colors Is the list of colors of previous answers(green/red depending on their correctness)
-     * @param o Is either MultiplayerQuestionCtrl or MultiplayerAnswerCtrl
+     * @param o      Is either MultiplayerQuestionCtrl or MultiplayerAnswerCtrl
      */
-    public void updateCircleColor(Object o, List<Color>colors){
+    public void updateCircleColor(Object o, List<Color> colors) {
         if (o instanceof MultiplayerQuestionCtrl) {
             MultiplayerQuestionCtrl m = (MultiplayerQuestionCtrl) o;
-            for(int i=0;i<getAnswerCount();i++){
-                Circle c= (Circle) m.getCircles().getChildren().get(i);
+            for (int i = 0; i < getAnswerCount(); i++) {
+                Circle c = (Circle) m.getCircles().getChildren().get(i);
                 c.setFill(colors.get(i));
             }
-
         }
         else if (o instanceof MultiplayerAnswerCtrl) {
             MultiplayerAnswerCtrl m = (MultiplayerAnswerCtrl) o;
-            for(int i=0;i<getAnswerCount();i++){
-                Circle c= (Circle) m.getCircles().getChildren().get(i);
+            for (int i = 0; i < getAnswerCount(); i++) {
+                Circle c = (Circle) m.getCircles().getChildren().get(i);
+                c.setFill(colors.get(i));
+            }
+        }
+        else if (o instanceof RankingCtrl) {
+            RankingCtrl m = (RankingCtrl) o;
+            for (int i = 0; i < getAnswerCount(); i++) {
+                Circle c = (Circle) m.getCircles().getChildren().get(i);
                 c.setFill(colors.get(i));
             }
         }
