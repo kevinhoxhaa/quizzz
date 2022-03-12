@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SoloResults">
+   <children>
+      <Text layoutX="199.0" layoutY="92.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Keep it up!" textAlignment="CENTER" wrappingWidth="176.53680419921875" />
+      <Button id="quit" layoutX="240.0" layoutY="313.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="94.0" text="Quit" />
+      <Text layoutX="215.0" layoutY="167.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Score:" wrappingWidth="50.3980712890625" />
+      <Text id="score" layoutX="300.0" layoutY="167.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+      <Text layoutX="193.0" layoutY="196.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Personal Best:" wrappingWidth="94.40000000000009" />
+      <Text id="personalBest" layoutX="300.0" layoutY="196.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+   </children>
+</AnchorPane>
