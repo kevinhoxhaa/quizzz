@@ -83,6 +83,7 @@ public class HomeCtrl {
     /**
      * Parses the info from the user input form and creates
      * a User object with the given username
+     * @param soloPlayer Boolean that identifies if the user is a solo player.
      * @return parsed User object
      */
     public User getUser(Boolean soloPlayer) {
