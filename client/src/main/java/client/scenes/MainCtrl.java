@@ -54,6 +54,8 @@ public class MainCtrl {
 
     private Stage primaryStage;
 
+    private ServerUtils server;
+
     private QuoteOverviewCtrl overviewCtrl;
     private Scene overview;
 
@@ -111,6 +113,8 @@ public class MainCtrl {
 
         this.homeCtrl = home.getKey();
         this.home = new Scene(home.getValue());
+
+        this.server = homeCtrl.getServer();
 
         this.multiplayerQuestionCtrl = multiplayerQuestion.getKey();
         this.multiplayerQuestion = new Scene(multiplayerQuestion.getValue());
@@ -360,7 +364,6 @@ public class MainCtrl {
      * Called once, initializes a solo game and shows the first question screen
      */
     public void startSoloGame() {
-        ServerUtils server = new ServerUtils(); //TODO: do this properly
         SoloGame soloGame = server.getSoloGame(server.getURL(), QUESTIONS_PER_GAME);
         soloQuestionCtrl.setup(soloGame);
         primaryStage.setTitle("Solo game");
