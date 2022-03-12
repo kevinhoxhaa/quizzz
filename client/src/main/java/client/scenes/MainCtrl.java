@@ -225,6 +225,7 @@ public class MainCtrl {
         Question question = getNextQuestion();
 
         updateCircleColor(multiplayerQuestionCtrl, colors);
+        multiplayerQuestionCtrl.resetHighlight();
         multiplayerQuestionCtrl.highlightCurrentCircle();
         multiplayerQuestionCtrl.setup(question);
         multiplayerQuestionCtrl.resetAnswerColors();

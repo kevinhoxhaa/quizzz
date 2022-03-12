@@ -34,6 +34,7 @@ public class MultiplayerQuestionCtrl {
 
     private static final double MILLISECONDS_PER_SECONDS = 1000.0;
     private static final double CIRCLE_BORDER_SIZE = 1.7;
+    private static final double STANDARD_CIRCLE_BORDER_SIZE = 1.0;
 
     private Question currentQuestion;
 
@@ -403,5 +404,15 @@ public class MultiplayerQuestionCtrl {
         Circle c = (Circle) circles.getChildren().get(mainCtrl.getAnswerCount());
         c.setFill(Color.DARKGRAY);
         c.setStrokeWidth(CIRCLE_BORDER_SIZE);
+    }
+
+    /**
+     * Resets the highlighting of the circle borders
+     */
+    public void resetHighlight(){
+        if(mainCtrl.getAnswerCount()>0){
+            Circle c = (Circle) circles.getChildren().get(mainCtrl.getAnswerCount()-1);
+            c.setStrokeWidth(STANDARD_CIRCLE_BORDER_SIZE);
+        }
     }
 }
