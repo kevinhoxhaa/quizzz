@@ -326,6 +326,7 @@ public class MainCtrl {
      *
      * @param countdownCircle the circle to perform the
      *                        animation on
+     * @param o is the screen we're currently on
      */
     public void startTimer(ProgressIndicator countdownCircle, Object o) {
         countdownCircle.applyCss();
