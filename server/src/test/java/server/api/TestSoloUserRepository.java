@@ -194,7 +194,8 @@ public class TestSoloUserRepository implements SoloUserRepository {
     }
 
     @Override
-    public <S extends User, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+    public <S extends User, R> R findBy(Example<S> example,
+                           Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         // TODO Auto-generated method stub
         return null;
     }
