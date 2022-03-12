@@ -162,6 +162,6 @@ public class UserControllerTest {
     }
 
     private static User getUser(String q) {
-        return new User(q);
+        return new User(q, null);
     }
 }
