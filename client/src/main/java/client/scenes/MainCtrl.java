@@ -166,8 +166,9 @@ public class MainCtrl {
 
     public void addScore ( int score ) {
         this.soloScore += score;
-        if ( this.soloScore > this.personalBest )
+        if ( this.soloScore > this.personalBest ) {
             this.personalBest = this.soloScore;
+        }
     }
 
     /**
