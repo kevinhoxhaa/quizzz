@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class Game {
-    private List<Long> userIds;
-    private List<Question> questions;
+    protected List<Long> userIds;
+    protected List<Question> questions;
 
     /**
      * Constructs a new game with an empty list of user
@@ -31,6 +31,14 @@ public class Game {
      */
     public List<Question> getQuestions() {
         return questions;
+    }
+
+    /**
+     * A setter for the questions
+     * @param questions the list of questions
+     */
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
     }
 
     /**

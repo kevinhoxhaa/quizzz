@@ -9,6 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
 
+public class RankingCtrl implements Initializable, SceneController {
 
 public class RankingCtrl {
 
@@ -57,7 +58,7 @@ public class RankingCtrl {
      * Initiates the timer countdown and animation
      */
     public void startTimer() {
-        mainCtrl.startTimer(countdownCircle,this);
+        mainCtrl.startTimer(countdownCircle, this);
     }
 
     /**
@@ -94,4 +95,9 @@ public class RankingCtrl {
 //        });
 //    }
 
+
+    @Override
+    public void redirect() {
+        //TODO
+    }
 }

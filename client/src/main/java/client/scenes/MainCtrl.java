@@ -15,10 +15,12 @@
  */
 package client.scenes;
 
+import client.utils.ServerUtils;
 import commons.entities.Activity;
 import commons.entities.User;
 import commons.models.ConsumptionQuestion;
 import commons.models.Question;
+import commons.models.SoloGame;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
@@ -50,8 +52,11 @@ public class MainCtrl {
     private static final int POLLING_INTERVAL = 1500;
     private static final long ANSWER_TO_THE_ULTIMATE_QUESTION = 42;
     private static final int STANDARD_PAGE_TIME = 15;
+    private static final int QUESTIONS_PER_GAME = 20;
 
     private Stage primaryStage;
+
+    private ServerUtils server;
 
     private QuoteOverviewCtrl overviewCtrl;
     private Scene overview;
@@ -60,13 +65,13 @@ public class MainCtrl {
     private Scene add;
 
     private MultiplayerAnswerCtrl multiplayerAnswerCtrl;
-    private Scene answerScene;
+    private Scene multiplayerAnswer;
 
     private HomeCtrl homeCtrl;
     private Scene home;
 
     private MultiplayerQuestionCtrl multiplayerQuestionCtrl;
-    private Scene questionScene;
+    private Scene multiplayerQuestion;
 
     private WaitingCtrl waitingCtrl;
     private Scene waiting;
@@ -77,6 +82,12 @@ public class MainCtrl {
     private EstimationQuestionCtrl estimationQuestionCtrl;
     private Scene estimation;
 
+    private SoloQuestionCtrl soloQuestionCtrl;
+    private Scene soloQuestion;
+
+    private SoloAnswerCtrl soloAnswerCtrl;
+    private Scene soloAnswer;
+
     private User user;
     private List<Color> colors;
 
@@ -85,10 +96,11 @@ public class MainCtrl {
     private static final int HALFWAY_ANSWERS = 10;
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-                           Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home,
-                           Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> question,
-                           Pair<MultiplayerAnswerCtrl, Parent> answerPage, Pair<RankingCtrl, Parent> ranking,
-                           Pair<EstimationQuestionCtrl, Parent> estimation) {
+            Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home,
+            Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> multiplayerQuestion,
+            Pair<MultiplayerAnswerCtrl, Parent> multiplayerAnswer, Pair<RankingCtrl, Parent> ranking,
+            Pair<EstimationQuestionCtrl, Parent> estimation, Pair<SoloQuestionCtrl, Parent> soloQuestion,
+                           Pair<SoloAnswerCtrl, Parent> soloAnswer) {
         this.primaryStage = primaryStage;
         primaryStage.setMinHeight(MIN_HEIGHT);
         primaryStage.setMinWidth(MIN_WIDTH);
@@ -99,14 +111,16 @@ public class MainCtrl {
         this.addCtrl = add.getKey();
         this.add = new Scene(add.getValue());
 
-        this.multiplayerAnswerCtrl = answerPage.getKey();
-        this.answerScene = new Scene(answerPage.getValue());
+        this.multiplayerAnswerCtrl = multiplayerAnswer.getKey();
+        this.multiplayerAnswer = new Scene(multiplayerAnswer.getValue());
 
         this.homeCtrl = home.getKey();
         this.home = new Scene(home.getValue());
 
-        this.multiplayerQuestionCtrl = question.getKey();
-        this.questionScene = new Scene(question.getValue());
+        this.server = homeCtrl.getServer();
+
+        this.multiplayerQuestionCtrl = multiplayerQuestion.getKey();
+        this.multiplayerQuestion = new Scene(multiplayerQuestion.getValue());
 
         this.waitingCtrl = waiting.getKey();
         this.waiting = new Scene(waiting.getValue());
@@ -116,6 +130,12 @@ public class MainCtrl {
 
         this.estimationQuestionCtrl = estimation.getKey();
         this.estimation = new Scene(estimation.getValue());
+
+        this.soloQuestionCtrl = soloQuestion.getKey();
+        this.soloQuestion = new Scene(soloQuestion.getValue());
+
+        this.soloAnswerCtrl = soloAnswer.getKey();
+        this.soloAnswer = new Scene(soloAnswer.getValue());
 
         colors = new ArrayList<>();
 
@@ -199,7 +219,7 @@ public class MainCtrl {
         updateCircleColor(multiplayerAnswerCtrl, colors);
         multiplayerAnswerCtrl.setup(prevQuestion, getCorrectPlayersMock());
         primaryStage.setTitle("Answer screen");
-        primaryStage.setScene(answerScene);
+        primaryStage.setScene(multiplayerAnswer);
     }
 
     /**
@@ -233,7 +253,7 @@ public class MainCtrl {
         multiplayerQuestionCtrl.startTimer();
         multiplayerQuestionCtrl.setStartTime();
         primaryStage.setTitle("Question screen");
-        primaryStage.setScene(questionScene);
+        primaryStage.setScene(multiplayerQuestion);
     }
 
     /**
@@ -273,7 +293,8 @@ public class MainCtrl {
     private Question getNextQuestion() {
         //TODO instead of this, return a random question fetched from the server
         Activity activity = new Activity(
-                "testing the question models", ANSWER_TO_THE_ULTIMATE_QUESTION, "it was me. I said it. haha");
+                "testing the question models", ANSWER_TO_THE_ULTIMATE_QUESTION,
+                "it was me. I said it. haha", "client/images/xd.png");
         return new ConsumptionQuestion(activity, new Random());
     }
 
@@ -327,9 +348,10 @@ public class MainCtrl {
      *
      * @param countdownCircle the circle to perform the
      *                        animation on
-     * @param o is the screen we're currently on
+     * @param sceneController the scene controller instance that will redirect to the next scene,
+     *                        once the timer is up
      */
-    public void startTimer(ProgressIndicator countdownCircle, Object o) {
+    public void startTimer(ProgressIndicator countdownCircle, SceneController sceneController) {
         countdownCircle.applyCss();
         Text text = (Text) countdownCircle.lookup(".text.percentage");
         new Thread(() -> {
@@ -350,24 +372,57 @@ public class MainCtrl {
                     e.printStackTrace();
                 }
             }
-
-            Platform.runLater(() -> {
-                if (text != null) {
-                    text.setText("Timeout");
-                    if (o instanceof MultiplayerQuestionCtrl) {
-                        multiplayerQuestionCtrl.finalizeAndSend();
+            Platform.runLater(
+                new Runnable(){
+                    @Override
+                    public void run() {
+                        sceneController.redirect();
+                        if(text != null) {
+                            text.setText("Timeout");
+                        }
                     }
-                    if (o instanceof MultiplayerAnswerCtrl) {
-                        afterAnswerScreen();
-                    }
-                    if (o instanceof RankingCtrl) {
-                        multiplayerQuestionCtrl.resetAnswerColors();
-                        showQuestion();
-                    }
-                    //TODO Add instanceof ResultsCtrl
-                }
             });
         }).start();
+    }
+
+    /**
+     * Called once, initializes a solo game and shows the first question screen
+     */
+    public void startSoloGame() {
+        SoloGame soloGame = server.getSoloGame(server.getURL(), QUESTIONS_PER_GAME);
+        soloQuestionCtrl.setup(soloGame);
+        primaryStage.setTitle("Solo game");
+        primaryStage.setScene(soloQuestion);
+        soloQuestionCtrl.startTimer();
+    }
+
+    /**
+     * Shows the relevant answer screen for the given solo game instance
+     * @param game the solo game instance
+     */
+    public void showSoloAnswerPage(SoloGame game) {
+        soloAnswerCtrl.setup(game);
+        primaryStage.setScene(soloAnswer);
+        soloAnswerCtrl.startTimer();
+    }
+
+    /**
+     * Shows the relevant question screen for the given solo game instance
+     * @param game the solo game instance
+     */
+    public void showSoloQuestion(SoloGame game) {
+        soloQuestionCtrl.setup(game);
+        primaryStage.setScene(soloQuestion);
+        soloQuestionCtrl.startTimer();
+    }
+
+    /**
+     * THIS STILL NEEDS TO BE IMPLEMENTED
+     * Called after the last answer screen's timer is up, shows the solo results page
+     */
+    public void showSoloResults() {
+        //TODO
+        System.out.println("game over lol");
     }
 
     /**
