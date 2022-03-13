@@ -30,7 +30,7 @@ import static commons.utils.CompareType.EQUAL;
 import static commons.utils.CompareType.LARGER;
 
 
-public class MultiplayerQuestionCtrl implements SceneController {
+public class MultiplayerQuestionCtrl implements SceneController,QuestionNumController {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
@@ -424,5 +424,17 @@ public class MultiplayerQuestionCtrl implements SceneController {
             Circle c = (Circle) circles.getChildren().get(mainCtrl.getAnswerCount()-1);
             c.setStrokeWidth(STANDARD_CIRCLE_BORDER_SIZE);
         }
+    }
+
+    @Override
+    public void updateCircleColor(List<Color> colors) {
+        for (int i = 0; i < mainCtrl.getAnswerCount(); i++) {
+            Circle c = (Circle) getCircles().getChildren().get(i);
+            c.setFill(colors.get(i));
+        }
+    }
+    @Override
+    public void updateQuestionNumber(){
+        getQuestionNum().setText("" + (mainCtrl.getAnswerCount() + 1));
     }
 }

@@ -20,11 +20,12 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 import java.util.List;
 
-public class MultiplayerAnswerCtrl implements SceneController {
+public class MultiplayerAnswerCtrl implements SceneController,QuestionNumController {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -206,5 +207,17 @@ public class MultiplayerAnswerCtrl implements SceneController {
      */
     public HBox getCircles(){
         return circles;
+    }
+
+    @Override
+    public void updateCircleColor(List<Color> colors) {
+        for (int i = 0; i < mainCtrl.getAnswerCount(); i++) {
+            Circle c = (Circle) getCircles().getChildren().get(i);
+            c.setFill(colors.get(i));
+        }
+    }
+    @Override
+    public void updateQuestionNumber(){
+        getQuestionNum().setText("" + (mainCtrl.getAnswerCount() + 1));
     }
 }

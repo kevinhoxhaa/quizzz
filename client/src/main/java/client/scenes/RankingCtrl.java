@@ -6,11 +6,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
+import java.util.List;
 
 
-public class RankingCtrl implements SceneController {
+public class RankingCtrl implements SceneController,QuestionNumController {
 
 
     private final ServerUtils server;
@@ -99,5 +102,18 @@ public class RankingCtrl implements SceneController {
     @Override
     public void redirect() {
         mainCtrl.showQuestion();
+    }
+
+    @Override
+    public void updateCircleColor(List<Color> colors) {
+        for (int i = 0; i < mainCtrl.getAnswerCount(); i++) {
+            Circle c = (Circle) getCircles().getChildren().get(i);
+            c.setFill(colors.get(i));
+        }
+    }
+
+    @Override
+    public void updateQuestionNumber(){
+        getQuestionNum().setText("" + (mainCtrl.getAnswerCount()));
     }
 }
