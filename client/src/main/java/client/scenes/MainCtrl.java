@@ -26,6 +26,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -87,6 +88,7 @@ public class MainCtrl {
     private Scene soloAnswer;
 
     private User user;
+    private List<Color> colors;
 
     private int answerCount = 0;
     private static final int TOTAL_ANSWERS = 20;
@@ -133,6 +135,8 @@ public class MainCtrl {
 
         this.soloAnswerCtrl = soloAnswer.getKey();
         this.soloAnswer = new Scene(soloAnswer.getValue());
+
+        colors = new ArrayList<>();
 
         showHome();
         primaryStage.show();
@@ -199,10 +203,19 @@ public class MainCtrl {
      * Sets the multiplayer answer screen as the scene in the primary stage
      * and gives the primary stage a corresponding title.
      * Furthermore, it increments the answerCount and first sets up the answer page.
+     *
      * @param prevQuestion The question that has just been asked to the players.
      */
     public void showAnswerPage(Question prevQuestion) {
+        multiplayerAnswerCtrl.updateQuestionNumber();
+        //Adds the color of the answer correctness to a list of answers
+        if (prevQuestion.hasCorrectUserAnswer()) {
+            colors.add(Color.LIGHTGREEN);
+        } else {
+            colors.add(Color.INDIANRED);
+        }
         answerCount++;
+        multiplayerAnswerCtrl.updateCircleColor(colors);
         multiplayerAnswerCtrl.setup(prevQuestion, getCorrectPlayersMock());
         primaryStage.setTitle("Answer screen");
         primaryStage.setScene(multiplayerAnswer);
@@ -211,6 +224,7 @@ public class MainCtrl {
     /**
      * Mock method to create a simple list of strings that should later be replaced by players that
      * answered correctly.
+     *
      * @return A list of Strings that represent players that answered the previous question correctly.
      */
     public List<String> getCorrectPlayersMock() {
@@ -229,8 +243,12 @@ public class MainCtrl {
     public void showQuestion() {
         Question question = getNextQuestion();
 
+        multiplayerQuestionCtrl.updateCircleColor(colors);
+        multiplayerQuestionCtrl.resetHighlight();
+        multiplayerQuestionCtrl.highlightCurrentCircle();
         multiplayerQuestionCtrl.setup(question);
         multiplayerQuestionCtrl.resetAnswerColors();
+        multiplayerQuestionCtrl.updateQuestionNumber();
         multiplayerQuestionCtrl.startTimer();
         multiplayerQuestionCtrl.setStartTime();
         primaryStage.setTitle("Question screen");
@@ -241,6 +259,8 @@ public class MainCtrl {
      * Sets the scene in the primary stage to the one corresponding to a ranking screen.
      */
     public void showRanking() {
+        rankingCtrl.updateCircleColor(colors);
+        rankingCtrl.updateQuestionNumber();
         primaryStage.setTitle("Ranking Screen");
         primaryStage.setScene(ranking);
         rankingCtrl.startTimer();
@@ -263,8 +283,10 @@ public class MainCtrl {
     public int getAnswerCount() {
         return answerCount;
     }
+
     /**
      * Fetches a random question from the server. For now, it just returns a placeholder for testing.
+     *
      * @return a random question
      */
     private Question getNextQuestion() {
@@ -305,15 +327,16 @@ public class MainCtrl {
     public void afterAnswerScreen() {
         if (getAnswerCount() <= TOTAL_ANSWERS) {
             if (getAnswerCount() == HALFWAY_ANSWERS) {
-//                mainCtrl.showRankingPage();
+                showRanking();
                 // The ranking page will be showed here
             }
             //If the User is not redirected to the ranking page, they go to the next Question
             else {
+                multiplayerQuestionCtrl.resetAnswerColors();
                 showQuestion();
             }
         } else {
-//            mainCtrl.showResultsPage();
+//            showResultsPage();
             // Once the game is over, the results page should be shown
         }
     }
@@ -321,6 +344,7 @@ public class MainCtrl {
     /**
      * Starts a particular countdown timer and initiates the
      * timer animation
+     *
      * @param countdownCircle the circle to perform the
      *                        animation on
      * @param sceneController the scene controller instance that will redirect to the next scene,
@@ -331,7 +355,7 @@ public class MainCtrl {
         Text text = (Text) countdownCircle.lookup(".text.percentage");
         new Thread(() -> {
             double countdown = START_TIME;
-            while(countdown >= 0.0) {
+            while (countdown >= 0.0) {
                 try {
                     double finalCountdown = countdown;
                     Platform.runLater(() -> {

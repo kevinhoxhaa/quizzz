@@ -19,6 +19,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
@@ -29,11 +30,13 @@ import static commons.utils.CompareType.EQUAL;
 import static commons.utils.CompareType.LARGER;
 
 
-public class MultiplayerQuestionCtrl implements SceneController {
+public class MultiplayerQuestionCtrl implements SceneController,QuestionNumController {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
     private static final double MILLISECONDS_PER_SECONDS = 1000.0;
+    private static final double CIRCLE_BORDER_SIZE = 1.7;
+    private static final double STANDARD_CIRCLE_BORDER_SIZE = 1.0;
 
     private Question currentQuestion;
 
@@ -105,6 +108,7 @@ public class MultiplayerQuestionCtrl implements SceneController {
      * @param question the question instance upon which the setup is based
      */
     protected void setup(Question question) {
+        selectedAnswerButton=null;
         this.currentQuestion = question;
         questionImg.setImage(new Image(currentQuestion.getImagePath()));
 
@@ -127,6 +131,11 @@ public class MultiplayerQuestionCtrl implements SceneController {
         this.answerButtons.add(answerTop);
         this.answerButtons.add(answerMid);
         this.answerButtons.add(answerBot);
+
+        for (StackPane answerBtnLoop: answerButtons) {
+            answerBtnLoop.setStyle("-fx-border-width: 1; -fx-border-color: black");
+            ((Text) answerBtnLoop.getChildren().get(0)).setStyle("-fx-font-weight: normal");
+        }
 
         resetAnswerColors();
     }
@@ -253,10 +262,11 @@ public class MultiplayerQuestionCtrl implements SceneController {
      *  - Making sure the answer page has all the necessary information
      *  - Redirecting to the answer page
      */
-    private void finalizeAndSend(){
+    public void finalizeAndSend(){
         //TODO sending the question instance back to the server
         // and waiting for the list of people who got it right
-        disableAnswers();
+        resetAnswerColors();
+//        disableAnswers();
         mainCtrl.showAnswerPage(currentQuestion);
     }
 
@@ -344,7 +354,7 @@ public class MultiplayerQuestionCtrl implements SceneController {
      * Resets all answer boxes' background color according to whether they are selected.
      */
     @FXML
-    protected void resetAnswerColors(){
+    public void resetAnswerColors(){
 
         for (StackPane answerBtn: answerButtons) {
             if (answerBtn.equals(selectedAnswerButton)) {
@@ -367,7 +377,7 @@ public class MultiplayerQuestionCtrl implements SceneController {
     /**
      * Disables all interaction with the answer buttons.
      */
-    private void disableAnswers() {
+    public void disableAnswers() {
         answerTop.setOnMouseEntered(null);
         answerMid.setOnMouseEntered(null);
         answerBot.setOnMouseEntered(null);
@@ -378,6 +388,53 @@ public class MultiplayerQuestionCtrl implements SceneController {
 
     @Override
     public void redirect() {
-        //TODO
+        finalizeAndSend();
+    }
+
+    /**
+     * Getter for the circles bar
+     * @return circles
+     */
+    public HBox getCircles(){
+        return circles;
+    }
+
+    /**
+     * Getter for the current question number
+     * @return questionNum
+     */
+    public Text getQuestionNum(){
+        return questionNum;
+    }
+
+    /**
+     * Highlights current question so the user is aware which circle corresponds to his current question
+     */
+    public void highlightCurrentCircle() {
+        Circle c = (Circle) circles.getChildren().get(mainCtrl.getAnswerCount());
+        c.setFill(Color.DARKGRAY);
+        c.setStrokeWidth(CIRCLE_BORDER_SIZE);
+    }
+
+    /**
+     * Resets the highlighting of the circle borders
+     */
+    public void resetHighlight(){
+        if(mainCtrl.getAnswerCount()>0){
+            Circle c = (Circle) circles.getChildren().get(mainCtrl.getAnswerCount()-1);
+            c.setStrokeWidth(STANDARD_CIRCLE_BORDER_SIZE);
+        }
+    }
+
+    @Override
+    public void updateCircleColor(List<Color> colors) {
+        for (int i = 0; i < mainCtrl.getAnswerCount(); i++) {
+            Circle c = (Circle) getCircles().getChildren().get(i);
+            c.setFill(colors.get(i));
+        }
+    }
+    @Override
+    public void updateQuestionNumber(){
+        getQuestionNum().setText("" + (mainCtrl.getAnswerCount() + 1));
     }
 }
