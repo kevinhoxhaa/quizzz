@@ -177,7 +177,6 @@ public class SoloAnswerCtrl implements SceneController {
      */
     @Override
     public void redirect() {
-        System.out.println(game.getCurrentQuestionNum());
         if(game.incrementCurrentQuestionNum() < QUESTIONS_PER_GAME){
             mainCtrl.showSoloQuestion(game);
         }
