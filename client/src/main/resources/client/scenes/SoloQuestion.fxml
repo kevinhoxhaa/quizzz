@@ -147,11 +147,11 @@
       </HBox>
       <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
          <children>
-            <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="SOMETIMES">
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="SOMETIMES">
                <children>
                   <StackPane prefHeight="110.0" prefWidth="76.0">
                      <children>
-                        <ImageView fx:id="questionImg" fitHeight="99.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="questionImg" fitHeight="90.0" fitWidth="122.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../images/thonk.png" />
                            </image>
@@ -160,13 +160,23 @@
                   </StackPane>
                   <StackPane prefHeight="110.0" prefWidth="214.0">
                      <children>
-                        <Text fx:id="activityText" strokeType="OUTSIDE" strokeWidth="0.0" text="What is the answer to this activity?" wrappingWidth="182.0">
+                        <Text fx:id="activityText" strokeType="OUTSIDE" strokeWidth="0.0" text="What is the answer to this activity?" wrappingWidth="384.0">
                            <font>
                               <Font name="System Bold" size="15.0" />
                            </font>
+                           <StackPane.margin>
+                              <Insets left="5.0" />
+                           </StackPane.margin>
                         </Text>
                      </children>
                   </StackPane>
+                  <Text text="Time remaining:" wrappingWidth="126.04296875">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                  </Text>
+                  <ProgressIndicator fx:id="countdownCircle" minHeight="-Infinity" minWidth="-Infinity" prefHeight="85.0" prefWidth="102.0" progress="0.0">
+                              </ProgressIndicator>
                </children>
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
@@ -212,13 +222,6 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </StackPane>
-                     </children>
-                  </VBox>
-                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="16.0" HBox.hgrow="ALWAYS">
-                     <children>
-                        <Text text="Time remaining:" />
-                        <ProgressIndicator fx:id="countdownCircle" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="70.0" progress="0.0">
-                              </ProgressIndicator>
                      </children>
                   </VBox>
                </children>

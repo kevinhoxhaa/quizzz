@@ -142,7 +142,7 @@
             </TextFlow>
          </children>
       </HBox>
-      <VBox fx:id="answerPane" prefHeight="202.0" prefWidth="708.0" style="-fx-border-color: black;">
+      <VBox fx:id="answerPane" prefHeight="255.0" prefWidth="708.0" style="-fx-border-color: black;">
          <children>
             <HBox prefHeight="100.0" prefWidth="730.0">
                <children>
@@ -195,20 +195,19 @@
             </HBox>
          </children>
       </VBox>
-      <HBox alignment="TOP_CENTER" prefHeight="255.0" prefWidth="708.0">
+      <HBox alignment="CENTER" prefHeight="140.0" prefWidth="708.0">
          <children>
-            <VBox alignment="CENTER" prefHeight="223.0" prefWidth="360.0">
-               <children>
-                  <Pane prefHeight="103.0" prefWidth="202.0">
-                     <children>
-                        <Text layoutX="64.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Next activity in:" wrappingWidth="96.34042358398432" />
-                     </children>
-                  </Pane>
-                  <ProgressIndicator fx:id="countdownCircle" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="70.0" progress="0.0">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Next activity in:" wrappingWidth="120.34042358398432">
+               <font>
+                  <Font size="17.0" />
+               </font>
+               <HBox.margin>
+                  <Insets bottom="18.0" />
+               </HBox.margin>
+            </Text>
+            <ProgressIndicator fx:id="countdownCircle" minHeight="-Infinity" minWidth="-Infinity" prefHeight="81.0" prefWidth="92.0" progress="0.0">
 
                   </ProgressIndicator>
-               </children>
-            </VBox>
          </children>
       </HBox>
    </children>
