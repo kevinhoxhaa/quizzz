@@ -189,7 +189,7 @@ public class MultiplayerAnswerCtrl implements SceneController {
 
     @Override
     public void redirect() {
-        //TODO
+        mainCtrl.afterAnswerScreen();
     }
     //TODO After a certain amount of time in the answer screen, the afterAnswerScreen() method should be called.
 

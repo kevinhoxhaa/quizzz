@@ -388,7 +388,7 @@ public class MultiplayerQuestionCtrl implements SceneController {
 
     @Override
     public void redirect() {
-        //TODO
+        finalizeAndSend();
     }
 
     /**
