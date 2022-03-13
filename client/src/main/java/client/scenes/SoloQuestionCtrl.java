@@ -4,32 +4,33 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.entities.Activity;
 import commons.models.Answer;
-import commons.models.Question;
-import commons.models.ConsumptionQuestion;
 import commons.models.ChoiceQuestion;
 import commons.models.ComparisonQuestion;
+import commons.models.ConsumptionQuestion;
+import commons.models.Question;
+import commons.models.SoloGame;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static commons.utils.CompareType.SMALLER;
 import static commons.utils.CompareType.EQUAL;
 import static commons.utils.CompareType.LARGER;
+import static commons.utils.CompareType.SMALLER;
 
 
-public class MultiplayerQuestionCtrl implements SceneController {
+public class SoloQuestionCtrl implements SceneController {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
@@ -76,23 +77,17 @@ public class MultiplayerQuestionCtrl implements SceneController {
 
     @FXML
     private HBox circles;
-
-    @FXML
-    private StackPane doublePoints;
-    @FXML
-    private StackPane disableIncorrect;
-    @FXML
-    private StackPane reduceTime;
+    private SoloGame game;
 
     /**
-     * Creates a controller for the multiplayer question screen, with the given server and main controller.
+     * Creates a controller for the solo question screen, with the given server and main controller.
      * Creates the list answerButtons for iterating through all of these.
      * @param server
      * @param mainCtrl
      */
     @Inject
 
-    public MultiplayerQuestionCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public SoloQuestionCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
@@ -102,11 +97,15 @@ public class MultiplayerQuestionCtrl implements SceneController {
      *  - Sets up the question/answers according to the type of the question given <br>
      *  - Fills the answerButtons list for iterations <br>
      *  - Resets all buttons to their default colors
-     * @param question the question instance upon which the setup is based
+     * @param soloGame the game instance
      */
-    protected void setup(Question question) {
+    protected void setup(SoloGame soloGame) {
+        this.game = soloGame;
+        Question question = soloGame.getCurrentQuestion();
         this.currentQuestion = question;
         questionImg.setImage(new Image(currentQuestion.getImagePath()));
+
+        selectedAnswerButton = null;
 
         switch (question.getType()){
             case CONSUMPTION:
@@ -249,13 +248,10 @@ public class MultiplayerQuestionCtrl implements SceneController {
      * Responsible for:
      *  - Disabling inputs
      *  - Sending the question instance back to the server
-     *  - Waiting for the list of people who got it right
      *  - Making sure the answer page has all the necessary information
      *  - Redirecting to the answer page
      */
     private void finalizeAndSend(){
-        //TODO sending the question instance back to the server
-        // and waiting for the list of people who got it right
         disableAnswers();
         mainCtrl.showAnswerPage(currentQuestion);
     }
@@ -353,6 +349,8 @@ public class MultiplayerQuestionCtrl implements SceneController {
             } else {
                 answerBtn.setBackground(new Background(
                         new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+                answerBtn.setStyle("-fx-border-width: 1; -fx-border-color: black");
+                ((Text) answerBtn.getChildren().get(0)).setStyle("-fx-font-weight: normal");
             }
         }
     }
@@ -376,8 +374,11 @@ public class MultiplayerQuestionCtrl implements SceneController {
         answerBot.setOnMouseClicked(null);
     }
 
+    /**
+     * Called by the timer running out in MainCtrl. Redirects to the answer page.
+     */
     @Override
     public void redirect() {
-        //TODO
+        mainCtrl.showSoloAnswerPage(game);
     }
 }

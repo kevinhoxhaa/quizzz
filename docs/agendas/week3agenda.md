@@ -61,7 +61,7 @@ Attendees:      Bink Boëtius, Alican Ekşi, Calin Georgescu, Boris Goranov, Kev
 
 ## Questions for the TA
 
-## Question round
-
-
+## Feedback round
+* Asking for the group's opinions on certain topics is good, but the chairman has to be a bit more decisive and have the final say.
+* The summary at the end of the meeting was a good addition.
 ## Closing
