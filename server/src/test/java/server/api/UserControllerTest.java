@@ -46,27 +46,29 @@ public class UserControllerTest {
 
     public int nextInt;
     private MyRandom random;
-    private TestWaitingUserRepository repo;
+    private TestWaitingUserRepository waitingRepo;
+    private TestSoloUserRepository soloRepo;
 
     private UserController sut;
 
     @BeforeEach
     public void setup() {
         random = new MyRandom();
-        repo = new TestWaitingUserRepository();
-        sut = new UserController(random, repo);
+        waitingRepo = new TestWaitingUserRepository();
+        soloRepo = new TestSoloUserRepository();
+        sut = new UserController(random, waitingRepo, soloRepo);
     }
 
     @Test
     public void cannotAddNullPerson() {
-        var actual = sut.add(getUser(null));
+        var actual = sut.multiplayerAdd(getUser(null));
         assertEquals(FORBIDDEN, actual.getStatusCode());
     }
 
     @Test
     public void cannotPutNullPerson() {
         User user = getUser("q1");
-        sut.add(user);
+        sut.multiplayerAdd(user);
         user.username = null;
         var actual = sut.update(user);
         assertEquals(FORBIDDEN, actual.getStatusCode());
@@ -75,10 +77,10 @@ public class UserControllerTest {
     @Test
     public void putUpdatesDatabase() {
         User user = getUser("q1");
-        var added = sut.add(user);
+        var added = sut.multiplayerAdd(user);
         user.username = "q2";
         sut.update(user);
-        for(User u : repo.users) {
+        for(User u : waitingRepo.users) {
             if(u.id == Objects.requireNonNull(added.getBody()).id) {
                 assertEquals("q2", u.username);
                 break;
@@ -88,8 +90,8 @@ public class UserControllerTest {
 
     @Test
     public void randomSelection() {
-        sut.add(getUser("q1"));
-        sut.add(getUser("q2"));
+        sut.multiplayerAdd(getUser("q1"));
+        sut.multiplayerAdd(getUser("q2"));
         nextInt = 1;
         var actual = sut.getRandom();
 
@@ -99,29 +101,29 @@ public class UserControllerTest {
 
     @Test
     public void duplicateUsername() {
-        sut.add(getUser("q1"));
-        var actual = sut.add(getUser("q1"));
+        sut.multiplayerAdd(getUser("q1"));
+        var actual = sut.multiplayerAdd(getUser("q1"));
         assertEquals(UNAUTHORIZED, actual.getStatusCode());
     }
 
     @Test
     public void getAllByIdReturnsList() {
-        var user = sut.add(getUser("q1"));
-        sut.add(getUser("q2"));
+        var user = sut.multiplayerAdd(getUser("q1"));
+        sut.multiplayerAdd(getUser("q2"));
         assertTrue(sut.getAllById(user.getBody().id).getBody().size() > 0);
     }
 
     @Test
     public void getAllByIdReturnsNoContent() {
-        sut.add(getUser("q1"));
-        var user = sut.add(getUser("q2"));
+        sut.multiplayerAdd(getUser("q1"));
+        var user = sut.multiplayerAdd(getUser("q2"));
         assertEquals(HttpStatus.NO_CONTENT, sut.getAllById(user.getBody().id + 1).getStatusCode());
     }
 
     @Test
     public void databaseIsUsed() {
-        sut.add(getUser("q1"));
-        repo.calledMethods.contains("save");
+        sut.multiplayerAdd(getUser("q1"));
+        waitingRepo.calledMethods.contains("save");
     }
     
     @Test
@@ -138,13 +140,28 @@ public class UserControllerTest {
     
     @Test
     public void deleteRightPerson() {
-        var savedUser = sut.add(getUser("q1"));
+        var savedUser = sut.multiplayerAdd(getUser("q1"));
         var actual = sut.delete(savedUser.getBody().id);
         assertTrue(actual.getStatusCode().is2xxSuccessful());
-        assertFalse(repo.existsById(savedUser.getBody().id));
+        assertFalse(waitingRepo.existsById(savedUser.getBody().id));
+    }
+
+    @Test
+    public void cannotAddNullPersonSolo() {
+        var actual = sut.soloAdd((User) getUser(null));
+        assertEquals(FORBIDDEN, actual.getStatusCode());
+    }
+
+    @Test
+    public void addCorrectPersonSolo() {
+        var actual = sut.soloAdd((User) getUser("q1"));
+        var found = soloRepo.getById((long) soloRepo.users.size()-1);
+        assertEquals(actual.getBody(), found);
+        assertTrue(soloRepo.calledMethods.contains("save"));
+        assertTrue(soloRepo.calledMethods.contains("getById"));
     }
 
     private static User getUser(String q) {
-        return new User(q);
+        return new User(q, null);
     }
 }

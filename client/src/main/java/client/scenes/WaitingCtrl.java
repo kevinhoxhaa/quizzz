@@ -17,6 +17,7 @@ import javafx.stage.Modality;
 import javafx.util.Duration;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class WaitingCtrl {
 
@@ -76,11 +77,12 @@ public class WaitingCtrl {
     public void fetchUsers(String serverUrl) {
         usersList.getItems().clear();
         try {
-            List<User> users = server.getUsers(serverUrl);
+            List<User> users = server.getUsers(serverUrl).stream()
+                    .filter(user -> !user.getSoloPlayer()).collect(Collectors.toList());
             for(User user : users) {
                 usersList.getItems().add(user.username);
             }
-            counterLabel.setText(String.format("%d players in this room:", users.size()));
+            counterLabel.setText(String.format("%d player(s) in this room:", users.size()));
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);

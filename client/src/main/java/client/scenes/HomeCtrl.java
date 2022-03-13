@@ -83,11 +83,12 @@ public class HomeCtrl {
     /**
      * Parses the info from the user input form and creates
      * a User object with the given username
+     * @param soloPlayer Boolean that identifies if the user is a solo player.
      * @return parsed User object
      */
-    public User getUser() {
+    public User getUser(Boolean soloPlayer) {
         String username = usernameField.getText();
-        return new User(username);
+        return new User(username, soloPlayer);
     }
 
     /**
@@ -107,13 +108,37 @@ public class HomeCtrl {
     }
 
     /**
-     * Adds the user to the database and redirects them to the
-     * first solo game question scene
+     * Adds the user to the database and redirects them to the first solo game question scene.
+     * An error will occur when the filled in server URL or username are invalid.
      */
     @FXML
     protected void onSoloButtonClick() {
-        // TODO: check if the server is valid and
-        //  add the user to the database
+        try {
+            String serverUrl = urlField.getText();
+            User user = getUser(true);
+            if (!isValidUsername(user)) {
+                return;
+            }
+            mainCtrl.bindUser(server.addUserSolo(serverUrl, user));
+        } catch (WebApplicationException e) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+
+            switch(e.getResponse().getStatus()) {
+                case FORBIDDEN:
+                    alert.setContentText("Username cannot be null or empty!");
+                    break;
+                default:
+                    alert.setContentText(e.getMessage());
+            }
+
+            alert.showAndWait();
+            return;
+        } catch (Exception e) {
+            invalidURL();
+            return;
+        }
+
         mainCtrl.showQuestion();
     }
 
@@ -125,16 +150,11 @@ public class HomeCtrl {
     protected void onMultiplayerButtonClick() {
         try {
             String serverUrl = urlField.getText();
-            User user = getUser();
-
-            if(user.username.contains(" ") || user.username.length() > USERNAME_LENGTH) {
-                var alert = new Alert(Alert.AlertType.ERROR);
-                alert.initModality(Modality.APPLICATION_MODAL);
-                alert.setContentText("Invalid username!");
-                alert.showAndWait();
+            User user = getUser(false);
+            if (!isValidUsername(user)) {
                 return;
             }
-            mainCtrl.bindUser(server.addUser(serverUrl, user));
+            mainCtrl.bindUser(server.addUserMultiplayer(serverUrl, user));
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
@@ -153,13 +173,29 @@ public class HomeCtrl {
             alert.showAndWait();
             return;
         } catch(Exception e) {
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText("Invalid server URL!");
-            alert.showAndWait();
+            invalidURL();
             return;
         }
         mainCtrl.showWaiting();
         mainCtrl.onClose();
+    }
+
+    private void invalidURL() {
+        var alert = new Alert(Alert.AlertType.ERROR);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setContentText("Invalid server URL!");
+        alert.showAndWait();
+        return;
+    }
+
+    private boolean isValidUsername(User user) {
+        if(user.username.contains(" ") || user.username.length() > USERNAME_LENGTH) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText("Invalid username!");
+            alert.showAndWait();
+            return false;
+        }
+        return true;
     }
 }

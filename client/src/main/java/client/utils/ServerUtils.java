@@ -71,9 +71,23 @@ public class ServerUtils {
                 .get(new GenericType<List<User>>() {});
     }
 
-    public User addUser(String serverUrl, User user) {
+    public User addUserMultiplayer(String serverUrl, User user) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(serverUrl).path("api/users")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(user, APPLICATION_JSON), User.class);
+    }
+
+    /**
+     * Adds a user to the user repository for solo games.
+     * @param serverUrl The server URL of the game the user is in.
+     * @param user The user that has to be saved in the repository.
+     * @return The user that has been saved in the repository.
+     */
+    public User addUserSolo(String serverUrl, User user) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path("api/users/solo")
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(user, APPLICATION_JSON), User.class);

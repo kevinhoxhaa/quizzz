@@ -26,29 +26,29 @@ public class UserTest {
 
     @Test
     public void checkConstructor() {
-        var u = new User("f");
+        var u = new User("f", null);
         assertEquals("f", u.username);
     }
 
     @Test
     public void equalsHashCode() {
-        var a = new User("a");
-        var b = new User("a");
+        var a = new User("a", null);
+        var b = new User("a", null);
         assertEquals(a, b);
         assertEquals(a.hashCode(), b.hashCode());
     }
 
     @Test
     public void notEqualsHashCode() {
-        var a = new User("a");
-        var b = new User("b");
+        var a = new User("a", null);
+        var b = new User("b", null);
         assertNotEquals(a, b);
         assertNotEquals(a.hashCode(), b.hashCode());
     }
 
     @Test
     public void hasToString() {
-        var actual = new User("a").toString();
+        var actual = new User("a", null).toString();
         assertTrue(actual.contains(User.class.getSimpleName()));
         assertTrue(actual.contains("\n"));
         assertTrue(actual.contains("username"));
