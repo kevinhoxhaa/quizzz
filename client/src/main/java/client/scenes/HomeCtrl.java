@@ -83,12 +83,11 @@ public class HomeCtrl {
     /**
      * Parses the info from the user input form and creates
      * a User object with the given username
-     * @param soloPlayer Boolean that identifies if the user is a solo player.
      * @return parsed User object
      */
-    public User getUser(Boolean soloPlayer) {
+    public User getUser() {
         String username = usernameField.getText();
-        return new User(username, soloPlayer);
+        return new User(username);
     }
 
     /**
@@ -115,7 +114,7 @@ public class HomeCtrl {
     protected void onSoloButtonClick() {
         try {
             String serverUrl = urlField.getText();
-            User user = getUser(true);
+            User user = getUser();
             if (!isValidUsername(user)) {
                 return;
             }
@@ -150,7 +149,7 @@ public class HomeCtrl {
     protected void onMultiplayerButtonClick() {
         try {
             String serverUrl = urlField.getText();
-            User user = getUser(false);
+            User user = getUser();
             if (!isValidUsername(user)) {
                 return;
             }

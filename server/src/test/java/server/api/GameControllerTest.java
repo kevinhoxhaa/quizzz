@@ -64,7 +64,7 @@ public class GameControllerTest {
     }
 
     private static User getUser(String q) {
-        return new User(q, null);
+        return new User(q);
     }
 
     @Test

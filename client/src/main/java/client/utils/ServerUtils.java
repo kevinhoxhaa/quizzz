@@ -87,7 +87,7 @@ public class ServerUtils {
      */
     public User addUserSolo(String serverUrl, User user) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(serverUrl).path("api/users/solo")
+                .target(serverUrl).path("api/solousers")
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(user, APPLICATION_JSON), User.class);

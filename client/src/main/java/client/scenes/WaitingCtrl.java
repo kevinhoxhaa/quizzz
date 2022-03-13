@@ -17,7 +17,6 @@ import javafx.stage.Modality;
 import javafx.util.Duration;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class WaitingCtrl {
 
@@ -77,8 +76,7 @@ public class WaitingCtrl {
     public void fetchUsers(String serverUrl) {
         usersList.getItems().clear();
         try {
-            List<User> users = server.getUsers(serverUrl).stream()
-                    .filter(user -> !user.getSoloPlayer()).collect(Collectors.toList());
+            List<User> users = server.getUsers(serverUrl);
             for(User user : users) {
                 usersList.getItems().add(user.username);
             }

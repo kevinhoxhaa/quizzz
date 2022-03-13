@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import server.database.SoloUserRepository;
 import server.database.WaitingUserRepository;
 
 @RestController
@@ -26,12 +25,10 @@ public class UserController {
 
     private final Random random;
     private final WaitingUserRepository waitingRepo;
-    private final SoloUserRepository soloRepo;
 
-    public UserController(Random random, WaitingUserRepository waitingRepo, SoloUserRepository soloRepo) {
+    public UserController(Random random, WaitingUserRepository waitingRepo) {
         this.random = random;
         this.waitingRepo = waitingRepo;
-        this.soloRepo = soloRepo;
     }
 
     @GetMapping(path = { "", "/" })
@@ -71,7 +68,7 @@ public class UserController {
     }
 
     @PostMapping(path = { "", "/" })
-    public ResponseEntity<User> multiplayerAdd(@RequestBody User user) {
+    public ResponseEntity<User> addMultiplayer(@RequestBody User user) {
 // || isNullOrEmpty(server) has to be added
         if (isNullOrEmpty(user.username)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -82,23 +79,6 @@ public class UserController {
         }
 
         User saved = waitingRepo.save(user);
-        return ResponseEntity.ok(saved);
-    }
-
-    /**
-     * Saves a user to the user repository for solo games.
-     * If the username is null or empty, however, the user will not be saved.
-     * @param user The user that needs to saved in the user repository for solo games.
-     * @return A response entity with a corresponding message (was the user saved or was
-     * the username incorrect).
-     */
-    @PostMapping(path = {"/solo"})
-    public ResponseEntity<User> soloAdd(@RequestBody User user) {
-        if (isNullOrEmpty(user.username)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-
-        User saved = soloRepo.save(user);
         return ResponseEntity.ok(saved);
     }
 

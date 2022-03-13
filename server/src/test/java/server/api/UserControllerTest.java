@@ -47,7 +47,6 @@ public class UserControllerTest {
     public int nextInt;
     private MyRandom random;
     private TestWaitingUserRepository waitingRepo;
-    private TestSoloUserRepository soloRepo;
 
     private UserController sut;
 
@@ -55,20 +54,19 @@ public class UserControllerTest {
     public void setup() {
         random = new MyRandom();
         waitingRepo = new TestWaitingUserRepository();
-        soloRepo = new TestSoloUserRepository();
-        sut = new UserController(random, waitingRepo, soloRepo);
+        sut = new UserController(random, waitingRepo);
     }
 
     @Test
     public void cannotAddNullPerson() {
-        var actual = sut.multiplayerAdd(getUser(null));
+        var actual = sut.addMultiplayer(getUser(null));
         assertEquals(FORBIDDEN, actual.getStatusCode());
     }
 
     @Test
     public void cannotPutNullPerson() {
         User user = getUser("q1");
-        sut.multiplayerAdd(user);
+        sut.addMultiplayer(user);
         user.username = null;
         var actual = sut.update(user);
         assertEquals(FORBIDDEN, actual.getStatusCode());
@@ -77,7 +75,7 @@ public class UserControllerTest {
     @Test
     public void putUpdatesDatabase() {
         User user = getUser("q1");
-        var added = sut.multiplayerAdd(user);
+        var added = sut.addMultiplayer(user);
         user.username = "q2";
         sut.update(user);
         for(User u : waitingRepo.users) {
@@ -90,8 +88,8 @@ public class UserControllerTest {
 
     @Test
     public void randomSelection() {
-        sut.multiplayerAdd(getUser("q1"));
-        sut.multiplayerAdd(getUser("q2"));
+        sut.addMultiplayer(getUser("q1"));
+        sut.addMultiplayer(getUser("q2"));
         nextInt = 1;
         var actual = sut.getRandom();
 
@@ -101,28 +99,28 @@ public class UserControllerTest {
 
     @Test
     public void duplicateUsername() {
-        sut.multiplayerAdd(getUser("q1"));
-        var actual = sut.multiplayerAdd(getUser("q1"));
+        sut.addMultiplayer(getUser("q1"));
+        var actual = sut.addMultiplayer(getUser("q1"));
         assertEquals(UNAUTHORIZED, actual.getStatusCode());
     }
 
     @Test
     public void getAllByIdReturnsList() {
-        var user = sut.multiplayerAdd(getUser("q1"));
-        sut.multiplayerAdd(getUser("q2"));
+        var user = sut.addMultiplayer(getUser("q1"));
+        sut.addMultiplayer(getUser("q2"));
         assertTrue(sut.getAllById(user.getBody().id).getBody().size() > 0);
     }
 
     @Test
     public void getAllByIdReturnsNoContent() {
-        sut.multiplayerAdd(getUser("q1"));
-        var user = sut.multiplayerAdd(getUser("q2"));
+        sut.addMultiplayer(getUser("q1"));
+        var user = sut.addMultiplayer(getUser("q2"));
         assertEquals(HttpStatus.NO_CONTENT, sut.getAllById(user.getBody().id + 1).getStatusCode());
     }
 
     @Test
     public void databaseIsUsed() {
-        sut.multiplayerAdd(getUser("q1"));
+        sut.addMultiplayer(getUser("q1"));
         waitingRepo.calledMethods.contains("save");
     }
     
@@ -140,28 +138,13 @@ public class UserControllerTest {
     
     @Test
     public void deleteRightPerson() {
-        var savedUser = sut.multiplayerAdd(getUser("q1"));
+        var savedUser = sut.addMultiplayer(getUser("q1"));
         var actual = sut.delete(savedUser.getBody().id);
         assertTrue(actual.getStatusCode().is2xxSuccessful());
         assertFalse(waitingRepo.existsById(savedUser.getBody().id));
     }
 
-    @Test
-    public void cannotAddNullPersonSolo() {
-        var actual = sut.soloAdd((User) getUser(null));
-        assertEquals(FORBIDDEN, actual.getStatusCode());
-    }
-
-    @Test
-    public void addCorrectPersonSolo() {
-        var actual = sut.soloAdd((User) getUser("q1"));
-        var found = soloRepo.getById((long) soloRepo.users.size()-1);
-        assertEquals(actual.getBody(), found);
-        assertTrue(soloRepo.calledMethods.contains("save"));
-        assertTrue(soloRepo.calledMethods.contains("getById"));
-    }
-
     private static User getUser(String q) {
-        return new User(q, null);
+        return new User(q);
     }
 }
