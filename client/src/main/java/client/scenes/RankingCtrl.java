@@ -3,14 +3,11 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 
 
 public class RankingCtrl implements SceneController {
