@@ -57,7 +57,7 @@ public class SoloResultsCtrl {
         });
 
         score.setText( String.format( "%d", mainCtrl.getSoloScore()) );
-        personalBest.setText( String.format( "%d", mainCtrl.getPersonalBest()) );
+        //TODO : add personal best to server side and link it
     }
 
 }
