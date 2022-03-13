@@ -2,26 +2,22 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
 
-import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.List;
 
-public class RankingCtrl implements Initializable {
+
+public class RankingCtrl implements SceneController,QuestionNumController {
+
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
-
-    private static Timeline countdown;
-    private static final int RANKING_TIMEOUT = 10;
 
     /**
      * Creates a controller for the ranking page screen, with the given server and mainCtrl parameters.
@@ -39,9 +35,6 @@ public class RankingCtrl implements Initializable {
 
     @FXML
     private ProgressIndicator countdownCircle;
-
-    @FXML
-    private Text countdownText;
 
     @FXML
     private Text questionNum;
@@ -65,31 +58,62 @@ public class RankingCtrl implements Initializable {
     private Text scoreTableUserName;
 
     /**
-     * Resets timer value back to 10, and initializes the countdown sequence.
+     * Initiates the timer countdown and animation
      */
-    public static void startTimeline() {
-        countdown.play();
+    public void startTimer() {
+        mainCtrl.startTimer(countdownCircle, this);
     }
 
     /**
-     * Sets up a timeline with keyFrames that have an interval of one second. This allows us to create a
-     * visual countdown timer.
-     * @param location
-     * @param resources
+     * Getter for the circles that show past questions' correctness
+     * @return circles
      */
+    public HBox getCircles(){
+        return circles;
+    }
+    /**
+     * Getter for the current question number
+     * @return questionNum
+     */
+    public Text getQuestionNum(){
+        return questionNum;
+    }
+
+//    /**
+//     * Sets up a timeline with keyFrames that have an interval of one second. This allows us to create a
+//     * visual countdown timer.
+//     * @param location
+//     * @param resources
+//     */
+//    @Override
+//    public void initialize(URL location, ResourceBundle resources) {
+//        startTimer();
+//        countdownCircle.progressProperty().addListener((ov, oldValue, newValue) -> {
+//            countdownCircle.applyCss();
+//            Text text = (Text) countdownCircle.lookup(".text.percentage");
+//            String progress = text.getText();
+//            if(progress.equals("Timeout")) {
+//                // TODO: handle next question
+//            }
+//        });
+//    }
+
+
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        countdownText.setText(String.valueOf(RANKING_TIMEOUT));
-        countdown = new Timeline(new KeyFrame(Duration.seconds(1), e ->{
-            int timeLeft = Integer.parseInt(countdownText.getText());
-            countdownText.setText(String.valueOf(timeLeft-1));
-        }));
+    public void redirect() {
+        mainCtrl.showQuestion();
+    }
 
-        countdown.setCycleCount(RANKING_TIMEOUT);
-        countdown.onFinishedProperty().set(event -> {
-            mainCtrl.showQuestion();
-            countdownText.setText("10");
-        });
+    @Override
+    public void updateCircleColor(List<Color> colors) {
+        for (int i = 0; i < mainCtrl.getAnswerCount(); i++) {
+            Circle c = (Circle) getCircles().getChildren().get(i);
+            c.setFill(colors.get(i));
+        }
+    }
 
+    @Override
+    public void updateQuestionNumber(){
+        getQuestionNum().setText("" + (mainCtrl.getAnswerCount()));
     }
 }

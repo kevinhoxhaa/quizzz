@@ -9,6 +9,7 @@ import commons.models.EstimationQuestion;
 import commons.models.Game;
 import commons.models.GameList;
 import commons.models.Question;
+import commons.models.SoloGame;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -177,6 +178,23 @@ public class GameController {
     }
 
     /**
+     * Generates a new game object for a solo game
+     * @param count the number of random questions to generate
+     * @return the game itself, as everything concerning the game will happen on the client side
+     */
+    @GetMapping(path =  "/startSolo/{count}")
+    public ResponseEntity<SoloGame> startSoloGame(@PathVariable("count") int count) {
+        SoloGame game = new SoloGame();
+
+        for(int i = 0; i < count; i++) {
+            game.getQuestions().add(generateQuestion());
+        }
+
+        gameList.getGames().add(game);
+        return ResponseEntity.ok(game);
+    }
+
+    /**
      * Retrieves the requested question from the game state object
      * and sends it to the user
      * Returns a bad request if the game or question index
@@ -232,16 +250,13 @@ public class GameController {
             return ResponseEntity.badRequest().build();
         }
 
-        if(!allUsersHaveAnswered(game.getUserIds(), questionIndex + 1)) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }
-
         User user = gameUserRepo.findById(userId).get();
         user.points += answeredQuestion.getPoints();
         user.totalAnswers += 1;
         user.correctAnswers += answeredQuestion.getPoints() == 0 ? 0 : 1;
         // TODO: handle the case where the user has not answered the question at all
         user.lastAnswerCorrect = answeredQuestion.hasCorrectUserAnswer();
+        gameUserRepo.save(user);
 
         // If no next question, return FORBIDDEN and handle
         // game end on the client
@@ -255,6 +270,10 @@ public class GameController {
             if(u.lastAnswerCorrect) {
                 rightUsers.add(u);
             }
+        }
+
+        if(!allUsersHaveAnswered(game.getUserIds(), questionIndex + 1)) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
 
         return ResponseEntity.ok(rightUsers);

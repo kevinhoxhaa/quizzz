@@ -114,7 +114,7 @@ public class HomeCtrl {
     protected void onSoloButtonClick() {
         // TODO: check if the server is valid and
         //  add the user to the database
-        mainCtrl.showQuestion();
+        mainCtrl.startSoloGame();
     }
 
     /**

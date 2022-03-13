@@ -21,10 +21,16 @@ public class Activity {
     public long id;
 
     public String title;
+
     @Column(name = "consumption_in_wh")
     @JsonProperty("consumption_in_wh")
     public long consumption;
+
     public String source;
+
+    @Column(name = "image_path")
+    @JsonProperty("image_path")
+    public String imagePath;
 
     @SuppressWarnings("unused")
     private Activity() {
@@ -35,6 +41,13 @@ public class Activity {
         this.title = title;
         this.consumption = consumption;
         this.source = source;
+    }
+
+    public Activity(String title, long consumption, String source, String imagePath) {
+        this.title = title;
+        this.consumption = consumption;
+        this.source = source;
+        this.imagePath = imagePath;
     }
 
     /**
