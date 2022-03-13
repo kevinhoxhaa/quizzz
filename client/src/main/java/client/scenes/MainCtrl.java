@@ -79,7 +79,6 @@ public class MainCtrl {
 
     private int answerCount = 0;
     private int soloScore = 0;
-    private int personalBest = 0;
     private static final int TOTAL_ANSWERS = 20;
     private static final int HALFWAY_ANSWERS = 10;
 
@@ -146,16 +145,6 @@ public class MainCtrl {
 
     public int getSoloScore() {
         return this.soloScore;
-    }
-
-    /**
-     * Getter for the personal best of a player
-     *
-     * @return the score
-     */
-
-    public int getPersonalBest() {
-        return this.personalBest;
     }
 
     /**

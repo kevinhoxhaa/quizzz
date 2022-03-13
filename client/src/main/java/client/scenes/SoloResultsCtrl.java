@@ -33,6 +33,9 @@ public class SoloResultsCtrl {
     @FXML
     private Button quit;
 
+    @FXML
+    private Button restart;
+
     /**
      * Setups the page quit button that redirects to the main page, and fills in the score and personal best
      *
@@ -43,6 +46,13 @@ public class SoloResultsCtrl {
             @Override
             public void handle(ActionEvent event) {
                 mainCtrl.showHome();
+            }
+        });
+
+        restart.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //TODO : start a new solo game thorugh the main controller
             }
         });
 
