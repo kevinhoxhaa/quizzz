@@ -72,9 +72,6 @@ public class MainCtrl {
     private RankingCtrl rankingCtrl;
     private Scene ranking;
 
-    private SoloResultsCtrl soloResultsCtrl;
-    private Scene soloResults;
-
     private EstimationQuestionCtrl estimationQuestionCtrl;
     private Scene estimation;
 
@@ -88,7 +85,7 @@ public class MainCtrl {
             Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home, 
             Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> question,
             Pair<MultiplayerAnswerCtrl, Parent> answerPage, Pair<RankingCtrl, Parent> ranking,
-            Pair<SoloResultsCtrl, Parent> soloResults, Pair<EstimationQuestionCtrl, Parent> estimation) {
+            Pair<EstimationQuestionCtrl, Parent> estimation) {
         this.primaryStage = primaryStage;
         primaryStage.setMinHeight(MIN_HEIGHT);
         primaryStage.setMinWidth(MIN_WIDTH);
@@ -113,9 +110,6 @@ public class MainCtrl {
 
         this.rankingCtrl = ranking.getKey();
         this.ranking = new Scene(ranking.getValue());
-
-        this.soloResultsCtrl = soloResults.getKey();
-        this.soloResults = new Scene(soloResults.getValue());
 
         this.estimationQuestionCtrl = estimation.getKey();
         this.estimation = new Scene(estimation.getValue());
@@ -230,15 +224,6 @@ public class MainCtrl {
         primaryStage.setTitle("Ranking Screen");
         primaryStage.setScene(ranking);
         rankingCtrl.startTimer();
-    }
-
-    /**
-     * Sets the solo results screen as the scene in the primary stage
-     * and gives the primary stage a corresponding title.
-     */
-    public void showSoloResults() {
-        primaryStage.setTitle("Solo results screen");
-        primaryStage.setScene(soloResults);
     }
 
     /**
