@@ -5,7 +5,8 @@ Date:           15.03.2022\
 Location:       Drebbelweg\
 Chair:          Georgescu Calin\
 Note taker:     Kevin Hoxha\
-Attendees:      Bink Boëtius, Alican Ekşi, Calin Georgescu, Boris Goranov, Kevin Hoxha,Varga Pál Patrik/
+Attendees:      Bink Boëtius, Alican Ekşi, Calin Georgescu, Boris Goranov, Kevin Hoxha,Varga Pál Patrik,
+Nada Mouman
 
 ## Agenda Items
 
