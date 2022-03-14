@@ -7,6 +7,7 @@ import java.util.Objects;
 
 public class EstimationQuestion extends Question {
     private static final long POINTS = 1000;
+    private static final long TIME_FACTOR = 800;
     private static final double ERROR_MARGIN = 0.05;
 
     private Activity activity;
@@ -42,10 +43,11 @@ public class EstimationQuestion extends Question {
      */
     @Override
     public long getPoints() {
-        long points = (long) (POINTS - (
+        long answerPoints = (long) (POINTS - (
                  (double) Math.abs(activity.consumption - ((long) userAnswer.getAnswer())) / activity.consumption
         ) * POINTS);
-        return points < 0 ? 0 : points;
+        long timePoints = (long) (TIME_FACTOR / (seconds + 1));
+        return answerPoints < 0 ? 0 : (answerPoints + timePoints);
     }
 
     /**
