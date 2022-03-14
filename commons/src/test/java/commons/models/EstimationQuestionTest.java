@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class EstimationQuestionTest {
     private static final long POSITIVE = 8;
-    private static final long TOTAL = 1000;
+    private static final long TOTAL = 1089;
 
     private EstimationQuestion question;
     private Activity activity = new Activity("act", POSITIVE, "src");
