@@ -2,6 +2,8 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.entities.MultiplayerUser;
+import commons.entities.SoloUser;
 import commons.entities.User;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
@@ -88,7 +90,22 @@ public class HomeCtrl {
      */
     public User getUser(Boolean soloPlayer) {
         String username = usernameField.getText();
-        return new User(username, soloPlayer);
+        if(soloPlayer){
+            return new SoloUser(username);
+        }
+        else{
+            return new MultiplayerUser(username);
+        }
+    }
+
+    public SoloUser getSoloUser() {
+        String username = usernameField.getText();
+        return new SoloUser(username);
+    }
+
+    public MultiplayerUser getMultiplayerUser() {
+        String username = usernameField.getText();
+        return new MultiplayerUser(username);
     }
 
     /**
@@ -115,7 +132,7 @@ public class HomeCtrl {
     protected void onSoloButtonClick() {
         try {
             String serverUrl = urlField.getText();
-            User user = getUser(true);
+            SoloUser user = getSoloUser();
             if (!isValidUsername(user)) {
                 return;
             }
@@ -150,7 +167,7 @@ public class HomeCtrl {
     protected void onMultiplayerButtonClick() {
         try {
             String serverUrl = urlField.getText();
-            User user = getUser(false);
+            MultiplayerUser user = getMultiplayerUser();
             if (!isValidUsername(user)) {
                 return;
             }

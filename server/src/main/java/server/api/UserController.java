@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+import commons.entities.MultiplayerUser;
+import commons.entities.SoloUser;
 import commons.entities.User;
 import org.springframework.http.HttpStatus;
 
@@ -35,12 +37,12 @@ public class UserController {
     }
 
     @GetMapping(path = { "", "/" })
-    public List<User> getAll() {
+    public List<MultiplayerUser> getAll() {
         return waitingRepo.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<User>> getById(@PathVariable("id") long id) {
+    public ResponseEntity<Optional<MultiplayerUser>> getById(@PathVariable("id") long id) {
         if (id < 0 || !waitingRepo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
@@ -58,7 +60,7 @@ public class UserController {
      * @return the teammates of a user
      */
     @GetMapping("/{id}/all")
-    public ResponseEntity<List<User>> getAllById(@PathVariable("id") long id) {
+    public ResponseEntity<List<MultiplayerUser>> getAllById(@PathVariable("id") long id) {
         if (id < 0) {
             return ResponseEntity.badRequest().build();
         }
@@ -71,17 +73,17 @@ public class UserController {
     }
 
     @PostMapping(path = { "", "/" })
-    public ResponseEntity<User> multiplayerAdd(@RequestBody User user) {
+    public ResponseEntity<MultiplayerUser> addMultiplayerUser(@RequestBody MultiplayerUser user) {
 // || isNullOrEmpty(server) has to be added
         if (isNullOrEmpty(user.username)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        if(waitingRepo.existsUserByUsername(user.username)) {
+        if(waitingRepo.existsByUsername(user.username)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        User saved = waitingRepo.save(user);
+        MultiplayerUser saved = waitingRepo.save(user);
         return ResponseEntity.ok(saved);
     }
 
@@ -93,12 +95,12 @@ public class UserController {
      * the username incorrect).
      */
     @PostMapping(path = {"/solo"})
-    public ResponseEntity<User> soloAdd(@RequestBody User user) {
+    public ResponseEntity<SoloUser> addSoloUser(@RequestBody SoloUser user) {
         if (isNullOrEmpty(user.username)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        User saved = soloRepo.save(user);
+        SoloUser saved = soloRepo.save(user);
         return ResponseEntity.ok(saved);
     }
 
@@ -112,13 +114,13 @@ public class UserController {
      * @return the updated user
      */
     @PutMapping(path = { "", "/" })
-    public ResponseEntity<User> update(@RequestBody User user) {
+    public ResponseEntity<MultiplayerUser> update(@RequestBody MultiplayerUser user) {
 // || isNullOrEmpty(server) has to be added
         if (isNullOrEmpty(user.username)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        User saved = waitingRepo.save(user);
+        MultiplayerUser saved = waitingRepo.save(user);
         return ResponseEntity.ok(saved);
     }
 

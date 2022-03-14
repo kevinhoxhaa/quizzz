@@ -1,6 +1,6 @@
 package server.api;
 
-import commons.entities.User;
+import commons.entities.SoloUser;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +15,7 @@ import java.util.function.Function;
 
 public class TestSoloUserRepository implements SoloUserRepository {
 
-    public final List<User> users = new ArrayList<>();
+    public final List<SoloUser> users = new ArrayList<>();
     public final List<String> calledMethods = new ArrayList<>();
 
     private void call(String name) {
@@ -23,25 +23,25 @@ public class TestSoloUserRepository implements SoloUserRepository {
     }
 
     @Override
-    public List<User> findAll() {
+    public List<SoloUser> findAll() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public List<User> findAll(Sort sort) {
+    public List<SoloUser> findAll(Sort sort) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Page<User> findAll(Pageable pageable) {
+    public Page<SoloUser> findAll(Pageable pageable) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public List<User> findAllById(Iterable<Long> longs) {
+    public List<SoloUser> findAllById(Iterable<Long> longs) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -59,7 +59,7 @@ public class TestSoloUserRepository implements SoloUserRepository {
     }
 
     @Override
-    public void delete(User entity) {
+    public void delete(SoloUser entity) {
         // TODO Auto-generated method stub
 
     }
@@ -71,7 +71,7 @@ public class TestSoloUserRepository implements SoloUserRepository {
     }
 
     @Override
-    public void deleteAll(Iterable<? extends User> entities) {
+    public void deleteAll(Iterable<? extends SoloUser> entities) {
         // TODO Auto-generated method stub
 
     }
@@ -83,7 +83,7 @@ public class TestSoloUserRepository implements SoloUserRepository {
     }
 
     @Override
-    public <S extends User> S save(S user) {
+    public <S extends SoloUser> S save(S user) {
         call("save");
         user.id = (long) users.size();
         users.add(user);
@@ -91,13 +91,13 @@ public class TestSoloUserRepository implements SoloUserRepository {
     }
 
     @Override
-    public <S extends User> List<S> saveAll(Iterable<S> entities) {
+    public <S extends SoloUser> List<S> saveAll(Iterable<S> entities) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Optional<User> findById(Long aLong) {
+    public Optional<SoloUser> findById(Long aLong) {
         // TODO Auto-generated method stub
         return Optional.empty();
     }
@@ -115,19 +115,19 @@ public class TestSoloUserRepository implements SoloUserRepository {
     }
 
     @Override
-    public <S extends User> S saveAndFlush(S entity) {
+    public <S extends SoloUser> S saveAndFlush(S entity) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public <S extends User> List<S> saveAllAndFlush(Iterable<S> entities) {
+    public <S extends SoloUser> List<S> saveAllAndFlush(Iterable<S> entities) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public void deleteAllInBatch(Iterable<User> entities) {
+    public void deleteAllInBatch(Iterable<SoloUser> entities) {
         // TODO Auto-generated method stub
 
     }
@@ -145,56 +145,56 @@ public class TestSoloUserRepository implements SoloUserRepository {
     }
 
     @Override
-    public User getOne(Long aLong) {
+    public SoloUser getOne(Long aLong) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public User getById(Long id) {
+    public SoloUser getById(Long id) {
         // TODO Auto-generated method stub
         call("getById");
         return users.stream().filter(q -> q.id == id).findFirst().get();
     }
 
     @Override
-    public <S extends User> Optional<S> findOne(Example<S> example) {
+    public <S extends SoloUser> Optional<S> findOne(Example<S> example) {
         // TODO Auto-generated method stub
         return Optional.empty();
     }
 
     @Override
-    public <S extends User> List<S> findAll(Example<S> example) {
+    public <S extends SoloUser> List<S> findAll(Example<S> example) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public <S extends User> List<S> findAll(Example<S> example, Sort sort) {
+    public <S extends SoloUser> List<S> findAll(Example<S> example, Sort sort) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public <S extends User> Page<S> findAll(Example<S> example, Pageable pageable) {
+    public <S extends SoloUser> Page<S> findAll(Example<S> example, Pageable pageable) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public <S extends User> long count(Example<S> example) {
+    public <S extends SoloUser> long count(Example<S> example) {
         // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
-    public <S extends User> boolean exists(Example<S> example) {
+    public <S extends SoloUser> boolean exists(Example<S> example) {
         // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public <S extends User, R> R findBy(Example<S> example,
+    public <S extends SoloUser, R> R findBy(Example<S> example,
                            Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         // TODO Auto-generated method stub
         return null;
