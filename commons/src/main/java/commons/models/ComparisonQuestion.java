@@ -87,8 +87,8 @@ public class ComparisonQuestion extends Question {
      */
     @Override
     public long getPoints() {
-        return (long) ((hasCorrectUserAnswer() ? 1 : 0) *
-                (TRUE_FACTOR + TIME_FACTOR / (seconds + 1)));
+        return ((hasCorrectUserAnswer() ? 1 : 0) *
+                Math.round(TRUE_FACTOR + TIME_FACTOR / (seconds + 1)));
     }
 
     /**

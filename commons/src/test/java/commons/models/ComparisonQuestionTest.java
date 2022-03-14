@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class ComparisonQuestionTest {
     private static final long POSITIVE = 8;
-    private static final long TOTAL = 588;
+    private static final long TOTAL = 589;
 
     private ComparisonQuestion question;
     private Activity firstActivity;

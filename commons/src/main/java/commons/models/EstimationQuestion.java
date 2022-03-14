@@ -43,10 +43,10 @@ public class EstimationQuestion extends Question {
      */
     @Override
     public long getPoints() {
-        long answerPoints = (long) (POINTS - (
+        long answerPoints = (POINTS - Math.round(
                  (double) Math.abs(activity.consumption - ((long) userAnswer.getAnswer())) / activity.consumption
         ) * POINTS);
-        long timePoints = (long) (TIME_FACTOR / (seconds + 1));
+        long timePoints = Math.round((TIME_FACTOR / (seconds + 1)));
         return answerPoints < 0 ? 0 : (answerPoints + timePoints);
     }
 
