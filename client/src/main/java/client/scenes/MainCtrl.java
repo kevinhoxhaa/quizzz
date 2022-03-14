@@ -91,7 +91,7 @@ public class MainCtrl {
     private List<Color> colors;
 
     private int answerCount = 0;
-    private int soloScore = 0;
+    private long soloScore = 0;
     private static final int TOTAL_ANSWERS = 20;
     private static final int HALFWAY_ANSWERS = 10;
 
@@ -167,7 +167,7 @@ public class MainCtrl {
      * @return the score
      */
 
-    public int getSoloScore() {
+    public long getSoloScore() {
         return this.soloScore;
     }
 
@@ -177,7 +177,7 @@ public class MainCtrl {
      * @param score the score to be added
      */
 
-    public void addScore ( int score ) {
+    public void addScore ( long score ) {
         this.soloScore += score;
     }
 
@@ -303,6 +303,16 @@ public class MainCtrl {
      */
     public int getAnswerCount() {
         return answerCount;
+    }
+
+    /**
+     * Resets the state of a solo game
+     */
+    public void resetSoloGame() {
+        answerCount = 0;
+        soloScore = 0;
+        colors = new ArrayList<>();
+
     }
 
     /**

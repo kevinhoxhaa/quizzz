@@ -220,7 +220,7 @@
                <children>
                   <Pane prefHeight="92.0" prefWidth="357.0">
                      <children>
-                        <Button id="restart" fx:id="restartButton" layoutX="14.0" layoutY="12.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="211.0" text="Restart">
+                        <Button id="restart" fx:id="restartButton" layoutX="14.0" layoutY="12.0" mnemonicParsing="false" onAction="#onRestartButton" prefHeight="67.0" prefWidth="211.0" text="Restart">
                            <font>
                               <Font size="20.0" />
                            </font>
@@ -229,7 +229,7 @@
                   </Pane>
                   <Pane prefHeight="92.0" prefWidth="350.0">
                      <children>
-                        <Button id="quit" fx:id="quitButton" layoutX="125.0" layoutY="13.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="211.0" text="Quit">
+                        <Button id="quit" fx:id="quitButton" layoutX="125.0" layoutY="13.0" mnemonicParsing="false" onAction="#onQuitButton" prefHeight="67.0" prefWidth="211.0" text="Quit">
                            <font>
                               <Font size="20.0" />
                            </font>

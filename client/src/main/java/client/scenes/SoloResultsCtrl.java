@@ -42,22 +42,22 @@ public class SoloResultsCtrl {
      */
 
     public void setup() {
-        quit.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                mainCtrl.showHome();
-            }
-        });
-
-        restart.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                //TODO : start a new solo game thorugh the main controller
-            }
-        });
-
         score.setText( String.format( "%d", mainCtrl.getSoloScore()) );
         //TODO : add personal best to server side and link it
+    }
+
+    /**
+     * Starts another game when restart button is clicked
+     */
+    public void onRestartButton(){
+        mainCtrl.resetSoloGame();
+        mainCtrl.showQuestion();
+    }
+    /**
+     * Redirects the user to the home page when the quit button is clicked
+     */
+    public void onQuitButton(){
+        mainCtrl.showHome();
     }
 
 }
