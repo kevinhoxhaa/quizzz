@@ -22,8 +22,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.List;
+import java.util.Random;
 
+import commons.entities.Activity;
 import commons.entities.User;
+import commons.models.ConsumptionQuestion;
+import commons.models.Question;
+import commons.models.SoloGame;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.entities.Quote;
@@ -34,6 +39,8 @@ import jakarta.ws.rs.core.GenericType;
 public class ServerUtils {
 
     private static final String SERVER = "http://localhost:8080/";
+    private static final long MAGICNUMBER = 42;
+    private static final int QUESTIONS_PER_GAME = 20;
 
     public void getQuotesTheHardWay() throws IOException {
         var url = new URL("http://localhost:8080/api/quotes");
@@ -105,5 +112,31 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .delete(User.class);
+    }
+
+    /**
+     * Returns a new (solo) game instance with the given number of questions
+     * @param serverUrl the server url
+     * @param count the number of questions
+     * @return a new (solo) game instance
+     */
+    public SoloGame getSoloGame(String serverUrl, int count) {
+        /*
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path("api/games/startSolo/" + count)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(SoloGame.class);
+        */
+
+        //THE FORMER PART WILL BE USED ONCE THE BACKEND IS SET UP PROPERLY, THE FOLLOWING PART IS A DUMMY
+        SoloGame soloGame = new SoloGame();
+        Activity activity = new Activity("starting a solo game on client side", MAGICNUMBER,
+                "source", "client/images/angry.png");
+        Question dummyQuestion = new ConsumptionQuestion(activity, new Random());
+        for (int i = 0; i < QUESTIONS_PER_GAME; i++) {
+            soloGame.getQuestions().add(dummyQuestion);
+        }
+        return soloGame;
     }
 }

@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
@@ -14,9 +10,9 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<VBox fx:id="userSelf" minHeight="492.0" minWidth="748.0" prefHeight="492.0" prefWidth="748.0" spacing="20.0" HBox.hgrow="ALWAYS" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SoloResultsCtrl">
+<VBox minHeight="492.0" minWidth="748.0" prefHeight="492.0" prefWidth="748.0" spacing="20.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SoloAnswerCtrl">
    <children>
-      <HBox alignment="CENTER" layoutX="23.0" layoutY="34.0" prefHeight="19.0" prefWidth="725.0" spacing="4.0" VBox.vgrow="NEVER">
+      <HBox alignment="CENTER" layoutX="23.0" layoutY="34.0" prefHeight="17.0" prefWidth="344.0" spacing="4.0" VBox.vgrow="NEVER">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Questions" HBox.hgrow="ALWAYS">
                <font>
@@ -132,7 +128,7 @@
             </HBox>
             <TextFlow prefHeight="0.0" prefWidth="42.0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                <children>
-                  <Text fx:id="questionNum" strokeType="OUTSIDE" strokeWidth="0.0" text="20">
+                  <Text fx:id="questionNum" strokeType="OUTSIDE" strokeWidth="0.0" text="1">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -146,100 +142,74 @@
             </TextFlow>
          </children>
       </HBox>
-      <VBox prefHeight="637.0" prefWidth="708.0">
+      <VBox fx:id="answerPane" prefHeight="255.0" prefWidth="708.0" style="-fx-border-color: black;">
          <children>
-            <HBox prefHeight="335.0" prefWidth="708.0">
+            <HBox prefHeight="100.0" prefWidth="730.0">
                <children>
-                  <VBox prefHeight="305.0" prefWidth="373.0">
+                  <Pane prefHeight="56.0" prefWidth="707.0">
                      <children>
-                        <TableView fx:id="scoreTable" prefHeight="277.0" prefWidth="167.0">
-                           <columns>
-                              <TableColumn prefWidth="240.66664123535156" text="Users" />
-                              <TableColumn prefWidth="132.00006866455078" text="Score" />
-                           </columns>
-                        </TableView>
-                        <HBox prefHeight="59.0" prefWidth="373.0">
-                           <children>
-                              <Text fx:id="scoreTableUserName" strokeType="OUTSIDE" strokeWidth="0.0" text="You">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="110.0" top="10.0" />
-                                 </HBox.margin>
-                              </Text>
-                              <Text fx:id="scoreTableUserSore" strokeType="OUTSIDE" strokeWidth="0.0" text="Score">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="120.0" top="10.0" />
-                                 </HBox.margin>
-                              </Text>
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
-                  <VBox prefHeight="241.0" prefWidth="229.0">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Leaderboard">
+                        <Text fx:id="answerResponse" layoutX="-1.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You got that right or wrong!" textAlignment="CENTER" wrappingWidth="706.3999999999999">
                            <font>
-                              <Font size="40.0" />
+                              <Font size="30.0" />
                            </font>
-                           <VBox.margin>
-                              <Insets left="50.0" />
-                           </VBox.margin></Text>
-                        <Text fx:id="ranking1stPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="1st player" textAlignment="CENTER" wrappingWidth="296.56768226623535">
-                           <VBox.margin>
-                              <Insets left="15.0" />
-                           </VBox.margin>
                         </Text>
-                        <Text fx:id="ranking2ndPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="2nd player" wrappingWidth="201.26686716079712">
-                           <VBox.margin>
-                              <Insets left="75.0" />
-                           </VBox.margin>
-                        </Text>
-                        <Text fx:id="ranking3rdPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="3rd player" wrappingWidth="71.47009086608887">
-                           <VBox.margin>
-                              <Insets left="200.0" />
-                           </VBox.margin>
-                        </Text>
-                        <ImageView fitHeight="201.0" fitWidth="260.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/leaderboard.png" />
-                           </image>
-                           <VBox.margin>
-                              <Insets left="45.0" />
-                           </VBox.margin>
-                        </ImageView>
-                     </children>
-                  </VBox>
-               </children>
-            </HBox>
-            <HBox prefHeight="105.0" prefWidth="708.0">
-               <children>
-                  <Pane prefHeight="92.0" prefWidth="357.0">
-                     <children>
-                        <Button id="restart" fx:id="restartButton" layoutX="14.0" layoutY="12.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="211.0" text="Restart">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Button>
                      </children>
                   </Pane>
-                  <Pane prefHeight="92.0" prefWidth="350.0">
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Pane prefHeight="57.0" prefWidth="708.0">
                      <children>
-                        <Button id="quit" fx:id="quitButton" layoutX="125.0" layoutY="13.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="211.0" text="Quit">
+                        <Text fx:id="activity" layoutX="138.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="What is the answer to this activity?" wrappingWidth="564.0000587463378">
                            <font>
                               <Font size="20.0" />
                            </font>
-                        </Button>
+                        </Text>
+                        <Text layoutX="37.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Question :" wrappingWidth="96.34042358398438">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </Pane>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Pane prefHeight="46.0" prefWidth="706.0">
+                     <children>
+                        <Text fx:id="answer" layoutX="136.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This is the answer to the activity." wrappingWidth="564.0000587463376">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="52.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Answer :" wrappingWidth="83.54043579101562">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Text>
                      </children>
                   </Pane>
                </children>
             </HBox>
          </children>
       </VBox>
+      <HBox alignment="CENTER" prefHeight="140.0" prefWidth="708.0">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Next activity in:" wrappingWidth="120.34042358398432">
+               <font>
+                  <Font size="17.0" />
+               </font>
+               <HBox.margin>
+                  <Insets bottom="18.0" />
+               </HBox.margin>
+            </Text>
+            <ProgressIndicator fx:id="countdownCircle" minHeight="-Infinity" minWidth="-Infinity" prefHeight="81.0" prefWidth="92.0" progress="0.0">
+
+                  </ProgressIndicator>
+         </children>
+      </HBox>
    </children>
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

@@ -113,33 +113,9 @@ public class HomeCtrl {
      */
     @FXML
     protected void onSoloButtonClick() {
-        try {
-            String serverUrl = urlField.getText();
-            User user = getUser(true);
-            if (!isValidUsername(user)) {
-                return;
-            }
-            mainCtrl.bindUser(server.addUserSolo(serverUrl, user));
-        } catch (WebApplicationException e) {
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-
-            switch(e.getResponse().getStatus()) {
-                case FORBIDDEN:
-                    alert.setContentText("Username cannot be null or empty!");
-                    break;
-                default:
-                    alert.setContentText(e.getMessage());
-            }
-
-            alert.showAndWait();
-            return;
-        } catch (Exception e) {
-            invalidURL();
-            return;
-        }
-
-        mainCtrl.showQuestion();
+        // TODO: check if the server is valid and
+        //  add the user to the database
+        mainCtrl.startSoloGame();
     }
 
     /**

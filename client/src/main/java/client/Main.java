@@ -24,7 +24,8 @@ import client.scenes.AddQuoteCtrl;
 import client.scenes.HomeCtrl;
 import client.scenes.MultiplayerAnswerCtrl;
 import client.scenes.QuoteOverviewCtrl;
-import client.scenes.MultiplayerQuestionCtrl;
+import client.scenes.SoloAnswerCtrl;
+import client.scenes.SoloQuestionCtrl;
 import client.scenes.WaitingCtrl;
 import client.scenes.RankingCtrl;
 import client.scenes.SoloResultsCtrl;
@@ -47,22 +48,32 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
 
-        var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
+        var overview = FXML.load(
+                QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
+
         var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
-        var answerPage = FXML.load(MultiplayerAnswerCtrl.class, "client", "scenes", "MultiplayerAnswer.fxml");
+
+        var multiplayerAnswer = FXML.load(
+                MultiplayerAnswerCtrl.class, "client", "scenes", "MultiplayerAnswer.fxml");
 
         var home = FXML.load(HomeCtrl.class, "client", "scenes", "Home.fxml");
-        var question = FXML.load(MultiplayerQuestionCtrl.class, "client", "scenes", "MultiplayerQuestion.fxml");
+
+        var multiplayerQuestion = FXML.load(
+                MultiplayerQuestionCtrl.class, "client", "scenes", "MultiplayerQuestion.fxml");
 
         var waiting = FXML.load(WaitingCtrl.class, "client", "scenes", "Waiting.fxml");
-        var ranking = FXML.load(RankingCtrl.class, "client", "scenes", "Ranking.fxml");
 
-        var soloResults = FXML.load(SoloResultsCtrl.class, "client", "scenes", "SoloResults.fxml");
+        var ranking = FXML.load(RankingCtrl.class, "client", "scenes", "Ranking.fxml");
 
         var estimation = FXML.load(EstimationQuestionCtrl.class, "client", "scenes", "Estimation.fxml");
 
+        var soloQuestion = FXML.load(
+                SoloQuestionCtrl.class, "client", "scenes", "SoloQuestion.fxml");
+
+        var soloAnswer = FXML.load(
+                SoloAnswerCtrl.class, "client", "scenes", "SoloAnswer.fxml");
+
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, overview, add, home, waiting, question, answerPage,
-                ranking, soloResults, estimation);
+        mainCtrl.initialize(primaryStage, overview, add, home, waiting, question, answerPage, ranking, estimation);
     }
 }

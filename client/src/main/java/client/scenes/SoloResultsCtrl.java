@@ -2,46 +2,19 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.entities.User;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
-
-import javafx.scene.control.TableView;
-import java.util.List;
 
 public class SoloResultsCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
-    @FXML
-    private HBox circles;
-    @FXML
-    private Text questionNum;
-
-    @FXML
-    private TableView scoreTable;
-    @FXML
-    private Text scoreTableUserName;
-    @FXML
-    private Text scoreTableUserScore;
-
-    @FXML
-    private Text ranking1stPlayer;
-    @FXML
-    private Text ranking2ndPlayer;
-    @FXML
-    private Text ranking3rdPlayer;
-
-    @FXML
-    private Button restartButton;
-    @FXML
-    private Button quitButton;
-
     /**
-     * Creates a controller for the solo results screen, with the given server and main controller.
+     * Creates a controller for the solo results page screen, with the given server and mainCtrl parameters.
      * @param server
      * @param mainCtrl
      */
@@ -51,8 +24,40 @@ public class SoloResultsCtrl {
         this.mainCtrl = mainCtrl;
     }
 
-    protected void setup(List<User> users) {
-        //TODO: Set the solo results screen up with all the users and the corresponding scores in
-        // the repository.
+    @FXML
+    private Text score;
+
+    @FXML
+    private Text personalBest;
+
+    @FXML
+    private Button quit;
+
+    @FXML
+    private Button restart;
+
+    /**
+     * Setups the page quit button that redirects to the main page, and fills in the score and personal best
+     *
+     */
+
+    public void setup() {
+        quit.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                mainCtrl.showHome();
+            }
+        });
+
+        restart.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //TODO : start a new solo game thorugh the main controller
+            }
+        });
+
+        score.setText( String.format( "%d", mainCtrl.getSoloScore()) );
+        //TODO : add personal best to server side and link it
     }
+
 }
