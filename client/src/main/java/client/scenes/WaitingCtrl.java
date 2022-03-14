@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.entities.MultiplayerUser;
 import commons.entities.User;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.animation.Animation;
@@ -76,11 +77,11 @@ public class WaitingCtrl {
     public void fetchUsers(String serverUrl) {
         usersList.getItems().clear();
         try {
-            List<User> users = server.getUsers(serverUrl);
-            for(User user : users) {
+            List<MultiplayerUser> users = server.getUsers(serverUrl);
+            for(MultiplayerUser user : users) {
                 usersList.getItems().add(user.username);
             }
-            counterLabel.setText(String.format("%d players in this room:", users.size()));
+            counterLabel.setText(String.format("%d player(s) in this room:", users.size()));
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
@@ -98,7 +99,7 @@ public class WaitingCtrl {
     protected void onBackButtonClick() {
         User user= mainCtrl.getUser();
         System.out.println(user);
-        server.removeUser(server.getURL(),user);
+        server.removeMultiplayerUser(server.getURL(),user);
         mainCtrl.bindUser(null);
         mainCtrl.showHome();
     }

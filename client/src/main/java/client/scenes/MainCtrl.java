@@ -330,7 +330,7 @@ public class MainCtrl {
 
                     @Override
                     public void run() {
-                        homeCtrl.getServer().removeUser(homeCtrl.getServer().getURL(), user);
+                        homeCtrl.getServer().removeMultiplayerUser(homeCtrl.getServer().getURL(), user);
                         user = null;
                         System.exit(0);
                     }

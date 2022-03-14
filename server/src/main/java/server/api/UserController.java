@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+import commons.entities.MultiplayerUser;
+import commons.entities.SoloUser;
 import commons.entities.User;
 import org.springframework.http.HttpStatus;
 
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import server.database.SoloUserRepository;
 import server.database.WaitingUserRepository;
 
 @RestController
@@ -24,24 +27,26 @@ import server.database.WaitingUserRepository;
 public class UserController {
 
     private final Random random;
-    private final WaitingUserRepository repo;
+    private final WaitingUserRepository waitingRepo;
+    private final SoloUserRepository soloRepo;
 
-    public UserController(Random random, WaitingUserRepository repo) {
+    public UserController(Random random, WaitingUserRepository waitingRepo, SoloUserRepository soloRepo) {
         this.random = random;
-        this.repo = repo;
+        this.waitingRepo = waitingRepo;
+        this.soloRepo = soloRepo;
     }
 
     @GetMapping(path = { "", "/" })
-    public List<User> getAll() {
-        return repo.findAll();
+    public List<MultiplayerUser> getAll() {
+        return waitingRepo.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<User>> getById(@PathVariable("id") long id) {
-        if (id < 0 || !repo.existsById(id)) {
+    public ResponseEntity<Optional<MultiplayerUser>> getById(@PathVariable("id") long id) {
+        if (id < 0 || !waitingRepo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(repo.findById(id));
+        return ResponseEntity.ok(waitingRepo.findById(id));
     }
 
     /**
@@ -55,30 +60,47 @@ public class UserController {
      * @return the teammates of a user
      */
     @GetMapping("/{id}/all")
-    public ResponseEntity<List<User>> getAllById(@PathVariable("id") long id) {
+    public ResponseEntity<List<MultiplayerUser>> getAllById(@PathVariable("id") long id) {
         if (id < 0) {
             return ResponseEntity.badRequest().build();
         }
 
-        if(!repo.existsById(id)) {
+        if(!waitingRepo.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
 
-        return ResponseEntity.ok(repo.findAll());
+        return ResponseEntity.ok(waitingRepo.findAll());
     }
 
     @PostMapping(path = { "", "/" })
-    public ResponseEntity<User> add(@RequestBody User user) {
+    public ResponseEntity<MultiplayerUser> addMultiplayerUser(@RequestBody MultiplayerUser user) {
 // || isNullOrEmpty(server) has to be added
         if (isNullOrEmpty(user.username)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        if(repo.existsUserByUsername(user.username)) {
+        if(waitingRepo.existsByUsername(user.username)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        User saved = repo.save(user);
+        MultiplayerUser saved = waitingRepo.save(user);
+        return ResponseEntity.ok(saved);
+    }
+
+    /**
+     * Saves a user to the user repository for solo games.
+     * If the username is null or empty, however, the user will not be saved.
+     * @param user The user that needs to saved in the user repository for solo games.
+     * @return A response entity with a corresponding message (was the user saved or was
+     * the username incorrect).
+     */
+    @PostMapping(path = {"/solo"})
+    public ResponseEntity<SoloUser> addSoloUser(@RequestBody SoloUser user) {
+        if (isNullOrEmpty(user.username)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        SoloUser saved = soloRepo.save(user);
         return ResponseEntity.ok(saved);
     }
 
@@ -92,13 +114,13 @@ public class UserController {
      * @return the updated user
      */
     @PutMapping(path = { "", "/" })
-    public ResponseEntity<User> update(@RequestBody User user) {
+    public ResponseEntity<MultiplayerUser> update(@RequestBody MultiplayerUser user) {
 // || isNullOrEmpty(server) has to be added
         if (isNullOrEmpty(user.username)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        User saved = repo.save(user);
+        MultiplayerUser saved = waitingRepo.save(user);
         return ResponseEntity.ok(saved);
     }
 
@@ -108,8 +130,8 @@ public class UserController {
 
     @GetMapping("rnd")
     public ResponseEntity<User> getRandom() {
-        var idx = random.nextInt((int) repo.count());
-        return ResponseEntity.ok(repo.getById((long) idx));
+        var idx = random.nextInt((int) waitingRepo.count());
+        return ResponseEntity.ok(waitingRepo.getById((long) idx));
     }
 
     /**
@@ -121,11 +143,11 @@ public class UserController {
      */
     @DeleteMapping(path = {"/{id}"})
     public ResponseEntity<User> delete(@PathVariable("id") long id) {
-        if (id < 0 || !repo.existsById(id)) {
+        if (id < 0 || !waitingRepo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
 
-        repo.deleteById(id);
+        waitingRepo.deleteById(id);
         return ResponseEntity.ok().build();
     }
 }

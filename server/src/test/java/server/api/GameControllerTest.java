@@ -1,7 +1,7 @@
 package server.api;
 
 import commons.entities.Activity;
-import commons.entities.User;
+import commons.entities.MultiplayerUser;
 import commons.models.ConsumptionQuestion;
 import commons.models.GameList;
 import org.junit.jupiter.api.BeforeEach;
@@ -63,8 +63,8 @@ public class GameControllerTest {
         return new Activity(title, consumption, source);
     }
 
-    private static User getUser(String q) {
-        return new User(q);
+    private static MultiplayerUser getUser(String q) {
+        return new MultiplayerUser(q);
     }
 
     @Test
@@ -115,7 +115,7 @@ public class GameControllerTest {
     @Test
     public void postAnswerReturnsErrorOnInvalidGame() {
         sut.startGame((int) NUMBER);
-        ResponseEntity<List<User>> actual = (ResponseEntity<List<User>>) sut.postAnswer(
+        ResponseEntity<List<MultiplayerUser>> actual = (ResponseEntity<List<MultiplayerUser>>) sut.postAnswer(
                 (int) NUMBER, 0, 0,
                 new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random));
         assertTrue(actual.getStatusCode().is4xxClientError());
@@ -124,7 +124,7 @@ public class GameControllerTest {
     @Test
     public void postAnswerReturnsErrorOnInvalidUser() {
         sut.startGame((int) NUMBER);
-        ResponseEntity<List<User>> actual = (ResponseEntity<List<User>>) sut.postAnswer(
+        ResponseEntity<List<MultiplayerUser>> actual = (ResponseEntity<List<MultiplayerUser>>) sut.postAnswer(
                 0, NUMBER, 0,
                 new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random));
         assertTrue(actual.getStatusCode().is4xxClientError());
@@ -133,7 +133,7 @@ public class GameControllerTest {
     @Test
     public void postAnswerReturnsErrorOnInvalidQuestion() {
         sut.startGame((int) NUMBER);
-        ResponseEntity<List<User>> actual = (ResponseEntity<List<User>>) sut.postAnswer(
+        ResponseEntity<List<MultiplayerUser>> actual = (ResponseEntity<List<MultiplayerUser>>) sut.postAnswer(
                 0, 0, (int) NUMBER,
                 new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random));
         assertTrue(actual.getStatusCode().is4xxClientError());
@@ -142,7 +142,7 @@ public class GameControllerTest {
     @Test
     public void postAnswerReturnsNoContentWhenNotEveryoneHasAnswered() {
         sut.startGame((int) NUMBER);
-        ResponseEntity<List<User>> actual = (ResponseEntity<List<User>>) sut.postAnswer(
+        ResponseEntity<List<MultiplayerUser>> actual = (ResponseEntity<List<MultiplayerUser>>) sut.postAnswer(
                 0, 0, 1,
                 new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random));
         assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
