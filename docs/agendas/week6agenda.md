@@ -25,3 +25,15 @@ Attendees:      Bink Boëtius, Alican Ekşi, Calin Georgescu, Boris Goranov, Kev
 
 * Closure 15 30
 
+## Points of action 
+
+- Buddycheck feedback
+  - Discuss about the reviews everyone gave and what messages we got
+- Feedback on the final HCI report 
+  - Final remarks about the HCI report
+- Small design change
+  - Bink had an idea about the design to change it a little
+  - We shall discuss and see if we go through with it
+- Planning for next week
+  - Discuss and plan the tasks for next week
+
