@@ -15,18 +15,30 @@ public class SoloUserTest {
     }
 
     @Test
-    public void equalsHashCode() {
+    public void equalsTrue() {
         var a = new SoloUser("a");
         var b = new SoloUser("a");
         assertEquals(a, b);
+    }
+
+    @Test
+    public void hashCodeEquals() {
+        var a = new SoloUser("a");
+        var b = new SoloUser("a");
         assertEquals(a.hashCode(), b.hashCode());
     }
 
     @Test
-    public void notEqualsHashCode() {
+    public void notEquals() {
         var a = new SoloUser("a");
         var b = new SoloUser("b");
         assertNotEquals(a, b);
+    }
+
+    @Test
+    public void hashCodeNotEquals() {
+        var a = new SoloUser("a");
+        var b = new SoloUser("b");
         assertNotEquals(a.hashCode(), b.hashCode());
     }
 
@@ -34,7 +46,5 @@ public class SoloUserTest {
     public void hasToString() {
         var actual = new SoloUser("a").toString();
         assertTrue(actual.contains(User.class.getSimpleName()));
-        assertTrue(actual.contains("\n"));
-        assertTrue(actual.contains("username"));
     }
 }

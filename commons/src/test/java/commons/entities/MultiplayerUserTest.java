@@ -15,18 +15,30 @@ public class MultiplayerUserTest {
     }
 
     @Test
-    public void equalsHashCode() {
+    public void equalsTrue() {
         var a = new MultiplayerUser("a");
         var b = new MultiplayerUser("a");
         assertEquals(a, b);
+    }
+
+    @Test
+    public void hashCodeEquals() {
+        var a = new MultiplayerUser("a");
+        var b = new MultiplayerUser("a");
         assertEquals(a.hashCode(), b.hashCode());
     }
 
     @Test
-    public void notEqualsHashCode() {
+    public void notEquals() {
         var a = new MultiplayerUser("a");
         var b = new MultiplayerUser("b");
         assertNotEquals(a, b);
+    }
+
+    @Test
+    public void hashCodeNotEquals() {
+        var a = new MultiplayerUser("a");
+        var b = new MultiplayerUser("b");
         assertNotEquals(a.hashCode(), b.hashCode());
     }
 
@@ -34,7 +46,5 @@ public class MultiplayerUserTest {
     public void hasToString() {
         var actual = new MultiplayerUser("a").toString();
         assertTrue(actual.contains(User.class.getSimpleName()));
-        assertTrue(actual.contains("\n"));
-        assertTrue(actual.contains("username"));
     }
 }
