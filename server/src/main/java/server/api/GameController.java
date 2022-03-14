@@ -10,6 +10,7 @@ import commons.models.EstimationQuestion;
 import commons.models.Game;
 import commons.models.GameList;
 import commons.models.Question;
+import commons.models.SoloGame;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -175,6 +176,23 @@ public class GameController {
 
         gameList.getGames().add(game);
         return ResponseEntity.ok(gameList.getGames().indexOf(game));
+    }
+
+    /**
+     * Generates a new game object for a solo game
+     * @param count the number of random questions to generate
+     * @return the game itself, as everything concerning the game will happen on the client side
+     */
+    @GetMapping(path =  "/startSolo/{count}")
+    public ResponseEntity<SoloGame> startSoloGame(@PathVariable("count") int count) {
+        SoloGame game = new SoloGame();
+
+        for(int i = 0; i < count; i++) {
+            game.getQuestions().add(generateQuestion());
+        }
+
+        gameList.getGames().add(game);
+        return ResponseEntity.ok(game);
     }
 
     /**

@@ -62,6 +62,7 @@ public class ChoiceQuestion extends Question {
         for(Activity a : activities) {
             if(a.consumption < minConsumption && a != answer) {
                 comparedActivity = a;
+                this.imagePath = comparedActivity.imagePath;
                 minConsumption = a.consumption;
             }
         }

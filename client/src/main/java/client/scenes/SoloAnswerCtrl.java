@@ -1,34 +1,31 @@
 package client.scenes;
 
-import com.google.inject.Inject;
-
 import client.utils.ServerUtils;
-import commons.models.EstimationQuestion;
+import com.google.inject.Inject;
 import commons.models.ChoiceQuestion;
 import commons.models.ComparisonQuestion;
 import commons.models.ConsumptionQuestion;
+import commons.models.EstimationQuestion;
 import commons.models.Question;
-import javafx.collections.FXCollections;
+import commons.models.SoloGame;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressIndicator;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
-import java.util.List;
 
-public class MultiplayerAnswerCtrl implements SceneController,QuestionNumController {
+public class SoloAnswerCtrl implements SceneController {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private static final int QUESTIONS_PER_GAME = 20;
 
     @FXML
     private VBox answerPane;
@@ -49,19 +46,7 @@ public class MultiplayerAnswerCtrl implements SceneController,QuestionNumControl
 
     @FXML
     private ListView<String> correctPlayers;
-    
-    @FXML
-    private ImageView thumbsup;
-    @FXML
-    private ImageView thumbsdown;
-    @FXML
-    private ImageView sad;
-    @FXML
-    private ImageView heart;
-    @FXML
-    private ImageView xd;
-    @FXML
-    private ImageView angry;
+    private SoloGame game;
 
 
     /**
@@ -70,7 +55,7 @@ public class MultiplayerAnswerCtrl implements SceneController,QuestionNumControl
      * @param mainCtrl
      */
     @Inject
-    public MultiplayerAnswerCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public SoloAnswerCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
@@ -80,11 +65,11 @@ public class MultiplayerAnswerCtrl implements SceneController,QuestionNumControl
      *  - Sets up a fitting message (with corresponding color) for the player
      *  based on if the player answered correctly or not. <br>
      *  - Fills in the question and correct answer in their corresponding text boxes. <br>
-     *  - Fills the correctPlayers ListView with players that answered correctly.
-     * @param prevQuestion The question that has just been asked to the players.
-     * @param correctPlayers A list of all the players that answered the precious question correctly.
+     * @param soloGame The solo game instance
      */
-    protected void setup(Question prevQuestion, List<String> correctPlayers) {
+    protected void setup(SoloGame soloGame) {
+        this.game = soloGame;
+        Question prevQuestion = soloGame.getCurrentQuestion();
         if (prevQuestion.hasCorrectUserAnswer()) {
             this.answerResponse.setText("Well done!");
             answerPane.setBackground(new Background(
@@ -109,9 +94,6 @@ public class MultiplayerAnswerCtrl implements SceneController,QuestionNumControl
                 setupEstimationAnswer(prevQuestion);
                 break;
         }
-
-        startTimer();
-        this.correctPlayers.setItems(FXCollections.observableArrayList(correctPlayers));
     }
 
     /**
@@ -188,36 +170,18 @@ public class MultiplayerAnswerCtrl implements SceneController,QuestionNumControl
         mainCtrl.startTimer(countdownCircle, this);
     }
 
+    /**
+     * redirects to:
+     *   - either the next question
+     *   - or the results page
+     */
     @Override
     public void redirect() {
-        mainCtrl.afterAnswerScreen();
-    }
-    //TODO After a certain amount of time in the answer screen, the afterAnswerScreen() method should be called.
-
-    /**
-     * Getter for the current question number
-     * @return questionNum
-     */
-    public Text getQuestionNum(){
-        return questionNum;
-    }
-    /**
-     * Getter for the circles bar
-     * @return circles
-     */
-    public HBox getCircles(){
-        return circles;
-    }
-
-    @Override
-    public void updateCircleColor(List<Color> colors) {
-        for (int i = 0; i < mainCtrl.getAnswerCount(); i++) {
-            Circle c = (Circle) getCircles().getChildren().get(i);
-            c.setFill(colors.get(i));
+        if(game.incrementCurrentQuestionNum() < QUESTIONS_PER_GAME){
+            mainCtrl.showSoloQuestion(game);
         }
-    }
-    @Override
-    public void updateQuestionNumber(){
-        getQuestionNum().setText("" + (mainCtrl.getAnswerCount() + 1));
+        else{
+            mainCtrl.showSoloResults();
+        }
     }
 }

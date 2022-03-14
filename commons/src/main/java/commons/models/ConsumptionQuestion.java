@@ -30,6 +30,7 @@ public class ConsumptionQuestion extends Question {
         this.seconds = 1;
         this.userAnswer = new Answer(Long.valueOf(-1));
         this.random = random;
+        this.imagePath = activity.imagePath;
         setAnswers(activity.consumption);
     }
 
