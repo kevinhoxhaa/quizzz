@@ -83,26 +83,18 @@ public class HomeCtrl {
     }
 
     /**
-     * Parses the info from the user input form and creates
-     * a User object with the given username
-     * @param soloPlayer Boolean that identifies if the user is a solo player.
-     * @return parsed User object
+     * Returns a new solo user with the given name
+     * @return a solo user
      */
-    public User getUser(Boolean soloPlayer) {
-        String username = usernameField.getText();
-        if(soloPlayer){
-            return new SoloUser(username);
-        }
-        else{
-            return new MultiplayerUser(username);
-        }
-    }
-
     public SoloUser getSoloUser() {
         String username = usernameField.getText();
         return new SoloUser(username);
     }
 
+    /**
+     * Returns a new multiplayer user with the given name
+     * @return a multiplayer user
+     */
     public MultiplayerUser getMultiplayerUser() {
         String username = usernameField.getText();
         return new MultiplayerUser(username);
