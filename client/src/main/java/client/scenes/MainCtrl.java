@@ -87,6 +87,9 @@ public class MainCtrl {
     private SoloAnswerCtrl soloAnswerCtrl;
     private Scene soloAnswer;
 
+    private SoloResultsCtrl soloResultsCtrl;
+    private Scene soloResults;
+
     private User user;
     private List<Color> colors;
 
@@ -100,7 +103,7 @@ public class MainCtrl {
             Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> multiplayerQuestion,
             Pair<MultiplayerAnswerCtrl, Parent> multiplayerAnswer, Pair<RankingCtrl, Parent> ranking,
             Pair<EstimationQuestionCtrl, Parent> estimation, Pair<SoloQuestionCtrl, Parent> soloQuestion,
-                           Pair<SoloAnswerCtrl, Parent> soloAnswer) {
+                           Pair<SoloAnswerCtrl, Parent> soloAnswer, Pair<SoloResultsCtrl, Parent> soloResults) {
         this.primaryStage = primaryStage;
         primaryStage.setMinHeight(MIN_HEIGHT);
         primaryStage.setMinWidth(MIN_WIDTH);
@@ -136,6 +139,9 @@ public class MainCtrl {
 
         this.soloAnswerCtrl = soloAnswer.getKey();
         this.soloAnswer = new Scene(soloAnswer.getValue());
+
+        this.soloResultsCtrl = soloResults.getKey();
+        this.soloResults=new Scene(soloResults.getValue());
 
         colors = new ArrayList<>();
 
@@ -451,7 +457,8 @@ public class MainCtrl {
      * Called after the last answer screen's timer is up, shows the solo results page
      */
     public void showSoloResults() {
-        //TODO
-        System.out.println("game over lol");
+        soloResultsCtrl.setup();
+        primaryStage.setScene(soloResults);
+//        System.out.println("game over lol");
     }
 }
