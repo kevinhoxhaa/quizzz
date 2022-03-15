@@ -107,6 +107,8 @@ public class SoloQuestionCtrl implements SceneController {
 
         selectedAnswerButton = null;
 
+        setStartTime();
+
         switch (question.getType()){
             case CONSUMPTION:
                 setupConsumptionQuestion(question);
