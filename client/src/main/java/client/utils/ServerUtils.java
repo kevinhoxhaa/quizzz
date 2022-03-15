@@ -80,6 +80,21 @@ public class ServerUtils {
                 .get(new GenericType<List<MultiplayerUser>>() {});
     }
 
+    /**
+     * Starts a game on the server and returns the index
+     * of the game object
+     * @param serverUrl the server to start a game on
+     * @return the index of the game object
+     */
+    public Integer startGame(String serverUrl) {
+        String path = String.format("/api/games/start/%d", QUESTIONS_PER_GAME);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path(path)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(Integer.class);
+    }
+
     public MultiplayerUser addUserMultiplayer(String serverUrl, MultiplayerUser user) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(serverUrl).path("api/users")
