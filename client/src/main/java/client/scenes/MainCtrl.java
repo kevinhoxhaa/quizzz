@@ -91,11 +91,14 @@ public class MainCtrl {
     private SoloAnswerCtrl soloAnswerCtrl;
     private Scene soloAnswer;
 
+    private SoloResultsCtrl soloResultsCtrl;
+    private Scene soloResults;
+
     private User user;
     private List<Color> colors;
 
     private int answerCount = 0;
-    private int soloScore = 0;
+    private long soloScore = 0;
     private static final int TOTAL_ANSWERS = 20;
     private static final int HALFWAY_ANSWERS = 10;
 
@@ -104,7 +107,7 @@ public class MainCtrl {
             Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> multiplayerQuestion,
             Pair<MultiplayerAnswerCtrl, Parent> multiplayerAnswer, Pair<RankingCtrl, Parent> ranking,
             Pair<EstimationQuestionCtrl, Parent> estimation, Pair<SoloQuestionCtrl, Parent> soloQuestion,
-                           Pair<SoloAnswerCtrl, Parent> soloAnswer) {
+                           Pair<SoloAnswerCtrl, Parent> soloAnswer, Pair<SoloResultsCtrl, Parent> soloResults) {
         this.primaryStage = primaryStage;
         primaryStage.setMinHeight(MIN_HEIGHT);
         primaryStage.setMinWidth(MIN_WIDTH);
@@ -141,6 +144,9 @@ public class MainCtrl {
         this.soloAnswerCtrl = soloAnswer.getKey();
         this.soloAnswer = new Scene(soloAnswer.getValue());
 
+        this.soloResultsCtrl = soloResults.getKey();
+        this.soloResults=new Scene(soloResults.getValue());
+
         colors = new ArrayList<>();
 
         showHome();
@@ -171,7 +177,7 @@ public class MainCtrl {
      * @return the score
      */
 
-    public int getSoloScore() {
+    public long getSoloScore() {
         return this.soloScore;
     }
 
@@ -181,7 +187,7 @@ public class MainCtrl {
      * @param score the score to be added
      */
 
-    public void addScore ( int score ) {
+    public void addScore ( long score ) {
         this.soloScore += score;
     }
 
@@ -318,6 +324,7 @@ public class MainCtrl {
         return answerCount;
     }
 
+
     /**
      * Fetches a random question from the server. For now, it just returns a placeholder for testing.
      *
@@ -425,8 +432,13 @@ public class MainCtrl {
 
     /**
      * Called once, initializes a solo game and shows the first question screen
+     * Resets the state of the solo game
      */
     public void startSoloGame() {
+        answerCount = 0;
+        soloScore = 0;
+        colors = new ArrayList<>();
+
         SoloGame soloGame = server.getSoloGame(server.getURL(), QUESTIONS_PER_GAME);
         soloQuestionCtrl.setup(soloGame);
         primaryStage.setTitle("Solo game");
@@ -476,7 +488,8 @@ public class MainCtrl {
      * Called after the last answer screen's timer is up, shows the solo results page
      */
     public void showSoloResults() {
-        //TODO
-        System.out.println("game over lol");
+        soloResultsCtrl.setup();
+        primaryStage.setScene(soloResults);
+//        System.out.println("game over lol");
     }
 }

@@ -149,7 +149,7 @@ public class HomeCtrl {
             return;
         }
 
-        mainCtrl.showQuestion();
+        mainCtrl.startSoloGame();
     }
 
     /**
