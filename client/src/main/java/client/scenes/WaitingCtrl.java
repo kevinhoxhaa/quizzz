@@ -112,7 +112,7 @@ public class WaitingCtrl {
      */
     @FXML
     protected void onStartButtonClick() {
-        
+        // TODO: start a game on the server
         mainCtrl.showQuestion();
     }
 }
