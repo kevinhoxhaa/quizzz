@@ -72,13 +72,20 @@ public class WaitingCtrl {
     /**
      * Fetches the users in the current waiting room and updates
      * the list view
-     * @param serverUrl the url of the server to fetch the users from
      */
-    public void fetchUsers(String serverUrl) {
+    public void fetchUsers() {
+        String serverUrl = mainCtrl.getServerUrl();
         usersList.getItems().clear();
         long userId = mainCtrl.getUser().id;
         try {
-            List<MultiplayerUser> users = server.getUsers(serverUrl, userId);
+            List<MultiplayerUser> users = server.getUsers(serverUrl);
+
+            if(!users.contains(mainCtrl.getUser())) {
+                mainCtrl.stopWaitingTimer();
+                // TODO: find started game for user
+                mainCtrl.showQuestion();
+            }
+
             for(MultiplayerUser user : users) {
                 usersList.getItems().add(user.username);
             }
@@ -112,7 +119,18 @@ public class WaitingCtrl {
      */
     @FXML
     protected void onStartButtonClick() {
-        // TODO: start a game on the server
-        mainCtrl.showQuestion();
+        try {
+            String serverUrl = mainCtrl.getServerUrl();
+            Integer gameIndex = server.startGame(serverUrl);
+            mainCtrl.stopWaitingTimer();
+            // TODO: handle started game
+            mainCtrl.showQuestion();
+        } catch (WebApplicationException e) {
+            System.out.println(e.getResponse().getStatus());
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
     }
 }

@@ -21,6 +21,7 @@ import commons.entities.User;
 import commons.models.ConsumptionQuestion;
 import commons.models.Question;
 import commons.models.SoloGame;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
@@ -52,6 +53,9 @@ public class MainCtrl {
     private static final long ANSWER_TO_THE_ULTIMATE_QUESTION = 42;
     private static final int STANDARD_PAGE_TIME = 15;
     private static final int QUESTIONS_PER_GAME = 20;
+
+    private String serverUrl;
+    private Timer waitingTimer;
 
     private Stage primaryStage;
 
@@ -197,15 +201,24 @@ public class MainCtrl {
         primaryStage.setTitle("Quizzz: Waiting");
         primaryStage.setScene(waiting);
         waitingCtrl.scaleButton();
-        new Timer().schedule(
+        waitingTimer = new Timer();
+        waitingTimer.schedule(
                 new TimerTask() {
 
                     @Override
                     public void run() {
                         System.out.println("REFRESH");
-                        Platform.runLater(() -> waitingCtrl.fetchUsers(homeCtrl.getServerUrl()));
+                        Platform.runLater(() -> waitingCtrl.fetchUsers());
                     }
                 }, POLLING_DELAY, POLLING_INTERVAL);
+    }
+
+    /**
+     * Stops the waiting room timer for continuous
+     * user polling
+     */
+    public void stopWaitingTimer() {
+        waitingTimer.cancel();
     }
 
     public void showOverview() {
@@ -330,9 +343,14 @@ public class MainCtrl {
 
                     @Override
                     public void run() {
-                        homeCtrl.getServer().removeMultiplayerUser(homeCtrl.getServer().getURL(), user);
-                        user = null;
-                        System.exit(0);
+                        try {
+                            homeCtrl.getServer().removeMultiplayerUser(homeCtrl.getServer().getURL(), user);
+                            user = null;
+                        } catch(WebApplicationException e) {
+                            System.out.println("User to remove not found!");
+                        } finally {
+                            System.exit(0);
+                        }
                     }
                 });
             }
@@ -434,6 +452,23 @@ public class MainCtrl {
         soloQuestionCtrl.setup(game);
         primaryStage.setScene(soloQuestion);
         soloQuestionCtrl.startTimer();
+    }
+
+    /**
+     * Sets the server URL for the application
+     * @param serverUrl the new server URL
+     */
+    public void setServerUrl(String serverUrl) {
+        this.serverUrl = serverUrl;
+    }
+
+    /**
+     * Returns the server URL the application makes requests
+     * to
+     * @return the app server URL
+     */
+    public String getServerUrl() {
+        return serverUrl;
     }
 
     /**
