@@ -311,15 +311,6 @@ public class MainCtrl {
         return answerCount;
     }
 
-    /**
-     * Resets the state of a solo game
-     */
-    public void resetSoloGame() {
-        answerCount = 0;
-        soloScore = 0;
-        colors = new ArrayList<>();
-
-    }
 
     /**
      * Fetches a random question from the server. For now, it just returns a placeholder for testing.
@@ -423,8 +414,13 @@ public class MainCtrl {
 
     /**
      * Called once, initializes a solo game and shows the first question screen
+     * Resets the state of the solo game
      */
     public void startSoloGame() {
+        answerCount = 0;
+        soloScore = 0;
+        colors = new ArrayList<>();
+
         SoloGame soloGame = server.getSoloGame(server.getURL(), QUESTIONS_PER_GAME);
         soloQuestionCtrl.setup(soloGame);
         primaryStage.setTitle("Solo game");

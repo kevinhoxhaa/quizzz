@@ -147,7 +147,7 @@ public class HomeCtrl {
             invalidURL();
             return;
         }
-        mainCtrl.resetSoloGame();
+
         mainCtrl.startSoloGame();
     }
 

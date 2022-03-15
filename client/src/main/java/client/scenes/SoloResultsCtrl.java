@@ -43,7 +43,6 @@ public class SoloResultsCtrl{
      */
 
     protected void setup() {
-        //TODO : Fix this so it shows user's username
         scoreTableUserName.setText( String.format( "%s", mainCtrl.getUser().username) );
         scoreTableUserScore.setText( String.format( "%d", mainCtrl.getSoloScore()) );
         //TODO : add personal best to server side and link it
@@ -54,7 +53,6 @@ public class SoloResultsCtrl{
      */
     @FXML
     protected void onRestartButton(){
-        mainCtrl.resetSoloGame();
         mainCtrl.startSoloGame();
     }
     /**
