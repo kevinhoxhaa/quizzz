@@ -24,11 +24,11 @@ import client.scenes.AddQuoteCtrl;
 import client.scenes.HomeCtrl;
 import client.scenes.MultiplayerAnswerCtrl;
 import client.scenes.QuoteOverviewCtrl;
+import client.scenes.MultiplayerQuestionCtrl;
 import client.scenes.SoloAnswerCtrl;
 import client.scenes.SoloQuestionCtrl;
 import client.scenes.WaitingCtrl;
 import client.scenes.RankingCtrl;
-import client.scenes.SoloResultsCtrl;
 import client.scenes.EstimationQuestionCtrl;
 import client.scenes.MainCtrl;
 import com.google.inject.Injector;
@@ -65,7 +65,8 @@ public class Main extends Application {
 
         var ranking = FXML.load(RankingCtrl.class, "client", "scenes", "Ranking.fxml");
 
-        var estimation = FXML.load(EstimationQuestionCtrl.class, "client", "scenes", "Estimation.fxml");
+        var estimation = FXML.load(
+                EstimationQuestionCtrl.class, "client", "scenes", "Estimation.fxml");
 
         var soloQuestion = FXML.load(
                 SoloQuestionCtrl.class, "client", "scenes", "SoloQuestion.fxml");
@@ -74,6 +75,7 @@ public class Main extends Application {
                 SoloAnswerCtrl.class, "client", "scenes", "SoloAnswer.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, overview, add, home, waiting, question, answerPage, ranking, estimation);
+        mainCtrl.initialize(primaryStage, overview, add, home, waiting, multiplayerQuestion,
+                multiplayerAnswer, ranking, estimation, soloQuestion, soloAnswer);
     }
 }

@@ -2,6 +2,8 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.entities.MultiplayerUser;
+import commons.entities.SoloUser;
 import commons.entities.User;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
@@ -81,14 +83,21 @@ public class HomeCtrl {
     }
 
     /**
-     * Parses the info from the user input form and creates
-     * a User object with the given username
-     * @param soloPlayer Boolean that identifies if the user is a solo player.
-     * @return parsed User object
+     * Returns a new solo user with the given name
+     * @return a solo user
      */
-    public User getUser(Boolean soloPlayer) {
+    public SoloUser getSoloUser() {
         String username = usernameField.getText();
-        return new User(username, soloPlayer);
+        return new SoloUser(username);
+    }
+
+    /**
+     * Returns a new multiplayer user with the given name
+     * @return a multiplayer user
+     */
+    public MultiplayerUser getMultiplayerUser() {
+        String username = usernameField.getText();
+        return new MultiplayerUser(username);
     }
 
     /**
@@ -113,9 +122,33 @@ public class HomeCtrl {
      */
     @FXML
     protected void onSoloButtonClick() {
-        // TODO: check if the server is valid and
-        //  add the user to the database
-        mainCtrl.startSoloGame();
+        try {
+            String serverUrl = urlField.getText();
+            SoloUser user = getSoloUser();
+            if (!isValidUsername(user)) {
+                return;
+            }
+            mainCtrl.bindUser(server.addUserSolo(serverUrl, user));
+        } catch (WebApplicationException e) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+
+            switch(e.getResponse().getStatus()) {
+                case FORBIDDEN:
+                    alert.setContentText("Username cannot be null or empty!");
+                    break;
+                default:
+                    alert.setContentText(e.getMessage());
+            }
+
+            alert.showAndWait();
+            return;
+        } catch (Exception e) {
+            invalidURL();
+            return;
+        }
+
+        mainCtrl.showQuestion();
     }
 
     /**
@@ -126,7 +159,7 @@ public class HomeCtrl {
     protected void onMultiplayerButtonClick() {
         try {
             String serverUrl = urlField.getText();
-            User user = getUser(false);
+            MultiplayerUser user = getMultiplayerUser();
             if (!isValidUsername(user)) {
                 return;
             }

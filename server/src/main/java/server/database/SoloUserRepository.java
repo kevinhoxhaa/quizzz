@@ -1,7 +1,7 @@
 package server.database;
 
-import commons.entities.User;
+import commons.entities.SoloUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface SoloUserRepository extends JpaRepository<User, Long> {
+public interface SoloUserRepository extends JpaRepository<SoloUser, Long> {
 }
