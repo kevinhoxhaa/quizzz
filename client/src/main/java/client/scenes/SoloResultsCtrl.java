@@ -55,7 +55,7 @@ public class SoloResultsCtrl{
     @FXML
     protected void onRestartButton(){
         mainCtrl.resetSoloGame();
-        mainCtrl.showQuestion();
+        mainCtrl.startSoloGame();
     }
     /**
      * Redirects the user to the home page when the quit button is clicked
