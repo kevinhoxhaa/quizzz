@@ -80,6 +80,26 @@ public class ServerUtils {
                 .get(new GenericType<List<MultiplayerUser>>() {});
     }
 
+    /**
+     * Returns all users from the waiting room that a particular
+     * user is in. In case the user is no longer in that waiting
+     * room, the game has started and all users are redirected
+     * to the first question page
+     * @param serverUrl the url of the server containing the
+     *                  waiting room
+     * @param id the id of the user
+     * @return a list of users from the waiting room or NO_CONTENT
+     * in case the game has already started
+     */
+    public List<MultiplayerUser> getUsers(String serverUrl, long id) {
+        String path = String.format("api/users/%d/all", id);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path(path)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<MultiplayerUser>>() {});
+    }
+
     public MultiplayerUser addUserMultiplayer(String serverUrl, MultiplayerUser user) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(serverUrl).path("api/users")

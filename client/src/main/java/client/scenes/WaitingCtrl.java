@@ -76,18 +76,19 @@ public class WaitingCtrl {
      */
     public void fetchUsers(String serverUrl) {
         usersList.getItems().clear();
+        long userId = mainCtrl.getUser().id;
         try {
-            List<MultiplayerUser> users = server.getUsers(serverUrl);
+            List<MultiplayerUser> users = server.getUsers(serverUrl, userId);
             for(MultiplayerUser user : users) {
                 usersList.getItems().add(user.username);
             }
             counterLabel.setText(String.format("%d player(s) in this room:", users.size()));
         } catch (WebApplicationException e) {
+            System.out.println(e.getResponse().getStatus());
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText(e.getMessage());
             alert.showAndWait();
-            return;
         }
     }
 
@@ -111,7 +112,7 @@ public class WaitingCtrl {
      */
     @FXML
     protected void onStartButtonClick() {
-        // TODO: start a game on the server
+        
         mainCtrl.showQuestion();
     }
 }
