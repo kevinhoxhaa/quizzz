@@ -44,7 +44,7 @@ public class SoloResultsCtrl{
 
     protected void setup() {
         //TODO : Fix this so it shows user's username
-        scoreTableUserName.setText( String.format( "%s", "Kevin") );
+        scoreTableUserName.setText( String.format( "%s", mainCtrl.getUser().username) );
         scoreTableUserScore.setText( String.format( "%d", mainCtrl.getSoloScore()) );
         //TODO : add personal best to server side and link it
     }

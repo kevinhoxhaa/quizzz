@@ -147,9 +147,6 @@ public class HomeCtrl {
             invalidURL();
             return;
         }
-
-        // TODO: check if the server is valid and
-        //  add the user to the database
         mainCtrl.resetSoloGame();
         mainCtrl.startSoloGame();
     }

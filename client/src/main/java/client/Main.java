@@ -29,6 +29,9 @@ import client.scenes.SoloAnswerCtrl;
 import client.scenes.SoloQuestionCtrl;
 import client.scenes.WaitingCtrl;
 import client.scenes.SoloResultsCtrl;
+import client.scenes.EstimationQuestionCtrl;
+import client.scenes.RankingCtrl;
+import client.scenes.MainCtrl;
 import com.google.inject.Injector;
 
 import javafx.application.Application;
