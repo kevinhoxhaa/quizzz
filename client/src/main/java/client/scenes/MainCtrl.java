@@ -49,7 +49,7 @@ public class MainCtrl {
     public static final double MIN_WIDTH = 768.0;
     public static final double MIN_HEIGHT = 512.0;
     private static final int POLLING_DELAY = 0;
-    private static final int POLLING_INTERVAL = 1500;
+    private static final int POLLING_INTERVAL = 200;
     private static final long ANSWER_TO_THE_ULTIMATE_QUESTION = 42;
     private static final int STANDARD_PAGE_TIME = 15;
     private static final int QUESTIONS_PER_GAME = 20;
