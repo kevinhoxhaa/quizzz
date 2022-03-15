@@ -20,19 +20,15 @@ import static com.google.inject.Guice.createInjector;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import client.scenes.EstimationQuestionCtrl;
-import client.scenes.RankingCtrl;
 import client.scenes.AddQuoteCtrl;
 import client.scenes.HomeCtrl;
-import client.scenes.MainCtrl;
-import client.scenes.MultiplayerQuestionCtrl;
 import client.scenes.MultiplayerAnswerCtrl;
 import client.scenes.QuoteOverviewCtrl;
+import client.scenes.MultiplayerQuestionCtrl;
 import client.scenes.SoloAnswerCtrl;
 import client.scenes.SoloQuestionCtrl;
 import client.scenes.WaitingCtrl;
 import client.scenes.SoloResultsCtrl;
-
 import com.google.inject.Injector;
 
 import javafx.application.Application;

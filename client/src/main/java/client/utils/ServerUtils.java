@@ -24,6 +24,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.Random;
 
+import commons.entities.MultiplayerUser;
+import commons.entities.SoloUser;
 import commons.entities.Activity;
 import commons.entities.User;
 import commons.models.ConsumptionQuestion;
@@ -70,34 +72,49 @@ public class ServerUtils {
                 .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
     }
 
-    public List<User> getUsers(String serverUrl) {
+    public List<MultiplayerUser> getUsers(String serverUrl) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(serverUrl).path("api/users")
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .get(new GenericType<List<User>>() {});
+                .get(new GenericType<List<MultiplayerUser>>() {});
     }
 
-    public User addUser(String serverUrl, User user) {
+    public MultiplayerUser addUserMultiplayer(String serverUrl, MultiplayerUser user) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(serverUrl).path("api/users")
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .post(Entity.entity(user, APPLICATION_JSON), User.class);
+                .post(Entity.entity(user, APPLICATION_JSON), MultiplayerUser.class);
     }
 
     /**
-     * A method that removes the user from the repository
+     * Adds a user to the user repository for solo games.
+     * @param serverUrl The server URL of the game the user is in.
+     * @param user The user that has to be saved in the repository.
+     * @return The user that has been saved in the repository.
+     */
+    public SoloUser addUserSolo(String serverUrl, SoloUser user) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path("api/users/solo")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(user, APPLICATION_JSON), SoloUser.class);
+    }
+
+    /**
+     * A method that removes a multiplayer user from the repository
      * @param serverUrl
      * @param user
      * @return the user that was removed
      */
-    public User removeUser(String serverUrl, User user) {
+    public MultiplayerUser removeMultiplayerUser(String serverUrl, User user) {
+        MultiplayerUser mu = (MultiplayerUser) user;
         return ClientBuilder.newClient(new ClientConfig())
-                .target(serverUrl).path("api/users/"+user.id)
+                .target(serverUrl).path("api/users/"+mu.id)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .delete(User.class);
+                .delete(MultiplayerUser.class);
     }
 
     /**
