@@ -96,7 +96,7 @@ public class MainCtrl {
 
     private User user;
     private List<Color> colors;
-    private Thread thread;
+    private Thread timerThread;
 
     private int answerCount = 0;
     private long soloScore = 0;
@@ -407,7 +407,7 @@ public class MainCtrl {
     public void startTimer(ProgressIndicator countdownCircle, SceneController sceneController) {
         countdownCircle.applyCss();
         Text text = (Text) countdownCircle.lookup(".text.percentage");
-        thread = new Thread(() -> {
+        timerThread = new Thread(() -> {
             double countdown = START_TIME;
             while (countdown >= 0.0) {
                 try {
@@ -438,14 +438,14 @@ public class MainCtrl {
                     }
             });
         });
-        thread.start();
+        timerThread.start();
     }
 
     /**
      * Kills the thread that is running the timer
      */
     public void killThread() {
-        thread.interrupt();
+        timerThread.interrupt();
     }
 
     /**

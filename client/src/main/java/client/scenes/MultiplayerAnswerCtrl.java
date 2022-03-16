@@ -3,7 +3,6 @@ package client.scenes;
 import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
-import commons.entities.User;
 import commons.models.EstimationQuestion;
 import commons.models.ChoiceQuestion;
 import commons.models.ComparisonQuestion;
@@ -199,8 +198,6 @@ public class MultiplayerAnswerCtrl implements SceneController,QuestionNumControl
 
     @Override
     public void onQuit() {
-        User user= mainCtrl.getUser();
-        System.out.println(user);
         mainCtrl.bindUser(null);
         mainCtrl.killThread();
         mainCtrl.showHome();
@@ -225,16 +222,16 @@ public class MultiplayerAnswerCtrl implements SceneController,QuestionNumControl
     @Override
     public void updateCircleColor(List<Color> colors) {
         for (int i = 0; i < mainCtrl.getAnswerCount(); i++) {
-            Circle c = (Circle) getCircles().getChildren().get(i);
-            c.setFill(colors.get(i));
+            Circle circle = (Circle) getCircles().getChildren().get(i);
+            circle.setFill(colors.get(i));
         }
     }
 
     @Override
     public void resetCircleColor() {
         for(int i=0; i<mainCtrl.getQuestionsPerGame();i++){
-            Circle c = (Circle) getCircles().getChildren().get(i);
-            c.setFill(Color.LIGHTGRAY);
+            Circle circle = (Circle) getCircles().getChildren().get(i);
+            circle.setFill(Color.LIGHTGRAY);
         }
     }
 

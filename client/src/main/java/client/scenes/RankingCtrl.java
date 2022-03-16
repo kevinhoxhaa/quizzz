@@ -2,7 +2,6 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.entities.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableView;
@@ -107,8 +106,6 @@ public class RankingCtrl implements SceneController,QuestionNumController {
 
     @Override
     public void onQuit() {
-        User user= mainCtrl.getUser();
-        System.out.println(user);
         mainCtrl.bindUser(null);
         mainCtrl.killThread();
         mainCtrl.showHome();
@@ -117,16 +114,16 @@ public class RankingCtrl implements SceneController,QuestionNumController {
     @Override
     public void updateCircleColor(List<Color> colors) {
         for (int i = 0; i < mainCtrl.getAnswerCount(); i++) {
-            Circle c = (Circle) getCircles().getChildren().get(i);
-            c.setFill(colors.get(i));
+            Circle circle = (Circle) getCircles().getChildren().get(i);
+            circle.setFill(colors.get(i));
         }
     }
 
     @Override
     public void resetCircleColor() {
         for(int i=0; i<mainCtrl.getQuestionsPerGame();i++){
-            Circle c = (Circle) getCircles().getChildren().get(i);
-            c.setFill(Color.LIGHTGRAY);
+            Circle circle = (Circle) getCircles().getChildren().get(i);
+            circle.setFill(Color.LIGHTGRAY);
         }
     }
 
