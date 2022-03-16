@@ -235,7 +235,7 @@
       </VBox>
       <AnchorPane prefHeight="49.0" prefWidth="708.0">
          <children>
-            <Button fx:id="quitButton" layoutX="595.0" layoutY="14.0" mnemonicParsing="false" onAction="#onClose" prefHeight="40.0" prefWidth="90.0" text="Quit" AnchorPane.rightAnchor="23.0">
+            <Button fx:id="quitButton" layoutX="595.0" layoutY="14.0" mnemonicParsing="false" onAction="#onQuit" prefHeight="40.0" prefWidth="90.0" text="Quit" AnchorPane.rightAnchor="23.0">
                <font>
                   <Font size="20.0" />
                </font>

@@ -54,8 +54,6 @@ public class SoloQuestionCtrl implements SceneController {
     @FXML
     private Text answerBotText;
     @FXML
-    private Button closeButton;
-    @FXML
     private Text currentScore;
 
     private Answer answerTopAnswer;
@@ -390,8 +388,9 @@ public class SoloQuestionCtrl implements SceneController {
         mainCtrl.showSoloAnswerPage(game);
     }
 
+    @Override
     @FXML
-    private void onClose(){
+    public void onQuit(){
         mainCtrl.killThread();
         mainCtrl.showHome();
     }

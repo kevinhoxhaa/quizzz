@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.entities.Activity;
+import commons.entities.User;
 import commons.models.Answer;
 import commons.models.Question;
 import commons.models.ConsumptionQuestion;
@@ -86,6 +87,8 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
     private StackPane disableIncorrect;
     @FXML
     private StackPane reduceTime;
+    @FXML
+    private Text currentScore;
 
     /**
      * Creates a controller for the multiplayer question screen, with the given server and main controller.
@@ -391,6 +394,15 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
         finalizeAndSend();
     }
 
+    @Override
+    public void onQuit() {
+        User user= mainCtrl.getUser();
+        System.out.println(user);
+        mainCtrl.bindUser(null);
+        mainCtrl.killThread();
+        mainCtrl.showHome();
+    }
+
     /**
      * Getter for the circles bar
      * @return circles
@@ -420,11 +432,11 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
      * Resets the highlighting of the circle borders
      */
     public void resetHighlight(){
-        if(mainCtrl.getAnswerCount()>0){
-            Circle c = (Circle) circles.getChildren().get(mainCtrl.getAnswerCount()-1);
-            c.setStrokeWidth(STANDARD_CIRCLE_BORDER_SIZE);
+            for(int i=0;i<circles.getChildren().size();i++){
+                Circle c = (Circle) circles.getChildren().get(i);
+                    c.setStrokeWidth(STANDARD_CIRCLE_BORDER_SIZE);
+                }
         }
-    }
 
     @Override
     public void updateCircleColor(List<Color> colors) {
@@ -433,6 +445,15 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
             c.setFill(colors.get(i));
         }
     }
+
+    @Override
+    public void resetCircleColor() {
+        for(int i=0; i<mainCtrl.getQuestionsPerGame();i++){
+            Circle c = (Circle) getCircles().getChildren().get(i);
+            c.setFill(Color.LIGHTGRAY);
+        }
+    }
+
     @Override
     public void updateQuestionNumber(){
         getQuestionNum().setText("" + (mainCtrl.getAnswerCount() + 1));

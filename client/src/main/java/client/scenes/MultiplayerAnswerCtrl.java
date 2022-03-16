@@ -3,6 +3,7 @@ package client.scenes;
 import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
+import commons.entities.User;
 import commons.models.EstimationQuestion;
 import commons.models.ChoiceQuestion;
 import commons.models.ComparisonQuestion;
@@ -49,6 +50,9 @@ public class MultiplayerAnswerCtrl implements SceneController,QuestionNumControl
 
     @FXML
     private ListView<String> correctPlayers;
+
+    @FXML
+    private Text currentScore;
     
     @FXML
     private ImageView thumbsup;
@@ -192,6 +196,15 @@ public class MultiplayerAnswerCtrl implements SceneController,QuestionNumControl
     public void redirect() {
         mainCtrl.afterAnswerScreen();
     }
+
+    @Override
+    public void onQuit() {
+        User user= mainCtrl.getUser();
+        System.out.println(user);
+        mainCtrl.bindUser(null);
+        mainCtrl.killThread();
+        mainCtrl.showHome();
+    }
     //TODO After a certain amount of time in the answer screen, the afterAnswerScreen() method should be called.
 
     /**
@@ -216,6 +229,15 @@ public class MultiplayerAnswerCtrl implements SceneController,QuestionNumControl
             c.setFill(colors.get(i));
         }
     }
+
+    @Override
+    public void resetCircleColor() {
+        for(int i=0; i<mainCtrl.getQuestionsPerGame();i++){
+            Circle c = (Circle) getCircles().getChildren().get(i);
+            c.setFill(Color.LIGHTGRAY);
+        }
+    }
+
     @Override
     public void updateQuestionNumber(){
         getQuestionNum().setText("" + (mainCtrl.getAnswerCount() + 1));

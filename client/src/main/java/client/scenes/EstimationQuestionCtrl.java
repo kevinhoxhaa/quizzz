@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.entities.User;
 import commons.models.Question;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressIndicator;
@@ -40,5 +41,14 @@ public class EstimationQuestionCtrl implements SceneController {
     @Override
     public void redirect() {
         //TODO
+    }
+
+    @Override
+    public void onQuit() {
+        User user= mainCtrl.getUser();
+        System.out.println(user);
+        mainCtrl.bindUser(null);
+        mainCtrl.killThread();
+        mainCtrl.showHome();
     }
 }

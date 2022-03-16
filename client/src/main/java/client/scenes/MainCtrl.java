@@ -148,8 +148,6 @@ public class MainCtrl {
         this.soloResultsCtrl = soloResults.getKey();
         this.soloResults=new Scene(soloResults.getValue());
 
-        colors = new ArrayList<>();
-
         showHome();
         primaryStage.show();
     }
@@ -203,10 +201,18 @@ public class MainCtrl {
 
     /**
      * Displays the waiting page of the quiz application
+     * Resets the colorList and the answerCount to 0 every time someone enters the waiting room.
      */
     public void showWaiting() {
         primaryStage.setTitle("Quizzz: Waiting");
         primaryStage.setScene(waiting);
+
+        colors = new ArrayList<>();
+        answerCount=0;
+        multiplayerQuestionCtrl.resetCircleColor();
+        multiplayerAnswerCtrl.resetCircleColor();
+        rankingCtrl.resetCircleColor();
+
         waitingCtrl.scaleButton();
         waitingTimer = new Timer();
         waitingTimer.schedule(
@@ -468,6 +474,12 @@ public class MainCtrl {
         soloAnswerCtrl.startTimer();
     }
 
+    /**
+     * Getter for the number of questions per game
+     */
+    public int getQuestionsPerGame(){
+        return QUESTIONS_PER_GAME;
+    }
     /**
      * Shows the relevant question screen for the given solo game instance
      * @param game the solo game instance

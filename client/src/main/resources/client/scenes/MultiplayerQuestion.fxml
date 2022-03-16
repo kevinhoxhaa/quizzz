@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 
-<VBox minHeight="492.0" minWidth="748.0" prefHeight="492.0" prefWidth="748.0" spacing="20.0" HBox.hgrow="ALWAYS" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.MultiplayerQuestionCtrl">
+<VBox minHeight="492.0" minWidth="748.0" prefHeight="492.0" prefWidth="748.0" spacing="20.0" HBox.hgrow="ALWAYS" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.MultiplayerQuestionCtrl">
    <children>
       <HBox alignment="CENTER" layoutX="23.0" layoutY="34.0" prefHeight="17.0" prefWidth="344.0" spacing="4.0" VBox.vgrow="NEVER">
          <children>
@@ -303,6 +314,20 @@
             </VBox>
          </children>
       </HBox>
+      <AnchorPane prefHeight="49.0" prefWidth="708.0">
+         <children>
+            <Button fx:id="quitButton" layoutX="595.0" layoutY="14.0" mnemonicParsing="false" onAction="#onQuit" prefHeight="40.0" prefWidth="90.0" text="Quit" AnchorPane.rightAnchor="23.0">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
+            <Text fx:id="currentScore" layoutX="43.0" layoutY="46.0" text="Score: 0" wrappingWidth="187.242919921875">
+               <font>
+                  <Font size="32.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
    </children>
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
