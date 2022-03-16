@@ -11,6 +11,7 @@ import commons.models.Question;
 import commons.models.SoloGame;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -52,6 +53,10 @@ public class SoloQuestionCtrl implements SceneController {
     private Text answerMidText;
     @FXML
     private Text answerBotText;
+    @FXML
+    private Button closeButton;
+    @FXML
+    private Text currentScore;
 
     private Answer answerTopAnswer;
     private Answer answerMidAnswer;
@@ -382,5 +387,11 @@ public class SoloQuestionCtrl implements SceneController {
     @Override
     public void redirect() {
         mainCtrl.showSoloAnswerPage(game);
+    }
+
+    @FXML
+    private void onClose(){
+        mainCtrl.stopWaitingTimer();
+        mainCtrl.showHome();
     }
 }
