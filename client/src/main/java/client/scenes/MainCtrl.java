@@ -476,6 +476,7 @@ public class MainCtrl {
 
     /**
      * Getter for the number of questions per game
+     * @return QUESTIONS_PER_GAME
      */
     public int getQuestionsPerGame(){
         return QUESTIONS_PER_GAME;
