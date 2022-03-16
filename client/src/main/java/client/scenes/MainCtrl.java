@@ -440,10 +440,9 @@ public class MainCtrl {
         colors = new ArrayList<>();
 
         SoloGame soloGame = server.getSoloGame(server.getURL(), QUESTIONS_PER_GAME);
-        soloQuestionCtrl.setup(soloGame);
         primaryStage.setTitle("Solo game");
-        primaryStage.setScene(soloQuestion);
-        soloQuestionCtrl.startTimer();
+
+        showSoloQuestion(soloGame);
     }
 
     /**
@@ -451,7 +450,13 @@ public class MainCtrl {
      * @param game the solo game instance
      */
     public void showSoloAnswerPage(SoloGame game) {
-        soloAnswerCtrl.setup(game);
+        Question prevQuestion = game.getCurrentQuestion();
+        if (prevQuestion.hasCorrectUserAnswer()) {
+            colors.add(Color.LIGHTGREEN);
+        } else {
+            colors.add(Color.INDIANRED);
+        }
+        soloAnswerCtrl.setup(game, colors);
         primaryStage.setScene(soloAnswer);
         soloAnswerCtrl.startTimer();
     }
@@ -461,9 +466,10 @@ public class MainCtrl {
      * @param game the solo game instance
      */
     public void showSoloQuestion(SoloGame game) {
-        soloQuestionCtrl.setup(game);
+        soloQuestionCtrl.setup(game, colors);
         primaryStage.setScene(soloQuestion);
         soloQuestionCtrl.startTimer();
+        soloQuestionCtrl.setStartTime();
     }
 
     /**

@@ -20,6 +20,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
@@ -30,11 +31,13 @@ import static commons.utils.CompareType.LARGER;
 import static commons.utils.CompareType.SMALLER;
 
 
-public class SoloQuestionCtrl implements SceneController {
+public class SoloQuestionCtrl implements SceneController, QuestionNumController {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
     private static final double MILLISECONDS_PER_SECONDS = 1000.0;
+    private static final double CIRCLE_BORDER_SIZE = 1.7;
+    private static final double STANDARD_CIRCLE_BORDER_SIZE = 1.0;
 
     private Question currentQuestion;
 
@@ -98,12 +101,17 @@ public class SoloQuestionCtrl implements SceneController {
      *  - Fills the answerButtons list for iterations <br>
      *  - Resets all buttons to their default colors
      * @param soloGame the game instance
+     * @param colors the list of colors corresponding to past questions
      */
-    protected void setup(SoloGame soloGame) {
+    protected void setup(SoloGame soloGame, List<Color> colors) {
         this.game = soloGame;
         Question question = soloGame.getCurrentQuestion();
         this.currentQuestion = question;
         questionImg.setImage(new Image(currentQuestion.getImagePath()));
+
+        updateCircleColor(colors);
+        resetHighlight();
+        highlightCurrentCircle();
 
         selectedAnswerButton = null;
 
@@ -129,6 +137,7 @@ public class SoloQuestionCtrl implements SceneController {
         this.answerButtons.add(answerMid);
         this.answerButtons.add(answerBot);
 
+        updateQuestionNumber();
         resetAnswerColors();
     }
 
@@ -383,4 +392,53 @@ public class SoloQuestionCtrl implements SceneController {
     public void redirect() {
         mainCtrl.showSoloAnswerPage(game);
     }
+
+    /**
+     * Getter for the circles bar
+     * @return circles
+     */
+    public HBox getCircles(){
+        return circles;
+    }
+
+    /**
+     * Getter for the text node containing the current question number
+     * @return questionNum
+     */
+    public Text getQuestionNum(){
+        return questionNum;
+    }
+
+    /**
+     * Highlights current question so the user is aware which circle corresponds to his current question
+     */
+    public void highlightCurrentCircle() {
+        Circle c = (Circle) circles.getChildren().get(game.getCurrentQuestionNum());
+        c.setFill(Color.DARKGRAY);
+        c.setStrokeWidth(CIRCLE_BORDER_SIZE);
+    }
+
+    /**
+     * Resets the highlighting of the circle borders
+     */
+    public void resetHighlight(){
+        if(game.getCurrentQuestionNum()>0){
+            Circle c = (Circle) circles.getChildren().get(game.getCurrentQuestionNum()-1);
+            c.setStrokeWidth(STANDARD_CIRCLE_BORDER_SIZE);
+        }
+    }
+
+    @Override
+    public void updateCircleColor(List<Color> colors) {
+        for (int i = 0; i < colors.size(); i++) {
+            Circle c = (Circle) getCircles().getChildren().get(i);
+            c.setFill(colors.get(i));
+        }
+    }
+
+    @Override
+    public void updateQuestionNumber(){
+        getQuestionNum().setText("" + (game.getCurrentQuestionNum()+ 1));
+    }
+
 }

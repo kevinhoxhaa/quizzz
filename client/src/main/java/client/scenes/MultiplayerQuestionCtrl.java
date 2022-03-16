@@ -400,7 +400,7 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
     }
 
     /**
-     * Getter for the current question number
+     * Getter for the text node containing the current question number
      * @return questionNum
      */
     public Text getQuestionNum(){

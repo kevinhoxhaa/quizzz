@@ -18,10 +18,13 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
+import java.util.List;
 
-public class SoloAnswerCtrl implements SceneController {
+
+public class SoloAnswerCtrl implements SceneController, QuestionNumController {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -66,8 +69,9 @@ public class SoloAnswerCtrl implements SceneController {
      *  based on if the player answered correctly or not. <br>
      *  - Fills in the question and correct answer in their corresponding text boxes. <br>
      * @param soloGame The solo game instance
+     * @param colors The list of colors associated with the past questions
      */
-    protected void setup(SoloGame soloGame) {
+    protected void setup(SoloGame soloGame, List<Color> colors) {
         this.game = soloGame;
         Question prevQuestion = soloGame.getCurrentQuestion();
         if (prevQuestion.hasCorrectUserAnswer()) {
@@ -95,6 +99,9 @@ public class SoloAnswerCtrl implements SceneController {
                 setupEstimationAnswer(prevQuestion);
                 break;
         }
+
+        updateQuestionNumber();
+        updateCircleColor(colors);
     }
 
     /**
@@ -184,5 +191,32 @@ public class SoloAnswerCtrl implements SceneController {
         else{
             mainCtrl.showSoloResults();
         }
+    }
+
+    /**
+     * Getter for the current question number
+     * @return questionNum
+     */
+    public Text getQuestionNum(){
+        return questionNum;
+    }
+    /**
+     * Getter for the circles bar
+     * @return circles
+     */
+    public HBox getCircles(){
+        return circles;
+    }
+
+    @Override
+    public void updateCircleColor(List<Color> colors) {
+        for (int i = 0; i < colors.size(); i++) {
+            Circle c = (Circle) getCircles().getChildren().get(i);
+            c.setFill(colors.get(i));
+        }
+    }
+    @Override
+    public void updateQuestionNumber(){
+        getQuestionNum().setText("" + (game.getCurrentQuestionNum() + 1));
     }
 }
