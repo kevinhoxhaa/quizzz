@@ -106,6 +106,7 @@ public class SoloQuestionCtrl implements SceneController {
      */
     protected void setup(SoloGame soloGame) {
         this.game = soloGame;
+        currentScore.setText( String.format( "Score: %d", mainCtrl.getSoloScore()) );
         Question question = soloGame.getCurrentQuestion();
         this.currentQuestion = question;
         questionImg.setImage(new Image(currentQuestion.getImagePath()));
@@ -391,7 +392,7 @@ public class SoloQuestionCtrl implements SceneController {
 
     @FXML
     private void onClose(){
-        mainCtrl.stopWaitingTimer();
+        mainCtrl.killThread();
         mainCtrl.showHome();
     }
 }

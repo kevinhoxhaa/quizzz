@@ -96,6 +96,7 @@ public class MainCtrl {
 
     private User user;
     private List<Color> colors;
+    private Thread thread;
 
     private int answerCount = 0;
     private long soloScore = 0;
@@ -289,6 +290,7 @@ public class MainCtrl {
         multiplayerQuestionCtrl.setup(question);
         multiplayerQuestionCtrl.resetAnswerColors();
         multiplayerQuestionCtrl.updateQuestionNumber();
+
         multiplayerQuestionCtrl.startTimer();
         multiplayerQuestionCtrl.setStartTime();
         primaryStage.setTitle("Question screen");
@@ -389,7 +391,7 @@ public class MainCtrl {
 
     /**
      * Starts a particular countdown timer and initiates the
-     * timer animation
+     * timer animation with a new thread
      *
      * @param countdownCircle the circle to perform the
      *                        animation on
@@ -399,7 +401,7 @@ public class MainCtrl {
     public void startTimer(ProgressIndicator countdownCircle, SceneController sceneController) {
         countdownCircle.applyCss();
         Text text = (Text) countdownCircle.lookup(".text.percentage");
-        new Thread(() -> {
+        thread = new Thread(() -> {
             double countdown = START_TIME;
             while (countdown >= 0.0) {
                 try {
@@ -414,7 +416,9 @@ public class MainCtrl {
                     Thread.sleep(MILLIS);
                     countdown -= INTERVAL;
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+//                    e.printStackTrace();
+                    //This kills the current running thread
+                    return;
                 }
             }
             Platform.runLater(
@@ -427,7 +431,15 @@ public class MainCtrl {
                         }
                     }
             });
-        }).start();
+        });
+        thread.start();
+    }
+
+    /**
+     * Kills the thread that is running the timer
+     */
+    public void killThread() {
+        thread.interrupt();
     }
 
     /**

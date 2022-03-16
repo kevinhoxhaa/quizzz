@@ -110,6 +110,7 @@ public class WaitingCtrl {
         server.removeMultiplayerUser(server.getURL(),user);
         mainCtrl.bindUser(null);
         mainCtrl.showHome();
+        mainCtrl.stopWaitingTimer();
     }
 
 
