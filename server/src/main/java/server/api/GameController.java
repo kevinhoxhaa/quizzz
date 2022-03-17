@@ -61,10 +61,7 @@ public class GameController {
     }
 
     private Activity getRandomActivity() {
-        List<Activity> activitiesList = activityRepo.findAll();
-        int idx = random.nextInt(activitiesList.size());
-        // TODO: fix accessing random activities
-        return activitiesList.get(idx);
+        return activityRepo.getRandomList(1).get(0);
     }
 
     /**
