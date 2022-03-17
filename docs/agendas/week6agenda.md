@@ -37,4 +37,3 @@ Nada Mouman
   - We shall discuss and see if we go through with it
 - Planning for next week
   - Discuss and plan the tasks for next week
-
