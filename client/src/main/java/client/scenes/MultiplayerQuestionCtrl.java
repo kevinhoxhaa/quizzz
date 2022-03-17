@@ -395,7 +395,7 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
      * Getter for the circles bar
      * @return circles
      */
-    public HBox getCircles(){
+    public HBox getCirclesHBox(){
         return circles;
     }
 
@@ -429,7 +429,7 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
     @Override
     public void updateCircleColor(List<Color> colors) {
         for (int i = 0; i < mainCtrl.getAnswerCount(); i++) {
-            Circle c = (Circle) getCircles().getChildren().get(i);
+            Circle c = (Circle) getCirclesHBox().getChildren().get(i);
             c.setFill(colors.get(i));
         }
     }
