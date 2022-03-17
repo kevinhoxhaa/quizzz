@@ -431,6 +431,10 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
         }
     }
 
+    /**
+     * Updates the colors of the little circles based on the array given
+     * @param colors Is the list of colors of previous answers(green/red depending on their correctness)
+     */
     @Override
     public void updateCircleColor(List<Color> colors) {
         for (int i = 0; i < colors.size(); i++) {
@@ -439,6 +443,9 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
         }
     }
 
+    /**
+     * Resets the colors of the little circles to gray.
+     */
     @Override
     public void resetCircleColor() {
         for(int i=0; i<mainCtrl.getQuestionsPerGame();i++){
@@ -447,12 +454,17 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
         }
     }
 
+    /**
+     * Updates the question number on the top of the screen.
+     */
     @Override
     public void updateQuestionNumber(){
         getQuestionNum().setText("" + (game.getCurrentQuestionNum()+ 1));
     }
-
-
+    
+    /**
+     * Handles the user clicking the quit button.
+     */
     @Override
     @FXML
     public void onQuit(){
