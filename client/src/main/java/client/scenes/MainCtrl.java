@@ -407,6 +407,9 @@ public class MainCtrl {
     public void startTimer(ProgressIndicator countdownCircle, SceneController sceneController) {
         countdownCircle.applyCss();
         Text text = (Text) countdownCircle.lookup(".text.percentage");
+        if(timerThread!=null && timerThread.isAlive()){
+            timerThread.interrupt();
+        }
         timerThread = new Thread(() -> {
             double countdown = START_TIME;
             while (countdown >= 0.0) {
