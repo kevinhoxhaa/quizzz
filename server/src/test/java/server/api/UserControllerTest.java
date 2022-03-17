@@ -25,10 +25,10 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import java.util.Objects;
 import java.util.Random;
 
-import commons.entities.User;
+import commons.entities.MultiplayerUser;
+import commons.entities.SoloUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
 
 public class UserControllerTest {
 
@@ -46,27 +46,29 @@ public class UserControllerTest {
 
     public int nextInt;
     private MyRandom random;
-    private TestWaitingUserRepository repo;
+    private TestWaitingUserRepository waitingRepo;
+    private TestSoloUserRepository soloRepo;
 
     private UserController sut;
 
     @BeforeEach
     public void setup() {
         random = new MyRandom();
-        repo = new TestWaitingUserRepository();
-        sut = new UserController(random, repo);
+        waitingRepo = new TestWaitingUserRepository();
+        soloRepo = new TestSoloUserRepository();
+        sut = new UserController(random, waitingRepo, soloRepo);
     }
 
     @Test
     public void cannotAddNullPerson() {
-        var actual = sut.add(getUser(null));
+        var actual = sut.addMultiplayerUser(getMultiplayerUser(null));
         assertEquals(FORBIDDEN, actual.getStatusCode());
     }
 
     @Test
     public void cannotPutNullPerson() {
-        User user = getUser("q1");
-        sut.add(user);
+        MultiplayerUser user = getMultiplayerUser("q1");
+        sut.addMultiplayerUser(user);
         user.username = null;
         var actual = sut.update(user);
         assertEquals(FORBIDDEN, actual.getStatusCode());
@@ -74,11 +76,11 @@ public class UserControllerTest {
 
     @Test
     public void putUpdatesDatabase() {
-        User user = getUser("q1");
-        var added = sut.add(user);
+        MultiplayerUser user = getMultiplayerUser("q1");
+        var added = sut.addMultiplayerUser(user);
         user.username = "q2";
         sut.update(user);
-        for(User u : repo.users) {
+        for(MultiplayerUser u : waitingRepo.users) {
             if(u.id == Objects.requireNonNull(added.getBody()).id) {
                 assertEquals("q2", u.username);
                 break;
@@ -88,8 +90,8 @@ public class UserControllerTest {
 
     @Test
     public void randomSelection() {
-        sut.add(getUser("q1"));
-        sut.add(getUser("q2"));
+        sut.addMultiplayerUser(getMultiplayerUser("q1"));
+        sut.addMultiplayerUser(getMultiplayerUser("q2"));
         nextInt = 1;
         var actual = sut.getRandom();
 
@@ -99,29 +101,15 @@ public class UserControllerTest {
 
     @Test
     public void duplicateUsername() {
-        sut.add(getUser("q1"));
-        var actual = sut.add(getUser("q1"));
+        sut.addMultiplayerUser(getMultiplayerUser("q1"));
+        var actual = sut.addMultiplayerUser(getMultiplayerUser("q1"));
         assertEquals(UNAUTHORIZED, actual.getStatusCode());
     }
 
     @Test
-    public void getAllByIdReturnsList() {
-        var user = sut.add(getUser("q1"));
-        sut.add(getUser("q2"));
-        assertTrue(sut.getAllById(user.getBody().id).getBody().size() > 0);
-    }
-
-    @Test
-    public void getAllByIdReturnsNoContent() {
-        sut.add(getUser("q1"));
-        var user = sut.add(getUser("q2"));
-        assertEquals(HttpStatus.NO_CONTENT, sut.getAllById(user.getBody().id + 1).getStatusCode());
-    }
-
-    @Test
     public void databaseIsUsed() {
-        sut.add(getUser("q1"));
-        repo.calledMethods.contains("save");
+        sut.addMultiplayerUser(getMultiplayerUser("q1"));
+        waitingRepo.calledMethods.contains("save");
     }
     
     @Test
@@ -132,19 +120,38 @@ public class UserControllerTest {
     
     @Test
     public void cannotDeleteNonExistingPerson() {
-        var actual = sut.delete(getUser("q1").id);
+        var actual = sut.delete(getMultiplayerUser("q1").id);
         assertEquals(BAD_REQUEST, actual.getStatusCode());
     }
     
     @Test
     public void deleteRightPerson() {
-        var savedUser = sut.add(getUser("q1"));
+        var savedUser = sut.addMultiplayerUser(getMultiplayerUser("q1"));
         var actual = sut.delete(savedUser.getBody().id);
         assertTrue(actual.getStatusCode().is2xxSuccessful());
-        assertFalse(repo.existsById(savedUser.getBody().id));
+        assertFalse(waitingRepo.existsById(savedUser.getBody().id));
     }
 
-    private static User getUser(String q) {
-        return new User(q);
+    @Test
+    public void cannotAddNullPersonSolo() {
+        var actual = sut.addSoloUser(getSoloUser(null));
+        assertEquals(FORBIDDEN, actual.getStatusCode());
+    }
+
+    @Test
+    public void addCorrectPersonSolo() {
+        var actual = sut.addSoloUser(getSoloUser("q1"));
+        var found = soloRepo.getById((long) soloRepo.users.size()-1);
+        assertEquals(actual.getBody(), found);
+        assertTrue(soloRepo.calledMethods.contains("save"));
+        assertTrue(soloRepo.calledMethods.contains("getById"));
+    }
+
+    private static MultiplayerUser getMultiplayerUser(String q) {
+        return new MultiplayerUser(q);
+    }
+
+    private static SoloUser getSoloUser(String q) {
+        return new SoloUser(q);
     }
 }

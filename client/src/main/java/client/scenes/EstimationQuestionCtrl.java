@@ -41,4 +41,11 @@ public class EstimationQuestionCtrl implements SceneController {
     public void redirect() {
         //TODO
     }
+
+    @Override
+    public void onQuit() {
+        mainCtrl.bindUser(null);
+        mainCtrl.killThread();
+        mainCtrl.showHome();
+    }
 }

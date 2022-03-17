@@ -1,5 +1,6 @@
 package server.api;
 
+import commons.entities.MultiplayerUser;
 import commons.entities.User;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -15,7 +16,7 @@ import java.util.function.Function;
 
 public class TestGameUserRepository implements GameUserRepository {
 
-    public final List<User> users = new ArrayList<>();
+    public final List<MultiplayerUser> users = new ArrayList<>();
     public final List<String> calledMethods = new ArrayList<>();
 
     private void call(String name) {
@@ -23,25 +24,25 @@ public class TestGameUserRepository implements GameUserRepository {
     }
 
     @Override
-    public List<User> findAll() {
+    public List<MultiplayerUser> findAll() {
         calledMethods.add("findAll");
         return users;
     }
 
     @Override
-    public List<User> findAll(Sort sort) {
+    public List<MultiplayerUser> findAll(Sort sort) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public List<User> findAllById(Iterable<Long> ids) {
+    public List<MultiplayerUser> findAllById(Iterable<Long> ids) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public <S extends User> List<S> saveAll(Iterable<S> entities) {
+    public <S extends MultiplayerUser> List<S> saveAll(Iterable<S> entities) {
         List<S> usersToSave = (List<S>) entities;
         for(S user : usersToSave) {
             save(user);
@@ -56,19 +57,19 @@ public class TestGameUserRepository implements GameUserRepository {
     }
 
     @Override
-    public <S extends User> S saveAndFlush(S entity) {
+    public <S extends MultiplayerUser> S saveAndFlush(S entity) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public <S extends User> List<S> saveAllAndFlush(Iterable<S> entities) {
+    public <S extends MultiplayerUser> List<S> saveAllAndFlush(Iterable<S> entities) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public void deleteAllInBatch(Iterable<User> entities) {
+    public void deleteAllInBatch(Iterable<MultiplayerUser> entities) {
         // TODO Auto-generated method stub
 
     }
@@ -86,41 +87,41 @@ public class TestGameUserRepository implements GameUserRepository {
     }
 
     @Override
-    public User getOne(Long id) {
+    public MultiplayerUser getOne(Long id) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public User getById(Long id) {
+    public MultiplayerUser getById(Long id) {
         call("getById");
         return find(id).get();
     }
 
-    private Optional<User> find(Long id) {
+    private Optional<MultiplayerUser> find(Long id) {
         return users.stream().filter(q -> q.id == id).findFirst();
     }
 
     @Override
-    public <S extends User> List<S> findAll(Example<S> example) {
+    public <S extends MultiplayerUser> List<S> findAll(Example<S> example) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public <S extends User> List<S> findAll(Example<S> example, Sort sort) {
+    public <S extends MultiplayerUser> List<S> findAll(Example<S> example, Sort sort) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Page<User> findAll(Pageable pageable) {
+    public Page<MultiplayerUser> findAll(Pageable pageable) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public <S extends User> S save(S entity) {
+    public <S extends MultiplayerUser> S save(S entity) {
         call("save");
         User existingEntity = users.stream().filter(u -> u.username.equals(entity.username)).findAny().orElse(null);
         if(existingEntity != null) {
@@ -133,7 +134,7 @@ public class TestGameUserRepository implements GameUserRepository {
     }
 
     @Override
-    public Optional<User> findById(Long id) {
+    public Optional<MultiplayerUser> findById(Long id) {
         return find(id);
     }
 
@@ -155,7 +156,7 @@ public class TestGameUserRepository implements GameUserRepository {
     }
 
     @Override
-    public void delete(User entity) {
+    public void delete(MultiplayerUser entity) {
         // TODO Auto-generated method stub
 
     }
@@ -167,7 +168,7 @@ public class TestGameUserRepository implements GameUserRepository {
     }
 
     @Override
-    public void deleteAll(Iterable<? extends User> entities) {
+    public void deleteAll(Iterable<? extends MultiplayerUser> entities) {
         // TODO Auto-generated method stub
 
     }
@@ -179,31 +180,31 @@ public class TestGameUserRepository implements GameUserRepository {
     }
 
     @Override
-    public <S extends User> Optional<S> findOne(Example<S> example) {
+    public <S extends MultiplayerUser> Optional<S> findOne(Example<S> example) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public <S extends User> Page<S> findAll(Example<S> example, Pageable pageable) {
+    public <S extends MultiplayerUser> Page<S> findAll(Example<S> example, Pageable pageable) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public <S extends User> long count(Example<S> example) {
+    public <S extends MultiplayerUser> long count(Example<S> example) {
         // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
-    public <S extends User> boolean exists(Example<S> example) {
+    public <S extends MultiplayerUser> boolean exists(Example<S> example) {
         // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public <S extends User, R> R findBy(Example<S> example,
+    public <S extends MultiplayerUser, R> R findBy(Example<S> example,
                                         Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         // TODO Auto-generated method stub
         return null;

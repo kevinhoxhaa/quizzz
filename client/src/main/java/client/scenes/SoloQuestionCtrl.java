@@ -52,6 +52,8 @@ public class SoloQuestionCtrl implements SceneController {
     private Text answerMidText;
     @FXML
     private Text answerBotText;
+    @FXML
+    private Text currentScore;
 
     private Answer answerTopAnswer;
     private Answer answerMidAnswer;
@@ -101,11 +103,14 @@ public class SoloQuestionCtrl implements SceneController {
      */
     protected void setup(SoloGame soloGame) {
         this.game = soloGame;
+        currentScore.setText( String.format( "Score: %d", mainCtrl.getSoloScore()) );
         Question question = soloGame.getCurrentQuestion();
         this.currentQuestion = question;
         questionImg.setImage(new Image(currentQuestion.getImagePath()));
 
         selectedAnswerButton = null;
+
+        setStartTime();
 
         switch (question.getType()){
             case CONSUMPTION:
@@ -380,5 +385,12 @@ public class SoloQuestionCtrl implements SceneController {
     @Override
     public void redirect() {
         mainCtrl.showSoloAnswerPage(game);
+    }
+
+    @Override
+    @FXML
+    public void onQuit(){
+        mainCtrl.killThread();
+        mainCtrl.showHome();
     }
 }
