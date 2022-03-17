@@ -15,7 +15,17 @@
  */
 package client.utils;
 
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import commons.entities.Activity;
+import commons.entities.MultiplayerUser;
+import commons.entities.Quote;
+import commons.entities.SoloUser;
+import commons.entities.User;
+import commons.models.ConsumptionQuestion;
+import commons.models.SoloGame;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.GenericType;
+import org.glassfish.jersey.client.ClientConfig;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,19 +34,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Random;
 
-import commons.entities.MultiplayerUser;
-import commons.entities.SoloUser;
-import commons.entities.Activity;
-import commons.entities.User;
-import commons.models.ConsumptionQuestion;
-import commons.models.Question;
-import commons.models.SoloGame;
-import org.glassfish.jersey.client.ClientConfig;
-
-import commons.entities.Quote;
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.core.GenericType;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
 
@@ -151,9 +149,8 @@ public class ServerUtils {
         SoloGame soloGame = new SoloGame();
         Activity activity = new Activity("starting a solo game on client side", MAGICNUMBER,
                 "source", "client/images/angry.png");
-        Question dummyQuestion = new ConsumptionQuestion(activity, new Random());
         for (int i = 0; i < QUESTIONS_PER_GAME; i++) {
-            soloGame.getQuestions().add(dummyQuestion);
+            soloGame.getQuestions().add(new ConsumptionQuestion(activity, new Random()));
         }
         return soloGame;
     }
