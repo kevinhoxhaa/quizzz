@@ -457,6 +457,9 @@ public class MainCtrl {
         soloScore = 0;
         colors = new ArrayList<>();
 
+        soloQuestionCtrl.resetCircleColor();
+        soloAnswerCtrl.resetCircleColor();
+
         SoloGame soloGame = server.getSoloGame(server.getURL(), QUESTIONS_PER_GAME);
         primaryStage.setTitle("Solo game");
 
@@ -517,9 +520,10 @@ public class MainCtrl {
     /**
      * THIS STILL NEEDS TO BE IMPLEMENTED
      * Called after the last answer screen's timer is up, shows the solo results page
+     * @param game
      */
-    public void showSoloResults() {
-        soloResultsCtrl.setup();
+    public void showSoloResults(SoloGame game) {
+        soloResultsCtrl.setup(game,colors);
         primaryStage.setScene(soloResults);
 //        System.out.println("game over lol");
     }

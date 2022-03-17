@@ -2,11 +2,17 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.models.SoloGame;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
-public class SoloResultsCtrl{
+import java.util.List;
+
+public class SoloResultsCtrl implements QuestionNumController{
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -25,6 +31,14 @@ public class SoloResultsCtrl{
     @FXML
     private Button restartButton;
 
+    @FXML
+    private Text questionNum;
+
+    @FXML
+    private HBox circles;
+
+    private SoloGame game;
+
     /**
      * Creates a controller for the solo results page screen, with the given server and mainCtrl parameters.
      * @param server
@@ -39,10 +53,16 @@ public class SoloResultsCtrl{
 
     /**
      * Setups the page quit button that redirects to the main page, and fills in the score and personal best
-     *
+     * @param game
+     * @param colors
      */
 
-    protected void setup() {
+    protected void setup(SoloGame game,List<Color>colors) {
+        this.game=game;
+
+        updateQuestionNumber();
+        updateCircleColor(colors);
+
         scoreTableUserName.setText( String.format( "%s", mainCtrl.getUser().username) );
         scoreTableUserScore.setText( String.format( "%d", mainCtrl.getSoloScore()) );
         //TODO : add personal best to server side and link it
@@ -61,5 +81,54 @@ public class SoloResultsCtrl{
     @FXML
     protected void onQuitButton(){
         mainCtrl.showHome();
+    }
+
+    /**
+     * Getter for the current question number
+     * @return questionNum
+     */
+    public Text getQuestionNum(){
+        return questionNum;
+    }
+
+    /**
+     * Getter for the circles bar
+     * @return circles
+     */
+    public HBox getCirclesHBox(){
+        return circles;
+    }
+
+    /**
+     * Updates the color of the past questions' circles on the circle bar
+     * (green/red depending on the correctness of the answer)
+     *
+     * @param colors Is the list of colors of previous answers(green/red depending on their correctness)
+     */
+    @Override
+    public void updateCircleColor(List<Color> colors) {
+        for (int i = 0; i < colors.size(); i++) {
+            Circle c = (Circle) getCirclesHBox().getChildren().get(i);
+            c.setFill(colors.get(i));
+        }
+    }
+
+    /**
+     * Resets the circles colors every time the game starts
+     */
+    @Override
+    public void resetCircleColor() {
+        for(int i=0; i<mainCtrl.getQuestionsPerGame();i++){
+            Circle circle = (Circle) getCirclesHBox().getChildren().get(i);
+            circle.setFill(Color.LIGHTGRAY);
+        }
+    }
+
+    /**
+     * Updates the number of the current question (e.g 11/20)
+     */
+    @Override
+    public void updateQuestionNumber() {
+        getQuestionNum().setText("" + (game.getCurrentQuestionNum()));
     }
 }

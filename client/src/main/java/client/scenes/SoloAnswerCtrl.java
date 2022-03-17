@@ -195,7 +195,7 @@ public class SoloAnswerCtrl implements SceneController, QuestionNumController {
             mainCtrl.showSoloQuestion(game);
         }
         else{
-            mainCtrl.showSoloResults();
+            mainCtrl.showSoloResults(game);
         }
     }
 

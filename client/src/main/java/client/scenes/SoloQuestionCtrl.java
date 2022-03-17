@@ -425,9 +425,9 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
      * Resets the highlighting of the circle borders
      */
     public void resetHighlight(){
-        if(game.getCurrentQuestionNum()>0){
-            Circle c = (Circle) circles.getChildren().get(game.getCurrentQuestionNum()-1);
-            c.setStrokeWidth(STANDARD_CIRCLE_BORDER_SIZE);
+        for(int i=0;i<circles.getChildren().size();i++){
+            Circle circle = (Circle) circles.getChildren().get(i);
+            circle.setStrokeWidth(STANDARD_CIRCLE_BORDER_SIZE);
         }
     }
 
