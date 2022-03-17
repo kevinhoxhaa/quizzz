@@ -55,6 +55,8 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
     private Text answerMidText;
     @FXML
     private Text answerBotText;
+    @FXML
+    private Text currentScore;
 
     private Answer answerTopAnswer;
     private Answer answerMidAnswer;
@@ -105,6 +107,7 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
      */
     protected void setup(SoloGame soloGame, List<Color> colors) {
         this.game = soloGame;
+        currentScore.setText( String.format( "Score: %d", mainCtrl.getSoloScore()) );
         Question question = soloGame.getCurrentQuestion();
         this.currentQuestion = question;
         questionImg.setImage(new Image(currentQuestion.getImagePath()));
@@ -441,4 +444,11 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
         getQuestionNum().setText("" + (game.getCurrentQuestionNum()+ 1));
     }
 
+
+    @Override
+    @FXML
+    public void onQuit(){
+        mainCtrl.killThread();
+        mainCtrl.showHome();
+    }
 }

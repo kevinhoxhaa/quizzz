@@ -96,6 +96,7 @@ public class MainCtrl {
 
     private User user;
     private List<Color> colors;
+    private Thread timerThread;
 
     private int answerCount = 0;
     private long soloScore = 0;
@@ -146,8 +147,6 @@ public class MainCtrl {
 
         this.soloResultsCtrl = soloResults.getKey();
         this.soloResults=new Scene(soloResults.getValue());
-
-        colors = new ArrayList<>();
 
         showHome();
         primaryStage.show();
@@ -202,10 +201,18 @@ public class MainCtrl {
 
     /**
      * Displays the waiting page of the quiz application
+     * Resets the colorList and the answerCount to 0 every time someone enters the waiting room.
      */
     public void showWaiting() {
         primaryStage.setTitle("Quizzz: Waiting");
         primaryStage.setScene(waiting);
+
+        colors = new ArrayList<>();
+        answerCount=0;
+        multiplayerQuestionCtrl.resetCircleColor();
+        multiplayerAnswerCtrl.resetCircleColor();
+        rankingCtrl.resetCircleColor();
+
         waitingCtrl.scaleButton();
         waitingTimer = new Timer();
         waitingTimer.schedule(
@@ -289,6 +296,7 @@ public class MainCtrl {
         multiplayerQuestionCtrl.setup(question);
         multiplayerQuestionCtrl.resetAnswerColors();
         multiplayerQuestionCtrl.updateQuestionNumber();
+
         multiplayerQuestionCtrl.startTimer();
         multiplayerQuestionCtrl.setStartTime();
         primaryStage.setTitle("Question screen");
@@ -389,7 +397,7 @@ public class MainCtrl {
 
     /**
      * Starts a particular countdown timer and initiates the
-     * timer animation
+     * timer animation with a new thread
      *
      * @param countdownCircle the circle to perform the
      *                        animation on
@@ -399,7 +407,7 @@ public class MainCtrl {
     public void startTimer(ProgressIndicator countdownCircle, SceneController sceneController) {
         countdownCircle.applyCss();
         Text text = (Text) countdownCircle.lookup(".text.percentage");
-        new Thread(() -> {
+        timerThread = new Thread(() -> {
             double countdown = START_TIME;
             while (countdown >= 0.0) {
                 try {
@@ -414,7 +422,9 @@ public class MainCtrl {
                     Thread.sleep(MILLIS);
                     countdown -= INTERVAL;
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+//                    e.printStackTrace();
+                    //This kills the current running thread
+                    return;
                 }
             }
             Platform.runLater(
@@ -427,7 +437,15 @@ public class MainCtrl {
                         }
                     }
             });
-        }).start();
+        });
+        timerThread.start();
+    }
+
+    /**
+     * Kills the thread that is running the timer
+     */
+    public void killThread() {
+        timerThread.interrupt();
     }
 
     /**
@@ -461,6 +479,13 @@ public class MainCtrl {
         soloAnswerCtrl.startTimer();
     }
 
+    /**
+     * Getter for the number of questions per game
+     * @return QUESTIONS_PER_GAME
+     */
+    public int getQuestionsPerGame(){
+        return QUESTIONS_PER_GAME;
+    }
     /**
      * Shows the relevant question screen for the given solo game instance
      * @param game the solo game instance

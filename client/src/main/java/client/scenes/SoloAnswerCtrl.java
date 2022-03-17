@@ -40,6 +40,8 @@ public class SoloAnswerCtrl implements SceneController, QuestionNumController {
     private Text answerResponse;
     @FXML
     private Text questionNum;
+    @FXML
+    private Text currentScore;
 
     @FXML
     private ProgressIndicator countdownCircle;
@@ -76,14 +78,18 @@ public class SoloAnswerCtrl implements SceneController, QuestionNumController {
         Question prevQuestion = soloGame.getCurrentQuestion();
         if (prevQuestion.hasCorrectUserAnswer()) {
             mainCtrl.addScore(prevQuestion.getPoints());
+            currentScore.setFill(Color.GREEN);
             this.answerResponse.setText("Well done!");
             answerPane.setBackground(new Background(
                     new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
         } else {
             this.answerResponse.setText("By making mistakes, we learn!");
+            currentScore.setFill(Color.DARKRED);
             answerPane.setBackground(new Background(
                     new BackgroundFill(Color.LIGHTCORAL, CornerRadii.EMPTY, Insets.EMPTY)));
         }
+
+        currentScore.setText( String.format( "Score: %d", mainCtrl.getSoloScore()) );
 
         switch(prevQuestion.getType()) {
             case CONSUMPTION:
@@ -215,8 +221,16 @@ public class SoloAnswerCtrl implements SceneController, QuestionNumController {
             c.setFill(colors.get(i));
         }
     }
+    
     @Override
     public void updateQuestionNumber(){
         getQuestionNum().setText("" + (game.getCurrentQuestionNum() + 1));
+    }
+    
+    @Override
+    @FXML
+    public void onQuit(){
+        mainCtrl.killThread();
+        mainCtrl.showHome();
     }
 }
