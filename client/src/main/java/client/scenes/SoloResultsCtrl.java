@@ -3,9 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.entities.User;
-import commons.models.SoloGame;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -33,7 +31,7 @@ public class SoloResultsCtrl {
     public SoloResultsCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
-        this.users = new FilteredList<>();
+        // this.users = new FilteredList<>();
     }
 
     @FXML
