@@ -21,6 +21,7 @@ public class Activity {
     public long id;
 
     public String title;
+    public String identifier;
 
     @Column(name = "consumption_in_wh")
     @JsonProperty("consumption_in_wh")
@@ -48,6 +49,11 @@ public class Activity {
         this.consumption = consumption;
         this.source = source;
         this.imagePath = imagePath;
+    }
+
+    public Activity(String identifier, String title, long consumption, String source, String imagePath) {
+        this(title, consumption, source, imagePath);
+        this.identifier = identifier;
     }
 
     /**
