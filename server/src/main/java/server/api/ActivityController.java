@@ -53,44 +53,6 @@ public class ActivityController {
     }
 
     /**
-     * Takes the activities from the JSON file and populates
-     * them into the database on server start.
-     * @return if activities have been populated successfully
-     */
-    @GetMapping(path = "/populate")
-    public ResponseEntity<Boolean> populateActivities() throws IOException {
-        if(repo.count() > 0) {
-            return ResponseEntity.ok(false);
-        }
-
-        String content = Files.readString(
-                Path.of(
-                        ResourceUtils.getFile("classpath:activities/activities.json").getPath()
-                ), StandardCharsets.US_ASCII);
-
-        JsonParser parser = new JsonParser();
-        JsonElement element = parser.parse(content);
-        JsonArray array = element.getAsJsonArray();
-
-        List<Activity> activities = new ArrayList<>();
-        array.forEach(e -> {
-            JsonObject o = e.getAsJsonObject();
-            String id = String.valueOf(o.get("id"));
-
-            String imagePath = String.valueOf(o.get("image_path"));
-            String title = String.valueOf(o.get("title"));
-            long consumption = Long.parseLong(String.valueOf(o.get("consumption_in_wh")));
-            String source = String.valueOf(o.get("source"));
-
-            Activity activity = new Activity(id, title, consumption, source, imagePath);
-            activities.add(activity);
-        });
-
-        repo.saveAll(activities);
-        return ResponseEntity.ok(true);
-    }
-
-    /**
      * Retrieves all activities from the repository and sends them
      * to the client
      * @return a list of all activities in the repository
