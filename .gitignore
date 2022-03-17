@@ -8,6 +8,7 @@ build/
 /server/src/main/resources/activities/
 
 **/*.mv.db
+**/*.trace.db
 
 **/*.swp
 

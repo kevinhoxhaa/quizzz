@@ -1,8 +1,18 @@
 package server.api;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.internal.LinkedTreeMap;
 import commons.entities.Activity;
+import org.springframework.boot.json.GsonJsonParser;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,11 +20,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import server.Main;
 import server.database.ActivityRepository;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/activities")
@@ -40,6 +53,44 @@ public class ActivityController {
      */
     private static boolean isNullOrEmpty(String s) {
         return s == null || s.isEmpty();
+    }
+
+    /**
+     * Takes the activities from the JSON file and populates
+     * them into the database on server start.
+     * @return if activities have been populated successfully
+     */
+    @GetMapping(path = "/populate")
+    public ResponseEntity<Boolean> populateActivities() throws IOException {
+        if(repo.count() > 0) {
+            return ResponseEntity.ok(false);
+        }
+
+        String content = Files.readString(
+                Path.of(
+                        ResourceUtils.getFile("classpath:activities/activities.json").getPath()
+                ), StandardCharsets.US_ASCII);
+
+        JsonParser parser = new JsonParser();
+        JsonElement element = parser.parse(content);
+        JsonArray array = element.getAsJsonArray();
+
+        List<Activity> activities = new ArrayList<>();
+        array.forEach(e -> {
+            JsonObject o = e.getAsJsonObject();
+            String id = String.valueOf(o.get("id"));
+
+            String imagePath = String.valueOf(o.get("image_path"));
+            String title = String.valueOf(o.get("title"));
+            long consumption = Long.parseLong(String.valueOf(o.get("consumption_in_wh")));
+            String source = String.valueOf(o.get("source"));
+
+            Activity activity = new Activity(id, title, consumption, source, imagePath);
+            activities.add(activity);
+        });
+
+        repo.saveAll(activities);
+        return ResponseEntity.ok(true);
     }
 
     /**
