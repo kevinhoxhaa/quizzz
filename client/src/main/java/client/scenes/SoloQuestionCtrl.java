@@ -440,6 +440,14 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
     }
 
     @Override
+    public void resetCircleColor() {
+        for(int i=0; i<mainCtrl.getQuestionsPerGame();i++){
+            Circle circle = (Circle) getCirclesHBox().getChildren().get(i);
+            circle.setFill(Color.LIGHTGRAY);
+        }
+    }
+
+    @Override
     public void updateQuestionNumber(){
         getQuestionNum().setText("" + (game.getCurrentQuestionNum()+ 1));
     }

@@ -438,7 +438,7 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
     @Override
     public void updateCircleColor(List<Color> colors) {
         for (int i = 0; i < mainCtrl.getAnswerCount(); i++) {
-            Circle circle = (Circle) getCircles().getChildren().get(i);
+            Circle circle = (Circle) getCirclesHBox().getChildren().get(i);
             circle.setFill(colors.get(i));
         }
     }
@@ -446,7 +446,7 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
     @Override
     public void resetCircleColor() {
         for(int i=0; i<mainCtrl.getQuestionsPerGame();i++){
-            Circle circle = (Circle) getCircles().getChildren().get(i);
+            Circle circle = (Circle) getCirclesHBox().getChildren().get(i);
             circle.setFill(Color.LIGHTGRAY);
         }
     }

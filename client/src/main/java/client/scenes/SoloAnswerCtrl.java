@@ -210,15 +210,23 @@ public class SoloAnswerCtrl implements SceneController, QuestionNumController {
      * Getter for the circles bar
      * @return circles
      */
-    public HBox getCircles(){
+    public HBox getCirclesHBox(){
         return circles;
     }
 
     @Override
     public void updateCircleColor(List<Color> colors) {
         for (int i = 0; i < colors.size(); i++) {
-            Circle c = (Circle) getCircles().getChildren().get(i);
+            Circle c = (Circle) getCirclesHBox().getChildren().get(i);
             c.setFill(colors.get(i));
+        }
+    }
+
+    @Override
+    public void resetCircleColor() {
+        for(int i=0; i<mainCtrl.getQuestionsPerGame();i++){
+            Circle circle = (Circle) getCirclesHBox().getChildren().get(i);
+            circle.setFill(Color.LIGHTGRAY);
         }
     }
     
