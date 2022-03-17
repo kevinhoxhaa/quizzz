@@ -162,6 +162,11 @@ public class UserControllerTest {
         assertTrue(soloRepo.calledMethods.contains("getById"));
     }
 
+    @Test
+    public void getAllScoresReturnslist(){
+        sut.addSoloUser(getSoloUser("q1"));
+    }
+
     private static MultiplayerUser getMultiplayerUser(String q) {
         return new MultiplayerUser(q);
     }

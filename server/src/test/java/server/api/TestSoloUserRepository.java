@@ -1,6 +1,7 @@
 package server.api;
 
 import commons.entities.SoloUser;
+import commons.entities.User;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -198,5 +199,11 @@ public class TestSoloUserRepository implements SoloUserRepository {
                            Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         // TODO Auto-generated method stub
         return null;
+    }
+    @Override
+    public ArrayList<User> sortUserByDescendingOrder(ArrayList<User> users){
+        users.sort((o1, o2)
+                -> o1.points.compareTo(o2.points));
+        return users;
     }
 }

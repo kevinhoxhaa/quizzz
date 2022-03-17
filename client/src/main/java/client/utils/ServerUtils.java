@@ -21,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -141,5 +142,18 @@ public class ServerUtils {
             soloGame.getQuestions().add(dummyQuestion);
         }
         return soloGame;
+    }
+
+    /**
+     * Returns an arraylist of solo users with their corresponding scores in descending order
+     * @param serverUrl
+     * @return Arraylist of solo users
+     */
+    public ArrayList<User> getAllUsersByScore(String serverUrl){
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path("api/solo/leaderboard")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<ArrayList<User>>() {});
     }
 }
