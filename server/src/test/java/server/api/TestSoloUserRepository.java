@@ -1,7 +1,6 @@
 package server.api;
 
 import commons.entities.SoloUser;
-import commons.entities.User;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -201,9 +200,9 @@ public class TestSoloUserRepository implements SoloUserRepository {
         return null;
     }
     @Override
-    public ArrayList<User> sortUserByDescendingOrder(ArrayList<User> users){
+    public List<SoloUser> sortUserByDescendingOrder(){
         users.sort((o1, o2)
-                -> o1.points.compareTo(o2.points));
+                -> o2.points.compareTo(o1.points));
         return users;
     }
 }

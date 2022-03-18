@@ -2,7 +2,9 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.entities.SoloUser;
 import commons.entities.User;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -13,13 +15,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 
-import java.util.ArrayList;
-
 public class SoloResultsCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
-    private ObservableList<User> users;
+    private ObservableList<SoloUser> users;
 
     /**
      * Creates a controller for the solo results page screen, with the given server and mainCtrl parameters.
@@ -31,7 +31,6 @@ public class SoloResultsCtrl {
     public SoloResultsCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
-        // this.users = new FilteredList<>();
     }
 
     @FXML
@@ -50,10 +49,10 @@ public class SoloResultsCtrl {
     private TableColumn<User, String> tableUsers;
 
     @FXML
-    private TableColumn<User, Long> tableScores;
+    private TableColumn<User, Long> tableScore;
 
     @FXML
-    private TableView<User> scoreTable;
+    private TableView<SoloUser> scoreTable;
 
 
     /**
@@ -61,9 +60,9 @@ public class SoloResultsCtrl {
      */
 
     public void setup() {
-        quit.setOnAction(new EventHandler<ActionEvent>() {
+        quit.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
-            public void handle(ActionEvent event) {
+            public void handle(javafx.event.ActionEvent event) {
                 mainCtrl.showHome();
             }
         });
@@ -71,12 +70,13 @@ public class SoloResultsCtrl {
         restart.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //TODO : start a new solo game thorugh the main controller
+                // TODO : restart the solo game
             }
         });
 
         score.setText(String.format("%d", mainCtrl.getSoloScore()));
-        //TODO : add personal best to server side and link it
+        // TODO : add personal best to server side and link it
+        setTable();
     }
 
 
@@ -86,12 +86,9 @@ public class SoloResultsCtrl {
      * and scores in descending order
      */
     public void setTable() {
-        tableUsers.setCellValueFactory(new PropertyValueFactory<>("username"));
-        tableScores.setCellValueFactory(new PropertyValueFactory<>("points"));
-        ArrayList<User> test  = server.getAllUsersByScore(server.getURL());
-        for(User u: test){
-            users.add(u);
-        }
+        tableUsers.setCellValueFactory(new PropertyValueFactory<User, String>("username"));
+        tableScore.setCellValueFactory(new PropertyValueFactory<User, Long>("points"));
+        this.users = FXCollections.observableList(server.getAllUsersByScore(server.getURL()));
 
         scoreTable.setItems(users);
 

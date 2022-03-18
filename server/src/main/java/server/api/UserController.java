@@ -1,6 +1,5 @@
 package server.api;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -158,9 +157,8 @@ public class UserController {
      * of the username and the corresponding score for it
      * @return arraylist of users with their corresponding score
      */
-    @GetMapping(path={"/solo","/leaderboard"})
-    public ArrayList<User> getAllScores(){
-        ArrayList<User> users = new ArrayList<>(soloRepo.findAll());
-        return soloRepo.sortUserByDescendingOrder(users);
+    @GetMapping(path={"/solo/leaderboard"})
+    public List<SoloUser> getAllScores(){
+        return soloRepo.sortUserByDescendingOrder();
     }
 }

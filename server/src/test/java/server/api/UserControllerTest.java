@@ -22,6 +22,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
 
@@ -162,10 +163,20 @@ public class UserControllerTest {
         assertTrue(soloRepo.calledMethods.contains("getById"));
     }
 
-   /* @Test
+    @Test
     public void getAllScoresReturnslist(){
-        sut.addSoloUser(getSoloUser("q1"));
-    }*/
+        var user1 = getSoloUser("q1");
+        user1.points = 0L;
+        var user2 = getSoloUser("q2");
+        user2.points = 2L;
+        sut.addSoloUser(user1);
+        sut.addSoloUser(user2);
+        ArrayList<SoloUser> users = new ArrayList<>();
+        users.add(user2);
+        users.add(user1);
+        assertEquals(users, sut.getAllScores());
+
+    }
 
     private static MultiplayerUser getMultiplayerUser(String q) {
         return new MultiplayerUser(q);

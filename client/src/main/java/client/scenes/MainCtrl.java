@@ -448,6 +448,7 @@ public class MainCtrl {
      */
     public void showSoloResults() {
         //TODO
+        soloResultsCtrl.setup();
         primaryStage.setScene(soloResults);
         primaryStage.setTitle("Solo results");
     }

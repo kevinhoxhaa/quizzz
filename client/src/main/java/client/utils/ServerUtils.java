@@ -21,7 +21,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -149,11 +148,11 @@ public class ServerUtils {
      * @param serverUrl
      * @return Arraylist of solo users
      */
-    public ArrayList<User> getAllUsersByScore(String serverUrl){
+    public List<SoloUser> getAllUsersByScore(String serverUrl){
         return ClientBuilder.newClient(new ClientConfig())
-                .target(serverUrl).path("api/solo/leaderboard")
+                .target(serverUrl).path("api/users/solo/leaderboard")
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .get(new GenericType<ArrayList<User>>() {});
+                .get(new GenericType<List<SoloUser>>() {});
     }
 }
