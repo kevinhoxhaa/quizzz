@@ -89,18 +89,16 @@ public class RankingCtrl implements SceneController,QuestionNumController {
      * the list view and the users on the podium
      * @param serverUrl the url of the server to fetch the users from
      */
-    public void fetchUsers(String serverUrl) {
+  /*  public void fetchUsers(String serverUrl) {
         scoreTable = new TableView();
         try {
-            List<User> users = server.getUsers(serverUrl);
+            //List<User> users = server.getAllUsersByScore(serverUrl);
             TableColumn usersColumn = new TableColumn ( "Players" );
             TableColumn scoreColumn = new TableColumn ( "Score" );
             scoreTable.getColumns().addAll( usersColumn, scoreColumn );
             for(User user : users) {
                 scoreTable.getItems().add( user.username, user.points );
             }
-
-            scoreTable.getSortOrder().add ( scoreColumn );
             ranking1stPlayer.setText( scoreTable.getItems().get(0) ) ;
             ranking2ndPlayer.setText( scoreTable.getItems().get(1) ) ;
             ranking3rdPlayer.setText( scoreTable.getItems().get(2) ) ;
@@ -112,7 +110,7 @@ public class RankingCtrl implements SceneController,QuestionNumController {
             alert.showAndWait();
             return;
         }
-    }
+    } */
 
 //    /**
 //     * Sets up a timeline with keyFrames that have an interval of one second. This allows us to create a
