@@ -1,6 +1,7 @@
 package server.api;
 
 import commons.entities.Activity;
+import commons.entities.MultiplayerUser;
 import commons.entities.User;
 import commons.models.ChoiceQuestion;
 import commons.models.ComparisonQuestion;
@@ -60,10 +61,7 @@ public class GameController {
     }
 
     private Activity getRandomActivity() {
-        List<Activity> activitiesList = activityRepo.findAll();
-        int idx = random.nextInt(activitiesList.size());
-        // TODO: fix accessing random activities
-        return activitiesList.get(idx);
+        return activityRepo.getRandomList(1).get(0);
     }
 
     /**
@@ -164,7 +162,7 @@ public class GameController {
             return ResponseEntity.badRequest().build();
         }
 
-        List<User> users = waitingUserRepo.findAll();
+        List<MultiplayerUser> users = waitingUserRepo.findAll();
         gameUserRepo.saveAll(users);
         users.forEach(u -> game.getUserIds().add(u.id));
         waitingUserRepo.deleteAll();
@@ -231,7 +229,7 @@ public class GameController {
      * correctly
      */
     @PostMapping(path =  "/{gameIndex}/user/{userId}/question/{questionIndex}")
-    public ResponseEntity<List<User>>
+    public ResponseEntity<List<MultiplayerUser>>
     postAnswer(@PathVariable(name = "gameIndex") int gameIndex,
                @PathVariable(name = "userId") long userId,
                @PathVariable(name = "questionIndex") int questionIndex,
@@ -250,7 +248,7 @@ public class GameController {
             return ResponseEntity.badRequest().build();
         }
 
-        User user = gameUserRepo.findById(userId).get();
+        MultiplayerUser user = gameUserRepo.findById(userId).get();
         user.points += answeredQuestion.getPoints();
         user.totalAnswers += 1;
         user.correctAnswers += answeredQuestion.getPoints() == 0 ? 0 : 1;
@@ -264,9 +262,9 @@ public class GameController {
             ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        List<User> rightUsers = new ArrayList<>();
+        List<MultiplayerUser> rightUsers = new ArrayList<>();
         for(long id : game.getUserIds()) {
-            User u = gameUserRepo.findById(id).get();
+            MultiplayerUser u = gameUserRepo.findById(id).get();
             if(u.lastAnswerCorrect) {
                 rightUsers.add(u);
             }

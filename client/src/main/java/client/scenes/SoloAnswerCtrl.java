@@ -18,10 +18,13 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
+import java.util.List;
 
-public class SoloAnswerCtrl implements SceneController {
+
+public class SoloAnswerCtrl implements SceneController, QuestionNumController {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -37,6 +40,8 @@ public class SoloAnswerCtrl implements SceneController {
     private Text answerResponse;
     @FXML
     private Text questionNum;
+    @FXML
+    private Text currentScore;
 
     @FXML
     private ProgressIndicator countdownCircle;
@@ -66,19 +71,25 @@ public class SoloAnswerCtrl implements SceneController {
      *  based on if the player answered correctly or not. <br>
      *  - Fills in the question and correct answer in their corresponding text boxes. <br>
      * @param soloGame The solo game instance
+     * @param colors The list of colors associated with the past questions
      */
-    protected void setup(SoloGame soloGame) {
+    protected void setup(SoloGame soloGame, List<Color> colors) {
         this.game = soloGame;
         Question prevQuestion = soloGame.getCurrentQuestion();
         if (prevQuestion.hasCorrectUserAnswer()) {
+            mainCtrl.addScore(prevQuestion.getPoints());
+            currentScore.setFill(Color.GREEN);
             this.answerResponse.setText("Well done!");
             answerPane.setBackground(new Background(
                     new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
         } else {
             this.answerResponse.setText("By making mistakes, we learn!");
+            currentScore.setFill(Color.DARKRED);
             answerPane.setBackground(new Background(
                     new BackgroundFill(Color.LIGHTCORAL, CornerRadii.EMPTY, Insets.EMPTY)));
         }
+
+        currentScore.setText( String.format( "Score: %d", mainCtrl.getSoloScore()) );
 
         switch(prevQuestion.getType()) {
             case CONSUMPTION:
@@ -94,6 +105,9 @@ public class SoloAnswerCtrl implements SceneController {
                 setupEstimationAnswer(prevQuestion);
                 break;
         }
+
+        updateQuestionNumber();
+        updateCircleColor(colors);
     }
 
     /**
@@ -181,7 +195,63 @@ public class SoloAnswerCtrl implements SceneController {
             mainCtrl.showSoloQuestion(game);
         }
         else{
-            mainCtrl.showSoloResults();
+            mainCtrl.showSoloResults(game);
         }
+    }
+
+    /**
+     * Getter for the current question number
+     * @return questionNum
+     */
+    public Text getQuestionNum(){
+        return questionNum;
+    }
+    /**
+     * Getter for the circles bar
+     * @return circles
+     */
+    public HBox getCirclesHBox(){
+        return circles;
+    }
+
+    /**
+     * Updates the colors of the little circles based on the array given
+     * @param colors Is the list of colors of previous answers(green/red depending on their correctness)
+     */
+    @Override
+    public void updateCircleColor(List<Color> colors) {
+        for (int i = 0; i < colors.size(); i++) {
+            Circle c = (Circle) getCirclesHBox().getChildren().get(i);
+            c.setFill(colors.get(i));
+        }
+    }
+
+    /**
+     * Resets the colors of the little circles to gray.
+     */
+    @Override
+    public void resetCircleColor() {
+        for(int i=0; i<mainCtrl.getQuestionsPerGame();i++){
+            Circle circle = (Circle) getCirclesHBox().getChildren().get(i);
+            circle.setFill(Color.LIGHTGRAY);
+        }
+    }
+
+    /**
+     * Updates the question number on the top of the screen.
+     */
+    @Override
+    public void updateQuestionNumber(){
+        getQuestionNum().setText("" + (game.getCurrentQuestionNum() + 1));
+    }
+
+    /**
+     * Handles the user clicking the quit button.
+     */
+    @Override
+    @FXML
+    public void onQuit(){
+        mainCtrl.killThread();
+        mainCtrl.showHome();
     }
 }

@@ -49,6 +49,9 @@ public class MultiplayerAnswerCtrl implements SceneController,QuestionNumControl
 
     @FXML
     private ListView<String> correctPlayers;
+
+    @FXML
+    private Text currentScore;
     
     @FXML
     private ImageView thumbsup;
@@ -192,6 +195,13 @@ public class MultiplayerAnswerCtrl implements SceneController,QuestionNumControl
     public void redirect() {
         mainCtrl.afterAnswerScreen();
     }
+
+    @Override
+    public void onQuit() {
+        mainCtrl.bindUser(null);
+        mainCtrl.killThread();
+        mainCtrl.showHome();
+    }
     //TODO After a certain amount of time in the answer screen, the afterAnswerScreen() method should be called.
 
     /**
@@ -212,10 +222,19 @@ public class MultiplayerAnswerCtrl implements SceneController,QuestionNumControl
     @Override
     public void updateCircleColor(List<Color> colors) {
         for (int i = 0; i < mainCtrl.getAnswerCount(); i++) {
-            Circle c = (Circle) getCircles().getChildren().get(i);
-            c.setFill(colors.get(i));
+            Circle circle = (Circle) getCircles().getChildren().get(i);
+            circle.setFill(colors.get(i));
         }
     }
+
+    @Override
+    public void resetCircleColor() {
+        for(int i=0; i<mainCtrl.getQuestionsPerGame();i++){
+            Circle circle = (Circle) getCircles().getChildren().get(i);
+            circle.setFill(Color.LIGHTGRAY);
+        }
+    }
+
     @Override
     public void updateQuestionNumber(){
         getQuestionNum().setText("" + (mainCtrl.getAnswerCount() + 1));

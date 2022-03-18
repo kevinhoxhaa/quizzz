@@ -9,8 +9,11 @@ import org.springframework.data.repository.query.FluentQuery;
 import server.database.ActivityRepository;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+import java.util.Set;
 import java.util.function.Function;
 
 public class TestActivityRepository implements ActivityRepository {
@@ -177,5 +180,27 @@ public class TestActivityRepository implements ActivityRepository {
     public <S extends Activity, R> R findBy(Example<S> example,
                                             Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
+    }
+
+    @Override
+    public List<Activity> getRandomList(int size) {
+        Set<Activity> used = new HashSet<>();
+        List<Activity> result = new ArrayList<>();
+
+        if(size > activities.size()) {
+            return result;
+        }
+
+        for(int i = 0; i < size; i++) {
+            Random rand = new Random();
+            int index = rand.nextInt(activities.size());
+            while(used.contains(activities.get(index))) {
+                index = rand.nextInt(activities.size());
+            }
+            result.add(activities.get(index));
+            used.add(activities.get(index));
+        }
+
+        return result;
     }
 }

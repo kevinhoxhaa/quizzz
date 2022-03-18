@@ -14,6 +14,11 @@ public interface QuestionNumController {
     public void updateCircleColor(List<Color> colors);
 
     /**
+     * Resets the circles colors every time the game starts
+     */
+    public void resetCircleColor();
+
+    /**
      * Updates the number of the current question (e.g 11/20)
      */
     public void updateQuestionNumber();
