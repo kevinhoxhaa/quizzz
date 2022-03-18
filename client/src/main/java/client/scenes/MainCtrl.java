@@ -153,6 +153,12 @@ public class MainCtrl {
 
         showHome();
         primaryStage.show();
+        primaryStage.setOnCloseRequest(event -> {
+
+            quitGame(true);
+
+            event.consume();
+        });
     }
 
     /**
@@ -350,32 +356,6 @@ public class MainCtrl {
     }
 
     /**
-     * Deletes user from database when the close button is clicked
-     */
-    public void onClose() {
-        primaryStage.setOnHiding(new EventHandler<WindowEvent>() {
-
-            @Override
-            public void handle(WindowEvent event) {
-                Platform.runLater(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        try {
-                            homeCtrl.getServer().removeMultiplayerUser(homeCtrl.getServer().getURL(), user);
-                            user = null;
-                        } catch(WebApplicationException e) {
-                            System.out.println("User to remove not found!");
-                        } finally {
-                            System.exit(0);
-                        }
-                    }
-                });
-            }
-        });
-    }
-
-    /**
      * A method that redirects the User to:
      * - The next question if the number of previous answers is less than 20 and not equal to 10
      * - The Ranking Page if the User is halfway through the game (10 answers so far)
@@ -534,7 +514,13 @@ public class MainCtrl {
 //        System.out.println("game over lol");
     }
 
-    public void quitGame(){
+    /**
+     * Shows a pop up on screen to confirm quitting the game
+     * @param check is used to decide whether the application should be closed or not
+     *                  If check is true: the application is closed
+     *                  If check is false: the user is redirected to home page
+     */
+    public void quitGame(boolean check){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Quit solo game");
         alert.setContentText("Are you sure you want to quit?");
@@ -543,6 +529,16 @@ public class MainCtrl {
         alert.getButtonTypes().setAll(okButton, noButton);
         alert.showAndWait().ifPresent(type -> {
             if (type == okButton) {
+                if(check){
+                    try {
+                        System.out.println(homeCtrl.getServer().removeMultiplayerUser(homeCtrl.getServer().getURL(), user));
+                        user = null;
+                    } catch(WebApplicationException e) {
+                        System.out.println("User to remove not found!");
+                    } finally {
+                        System.exit(0);
+                    }
+                }
                 killThread();
                 showHome();
             }
