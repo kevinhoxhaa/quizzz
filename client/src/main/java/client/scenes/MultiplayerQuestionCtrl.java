@@ -396,8 +396,7 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
     @Override
     public void onQuit() {
         mainCtrl.bindUser(null);
-        mainCtrl.killThread();
-        mainCtrl.showHome();
+        mainCtrl.quitGame();
     }
 
     /**

@@ -107,8 +107,7 @@ public class RankingCtrl implements SceneController,QuestionNumController {
     @Override
     public void onQuit() {
         mainCtrl.bindUser(null);
-        mainCtrl.killThread();
-        mainCtrl.showHome();
+        mainCtrl.quitGame();
     }
 
     @Override

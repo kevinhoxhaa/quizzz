@@ -26,6 +26,9 @@ import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -529,5 +532,20 @@ public class MainCtrl {
         soloResultsCtrl.setup(game,colors);
         primaryStage.setScene(soloResults);
 //        System.out.println("game over lol");
+    }
+
+    public void quitGame(){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Quit solo game");
+        alert.setContentText("Are you sure you want to quit?");
+        ButtonType okButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
+        ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
+        alert.getButtonTypes().setAll(okButton, noButton);
+        alert.showAndWait().ifPresent(type -> {
+            if (type == okButton) {
+                killThread();
+                showHome();
+            }
+        });
     }
 }

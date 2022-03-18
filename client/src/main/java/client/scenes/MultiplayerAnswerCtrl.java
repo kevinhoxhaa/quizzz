@@ -199,8 +199,7 @@ public class MultiplayerAnswerCtrl implements SceneController,QuestionNumControl
     @Override
     public void onQuit() {
         mainCtrl.bindUser(null);
-        mainCtrl.killThread();
-        mainCtrl.showHome();
+        mainCtrl.quitGame();
     }
     //TODO After a certain amount of time in the answer screen, the afterAnswerScreen() method should be called.
 
