@@ -23,7 +23,6 @@ import commons.models.Question;
 import commons.models.SoloGame;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -33,7 +32,6 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
@@ -531,7 +529,7 @@ public class MainCtrl {
             if (type == okButton) {
                 if(check){
                     try {
-                        System.out.println(homeCtrl.getServer().removeMultiplayerUser(homeCtrl.getServer().getURL(), user));
+                        homeCtrl.getServer().removeMultiplayerUser(homeCtrl.getServer().getURL(), user);
                         user = null;
                     } catch(WebApplicationException e) {
                         System.out.println("User to remove not found!");
