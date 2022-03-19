@@ -161,7 +161,7 @@
                                  </image></ImageView>
                               <TextFlow maxHeight="92.0" maxWidth="192.0" minHeight="64.0" minWidth="192.0" prefHeight="64.0" prefWidth="192.0" textAlignment="CENTER">
                                  <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Question text here?">
+                                    <Text fx:id="questionDescription" strokeType="OUTSIDE" strokeWidth="0.0" text="Question text here?">
                                        <font>
                                           <Font size="18.0" />
                                        </font>

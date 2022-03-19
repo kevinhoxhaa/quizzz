@@ -2,9 +2,11 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.models.EstimationQuestion;
 import commons.models.Question;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.text.Text;
 
 public class EstimationQuestionCtrl implements SceneController {
 
@@ -15,6 +17,9 @@ public class EstimationQuestionCtrl implements SceneController {
 
     @FXML
     private ProgressIndicator countdownCircle;
+
+    @FXML
+    private Text questionDescription;
 
     /**
      * Creates a controller for the estimation question screen,
@@ -35,6 +40,10 @@ public class EstimationQuestionCtrl implements SceneController {
         mainCtrl.startTimer(countdownCircle, this);
         //TODO figure out if the estimation question has been called by a solo game
         // OR create a new, solo estimation question scene
+    }
+
+    public void loadQuestion(EstimationQuestion question) {
+        questionDescription.setText("How much energy in Wh does " + question.getActivity().title + " use?");
     }
 
     @Override

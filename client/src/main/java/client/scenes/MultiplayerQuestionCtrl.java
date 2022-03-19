@@ -22,6 +22,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static commons.utils.CompareType.EQUAL;
@@ -123,9 +124,6 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
             case CHOICE:
                 setupChoiceQuestion(question);
                 break;
-            case ESTIMATION:
-                setupEstimationQuestion(question);
-                break;
         }
 
         this.answerButtons = new ArrayList<>();
@@ -196,25 +194,21 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
                         question.getComparedActivity().title)
         );
 
-        List<Activity> answers = question.getActivities();
+        List<Activity> answers = new ArrayList<>();
+        for(Activity activity : question.getActivities()) {
+            if(!activity.equals(question.getComparedActivity())) {
+                answers.add(activity);
+            }
+        }
+        Collections.shuffle(answers);
 
-        //TODO figure out how the answers work exactly (shuffling)
-        answerTopText.setText(answers.get(0).toString());
-        answerMidText.setText(answers.get(1).toString());
-        answerBotText.setText(answers.get(2).toString());
+        answerTopText.setText(answers.get(0).title);
+        answerMidText.setText(answers.get(1).title);
+        answerBotText.setText(answers.get(2).title);
 
         answerTopAnswer = new Answer(answers.get(0));
         answerMidAnswer = new Answer(answers.get(1));
         answerBotAnswer = new Answer(answers.get(2));
-    }
-
-    /**
-     * Sets up the questions and answers on the page for the given estimation question
-     * Needs to be thought through, will probably be in a different class
-     * @param generalQuestion the given question
-     */
-    private void setupEstimationQuestion(Question generalQuestion) {
-        //TODO Deal with estimation questions (they need a whole different scene most probably)
     }
 
 

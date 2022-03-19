@@ -19,8 +19,10 @@ import client.utils.ServerUtils;
 import commons.entities.Activity;
 import commons.entities.User;
 import commons.models.ConsumptionQuestion;
+import commons.models.EstimationQuestion;
 import commons.models.Question;
 import commons.models.SoloGame;
+import commons.utils.QuestionType;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -305,7 +307,15 @@ public class MainCtrl {
      * @param question the question to visualise
      */
     public void showQuestion(Question question) {
+        if (question.getType() == QuestionType.ESTIMATION) {
+            showEstimationQuestion((EstimationQuestion) question);
+            return;
+        }
 
+        showMultipleChoiceQuestion(question);
+    }
+
+    public void showMultipleChoiceQuestion(Question question) {
         multiplayerQuestionCtrl.updateCircleColor(colors);
         multiplayerQuestionCtrl.resetHighlight();
         multiplayerQuestionCtrl.highlightCurrentCircle();
@@ -333,10 +343,11 @@ public class MainCtrl {
     /**
      * Sets the scene in the primary stage to the estimation screen
      */
-    public void showEstimation() {
+    public void showEstimationQuestion(EstimationQuestion question) {
         primaryStage.setTitle("Estimation");
         primaryStage.setScene(estimation);
         estimationQuestionCtrl.startTimer();
+        estimationQuestionCtrl.loadQuestion(question);
     }
 
     /**
