@@ -124,6 +124,15 @@ public class ServerUtils {
                 .get(Question.class);
     }
 
+    public String getQuestionType(String serverUrl, int gameIndex, int questionIndex) {
+        String path = String.format("/api/games/%d/questionType/%d", gameIndex, questionIndex);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path(path)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(String.class);
+    }
+
     public ConsumptionQuestion getConsumptionQuestion(String serverUrl, int gameIndex, int questionIndex) {
         String path = String.format("/api/games/%d/consumption/%d", gameIndex, questionIndex);
         return ClientBuilder.newClient(new ClientConfig())
