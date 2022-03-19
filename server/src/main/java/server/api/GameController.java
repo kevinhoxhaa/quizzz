@@ -192,6 +192,25 @@ public class GameController {
         return ResponseEntity.ok(game);
     }
 
+    @GetMapping(path = "/find/{userId}")
+    public ResponseEntity<Integer> findGameIndex(@PathVariable("userId") long userId) {
+        if(userId < 0 || !gameUserRepo.existsById(userId)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        List<Game> games = gameList.getGames();
+        int index = -1;
+
+        for(int i = 0; i < games.size(); i++) {
+            if(games.get(i).getUserIds().contains(userId)) {
+                index = i;
+                break;
+            }
+        }
+
+        return ResponseEntity.ok(index);
+    }
+
     /**
      * Retrieves the requested question from the game state object
      * and sends it to the user
