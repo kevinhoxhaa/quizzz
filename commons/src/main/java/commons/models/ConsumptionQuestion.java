@@ -4,7 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import commons.entities.Activity;
 import commons.utils.QuestionType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ConsumptionQuestion extends Question {
@@ -18,6 +22,7 @@ public class ConsumptionQuestion extends Question {
     @SuppressWarnings("unused")
     private ConsumptionQuestion() {
         super(QuestionType.CONSUMPTION);
+        this.random = new Random();
         // for object mapper
     }
 
