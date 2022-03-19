@@ -1,5 +1,6 @@
 package commons.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import commons.entities.Activity;
 import commons.utils.QuestionType;
@@ -13,6 +14,7 @@ public class ChoiceQuestion extends Question {
     private static final long TIME_FACTOR = 800;
 
     private Activity comparedActivity;
+    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     private List<Activity> activities;
     private Activity answer;
 
@@ -40,7 +42,7 @@ public class ChoiceQuestion extends Question {
      * @param activities the activities this question
      *                   is based on
      */
-    private void setAnswer(List<Activity> activities) {
+    private void loadAnswer(List<Activity> activities) {
         long minConsumption = Integer.MAX_VALUE;
         for(Activity a : activities) {
             if(a.consumption < minConsumption) {
@@ -48,6 +50,10 @@ public class ChoiceQuestion extends Question {
                 minConsumption = a.consumption;
             }
         }
+    }
+
+    public void setAnswer(Activity answer) {
+        this.answer = answer;
     }
 
     /**
@@ -65,7 +71,7 @@ public class ChoiceQuestion extends Question {
      *                   activity is chosen as the second
      *                   maximal
      */
-    private void setComparedActivity(List<Activity> activities) {
+    private void loadComparedActivity(List<Activity> activities) {
         long minConsumption = Integer.MAX_VALUE;
         for(Activity a : activities) {
             if(a.consumption < minConsumption && a != answer) {
@@ -74,6 +80,10 @@ public class ChoiceQuestion extends Question {
                 minConsumption = a.consumption;
             }
         }
+    }
+
+    public void setComparedActivity(Activity activity) {
+        this.comparedActivity = activity;
     }
 
     /**
@@ -100,8 +110,8 @@ public class ChoiceQuestion extends Question {
      */
     public void setActivities(List<Activity> activities) {
         this.activities = activities;
-        setAnswer(activities);
-        setComparedActivity(activities);
+        loadAnswer(activities);
+        loadComparedActivity(activities);
     }
 
     /**

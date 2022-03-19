@@ -40,7 +40,7 @@ public class ConsumptionQuestion extends Question {
         this.userAnswer = new Answer(Long.valueOf(-1));
         this.random = random;
         this.imagePath = activity.imagePath;
-        setAnswers(activity.consumption);
+        loadAnswers(activity.consumption);
     }
 
     /**
@@ -58,7 +58,7 @@ public class ConsumptionQuestion extends Question {
      */
     public void setActivity(Activity activity) {
         this.activity = activity;
-        setAnswers(activity.consumption);
+        loadAnswers(activity.consumption);
     }
 
     /**
@@ -70,7 +70,7 @@ public class ConsumptionQuestion extends Question {
      * @param correctAnswer the correct answer
      */
     // CHECKSTYLE:OFF
-    public void setAnswers(long correctAnswer) {
+    private void loadAnswers(long correctAnswer) {
         answers = new ArrayList<>();
 
         long firstAlternative;
@@ -92,6 +92,10 @@ public class ConsumptionQuestion extends Question {
         Collections.shuffle(answers);
     }
     // CHECKSTYLE:ON
+
+    public void setAnswers(List<Long> answers) {
+        this.answers = answers;
+    }
 
     /**
      * Returns the generated answers to the question
