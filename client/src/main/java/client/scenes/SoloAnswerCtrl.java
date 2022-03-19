@@ -159,7 +159,7 @@ public class SoloAnswerCtrl implements SceneController, QuestionNumController {
                         prevChoiceQuestion.getComparedActivity().title)
         );
 
-        this.answer.setText(prevChoiceQuestion.getAnswer().toString());
+        this.answer.setText(prevChoiceQuestion.getAnswer().title);
     }
 
     /**

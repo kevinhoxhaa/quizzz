@@ -23,6 +23,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static commons.utils.CompareType.EQUAL;
@@ -200,10 +201,11 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
 
         List<Activity> answers = question.getActivities();
 
-        //TODO figure out how the answers work exactly (shuffling)
-        answerTopText.setText(answers.get(0).toString());
-        answerMidText.setText(answers.get(1).toString());
-        answerBotText.setText(answers.get(2).toString());
+        Collections.shuffle(answers);
+
+        answerTopText.setText(answers.get(0).title);
+        answerMidText.setText(answers.get(1).title);
+        answerBotText.setText(answers.get(2).title);
 
         answerTopAnswer = new Answer(answers.get(0));
         answerMidAnswer = new Answer(answers.get(1));
