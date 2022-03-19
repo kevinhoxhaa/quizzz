@@ -24,7 +24,7 @@ import javafx.scene.text.Text;
 
 import java.util.List;
 
-public class MultiplayerAnswerCtrl implements SceneController,QuestionNumController {
+public class MultiplayerAnswerCtrl implements SceneController, QuestionNumController {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -51,7 +51,7 @@ public class MultiplayerAnswerCtrl implements SceneController,QuestionNumControl
 
     @FXML
     private Text currentScore;
-    
+
     @FXML
     private ImageView thumbsup;
     @FXML
@@ -68,6 +68,7 @@ public class MultiplayerAnswerCtrl implements SceneController,QuestionNumControl
 
     /**
      * Creates a controller for the multiplayer answer screen, with the given server and main controller.
+     *
      * @param server
      * @param mainCtrl
      */
@@ -79,11 +80,12 @@ public class MultiplayerAnswerCtrl implements SceneController,QuestionNumControl
 
     /**
      * Sets up the answer page screen: <br>
-     *  - Sets up a fitting message (with corresponding color) for the player
-     *  based on if the player answered correctly or not. <br>
-     *  - Fills in the question and correct answer in their corresponding text boxes. <br>
-     *  - Fills the correctPlayers ListView with players that answered correctly.
-     * @param prevQuestion The question that has just been asked to the players.
+     * - Sets up a fitting message (with corresponding color) for the player
+     * based on if the player answered correctly or not. <br>
+     * - Fills in the question and correct answer in their corresponding text boxes. <br>
+     * - Fills the correctPlayers ListView with players that answered correctly.
+     *
+     * @param prevQuestion   The question that has just been asked to the players.
      * @param correctPlayers A list of all the players that answered the precious question correctly.
      */
     protected void setup(Question prevQuestion, List<MultiplayerUser> correctPlayers) {
@@ -97,7 +99,7 @@ public class MultiplayerAnswerCtrl implements SceneController,QuestionNumControl
                     new BackgroundFill(Color.LIGHTCORAL, CornerRadii.EMPTY, Insets.EMPTY)));
         }
 
-        switch(prevQuestion.getType()) {
+        switch (prevQuestion.getType()) {
             case CONSUMPTION:
                 setupConsumptionAnswer(prevQuestion);
                 break;
@@ -118,6 +120,7 @@ public class MultiplayerAnswerCtrl implements SceneController,QuestionNumControl
 
     /**
      * Sets up the previous question and correct answer for an answer page of a consumption question.
+     *
      * @param prevQuestion The question that has just been asked to the players.
      */
     public void setupConsumptionAnswer(Question prevQuestion) {
@@ -133,6 +136,7 @@ public class MultiplayerAnswerCtrl implements SceneController,QuestionNumControl
 
     /**
      * Sets up the previous question and correct answer for an answer page of a comparison question.
+     *
      * @param prevQuestion The question that has just been asked to the players.
      */
     public void setupComparisonAnswer(Question prevQuestion) {
@@ -155,6 +159,7 @@ public class MultiplayerAnswerCtrl implements SceneController,QuestionNumControl
 
     /**
      * Sets up the previous question and correct answer for an answer page of a choice question.
+     *
      * @param prevQuestion The question that has just been asked to the players.
      */
     public void setupChoiceAnswer(Question prevQuestion) {
@@ -170,6 +175,7 @@ public class MultiplayerAnswerCtrl implements SceneController,QuestionNumControl
 
     /**
      * Sets up the previous question and correct answer for an answer page of an estimation question.
+     *
      * @param prevQuestion The question that has just been asked to the players.
      */
     public void setupEstimationAnswer(Question prevQuestion) {
@@ -205,16 +211,19 @@ public class MultiplayerAnswerCtrl implements SceneController,QuestionNumControl
 
     /**
      * Getter for the current question number
+     *
      * @return questionNum
      */
-    public Text getQuestionNum(){
+    public Text getQuestionNum() {
         return questionNum;
     }
+
     /**
      * Getter for the circles bar
+     *
      * @return circles
      */
-    public HBox getCircles(){
+    public HBox getCircles() {
         return circles;
     }
 
@@ -228,14 +237,14 @@ public class MultiplayerAnswerCtrl implements SceneController,QuestionNumControl
 
     @Override
     public void resetCircleColor() {
-        for(int i=0; i<mainCtrl.getQuestionsPerGame();i++){
+        for (int i = 0; i < mainCtrl.getQuestionsPerGame(); i++) {
             Circle circle = (Circle) getCircles().getChildren().get(i);
             circle.setFill(Color.LIGHTGRAY);
         }
     }
 
     @Override
-    public void updateQuestionNumber(){
+    public void updateQuestionNumber() {
         getQuestionNum().setText("" + (mainCtrl.getAnswerCount() + 1));
     }
 }

@@ -40,8 +40,9 @@ public class WaitingCtrl {
 
     /**
      * Creates a new waiting controller instance
-     * @param server the server util object containing
-     *               necessary REST API functionality
+     *
+     * @param server   the server util object containing
+     *                 necessary REST API functionality
      * @param mainCtrl the main controller used for changing
      *                 scenes in the application
      */
@@ -81,7 +82,7 @@ public class WaitingCtrl {
         try {
             List<MultiplayerUser> users = server.getUsers(serverUrl);
 
-            if(!users.contains(mainCtrl.getUser())) {
+            if (!users.contains(mainCtrl.getUser())) {
                 Integer gameIndex = server.findGameIndex(serverUrl, userId);
                 mainCtrl.setGameIndex(gameIndex);
                 Question firstQuestion = server.getQuestion(serverUrl, gameIndex, 0);
@@ -89,7 +90,7 @@ public class WaitingCtrl {
                 mainCtrl.showQuestion(firstQuestion);
             }
 
-            for(MultiplayerUser user : users) {
+            for (MultiplayerUser user : users) {
                 usersList.getItems().add(user.username);
             }
             counterLabel.setText(String.format("%d player(s) in this room:", users.size()));
@@ -104,8 +105,8 @@ public class WaitingCtrl {
      */
     @FXML
     protected void onBackButtonClick() {
-        User user= mainCtrl.getUser();
-        server.removeMultiplayerUser(server.getURL(),user);
+        User user = mainCtrl.getUser();
+        server.removeMultiplayerUser(server.getURL(), user);
         mainCtrl.bindUser(null);
         mainCtrl.showHome();
         mainCtrl.stopWaitingTimer();

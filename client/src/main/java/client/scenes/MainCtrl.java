@@ -44,66 +44,52 @@ import java.util.Random;
 
 public class MainCtrl {
 
+    public static final double MIN_WIDTH = 768.0;
+    public static final double MIN_HEIGHT = 512.0;
     private static final double TIMEOUT = 8.0;
     private static final double START_TIME = 7.95;
     private static final double INTERVAL = 0.05;
     private static final int MILLIS = 50;
-
-    public static final double MIN_WIDTH = 768.0;
-    public static final double MIN_HEIGHT = 512.0;
     private static final int POLLING_DELAY = 0;
     private static final int POLLING_INTERVAL = 500;
     private static final long ANSWER_TO_THE_ULTIMATE_QUESTION = 42;
     private static final int STANDARD_PAGE_TIME = 15;
     private static final int QUESTIONS_PER_GAME = 20;
-
+    private static final int TOTAL_ANSWERS = 20;
+    private static final int HALFWAY_ANSWERS = 10;
     private String serverUrl;
     private Timer waitingTimer;
-
     private Stage primaryStage;
-
     private ServerUtils server;
-
     private QuoteOverviewCtrl overviewCtrl;
     private Scene overview;
-
     private AddQuoteCtrl addCtrl;
     private Scene add;
-
     private MultiplayerAnswerCtrl multiplayerAnswerCtrl;
     private Scene multiplayerAnswer;
-
     private HomeCtrl homeCtrl;
     private Scene home;
-
     private MultiplayerQuestionCtrl multiplayerQuestionCtrl;
     private Scene multiplayerQuestion;
-
     private WaitingCtrl waitingCtrl;
     private Scene waiting;
-
     private RankingCtrl rankingCtrl;
     private Scene ranking;
-
     private EstimationQuestionCtrl estimationQuestionCtrl;
     private Scene estimation;
-
     private SoloQuestionCtrl soloQuestionCtrl;
     private Scene soloQuestion;
-
     private SoloAnswerCtrl soloAnswerCtrl;
     private Scene soloAnswer;
-
     private SoloResultsCtrl soloResultsCtrl;
     private Scene soloResults;
-
     private User user;
     private int gameIndex;
     private List<Color> colors;
     private Thread timerThread;
-
     private int answerCount = 0;
     private long soloScore = 0;
+    private int currentQuestion = 0;
 
     public int getCurrentQuestion() {
         return currentQuestion;
@@ -113,15 +99,11 @@ public class MainCtrl {
         this.currentQuestion = currentQuestion;
     }
 
-    private int currentQuestion = 0;
-    private static final int TOTAL_ANSWERS = 20;
-    private static final int HALFWAY_ANSWERS = 10;
-
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home,
-            Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> multiplayerQuestion,
-            Pair<MultiplayerAnswerCtrl, Parent> multiplayerAnswer, Pair<RankingCtrl, Parent> ranking,
-            Pair<EstimationQuestionCtrl, Parent> estimation, Pair<SoloQuestionCtrl, Parent> soloQuestion,
+                           Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home,
+                           Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> multiplayerQuestion,
+                           Pair<MultiplayerAnswerCtrl, Parent> multiplayerAnswer, Pair<RankingCtrl, Parent> ranking,
+                           Pair<EstimationQuestionCtrl, Parent> estimation, Pair<SoloQuestionCtrl, Parent> soloQuestion,
                            Pair<SoloAnswerCtrl, Parent> soloAnswer, Pair<SoloResultsCtrl, Parent> soloResults) {
         this.primaryStage = primaryStage;
         primaryStage.setMinHeight(MIN_HEIGHT);
@@ -160,7 +142,7 @@ public class MainCtrl {
         this.soloAnswer = new Scene(soloAnswer.getValue());
 
         this.soloResultsCtrl = soloResults.getKey();
-        this.soloResults=new Scene(soloResults.getValue());
+        this.soloResults = new Scene(soloResults.getValue());
 
         showHome();
         primaryStage.show();
@@ -186,6 +168,7 @@ public class MainCtrl {
 
     /**
      * Returns the current game index
+     *
      * @return the current game index
      */
     public int getGameIndex() {
@@ -194,6 +177,7 @@ public class MainCtrl {
 
     /**
      * Sets the index of the multiplayer game a user participates in
+     *
      * @param gameIndex the multiplayer game index
      */
     public void setGameIndex(int gameIndex) {
@@ -216,7 +200,7 @@ public class MainCtrl {
      * @param score the score to be added
      */
 
-    public void addScore ( long score ) {
+    public void addScore(long score) {
         this.soloScore += score;
     }
 
@@ -238,7 +222,7 @@ public class MainCtrl {
         primaryStage.setScene(waiting);
 
         colors = new ArrayList<>();
-        answerCount=0;
+        answerCount = 0;
         multiplayerQuestionCtrl.resetCircleColor();
         multiplayerAnswerCtrl.resetCircleColor();
         rankingCtrl.resetCircleColor();
@@ -315,6 +299,7 @@ public class MainCtrl {
     /**
      * Sets the scene in the primary stage to the one corresponding to a multiplayer question screen.
      * Sets the timer to an initial 10 seconds for the players to answer the question.
+     *
      * @param question the question to visualise
      */
     public void showQuestion(Question question) {
@@ -334,6 +319,7 @@ public class MainCtrl {
         multiplayerQuestionCtrl.resetAnswerColors();
         multiplayerQuestionCtrl.updateQuestionNumber();
 
+        multiplayerQuestionCtrl.enableAnswers();
         multiplayerQuestionCtrl.startTimer();
         multiplayerQuestionCtrl.setStartTime();
         primaryStage.setTitle("Question screen");
@@ -353,6 +339,7 @@ public class MainCtrl {
 
     /**
      * Sets the scene in the primary stage to the estimation screen
+     *
      * @param question the estimation question to visualise
      */
     public void showEstimationQuestion(EstimationQuestion question) {
@@ -400,7 +387,7 @@ public class MainCtrl {
                         try {
                             homeCtrl.getServer().removeMultiplayerUser(homeCtrl.getServer().getURL(), user);
                             user = null;
-                        } catch(WebApplicationException e) {
+                        } catch (WebApplicationException e) {
                             System.out.println("User to remove not found!");
                         } finally {
                             System.exit(0);
@@ -446,7 +433,7 @@ public class MainCtrl {
     public void startTimer(ProgressIndicator countdownCircle, SceneController sceneController) {
         countdownCircle.applyCss();
         Text text = (Text) countdownCircle.lookup(".text.percentage");
-        if(timerThread!=null && timerThread.isAlive()){
+        if (timerThread != null && timerThread.isAlive()) {
             timerThread.interrupt();
         }
         timerThread = new Thread(() -> {
@@ -470,15 +457,15 @@ public class MainCtrl {
                 }
             }
             Platform.runLater(
-                new Runnable(){
-                    @Override
-                    public void run() {
-                        sceneController.redirect();
-                        if(text != null) {
-                            text.setText("Timeout");
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            sceneController.redirect();
+                            if (text != null) {
+                                text.setText("Timeout");
+                            }
                         }
-                    }
-            });
+                    });
         });
         timerThread.start();
     }
@@ -510,6 +497,7 @@ public class MainCtrl {
 
     /**
      * Shows the relevant answer screen for the given solo game instance
+     *
      * @param game the solo game instance
      */
     public void showSoloAnswerPage(SoloGame game) {
@@ -526,13 +514,16 @@ public class MainCtrl {
 
     /**
      * Getter for the number of questions per game
+     *
      * @return QUESTIONS_PER_GAME
      */
-    public int getQuestionsPerGame(){
+    public int getQuestionsPerGame() {
         return QUESTIONS_PER_GAME;
     }
+
     /**
      * Shows the relevant question screen for the given solo game instance
+     *
      * @param game the solo game instance
      */
     public void showSoloQuestion(SoloGame game) {
@@ -543,16 +534,9 @@ public class MainCtrl {
     }
 
     /**
-     * Sets the server URL for the application
-     * @param serverUrl the new server URL
-     */
-    public void setServerUrl(String serverUrl) {
-        this.serverUrl = serverUrl;
-    }
-
-    /**
      * Returns the server URL the application makes requests
      * to
+     *
      * @return the app server URL
      */
     public String getServerUrl() {
@@ -560,12 +544,22 @@ public class MainCtrl {
     }
 
     /**
+     * Sets the server URL for the application
+     *
+     * @param serverUrl the new server URL
+     */
+    public void setServerUrl(String serverUrl) {
+        this.serverUrl = serverUrl;
+    }
+
+    /**
      * THIS STILL NEEDS TO BE IMPLEMENTED
      * Called after the last answer screen's timer is up, shows the solo results page
+     *
      * @param game
      */
     public void showSoloResults(SoloGame game) {
-        soloResultsCtrl.setup(game,colors);
+        soloResultsCtrl.setup(game, colors);
         primaryStage.setScene(soloResults);
 //        System.out.println("game over lol");
     }

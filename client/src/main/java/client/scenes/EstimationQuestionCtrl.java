@@ -45,6 +45,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     /**
      * Creates a controller for the estimation question screen,
      * with the given server and main controller
+     *
      * @param server
      * @param mainCtrl
      */
@@ -78,7 +79,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
                                 server.answerQuestion(mainCtrl.getServerUrl(), mainCtrl.getGameIndex(),
                                         mainCtrl.getUser().id, mainCtrl.getAnswerCount(), currentQuestion);
 
-                        if(correctUsers.size() == 0) {
+                        if (correctUsers.size() == 0) {
                             return;
                         }
 
@@ -99,9 +100,10 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
 
     /**
      * Getter for the circles bar
+     *
      * @return circles
      */
-    public HBox getCirclesHBox(){
+    public HBox getCirclesHBox() {
         return circles;
     }
 
@@ -117,8 +119,8 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     /**
      * Resets the highlighting of the circle borders
      */
-    public void resetHighlight(){
-        for(int i=0;i<circles.getChildren().size();i++){
+    public void resetHighlight() {
+        for (int i = 0; i < circles.getChildren().size(); i++) {
             Circle circle = (Circle) circles.getChildren().get(i);
             circle.setStrokeWidth(STANDARD_CIRCLE_BORDER_SIZE);
         }
@@ -134,14 +136,14 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
 
     @Override
     public void resetCircleColor() {
-        for(int i=0; i<mainCtrl.getQuestionsPerGame();i++){
+        for (int i = 0; i < mainCtrl.getQuestionsPerGame(); i++) {
             Circle circle = (Circle) getCirclesHBox().getChildren().get(i);
             circle.setFill(Color.LIGHTGRAY);
         }
     }
 
     @Override
-    public void updateQuestionNumber(){
+    public void updateQuestionNumber() {
         questionNum.setText("" + (mainCtrl.getAnswerCount() + 1));
     }
 }

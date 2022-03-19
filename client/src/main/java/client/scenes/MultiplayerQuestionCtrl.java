@@ -20,17 +20,14 @@ import java.util.*;
 import static commons.utils.CompareType.*;
 
 
-public class MultiplayerQuestionCtrl implements SceneController,QuestionNumController {
-    private final ServerUtils server;
-    private final MainCtrl mainCtrl;
-
+public class MultiplayerQuestionCtrl implements SceneController, QuestionNumController {
     private static final double MILLISECONDS_PER_SECONDS = 1000.0;
     private static final double CIRCLE_BORDER_SIZE = 1.7;
     private static final double STANDARD_CIRCLE_BORDER_SIZE = 1.0;
-
     private static final int POLLING_DELAY = 0;
     private static final int POLLING_INTERVAL = 500;
-
+    private final ServerUtils server;
+    private final MainCtrl mainCtrl;
     private Question currentQuestion;
 
     private double startTime;
@@ -85,6 +82,7 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
     /**
      * Creates a controller for the multiplayer question screen, with the given server and main controller.
      * Creates the list answerButtons for iterating through all of these.
+     *
      * @param server
      * @param mainCtrl
      */
@@ -97,17 +95,18 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
 
     /**
      * Sets up the question page scene: <br>
-     *  - Sets up the question/answers according to the type of the question given <br>
-     *  - Fills the answerButtons list for iterations <br>
-     *  - Resets all buttons to their default colors
+     * - Sets up the question/answers according to the type of the question given <br>
+     * - Fills the answerButtons list for iterations <br>
+     * - Resets all buttons to their default colors
+     *
      * @param question the question instance upon which the setup is based
      */
     protected void setup(Question question) {
-        selectedAnswerButton=null;
+        selectedAnswerButton = null;
         this.currentQuestion = question;
 //        questionImg.setImage(new Image(currentQuestion.getImagePath()));
 
-        switch (question.getType()){
+        switch (question.getType()) {
             case CONSUMPTION:
                 setupConsumptionQuestion(question);
                 break;
@@ -124,9 +123,9 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
         this.answerButtons.add(answerMid);
         this.answerButtons.add(answerBot);
 
-        for (StackPane answerBtnLoop: answerButtons) {
+        for (StackPane answerBtnLoop : answerButtons) {
             answerBtnLoop.setStyle("-fx-border-width: 1; -fx-border-color: black");
-            ((Text) answerBtnLoop.getChildren().get(0)).setStyle("-fx-font-weight: normal");
+            answerBtnLoop.getChildren().get(0).setStyle("-fx-font-weight: normal");
         }
 
         resetAnswerColors();
@@ -134,6 +133,7 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
 
     /**
      * Sets up the questions and answers on the page for the given comparison question
+     *
      * @param generalQuestion the given question
      */
     private void setupComparisonQuestion(Question generalQuestion) {
@@ -154,6 +154,7 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
 
     /**
      * Sets up the questions and answers on the page for the given consumption question
+     *
      * @param generalQuestion the given question
      */
     private void setupConsumptionQuestion(Question generalQuestion) {
@@ -177,6 +178,7 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
 
     /**
      * Sets up the questions and answers on the page for the given choice question
+     *
      * @param generalQuestion the given question
      */
     private void setupChoiceQuestion(Question generalQuestion) {
@@ -188,8 +190,8 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
         );
 
         List<Activity> answers = new ArrayList<>();
-        for(Activity activity : question.getActivities()) {
-            if(!activity.equals(question.getComparedActivity())) {
+        for (Activity activity : question.getActivities()) {
+            if (!activity.equals(question.getComparedActivity())) {
                 answers.add(activity);
             }
         }
@@ -208,12 +210,15 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
     /**
      * Saves the answer selected last by the user, as well as the amount of time it took.
      * Changes the scene visuals accordingly.
+     *
      * @param answerButton The answer button pressed.
-     * @param answer The answer corresponding to the answer button.
+     * @param answer       The answer corresponding to the answer button.
      */
-    private void onAnswerClicked(StackPane answerButton, Answer answer){
+    private void onAnswerClicked(StackPane answerButton, Answer answer) {
 
-        if(!answerButton.equals(selectedAnswerButton)) {
+        System.out.println(answer);
+
+        if (!answerButton.equals(selectedAnswerButton)) {
 
             currentQuestion.setUserAnswer(answer, getSeconds());
 
@@ -222,11 +227,11 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
             answerButton.setBackground(new Background(
                     new BackgroundFill(Color.DARKCYAN, CornerRadii.EMPTY, Insets.EMPTY)));
 
-            for (StackPane answerBtnLoop: answerButtons) {
+            for (StackPane answerBtnLoop : answerButtons) {
                 answerBtnLoop.setStyle("-fx-border-width: 1; -fx-border-color: black");
-                ((Text) answerBtnLoop.getChildren().get(0)).setStyle("-fx-font-weight: normal");
+                answerBtnLoop.getChildren().get(0).setStyle("-fx-font-weight: normal");
             }
-            ((Text) answerButton.getChildren().get(0)).setStyle("-fx-font-weight: bold");
+            answerButton.getChildren().get(0).setStyle("-fx-font-weight: bold");
             answerButton.setStyle("-fx-border-width: 2; -fx-border-color: black");
         }
 
@@ -235,20 +240,21 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
     /**
      * Returns the time since the timer started, in seconds.
      * For now, a placeholder method.
+     *
      * @return the time since the timer started, in seconds.
      */
     private double getSeconds() {
-        return (System.currentTimeMillis() - startTime)/MILLISECONDS_PER_SECONDS;
+        return (System.currentTimeMillis() - startTime) / MILLISECONDS_PER_SECONDS;
     }
 
     /**
      * Called when the timer is up.
      * Responsible for:
-     *  - Disabling inputs
-     *  - Sending the question instance back to the server
-     *  - Waiting for the list of people who got it right
-     *  - Making sure the answer page has all the necessary information
-     *  - Redirecting to the answer page
+     * - Disabling inputs
+     * - Sending the question instance back to the server
+     * - Waiting for the list of people who got it right
+     * - Making sure the answer page has all the necessary information
+     * - Redirecting to the answer page
      */
     public void finalizeAndSend() {
         Timer answerTimer = new Timer();
@@ -262,7 +268,7 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
                                         mainCtrl.getUser().id, mainCtrl.getAnswerCount(), currentQuestion);
                         System.out.println(correctUsers);
 
-                        if(correctUsers == null) {
+                        if (correctUsers == null) {
                             return;
                         }
 
@@ -274,7 +280,6 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
                     }
                 }, POLLING_DELAY, POLLING_INTERVAL);
     }
-
 
 
     /**
@@ -290,7 +295,7 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
      * Calls the generic method for clicking an answer, specifying that it was the top button.
      */
     @FXML
-    protected void onAnswerTopClicked(){
+    protected void onAnswerTopClicked() {
         onAnswerClicked(answerTop, answerTopAnswer);
     }
 
@@ -299,7 +304,7 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
      * Calls the generic method for clicking an answer, specifying that it was the middle button.
      */
     @FXML
-    protected void onAnswerMidClicked(){
+    protected void onAnswerMidClicked() {
         onAnswerClicked(answerMid, answerMidAnswer);
     }
 
@@ -308,7 +313,7 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
      * Calls the generic method for clicking an answer, specifying that it was the bottom button.
      */
     @FXML
-    protected void onAnswerBotClicked(){
+    protected void onAnswerBotClicked() {
         onAnswerClicked(answerBot, answerBotAnswer);
     }
 
@@ -317,7 +322,7 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
      * Sets answerTop's background color according to whether it is selected.
      */
     @FXML
-    protected void enterAnswerTop(){
+    protected void enterAnswerTop() {
         enterAnswer(answerTop);
     }
 
@@ -326,7 +331,7 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
      * Sets answerMid's background color according to whether it is selected.
      */
     @FXML
-    protected void enterAnswerMid(){
+    protected void enterAnswerMid() {
         enterAnswer(answerMid);
     }
 
@@ -335,23 +340,24 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
      * Sets answerBot's background color according to whether it is selected.
      */
     @FXML
-    protected void enterAnswerBot(){
+    protected void enterAnswerBot() {
         enterAnswer(answerBot);
     }
 
     /**
      * A general method for setting an answer button's background color upon the cursor enters it,
      * according to whether it is selected.
+     *
      * @param answerBtn The answer button to be recolor.
      */
-    private void enterAnswer(StackPane answerBtn){
-            if (answerBtn.equals(selectedAnswerButton)) {
-                answerBtn.setBackground(new Background(
-                        new BackgroundFill(Color.DARKCYAN, CornerRadii.EMPTY, Insets.EMPTY)));
-            } else {
-                answerBtn.setBackground(new Background(
-                        new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
-            }
+    private void enterAnswer(StackPane answerBtn) {
+        if (answerBtn.equals(selectedAnswerButton)) {
+            answerBtn.setBackground(new Background(
+                    new BackgroundFill(Color.DARKCYAN, CornerRadii.EMPTY, Insets.EMPTY)));
+        } else {
+            answerBtn.setBackground(new Background(
+                    new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+        }
     }
 
     /**
@@ -359,9 +365,9 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
      * Resets all answer boxes' background color according to whether they are selected.
      */
     @FXML
-    public void resetAnswerColors(){
+    public void resetAnswerColors() {
 
-        for (StackPane answerBtn: answerButtons) {
+        for (StackPane answerBtn : answerButtons) {
             if (answerBtn.equals(selectedAnswerButton)) {
                 answerBtn.setBackground(new Background(
                         new BackgroundFill(Color.LIGHTSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -411,17 +417,19 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
 
     /**
      * Getter for the circles bar
+     *
      * @return circles
      */
-    public HBox getCirclesHBox(){
+    public HBox getCirclesHBox() {
         return circles;
     }
 
     /**
      * Getter for the text node containing the current question number
+     *
      * @return questionNum
      */
-    public Text getQuestionNum(){
+    public Text getQuestionNum() {
         return questionNum;
     }
 
@@ -437,8 +445,8 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
     /**
      * Resets the highlighting of the circle borders
      */
-    public void resetHighlight(){
-        for(int i=0;i<circles.getChildren().size();i++){
+    public void resetHighlight() {
+        for (int i = 0; i < circles.getChildren().size(); i++) {
             Circle circle = (Circle) circles.getChildren().get(i);
             circle.setStrokeWidth(STANDARD_CIRCLE_BORDER_SIZE);
         }
@@ -454,14 +462,14 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
 
     @Override
     public void resetCircleColor() {
-        for(int i=0; i<mainCtrl.getQuestionsPerGame();i++){
+        for (int i = 0; i < mainCtrl.getQuestionsPerGame(); i++) {
             Circle circle = (Circle) getCirclesHBox().getChildren().get(i);
             circle.setFill(Color.LIGHTGRAY);
         }
     }
 
     @Override
-    public void updateQuestionNumber(){
+    public void updateQuestionNumber() {
         getQuestionNum().setText("" + (mainCtrl.getAnswerCount() + 1));
     }
 }
