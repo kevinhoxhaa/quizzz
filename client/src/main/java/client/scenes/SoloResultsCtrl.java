@@ -72,6 +72,8 @@ public class SoloResultsCtrl implements QuestionNumController{
         updateQuestionNumber();
         updateCircleColor(colors);
 
+        server.addUserSolo(mainCtrl.getServerUrl(), (SoloUser) mainCtrl.getUser());
+
         scoreTableUserName.setText( String.format( "%s", mainCtrl.getUser().username) );
         scoreTableUserScore.setText( String.format( "%d", mainCtrl.getSoloScore()) );
         setTable();

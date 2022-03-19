@@ -61,6 +61,20 @@ public abstract class User {
         this.lastAnswerCorrect = false;
     }
 
+    /**
+     * A method that increments the user's score
+     * @param score
+     */
+    public void incrementScore(long score){
+        points+=score;
+    }
+
+    /**
+     * Resets the user's score when game restarts
+     */
+    public void resetScore(){
+        points=0L;
+    }
 
     @Override
     public boolean equals(Object obj) {
