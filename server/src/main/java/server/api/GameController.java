@@ -158,15 +158,14 @@ public class GameController {
     public ResponseEntity<Integer> startGame(@PathVariable("count") int count) {
         Game game = new Game();
 
-        if(waitingUserRepo.count() == 0) {
+        if(waitingUserRepo.findByGameIDIsNull().size() == 0) {
             return ResponseEntity.badRequest().build();
         }
 
-        List<MultiplayerUser> users = waitingUserRepo.findAll();
+        List<MultiplayerUser> users = waitingUserRepo.findByGameIDIsNull();
         for(MultiplayerUser user : users) {
             user.gameID = (long) gameList.getGames().size();
         }
-        System.out.println(users);
         users.forEach(u -> gameUserRepo.save(u));
 
         users = gameUserRepo.findByGameID((long) gameList.getGames().size());
@@ -411,6 +410,7 @@ public class GameController {
             user.totalAnswers += 1;
             user.correctAnswers += answeredQuestion.getPoints() == 0 ? 0 : 1;
             user.lastAnswerCorrect = answeredQuestion.hasCorrectUserAnswer();
+            System.out.println(user.totalAnswers);
             gameUserRepo.save(user);
         }
 
@@ -423,8 +423,6 @@ public class GameController {
         if(!allUsersHaveAnswered(game.getUserIds(), questionIndex + 1)) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
-
-        System.out.println("All users have answered!");
 
         List<MultiplayerUser> rightUsers = new ArrayList<>();
         for(long id : game.getUserIds()) {

@@ -223,8 +223,6 @@ public class ServerUtils {
                 questionIndex
         );
 
-        System.out.println(path);
-
         switch(question.getType()) {
             case CONSUMPTION:
                 return postConsumptionAnswer(serverUrl, path, (ConsumptionQuestion) question);
