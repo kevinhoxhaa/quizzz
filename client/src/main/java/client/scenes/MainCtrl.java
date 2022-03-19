@@ -305,6 +305,7 @@ public class MainCtrl {
     /**
      * Sets the scene in the primary stage to the one corresponding to a multiplayer question screen.
      * Sets the timer to an initial 10 seconds for the players to answer the question.
+     * @param question the question to visualise
      */
     public void showQuestion(Question question) {
 

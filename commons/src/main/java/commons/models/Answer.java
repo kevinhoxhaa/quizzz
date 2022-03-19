@@ -7,7 +7,9 @@ import commons.utils.CompareType;
 
 import java.util.Objects;
 
-import static commons.utils.AnswerType.*;
+import static commons.utils.AnswerType.ACTIVITY;
+import static commons.utils.AnswerType.COMPARETYPE;
+import static commons.utils.AnswerType.LONG;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Answer {
