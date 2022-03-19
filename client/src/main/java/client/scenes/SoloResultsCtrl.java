@@ -6,8 +6,6 @@ import commons.entities.SoloUser;
 import commons.entities.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import commons.models.SoloGame;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -76,6 +74,7 @@ public class SoloResultsCtrl implements QuestionNumController{
 
         scoreTableUserName.setText( String.format( "%s", mainCtrl.getUser().username) );
         scoreTableUserScore.setText( String.format( "%d", mainCtrl.getSoloScore()) );
+        setTable();
         //TODO : add personal best to server side and link it
     }
 
@@ -134,9 +133,6 @@ public class SoloResultsCtrl implements QuestionNumController{
         }
     }
 
-        score.setText(String.format("%d", mainCtrl.getSoloScore()));
-        // TODO : add personal best to server side and link it
-        setTable();
     /**
      * Resets the circles colors every time the game starts
      */
@@ -147,8 +143,6 @@ public class SoloResultsCtrl implements QuestionNumController{
             circle.setFill(Color.LIGHTGRAY);
         }
     }
-
-
 
     /**
      * sets up the table for the solo users result page consisting of users with their username

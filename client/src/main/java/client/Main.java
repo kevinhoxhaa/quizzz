@@ -25,6 +25,8 @@ import client.scenes.AddQuoteCtrl;
 import client.scenes.MultiplayerAnswerCtrl;
 import client.scenes.HomeCtrl;
 import client.scenes.MultiplayerQuestionCtrl;
+import client.scenes.SoloAnswerCtrl;
+import client.scenes.SoloQuestionCtrl;
 import client.scenes.WaitingCtrl;
 import client.scenes.SoloResultsCtrl;
 import client.scenes.EstimationQuestionCtrl;
