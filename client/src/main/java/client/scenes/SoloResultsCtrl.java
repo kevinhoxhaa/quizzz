@@ -45,6 +45,15 @@ public class SoloResultsCtrl implements QuestionNumController{
     @FXML
     private HBox circles;
 
+    @FXML
+    private Text ranking1stPlayer;
+
+    @FXML
+    private Text ranking2ndPlayer;
+
+    @FXML
+    private Text ranking3rdPlayer;
+
     private SoloGame game;
 
     /**
@@ -77,6 +86,9 @@ public class SoloResultsCtrl implements QuestionNumController{
         scoreTableUserName.setText( String.format( "%s", mainCtrl.getUser().username) );
         scoreTableUserScore.setText( String.format( "%d", mainCtrl.getSoloScore()) );
         setTable();
+        ranking1stPlayer.setText(users.get ( 0 ).username );
+        ranking2ndPlayer.setText(users.get ( 1 ).username );
+        ranking3rdPlayer.setText(users.get ( 2 ).username );
         //TODO : add personal best to server side and link it
     }
 
