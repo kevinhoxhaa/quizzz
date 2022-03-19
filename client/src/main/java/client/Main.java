@@ -24,6 +24,9 @@ import client.scenes.QuoteOverviewCtrl;
 import client.scenes.AddQuoteCtrl;
 import client.scenes.MultiplayerAnswerCtrl;
 import client.scenes.HomeCtrl;
+import client.scenes.MultiplayerAnswerCtrl;
+import client.scenes.MultiplayerResultsCtrl;
+import client.scenes.QuoteOverviewCtrl;
 import client.scenes.MultiplayerQuestionCtrl;
 import client.scenes.SoloAnswerCtrl;
 import client.scenes.SoloQuestionCtrl;
@@ -79,8 +82,12 @@ public class Main extends Application {
         var soloResults = FXML.load(
                 SoloResultsCtrl.class, "client", "scenes", "SoloResults.fxml");
 
+        var multiplayerResults = FXML.load(
+                MultiplayerResultsCtrl.class, "client", "scenes", "MultiplayerResults.fxml");
+
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, overview, add, home, waiting, multiplayerQuestion,
-                multiplayerAnswer, ranking, estimation, soloQuestion, soloAnswer, soloResults);
+                multiplayerAnswer, ranking, estimation, soloQuestion, soloAnswer, soloResults,
+                multiplayerResults);
     }
 }

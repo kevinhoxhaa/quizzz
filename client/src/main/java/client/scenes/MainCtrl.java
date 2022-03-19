@@ -23,14 +23,15 @@ import commons.models.Question;
 import commons.models.SoloGame;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
@@ -94,6 +95,9 @@ public class MainCtrl {
     private SoloResultsCtrl soloResultsCtrl;
     private Scene soloResults;
 
+    private MultiplayerResultsCtrl multiplayerResultsCtrl;
+    private Scene multiplayerResults;
+
     private User user;
     private List<Color> colors;
     private Thread timerThread;
@@ -107,7 +111,8 @@ public class MainCtrl {
             Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> multiplayerQuestion,
             Pair<MultiplayerAnswerCtrl, Parent> multiplayerAnswer, Pair<RankingCtrl, Parent> ranking,
             Pair<EstimationQuestionCtrl, Parent> estimation, Pair<SoloQuestionCtrl, Parent> soloQuestion,
-                           Pair<SoloAnswerCtrl, Parent> soloAnswer, Pair<SoloResultsCtrl, Parent> soloResults) {
+            Pair<SoloAnswerCtrl, Parent> soloAnswer, Pair<SoloResultsCtrl, Parent> soloResults,
+            Pair<MultiplayerResultsCtrl, Parent> multiplayerResults) {
         this.primaryStage = primaryStage;
         primaryStage.setMinHeight(MIN_HEIGHT);
         primaryStage.setMinWidth(MIN_WIDTH);
@@ -147,8 +152,17 @@ public class MainCtrl {
         this.soloResultsCtrl = soloResults.getKey();
         this.soloResults=new Scene(soloResults.getValue());
 
+        this.multiplayerResultsCtrl = multiplayerResults.getKey();
+        this.multiplayerResults = new Scene(multiplayerResults.getValue());
+
         showHome();
         primaryStage.show();
+        primaryStage.setOnCloseRequest(event -> {
+
+            quitGame(true);
+
+            event.consume();
+        });
     }
 
     /**
@@ -336,32 +350,6 @@ public class MainCtrl {
     }
 
     /**
-     * Deletes user from database when the close button is clicked
-     */
-    public void onClose() {
-        primaryStage.setOnHiding(new EventHandler<WindowEvent>() {
-
-            @Override
-            public void handle(WindowEvent event) {
-                Platform.runLater(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        try {
-                            homeCtrl.getServer().removeMultiplayerUser(homeCtrl.getServer().getURL(), user);
-                            user = null;
-                        } catch(WebApplicationException e) {
-                            System.out.println("User to remove not found!");
-                        } finally {
-                            System.exit(0);
-                        }
-                    }
-                });
-            }
-        });
-    }
-
-    /**
      * A method that redirects the User to:
      * - The next question if the number of previous answers is less than 20 and not equal to 10
      * - The Ranking Page if the User is halfway through the game (10 answers so far)
@@ -379,8 +367,7 @@ public class MainCtrl {
                 showQuestion();
             }
         } else {
-//            showResultsPage();
-            // Once the game is over, the results page should be shown
+            showMultiplayerResults();
         }
     }
 
@@ -510,13 +497,51 @@ public class MainCtrl {
     }
 
     /**
-     * THIS STILL NEEDS TO BE IMPLEMENTED
      * Called after the last answer screen's timer is up, shows the solo results page
      * @param game
      */
     public void showSoloResults(SoloGame game) {
         soloResultsCtrl.setup(game,colors);
         primaryStage.setScene(soloResults);
-//        System.out.println("game over lol");
+    }
+
+    /**
+     * Called after the last answer screen's timer is up, shows the solo results page
+     */
+    public void showMultiplayerResults() {
+        multiplayerResultsCtrl.setup(colors);
+        primaryStage.setTitle("Multiplayer results screen");
+        primaryStage.setScene(multiplayerResults);
+    }
+
+    /**
+     * Shows a pop up on screen to confirm quitting the game
+     * @param check is used to decide whether the application should be closed or not
+     *                  If check is true: the application is closed
+     *                  If check is false: the user is redirected to home page
+     */
+    public void quitGame(boolean check){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Quit solo game");
+        alert.setContentText("Are you sure you want to quit?");
+        ButtonType okButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
+        ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
+        alert.getButtonTypes().setAll(okButton, noButton);
+        alert.showAndWait().ifPresent(type -> {
+            if (type == okButton) {
+                if(check){
+                    try {
+                        homeCtrl.getServer().removeMultiplayerUser(homeCtrl.getServer().getURL(), user);
+                        user = null;
+                    } catch(WebApplicationException e) {
+                        System.out.println("User to remove not found!");
+                    } finally {
+                        System.exit(0);
+                    }
+                }
+                killThread();
+                showHome();
+            }
+        });
     }
 }
