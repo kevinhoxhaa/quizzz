@@ -188,7 +188,6 @@ public class HomeCtrl {
             return;
         }
         mainCtrl.showWaiting();
-        mainCtrl.onClose();
     }
 
     private void invalidURL() {
