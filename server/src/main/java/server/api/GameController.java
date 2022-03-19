@@ -3,22 +3,10 @@ package server.api;
 import commons.entities.Activity;
 import commons.entities.MultiplayerUser;
 import commons.entities.User;
-import commons.models.ChoiceQuestion;
-import commons.models.ComparisonQuestion;
-import commons.models.ConsumptionQuestion;
-import commons.models.EstimationQuestion;
-import commons.models.Game;
-import commons.models.GameList;
-import commons.models.Question;
-import commons.models.SoloGame;
+import commons.models.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import server.database.ActivityRepository;
 import server.database.GameUserRepository;
 import server.database.WaitingUserRepository;
@@ -26,7 +14,6 @@ import server.database.WaitingUserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/games")
@@ -167,11 +154,10 @@ public class GameController {
         for(MultiplayerUser user : users) {
             user.gameID = (long) gameList.getGames().size();
         }
+        System.out.println(users);
         gameUserRepo.saveAll(users);
 
-        users = gameUserRepo.findAll().stream()
-                .filter(u -> u.gameID == (long) gameList.getGames().size())
-                .collect(Collectors.toList());
+        users = gameUserRepo.findByGameID((long) gameList.getGames().size());
         users.forEach(u -> game.getUserIds().add(u.id));
 
         waitingUserRepo.deleteAll();
@@ -182,6 +168,30 @@ public class GameController {
 
         gameList.getGames().add(game);
         return ResponseEntity.ok(gameList.getGames().indexOf(game));
+    }
+
+    @GetMapping("/{gameIndex}/user/{username}")
+    public ResponseEntity<Long> getUserId(@PathVariable("gameIndex") int gameIndex,
+                          @PathVariable("username") String username) {
+        List<MultiplayerUser> usersInGame = gameUserRepo.findByGameID((long) gameIndex);
+
+        System.out.println(username);
+        System.out.println(usersInGame);
+
+        MultiplayerUser result = null;
+
+        for(MultiplayerUser user : usersInGame) {
+            if(user.username.equals(username)) {
+                result = user;
+                break;
+            }
+        }
+
+        if(result == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(result.id);
     }
 
     /**
