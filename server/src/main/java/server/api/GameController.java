@@ -241,6 +241,32 @@ public class GameController {
     }
 
     /**
+     * Retrieves the type of the requested question from the game state object
+     * and sends it to the user
+     * Returns a bad request if the game or question index
+     * is invalid
+     * @param gameIndex the index of the game
+     * @param questionIndex the index of the question
+     * @return the requested question
+     */
+    @GetMapping(path =  "/{gameIndex}/questionType/{questionIndex}")
+    public ResponseEntity<String> getQuestionType(
+            @PathVariable(name = "gameIndex") int gameIndex,
+                                                @PathVariable(name = "questionIndex") int questionIndex) {
+        if(gameIndex >= gameList.getGames().size()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Game game = gameList.getGames().get(gameIndex);
+
+        if(questionIndex >= game.getQuestions().size()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(game.getQuestions().get(questionIndex).getType().name());
+    }
+
+    /**
      * Retrieves the requested question from the game state object
      * and sends it to the user
      * Returns a bad request if the game or question index
