@@ -101,7 +101,7 @@ public class RankingCtrl implements SceneController,QuestionNumController {
 
     @Override
     public void redirect() {
-        mainCtrl.showQuestion();
+        mainCtrl.showQuestion(mainCtrl.getNextQuestion());
     }
 
     @Override
