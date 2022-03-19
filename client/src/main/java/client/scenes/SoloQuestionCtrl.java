@@ -23,7 +23,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static commons.utils.CompareType.EQUAL;
@@ -193,6 +192,7 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
      */
     private void setupChoiceQuestion(Question generalQuestion) {
         ChoiceQuestion question = (ChoiceQuestion) generalQuestion;
+        question.removeComparedFromActivities();
 
         activityText.setText(
                 String.format("What could you do instead of %s to consume less energy?",
@@ -200,8 +200,6 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
         );
 
         List<Activity> answers = question.getActivities();
-
-        Collections.shuffle(answers);
 
         answerTopText.setText(answers.get(0).title);
         answerMidText.setText(answers.get(1).title);

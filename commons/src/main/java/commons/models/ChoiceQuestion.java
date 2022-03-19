@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import commons.entities.Activity;
 import commons.utils.QuestionType;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,6 +33,7 @@ public class ChoiceQuestion extends Question {
      */
     public ChoiceQuestion(List<Activity> activities) {
         super(QuestionType.CHOICE);
+        Collections.shuffle(activities);
         setActivities(activities);
         this.userAnswer = null;
     }
@@ -50,6 +52,10 @@ public class ChoiceQuestion extends Question {
                 minConsumption = a.consumption;
             }
         }
+    }
+
+    public void removeComparedFromActivities(){
+        activities.remove(comparedActivity);
     }
 
     public void setAnswer(Activity answer) {
@@ -136,7 +142,7 @@ public class ChoiceQuestion extends Question {
         if (userAnswer == null) {
             return false;
         }
-        return answer == userAnswer.getAnswer();
+        return answer.equals(userAnswer.getAnswer());
     }
 
     /**

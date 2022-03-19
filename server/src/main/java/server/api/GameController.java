@@ -108,9 +108,17 @@ public class GameController {
      */
     private ChoiceQuestion generateChoiceQuestion() {
         List<Activity> activities = new ArrayList<>();
-        for(int i = 0; i < CHOICE_COUNT; i++) {
-            activities.add(getRandomActivity());
+        List<Long> consumptions = new ArrayList<>();
+
+        while (activities.size() < CHOICE_COUNT) {
+            Activity randomActivity = getRandomActivity();
+
+            if(!consumptions.contains(randomActivity.consumption)){
+                activities.add(randomActivity);
+                consumptions.add(randomActivity.consumption);
+            }
         }
+
         return new ChoiceQuestion(activities);
     }
 
