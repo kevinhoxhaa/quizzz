@@ -3,11 +3,13 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.entities.Activity;
+import commons.entities.MultiplayerUser;
 import commons.models.Answer;
 import commons.models.ChoiceQuestion;
 import commons.models.ComparisonQuestion;
 import commons.models.ConsumptionQuestion;
 import commons.models.Question;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.ProgressIndicator;
@@ -24,6 +26,8 @@ import javafx.scene.text.Text;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static commons.utils.CompareType.EQUAL;
 import static commons.utils.CompareType.LARGER;
@@ -37,6 +41,9 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
     private static final double MILLISECONDS_PER_SECONDS = 1000.0;
     private static final double CIRCLE_BORDER_SIZE = 1.7;
     private static final double STANDARD_CIRCLE_BORDER_SIZE = 1.0;
+
+    private static final int POLLING_DELAY = 0;
+    private static final int POLLING_INTERVAL = 500;
 
     private Question currentQuestion;
 
@@ -257,12 +264,28 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
      *  - Making sure the answer page has all the necessary information
      *  - Redirecting to the answer page
      */
-    public void finalizeAndSend(){
-        //TODO sending the question instance back to the server
-        // and waiting for the list of people who got it right
-        resetAnswerColors();
-//        disableAnswers();
-        mainCtrl.showAnswerPage(currentQuestion);
+    public void finalizeAndSend() {
+        Timer answerTimer = new Timer();
+        answerTimer.schedule(
+                new TimerTask() {
+
+                    @Override
+                    public void run() {
+                        List<MultiplayerUser> correctUsers =
+                                server.answerQuestion(mainCtrl.getServerUrl(), mainCtrl.getGameIndex(),
+                                        mainCtrl.getUser().id, mainCtrl.getAnswerCount(), currentQuestion);
+
+                        if(correctUsers.size() == 0) {
+                            return;
+                        }
+
+                        Platform.runLater(() -> {
+                            resetAnswerColors();
+                            mainCtrl.showAnswerPage(currentQuestion, correctUsers);
+                        });
+                        answerTimer.cancel();
+                    }
+                }, POLLING_DELAY, POLLING_INTERVAL);
     }
 
 
@@ -422,11 +445,11 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
      * Resets the highlighting of the circle borders
      */
     public void resetHighlight(){
-            for(int i=0;i<circles.getChildren().size();i++){
-                Circle circle = (Circle) circles.getChildren().get(i);
-                    circle.setStrokeWidth(STANDARD_CIRCLE_BORDER_SIZE);
-                }
+        for(int i=0;i<circles.getChildren().size();i++){
+            Circle circle = (Circle) circles.getChildren().get(i);
+            circle.setStrokeWidth(STANDARD_CIRCLE_BORDER_SIZE);
         }
+    }
 
     @Override
     public void updateCircleColor(List<Color> colors) {

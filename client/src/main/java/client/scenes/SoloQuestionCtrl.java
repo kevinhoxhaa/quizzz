@@ -267,7 +267,7 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
      */
     private void finalizeAndSend(){
         disableAnswers();
-        mainCtrl.showAnswerPage(currentQuestion);
+        mainCtrl.showAnswerPage(currentQuestion, mainCtrl.getCorrectPlayersMock());
     }
 
 

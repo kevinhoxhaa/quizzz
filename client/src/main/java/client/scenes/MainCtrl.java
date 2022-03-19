@@ -17,6 +17,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.entities.Activity;
+import commons.entities.MultiplayerUser;
 import commons.entities.User;
 import commons.models.ConsumptionQuestion;
 import commons.models.EstimationQuestion;
@@ -103,6 +104,16 @@ public class MainCtrl {
 
     private int answerCount = 0;
     private long soloScore = 0;
+
+    public int getCurrentQuestion() {
+        return currentQuestion;
+    }
+
+    public void setCurrentQuestion(int currentQuestion) {
+        this.currentQuestion = currentQuestion;
+    }
+
+    private int currentQuestion = 0;
     private static final int TOTAL_ANSWERS = 20;
     private static final int HALFWAY_ANSWERS = 10;
 
@@ -269,9 +280,10 @@ public class MainCtrl {
      * and gives the primary stage a corresponding title.
      * Furthermore, it increments the answerCount and first sets up the answer page.
      *
+     * @param correctUsers the users that have answered correctly
      * @param prevQuestion The question that has just been asked to the players.
      */
-    public void showAnswerPage(Question prevQuestion) {
+    public void showAnswerPage(Question prevQuestion, List<MultiplayerUser> correctUsers) {
         multiplayerAnswerCtrl.updateQuestionNumber();
         //Adds the color of the answer correctness to a list of answers
         if (prevQuestion.hasCorrectUserAnswer()) {
@@ -281,7 +293,7 @@ public class MainCtrl {
         }
         answerCount++;
         multiplayerAnswerCtrl.updateCircleColor(colors);
-        multiplayerAnswerCtrl.setup(prevQuestion, getCorrectPlayersMock());
+        multiplayerAnswerCtrl.setup(prevQuestion, correctUsers);
         primaryStage.setTitle("Answer screen");
         primaryStage.setScene(multiplayerAnswer);
     }
@@ -292,12 +304,11 @@ public class MainCtrl {
      *
      * @return A list of Strings that represent players that answered the previous question correctly.
      */
-    public List<String> getCorrectPlayersMock() {
-        //TODO: Instead get list from server.
-        List<String> correctPlayers = new ArrayList<>();
-        correctPlayers.add("Patrik");
-        correctPlayers.add("Bink");
-        correctPlayers.add("Boris");
+    public List<MultiplayerUser> getCorrectPlayersMock() {
+        List<MultiplayerUser> correctPlayers = new ArrayList<>();
+        correctPlayers.add(new MultiplayerUser("Patrik"));
+        correctPlayers.add(new MultiplayerUser("Bink"));
+        correctPlayers.add(new MultiplayerUser("Boris"));
         return correctPlayers;
     }
 
@@ -342,6 +353,7 @@ public class MainCtrl {
 
     /**
      * Sets the scene in the primary stage to the estimation screen
+     * @param question the estimation question to visualise
      */
     public void showEstimationQuestion(EstimationQuestion question) {
         primaryStage.setTitle("Estimation");

@@ -85,7 +85,6 @@ public class WaitingCtrl {
                 Integer gameIndex = server.findGameIndex(serverUrl, userId);
                 mainCtrl.setGameIndex(gameIndex);
                 Question firstQuestion = server.getQuestion(serverUrl, gameIndex, 0);
-                System.out.println(firstQuestion);
                 mainCtrl.stopWaitingTimer();
                 mainCtrl.showQuestion(firstQuestion);
             }
@@ -122,8 +121,8 @@ public class WaitingCtrl {
         try {
             String serverUrl = mainCtrl.getServerUrl();
             Integer gameIndex = server.startGame(serverUrl);
+            mainCtrl.setGameIndex(gameIndex);
             Question firstQuestion = server.getQuestion(serverUrl, gameIndex, 0);
-            System.out.println(firstQuestion);
             mainCtrl.stopWaitingTimer();
             mainCtrl.showQuestion(firstQuestion);
         } catch (WebApplicationException e) {

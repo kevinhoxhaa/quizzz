@@ -1,22 +1,21 @@
 package client.scenes;
 
-import com.google.inject.Inject;
-
 import client.utils.ServerUtils;
-import commons.models.EstimationQuestion;
+import com.google.inject.Inject;
+import commons.entities.MultiplayerUser;
 import commons.models.ChoiceQuestion;
 import commons.models.ComparisonQuestion;
 import commons.models.ConsumptionQuestion;
+import commons.models.EstimationQuestion;
 import commons.models.Question;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -87,7 +86,7 @@ public class MultiplayerAnswerCtrl implements SceneController,QuestionNumControl
      * @param prevQuestion The question that has just been asked to the players.
      * @param correctPlayers A list of all the players that answered the precious question correctly.
      */
-    protected void setup(Question prevQuestion, List<String> correctPlayers) {
+    protected void setup(Question prevQuestion, List<MultiplayerUser> correctPlayers) {
         if (prevQuestion.hasCorrectUserAnswer()) {
             this.answerResponse.setText("Well done!");
             answerPane.setBackground(new Background(
@@ -114,7 +113,7 @@ public class MultiplayerAnswerCtrl implements SceneController,QuestionNumControl
         }
 
         startTimer();
-        this.correctPlayers.setItems(FXCollections.observableArrayList(correctPlayers));
+        correctPlayers.forEach(u -> this.correctPlayers.getItems().add(u.username));
     }
 
     /**

@@ -35,7 +35,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -209,6 +211,68 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .delete(MultiplayerUser.class);
+    }
+
+    public List<MultiplayerUser> answerQuestion(String serverUrl, int gameIndex,
+                                                long userId, int questionIndex, Question question) {
+        String path = String.format(
+                "api/games/%d/user/%d/%s/%d",
+                gameIndex,
+                userId,
+                question.getType().name().toLowerCase(Locale.ROOT),
+                questionIndex
+        );
+
+        System.out.println(path);
+
+        switch(question.getType()) {
+            case CONSUMPTION:
+                return postConsumptionAnswer(serverUrl, path, (ConsumptionQuestion) question);
+            case ESTIMATION:
+                return postEstimationAnswer(serverUrl, path, (EstimationQuestion) question);
+            case CHOICE:
+                return postChoiceQuestion(serverUrl, path, (ChoiceQuestion) question);
+            case COMPARISON:
+                return postComparisonQuestion(serverUrl, path, (ComparisonQuestion) question);
+            default:
+                return new ArrayList<>();
+        }
+    }
+
+    private List<MultiplayerUser> postConsumptionAnswer(String serverUrl, String path,
+                                                        ConsumptionQuestion answeredQuestion) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path(path)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(answeredQuestion, APPLICATION_JSON), new GenericType<List<MultiplayerUser>>() {});
+    }
+
+    private List<MultiplayerUser> postEstimationAnswer(String serverUrl, String path,
+                                                        EstimationQuestion answeredQuestion) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path(path)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(answeredQuestion, APPLICATION_JSON), new GenericType<List<MultiplayerUser>>() {});
+    }
+
+    private List<MultiplayerUser> postChoiceQuestion(String serverUrl, String path,
+                                                        ChoiceQuestion answeredQuestion) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path(path)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(answeredQuestion, APPLICATION_JSON), new GenericType<List<MultiplayerUser>>() {});
+    }
+
+    private List<MultiplayerUser> postComparisonQuestion(String serverUrl, String path,
+                                                        ComparisonQuestion answeredQuestion) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path(path)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(answeredQuestion, APPLICATION_JSON), new GenericType<List<MultiplayerUser>>() {});
     }
 
     /**
