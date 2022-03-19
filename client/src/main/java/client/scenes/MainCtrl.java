@@ -510,6 +510,10 @@ public class MainCtrl {
         soloQuestionCtrl.setStartTime();
     }
 
+    /**
+     * Shows the solo estimation question page relevant to the given solo game
+     * @param game the solo game instance
+     */
     public void showSoloEstimationQuestion(SoloGame game) {
         soloEstimationCtrl.setup(game, colors);
         primaryStage.setScene(soloEstimation);

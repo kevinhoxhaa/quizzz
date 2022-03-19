@@ -54,10 +54,18 @@ public class ChoiceQuestion extends Question {
         }
     }
 
+    /**
+     * Removes the compared activity from the list of activities belonging to the question.
+     * (Should be called only on the frontend)
+     */
     public void removeComparedFromActivities(){
         activities.remove(comparedActivity);
     }
 
+    /**
+     * A setter for the answer activity
+     * @param answer
+     */
     public void setAnswer(Activity answer) {
         this.answer = answer;
     }
@@ -88,6 +96,10 @@ public class ChoiceQuestion extends Question {
         }
     }
 
+    /**
+     * A setter for the compared activity
+     * @param activity the compared activity to be set
+     */
     public void setComparedActivity(Activity activity) {
         this.comparedActivity = activity;
     }

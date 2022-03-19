@@ -64,6 +64,14 @@ public class SoloEstimationQuestionCtrl implements SceneController, QuestionNumC
         this.mainCtrl = mainCtrl;
     }
 
+    /**
+     * Prepares the scene for being shown:
+     *  - updates the question counter and the circles
+     *  - updates the question text
+     *  - resets input field to empty
+     * @param soloGame the solo game instance
+     * @param colors the array of colors for the circles
+     */
     protected void setup(SoloGame soloGame, List<Color> colors){
         this.game = soloGame;
         currentScore.setText(String.format( "Score: %d", mainCtrl.getSoloScore()));
@@ -72,7 +80,6 @@ public class SoloEstimationQuestionCtrl implements SceneController, QuestionNumC
         updateCircleColor(colors);
         resetHighlight();
         highlightCurrentCircle();
-        setStartTime();
         updateQuestionNumber();
 
         activityText.setText(
@@ -82,6 +89,9 @@ public class SoloEstimationQuestionCtrl implements SceneController, QuestionNumC
         userInput.setText("");
     }
 
+    /**
+     * Saves the user input and updates the screen accordingly
+     */
     @FXML
     private void onSubmit(){
         try{
