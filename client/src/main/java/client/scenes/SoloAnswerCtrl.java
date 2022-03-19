@@ -8,6 +8,7 @@ import commons.models.ConsumptionQuestion;
 import commons.models.EstimationQuestion;
 import commons.models.Question;
 import commons.models.SoloGame;
+import commons.utils.QuestionType;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.ListView;
@@ -192,7 +193,12 @@ public class SoloAnswerCtrl implements SceneController, QuestionNumController {
     @Override
     public void redirect() {
         if(game.incrementCurrentQuestionNum() < QUESTIONS_PER_GAME){
-            mainCtrl.showSoloQuestion(game);
+            if(game.loadCurrentQuestion().getType() == QuestionType.ESTIMATION){
+                mainCtrl.showSoloEstimationQuestion(game);
+            }
+            else{
+                mainCtrl.showSoloQuestion(game);
+            }
         }
         else{
             mainCtrl.showSoloResults(game);

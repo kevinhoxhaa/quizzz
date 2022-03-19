@@ -21,6 +21,7 @@ import commons.entities.User;
 import commons.models.ConsumptionQuestion;
 import commons.models.Question;
 import commons.models.SoloGame;
+import commons.utils.QuestionType;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.application.Platform;
 import javafx.scene.Parent;
@@ -83,8 +84,11 @@ public class MainCtrl {
     private RankingCtrl rankingCtrl;
     private Scene ranking;
 
-    private EstimationQuestionCtrl estimationQuestionCtrl;
-    private Scene estimation;
+    private EstimationQuestionCtrl multiplayerEstimationCtrl;
+    private Scene multiplayerEstimation;
+
+    private SoloEstimationQuestionCtrl soloEstimationCtrl;
+    private Scene soloEstimation;
 
     private SoloQuestionCtrl soloQuestionCtrl;
     private Scene soloQuestion;
@@ -111,9 +115,12 @@ public class MainCtrl {
             Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home,
             Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> multiplayerQuestion,
             Pair<MultiplayerAnswerCtrl, Parent> multiplayerAnswer, Pair<RankingCtrl, Parent> ranking,
-            Pair<EstimationQuestionCtrl, Parent> estimation, Pair<SoloQuestionCtrl, Parent> soloQuestion,
-            Pair<SoloAnswerCtrl, Parent> soloAnswer, Pair<SoloResultsCtrl, Parent> soloResults,
-            Pair<MultiplayerResultsCtrl, Parent> multiplayerResults) {
+            Pair<EstimationQuestionCtrl, Parent> multiplayerEstimation,
+                           Pair<SoloEstimationQuestionCtrl, Parent> soloEstimation,
+                           Pair<SoloQuestionCtrl, Parent> soloQuestion,
+                           Pair<SoloAnswerCtrl, Parent> soloAnswer, Pair<SoloResultsCtrl, Parent> soloResults, 
+                           Pair<MultiplayerResultsCtrl, Parent> multiplayerResults
+                           ) {
         this.primaryStage = primaryStage;
         primaryStage.setMinHeight(MIN_HEIGHT);
         primaryStage.setMinWidth(MIN_WIDTH);
@@ -141,8 +148,11 @@ public class MainCtrl {
         this.rankingCtrl = ranking.getKey();
         this.ranking = new Scene(ranking.getValue());
 
-        this.estimationQuestionCtrl = estimation.getKey();
-        this.estimation = new Scene(estimation.getValue());
+        this.multiplayerEstimationCtrl = multiplayerEstimation.getKey();
+        this.multiplayerEstimation = new Scene(multiplayerEstimation.getValue());
+
+        this.soloEstimationCtrl = soloEstimation.getKey();
+        this.soloEstimation = new Scene(soloEstimation.getValue());
 
         this.soloQuestionCtrl = soloQuestion.getKey();
         this.soloQuestion = new Scene(soloQuestion.getValue());
@@ -338,8 +348,8 @@ public class MainCtrl {
      */
     public void showEstimation() {
         primaryStage.setTitle("Estimation");
-        primaryStage.setScene(estimation);
-        estimationQuestionCtrl.startTimer();
+        primaryStage.setScene(multiplayerEstimation);
+        multiplayerEstimationCtrl.startTimer();
     }
 
     /**
@@ -458,7 +468,12 @@ public class MainCtrl {
         SoloGame soloGame = server.getSoloGame(server.getURL(), QUESTIONS_PER_GAME);
         primaryStage.setTitle("Solo game");
 
-        showSoloQuestion(soloGame);
+        if(soloGame.loadCurrentQuestion().getType() == QuestionType.ESTIMATION){
+            showSoloEstimationQuestion(soloGame);
+        }
+        else {
+            showSoloQuestion(soloGame);
+        }
     }
 
     /**
@@ -493,6 +508,13 @@ public class MainCtrl {
         primaryStage.setScene(soloQuestion);
         soloQuestionCtrl.startTimer();
         soloQuestionCtrl.setStartTime();
+    }
+
+    public void showSoloEstimationQuestion(SoloGame game) {
+        soloEstimationCtrl.setup(game, colors);
+        primaryStage.setScene(soloEstimation);
+        soloEstimationCtrl.startTimer();
+        soloEstimationCtrl.setStartTime();
     }
 
     /**
