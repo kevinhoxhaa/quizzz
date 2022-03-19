@@ -194,7 +194,9 @@ public class GameController {
 
     @GetMapping(path = "/find/{userId}")
     public ResponseEntity<Integer> findGameIndex(@PathVariable("userId") long userId) {
-        if(userId < 0 || !gameUserRepo.existsById(userId)) {
+        System.out.println("Searching for user " + userId);
+        if(userId < 0 || waitingUserRepo.existsById(userId)) {
+            System.out.println("Invalid user id " + userId);
             return ResponseEntity.badRequest().build();
         }
 
@@ -207,6 +209,8 @@ public class GameController {
                 break;
             }
         }
+
+        System.out.println("User found in game " + index);
 
         return ResponseEntity.ok(index);
     }

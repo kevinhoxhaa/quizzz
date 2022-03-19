@@ -49,7 +49,7 @@ public class MainCtrl {
     public static final double MIN_WIDTH = 768.0;
     public static final double MIN_HEIGHT = 512.0;
     private static final int POLLING_DELAY = 0;
-    private static final int POLLING_INTERVAL = 200;
+    private static final int POLLING_INTERVAL = 500;
     private static final long ANSWER_TO_THE_ULTIMATE_QUESTION = 42;
     private static final int STANDARD_PAGE_TIME = 15;
     private static final int QUESTIONS_PER_GAME = 20;
@@ -95,6 +95,7 @@ public class MainCtrl {
     private Scene soloResults;
 
     private User user;
+    private int gameIndex;
     private List<Color> colors;
     private Thread timerThread;
 
@@ -171,6 +172,22 @@ public class MainCtrl {
     }
 
     /**
+     * Returns the current game index
+     * @return the current game index
+     */
+    public int getGameIndex() {
+        return gameIndex;
+    }
+
+    /**
+     * Sets the index of the multiplayer game a user participates in
+     * @param gameIndex the multiplayer game index
+     */
+    public void setGameIndex(int gameIndex) {
+        this.gameIndex = gameIndex;
+    }
+
+    /**
      * Getter for the solo score points
      *
      * @return the score
@@ -220,7 +237,6 @@ public class MainCtrl {
 
                     @Override
                     public void run() {
-                        System.out.println("REFRESH");
                         Platform.runLater(() -> waitingCtrl.fetchUsers());
                     }
                 }, POLLING_DELAY, POLLING_INTERVAL);
@@ -287,8 +303,7 @@ public class MainCtrl {
      * Sets the scene in the primary stage to the one corresponding to a multiplayer question screen.
      * Sets the timer to an initial 10 seconds for the players to answer the question.
      */
-    public void showQuestion() {
-        Question question = getNextQuestion();
+    public void showQuestion(Question question) {
 
         multiplayerQuestionCtrl.updateCircleColor(colors);
         multiplayerQuestionCtrl.resetHighlight();
@@ -338,7 +353,7 @@ public class MainCtrl {
      *
      * @return a random question
      */
-    private Question getNextQuestion() {
+    public Question getNextQuestion() {
         //TODO instead of this, return a random question fetched from the server
         Activity activity = new Activity(
                 "testing the question models", ANSWER_TO_THE_ULTIMATE_QUESTION,
@@ -387,7 +402,7 @@ public class MainCtrl {
             //If the User is not redirected to the ranking page, they go to the next Question
             else {
                 multiplayerQuestionCtrl.resetAnswerColors();
-                showQuestion();
+                showQuestion(getNextQuestion());
             }
         } else {
 //            showResultsPage();

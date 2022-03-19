@@ -21,6 +21,7 @@ import commons.entities.Quote;
 import commons.entities.SoloUser;
 import commons.entities.User;
 import commons.models.ConsumptionQuestion;
+import commons.models.Question;
 import commons.models.SoloGame;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -99,6 +100,39 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(user, APPLICATION_JSON), MultiplayerUser.class);
+    }
+
+    /**
+     * Returns the index of the game a user participates in
+     * @param serverUrl the server URL
+     * @param userId the user id
+     * @return the index of the game
+     */
+    public Integer findGameIndex(String serverUrl, long userId) {
+        String path = String.format("/api/games/find/%d", userId);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path(path)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(Integer.class);
+    }
+
+    public Question getQuestion(String serverUrl, int gameIndex, int questionIndex) {
+        String path = String.format("/api/games/%d/question/%d", gameIndex, questionIndex);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path(path)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(Question.class);
+    }
+
+    public ConsumptionQuestion getConsumptionQuestion(String serverUrl, int gameIndex, int questionIndex) {
+        String path = String.format("/api/games/%d/consumption/%d", gameIndex, questionIndex);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path(path)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(ConsumptionQuestion.class);
     }
 
     /**
