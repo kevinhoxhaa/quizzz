@@ -170,7 +170,7 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
                         prevChoiceQuestion.getComparedActivity().title)
         );
 
-        this.answer.setText(prevChoiceQuestion.getAnswer().toString());
+        this.answer.setText(prevChoiceQuestion.getAnswer().title);
     }
 
     /**
