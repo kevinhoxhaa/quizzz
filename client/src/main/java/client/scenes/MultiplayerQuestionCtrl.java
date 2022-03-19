@@ -3,21 +3,12 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.entities.Activity;
-import commons.models.Answer;
-import commons.models.Question;
-import commons.models.ConsumptionQuestion;
-import commons.models.ChoiceQuestion;
-import commons.models.ComparisonQuestion;
+import commons.models.*;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.control.ProgressIndicator;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -25,9 +16,7 @@ import javafx.scene.text.Text;
 import java.util.ArrayList;
 import java.util.List;
 
-import static commons.utils.CompareType.SMALLER;
-import static commons.utils.CompareType.EQUAL;
-import static commons.utils.CompareType.LARGER;
+import static commons.utils.CompareType.*;
 
 
 public class MultiplayerQuestionCtrl implements SceneController,QuestionNumController {
@@ -112,7 +101,7 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
     protected void setup(Question question) {
         selectedAnswerButton=null;
         this.currentQuestion = question;
-        questionImg.setImage(new Image(currentQuestion.getImagePath()));
+//        questionImg.setImage(new Image(currentQuestion.getImagePath()));
 
         switch (question.getType()){
             case CONSUMPTION:

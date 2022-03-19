@@ -1,12 +1,13 @@
 package commons.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import commons.entities.Activity;
 import commons.utils.QuestionType;
 
 import java.util.List;
 import java.util.Objects;
 
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ChoiceQuestion extends Question {
     private static final long TRUE_FACTOR = 500;
     private static final long TIME_FACTOR = 800;

@@ -1,10 +1,12 @@
 package commons.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import commons.entities.Activity;
 import commons.utils.QuestionType;
 
 import java.util.Objects;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class EstimationQuestion extends Question {
     private static final long POINTS = 1000;
     private static final long TIME_FACTOR = 800;
