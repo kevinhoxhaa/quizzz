@@ -20,9 +20,7 @@ import commons.entities.MultiplayerUser;
 import commons.entities.Quote;
 import commons.entities.SoloUser;
 import commons.entities.User;
-import commons.models.ConsumptionQuestion;
-import commons.models.Question;
-import commons.models.SoloGame;
+import commons.models.*;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -133,6 +131,33 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(ConsumptionQuestion.class);
+    }
+
+    public EstimationQuestion getEstimationQuestion(String serverUrl, int gameIndex, int questionIndex) {
+        String path = String.format("/api/games/%d/estimation/%d", gameIndex, questionIndex);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path(path)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(EstimationQuestion.class);
+    }
+
+    public ChoiceQuestion getChoiceQuestion(String serverUrl, int gameIndex, int questionIndex) {
+        String path = String.format("/api/games/%d/choice/%d", gameIndex, questionIndex);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path(path)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(ChoiceQuestion.class);
+    }
+
+    public ComparisonQuestion getComparisonQuestion(String serverUrl, int gameIndex, int questionIndex) {
+        String path = String.format("/api/games/%d/comparison/%d", gameIndex, questionIndex);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path(path)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(ComparisonQuestion.class);
     }
 
     /**
