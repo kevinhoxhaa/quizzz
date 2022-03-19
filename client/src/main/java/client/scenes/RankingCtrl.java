@@ -2,19 +2,19 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.entities.SoloUser;
-import jakarta.ws.rs.WebApplicationException;
+//import commons.entities.SoloUser;
+//import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
+//import javafx.scene.control.Alert;
 import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.TableColumn;
+//import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
+//import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
+//import javafx.stage.Modality;
 
 import java.util.List;
 
