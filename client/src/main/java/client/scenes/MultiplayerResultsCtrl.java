@@ -3,7 +3,12 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -11,10 +16,12 @@ import javafx.scene.text.Text;
 
 import java.util.List;
 
-public class MultiplayerResultsCtrl implements QuestionNumController{
+public class MultiplayerResultsCtrl implements QuestionNumController, SceneController {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+
+    private boolean rematch;
 
     @FXML
     private Text scoreTableUserName;
@@ -35,6 +42,9 @@ public class MultiplayerResultsCtrl implements QuestionNumController{
 
     @FXML
     private HBox circles;
+
+    @FXML
+    private ProgressIndicator countdownCircle;
 
     /**
      * Creates a controller for the multiplayer results page screen, with the given server and mainCtrl parameters.
@@ -67,16 +77,40 @@ public class MultiplayerResultsCtrl implements QuestionNumController{
      */
     @FXML
     protected void onRematchButton(){
-        //TODO: Make a working rematch button.
+        rematch = !rematch;
+        if (rematch) {
+            rematchButton.setBackground(new Background(
+                    new BackgroundFill(Color.DARKCYAN, CornerRadii.EMPTY, Insets.EMPTY)));
+        } else {
+            rematchButton.setBackground(new Background(
+                    new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+        }
     }
     /**
      * Redirects the user to the home page when the quit button is clicked.
      */
+    @Override
     @FXML
-    protected void onQuitButton(){
+    public void onQuit(){
         mainCtrl.bindUser(null);
         mainCtrl.killThread();
         mainCtrl.showHome();
+    }
+
+    @Override
+    public void redirect() {
+        if (rematch) {
+            mainCtrl.showWaiting();
+        } else {
+            onQuit();
+        }
+    }
+
+    /**
+     * Initiates the timer countdown and animation
+     */
+    public void startTimer() {
+        mainCtrl.startTimer(countdownCircle, this);
     }
 
     /**

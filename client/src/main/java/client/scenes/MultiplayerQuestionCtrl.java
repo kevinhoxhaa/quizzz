@@ -238,9 +238,9 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
 
             for (StackPane answerBtnLoop: answerButtons) {
                 answerBtnLoop.setStyle("-fx-border-width: 1; -fx-border-color: black");
-                ((Text) answerBtnLoop.getChildren().get(0)).setStyle("-fx-font-weight: normal");
+                (answerBtnLoop.getChildren().get(0)).setStyle("-fx-font-weight: normal");
             }
-            ((Text) answerButton.getChildren().get(0)).setStyle("-fx-font-weight: bold");
+            (answerButton.getChildren().get(0)).setStyle("-fx-font-weight: bold");
             answerButton.setStyle("-fx-border-width: 2; -fx-border-color: black");
         }
 

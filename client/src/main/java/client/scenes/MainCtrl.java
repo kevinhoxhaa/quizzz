@@ -543,5 +543,6 @@ public class MainCtrl {
         multiplayerResultsCtrl.setup(colors);
         primaryStage.setTitle("Multiplayer results screen");
         primaryStage.setScene(multiplayerResults);
+        multiplayerResultsCtrl.startTimer();
     }
 }

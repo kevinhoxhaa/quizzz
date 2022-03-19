@@ -12,7 +12,7 @@ import javafx.scene.text.Text;
 
 import java.util.List;
 
-public class SoloResultsCtrl implements QuestionNumController{
+public class SoloResultsCtrl implements SceneController, QuestionNumController{
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -75,12 +75,20 @@ public class SoloResultsCtrl implements QuestionNumController{
     protected void onRestartButton(){
         mainCtrl.startSoloGame();
     }
+
     /**
-     * Redirects the user to the home page when the quit button is clicked
+     * Quits the solo game, unbinds the user and redirects the user to the home page.
      */
+    @Override
     @FXML
-    protected void onQuitButton(){
+    public void onQuit() {
+        mainCtrl.killThread();
         mainCtrl.showHome();
+    }
+
+    @Override
+    public void redirect() {
+        //TODO: See if this method is really needed or not.
     }
 
     /**
