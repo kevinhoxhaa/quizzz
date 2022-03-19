@@ -12,7 +12,6 @@ import commons.models.SoloGame;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.ProgressIndicator;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -108,9 +107,9 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
     protected void setup(SoloGame soloGame, List<Color> colors) {
         this.game = soloGame;
         currentScore.setText( String.format( "Score: %d", mainCtrl.getSoloScore()) );
-        Question question = soloGame.getCurrentQuestion();
+        Question question = soloGame.loadCurrentQuestion();
         this.currentQuestion = question;
-        questionImg.setImage(new Image(currentQuestion.getImagePath()));
+        //questionImg.setImage(new Image(currentQuestion.getImagePath()));
 
         updateCircleColor(colors);
         resetHighlight();

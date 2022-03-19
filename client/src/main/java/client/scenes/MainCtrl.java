@@ -466,7 +466,7 @@ public class MainCtrl {
      * @param game the solo game instance
      */
     public void showSoloAnswerPage(SoloGame game) {
-        Question prevQuestion = game.getCurrentQuestion();
+        Question prevQuestion = game.loadCurrentQuestion();
         if (prevQuestion.hasCorrectUserAnswer()) {
             colors.add(Color.LIGHTGREEN);
         } else {

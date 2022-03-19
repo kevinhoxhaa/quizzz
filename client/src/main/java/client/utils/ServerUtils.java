@@ -15,7 +15,6 @@
  */
 package client.utils;
 
-import commons.entities.Activity;
 import commons.entities.MultiplayerUser;
 import commons.entities.Quote;
 import commons.entities.SoloUser;
@@ -36,7 +35,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.List;
-import java.util.Random;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -218,14 +216,14 @@ public class ServerUtils {
      * @return a new (solo) game instance
      */
     public SoloGame getSoloGame(String serverUrl, int count) {
-        /*
+
         return ClientBuilder.newClient(new ClientConfig())
                 .target(serverUrl).path("api/games/startSolo/" + count)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(SoloGame.class);
-        */
 
+        /*
         //THE FORMER PART WILL BE USED ONCE THE BACKEND IS SET UP PROPERLY, THE FOLLOWING PART IS A DUMMY
         SoloGame soloGame = new SoloGame();
         Activity activity = new Activity("starting a solo game on client side", MAGICNUMBER,
@@ -234,6 +232,8 @@ public class ServerUtils {
             soloGame.getQuestions().add(new ConsumptionQuestion(activity, new Random()));
         }
         return soloGame;
+
+         */
     }
 
     /**
