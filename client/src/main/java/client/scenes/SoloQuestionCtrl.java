@@ -363,7 +363,7 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
                 answerBtn.setBackground(new Background(
                         new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
                 answerBtn.setStyle("-fx-border-width: 1; -fx-border-color: black");
-                ((Text) answerBtn.getChildren().get(0)).setStyle("-fx-font-weight: normal");
+                (answerBtn.getChildren().get(0)).setStyle("-fx-font-weight: normal");
             }
         }
     }
