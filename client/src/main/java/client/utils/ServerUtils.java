@@ -116,12 +116,20 @@ public class ServerUtils {
     }
 
     public Question getQuestion(String serverUrl, int gameIndex, int questionIndex) {
-        String path = String.format("/api/games/%d/question/%d", gameIndex, questionIndex);
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(serverUrl).path(path)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(Question.class);
+        String questionType = getQuestionType(serverUrl, gameIndex, questionIndex);
+
+        switch(questionType) {
+            case "CONSUMPTION":
+                return getConsumptionQuestion(serverUrl, gameIndex, questionIndex);
+            case "ESTIMATION":
+                return getEstimationQuestion(serverUrl, gameIndex, questionIndex);
+            case "CHOICE":
+                return getChoiceQuestion(serverUrl, gameIndex, questionIndex);
+            case "COMPARISON":
+                return getComparisonQuestion(serverUrl, gameIndex, questionIndex);
+            default:
+                return null;
+        }
     }
 
     public String getQuestionType(String serverUrl, int gameIndex, int questionIndex) {
