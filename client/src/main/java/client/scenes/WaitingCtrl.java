@@ -84,7 +84,6 @@ public class WaitingCtrl {
             if(!users.contains(mainCtrl.getUser())) {
                 Integer gameIndex = server.findGameIndex(serverUrl, userId);
                 mainCtrl.setGameIndex(gameIndex);
-                mainCtrl.getUser().id = server.findUserInGame(serverUrl, gameIndex, mainCtrl.getUser().username);
                 Question firstQuestion = server.getQuestion(serverUrl, gameIndex, 0);
                 mainCtrl.stopWaitingTimer();
                 mainCtrl.showQuestion(firstQuestion);
@@ -123,9 +122,6 @@ public class WaitingCtrl {
             String serverUrl = mainCtrl.getServerUrl();
             Integer gameIndex = server.startGame(serverUrl);
             mainCtrl.setGameIndex(gameIndex);
-            System.out.println("Not in game is " + mainCtrl.getUser().id);
-            mainCtrl.getUser().id = server.findUserInGame(serverUrl, gameIndex, mainCtrl.getUser().username);
-            System.out.println("In game is " + mainCtrl.getUser().id);
             Question firstQuestion = server.getQuestion(serverUrl, gameIndex, 0);
             mainCtrl.stopWaitingTimer();
             mainCtrl.showQuestion(firstQuestion);

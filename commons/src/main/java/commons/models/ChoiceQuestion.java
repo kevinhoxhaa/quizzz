@@ -133,7 +133,7 @@ public class ChoiceQuestion extends Question {
      */
     @Override
     public boolean hasCorrectUserAnswer() {
-        if (userAnswer == null) {
+        if (userAnswer == null || userAnswer.getAnswer() == null) {
             return false;
         }
         return answer == userAnswer.getAnswer();

@@ -213,15 +213,6 @@ public class ServerUtils {
                 .delete(MultiplayerUser.class);
     }
 
-    public Long findUserInGame(String serverUrl, int gameIndex, String username) {
-        String path = String.format("api/games/%d/user/%s", gameIndex, username);
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(serverUrl).path(path)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(Long.class);
-    }
-
     public List<MultiplayerUser> answerQuestion(String serverUrl, int gameIndex,
                                                 long userId, int questionIndex, Question question) {
         String path = String.format(

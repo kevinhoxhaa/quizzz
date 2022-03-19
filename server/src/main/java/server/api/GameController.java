@@ -155,12 +155,12 @@ public class GameController {
             user.gameID = (long) gameList.getGames().size();
         }
         System.out.println(users);
-        gameUserRepo.saveAll(users);
+        users.forEach(u -> gameUserRepo.save(u));
 
         users = gameUserRepo.findByGameID((long) gameList.getGames().size());
         users.forEach(u -> game.getUserIds().add(u.id));
 
-        waitingUserRepo.deleteAll();
+//        waitingUserRepo.deleteAll();
 
         for(int i = 0; i < count; i++) {
             game.getQuestions().add(generateQuestion());
@@ -168,30 +168,6 @@ public class GameController {
 
         gameList.getGames().add(game);
         return ResponseEntity.ok(gameList.getGames().indexOf(game));
-    }
-
-    @GetMapping("/{gameIndex}/user/{username}")
-    public ResponseEntity<Long> getUserId(@PathVariable("gameIndex") int gameIndex,
-                          @PathVariable("username") String username) {
-        List<MultiplayerUser> usersInGame = gameUserRepo.findByGameID((long) gameIndex);
-
-        System.out.println(username);
-        System.out.println(usersInGame);
-
-        MultiplayerUser result = null;
-
-        for(MultiplayerUser user : usersInGame) {
-            if(user.username.equals(username)) {
-                result = user;
-                break;
-            }
-        }
-
-        if(result == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        return ResponseEntity.ok(result.id);
     }
 
     /**
@@ -213,9 +189,7 @@ public class GameController {
 
     @GetMapping(path = "/find/{userId}")
     public ResponseEntity<Integer> findGameIndex(@PathVariable("userId") long userId) {
-        System.out.println("Searching for user " + userId);
         if(userId < 0 || waitingUserRepo.existsById(userId)) {
-            System.out.println("Invalid user id " + userId);
             return ResponseEntity.badRequest().build();
         }
 
@@ -228,8 +202,6 @@ public class GameController {
                 break;
             }
         }
-
-        System.out.println("User found in game " + index);
 
         return ResponseEntity.ok(index);
     }
@@ -439,6 +411,8 @@ public class GameController {
         if(!allUsersHaveAnswered(game.getUserIds(), questionIndex + 1)) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
+
+        System.out.println("All users have answered!");
 
         List<MultiplayerUser> rightUsers = new ArrayList<>();
         for(long id : game.getUserIds()) {
