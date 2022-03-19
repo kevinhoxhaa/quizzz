@@ -1,5 +1,6 @@
 package commons.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import commons.entities.Activity;
 import commons.utils.AnswerType;
 import commons.utils.CompareType;
@@ -8,6 +9,7 @@ import java.util.Objects;
 
 import static commons.utils.AnswerType.*;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Answer {
     private Long longAnswer;
     private Activity activity;
