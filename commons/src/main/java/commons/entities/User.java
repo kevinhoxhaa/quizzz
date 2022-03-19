@@ -24,7 +24,32 @@ public abstract class User {
 
     public String username;
     public Long correctAnswers;
-    public Long points;
+    public Long points = 0L;
+
+    public long getId() {
+        return id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public Long getCorrectAnswers() {
+        return correctAnswers;
+    }
+
+    public Long getPoints() {
+        return points;
+    }
+
+    public Integer getTotalAnswers() {
+        return totalAnswers;
+    }
+
+    public Boolean getLastAnswerCorrect() {
+        return lastAnswerCorrect;
+    }
+
     public Integer totalAnswers;
     public Boolean lastAnswerCorrect;
 
@@ -36,6 +61,20 @@ public abstract class User {
         this.lastAnswerCorrect = false;
     }
 
+    /**
+     * A method that increments the user's score
+     * @param score
+     */
+    public void incrementScore(long score){
+        points+=score;
+    }
+
+    /**
+     * Resets the user's score when game restarts
+     */
+    public void resetScore(){
+        points=0L;
+    }
 
     @Override
     public boolean equals(Object obj) {
