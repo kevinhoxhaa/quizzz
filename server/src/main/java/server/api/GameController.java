@@ -250,7 +250,8 @@ public class GameController {
      * @return the requested question
      */
     @GetMapping(path =  "/{gameIndex}/consumption/{questionIndex}")
-    public ResponseEntity<Question> getConsumptionQuestion(@PathVariable(name = "gameIndex") int gameIndex,
+    public ResponseEntity<ConsumptionQuestion> getConsumptionQuestion(
+            @PathVariable(name = "gameIndex") int gameIndex,
                                                 @PathVariable(name = "questionIndex") int questionIndex) {
         if(gameIndex >= gameList.getGames().size()) {
             return ResponseEntity.badRequest().build();
@@ -262,7 +263,7 @@ public class GameController {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(game.getQuestions().get(questionIndex));
+        return ResponseEntity.ok((ConsumptionQuestion) game.getQuestions().get(questionIndex));
     }
 
     /**
@@ -275,7 +276,8 @@ public class GameController {
      * @return the requested question
      */
     @GetMapping(path =  "/{gameIndex}/estimation/{questionIndex}")
-    public ResponseEntity<Question> getEstimationQuestion(@PathVariable(name = "gameIndex") int gameIndex,
+    public ResponseEntity<EstimationQuestion> getEstimationQuestion(
+            @PathVariable(name = "gameIndex") int gameIndex,
                                                 @PathVariable(name = "questionIndex") int questionIndex) {
         if(gameIndex >= gameList.getGames().size()) {
             return ResponseEntity.badRequest().build();
@@ -287,7 +289,7 @@ public class GameController {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(game.getQuestions().get(questionIndex));
+        return ResponseEntity.ok((EstimationQuestion) game.getQuestions().get(questionIndex));
     }
 
     /**
@@ -300,7 +302,8 @@ public class GameController {
      * @return the requested question
      */
     @GetMapping(path =  "/{gameIndex}/choice/{questionIndex}")
-    public ResponseEntity<Question> getChoiceQuestion(@PathVariable(name = "gameIndex") int gameIndex,
+    public ResponseEntity<ChoiceQuestion> getChoiceQuestion(
+            @PathVariable(name = "gameIndex") int gameIndex,
                                                 @PathVariable(name = "questionIndex") int questionIndex) {
         if(gameIndex >= gameList.getGames().size()) {
             return ResponseEntity.badRequest().build();
@@ -312,7 +315,7 @@ public class GameController {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(game.getQuestions().get(questionIndex));
+        return ResponseEntity.ok((ChoiceQuestion) game.getQuestions().get(questionIndex));
     }
 
     /**
@@ -325,7 +328,8 @@ public class GameController {
      * @return the requested question
      */
     @GetMapping(path =  "/{gameIndex}/comparison/{questionIndex}")
-    public ResponseEntity<Question> getComparisonQuestion(@PathVariable(name = "gameIndex") int gameIndex,
+    public ResponseEntity<ComparisonQuestion> getComparisonQuestion(
+            @PathVariable(name = "gameIndex") int gameIndex,
                                                 @PathVariable(name = "questionIndex") int questionIndex) {
         if(gameIndex >= gameList.getGames().size()) {
             return ResponseEntity.badRequest().build();
@@ -337,7 +341,7 @@ public class GameController {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(game.getQuestions().get(questionIndex));
+        return ResponseEntity.ok((ComparisonQuestion) game.getQuestions().get(questionIndex));
     }
 
     /**
