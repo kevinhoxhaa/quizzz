@@ -95,6 +95,9 @@ public class MainCtrl {
     private SoloResultsCtrl soloResultsCtrl;
     private Scene soloResults;
 
+    private MultiplayerResultsCtrl multiplayerResultsCtrl;
+    private Scene multiplayerResults;
+
     private User user;
     private List<Color> colors;
     private Thread timerThread;
@@ -109,7 +112,8 @@ public class MainCtrl {
             Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> multiplayerQuestion,
             Pair<MultiplayerAnswerCtrl, Parent> multiplayerAnswer, Pair<RankingCtrl, Parent> ranking,
             Pair<EstimationQuestionCtrl, Parent> estimation, Pair<SoloQuestionCtrl, Parent> soloQuestion,
-                           Pair<SoloAnswerCtrl, Parent> soloAnswer, Pair<SoloResultsCtrl, Parent> soloResults) {
+            Pair<SoloAnswerCtrl, Parent> soloAnswer, Pair<SoloResultsCtrl, Parent> soloResults,
+            Pair<MultiplayerResultsCtrl, Parent> multiplayerResults) {
         this.primaryStage = primaryStage;
         primaryStage.setMinHeight(MIN_HEIGHT);
         primaryStage.setMinWidth(MIN_WIDTH);
@@ -148,6 +152,9 @@ public class MainCtrl {
 
         this.soloResultsCtrl = soloResults.getKey();
         this.soloResults=new Scene(soloResults.getValue());
+
+        this.multiplayerResultsCtrl = multiplayerResults.getKey();
+        this.multiplayerResults = new Scene(multiplayerResults.getValue());
 
         showHome();
         primaryStage.show();
@@ -371,8 +378,7 @@ public class MainCtrl {
                 showQuestion();
             }
         } else {
-//            showResultsPage();
-            // Once the game is over, the results page should be shown
+            showMultiplayerResults();
         }
     }
 
@@ -502,14 +508,21 @@ public class MainCtrl {
     }
 
     /**
-     * THIS STILL NEEDS TO BE IMPLEMENTED
      * Called after the last answer screen's timer is up, shows the solo results page
      * @param game
      */
     public void showSoloResults(SoloGame game) {
         soloResultsCtrl.setup(game,colors);
         primaryStage.setScene(soloResults);
-//        System.out.println("game over lol");
+    }
+
+    /**
+     * Called after the last answer screen's timer is up, shows the solo results page
+     */
+    public void showMultiplayerResults() {
+        multiplayerResultsCtrl.setup(colors);
+        primaryStage.setTitle("Multiplayer results screen");
+        primaryStage.setScene(multiplayerResults);
     }
 
     /**
