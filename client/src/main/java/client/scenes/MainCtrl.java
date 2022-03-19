@@ -16,10 +16,8 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import commons.entities.Activity;
 import commons.entities.MultiplayerUser;
 import commons.entities.User;
-import commons.models.ConsumptionQuestion;
 import commons.models.EstimationQuestion;
 import commons.models.Question;
 import commons.models.SoloGame;
@@ -40,7 +38,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Random;
 
 public class MainCtrl {
 
@@ -365,11 +362,7 @@ public class MainCtrl {
      * @return a random question
      */
     public Question getNextQuestion() {
-        //TODO instead of this, return a random question fetched from the server
-        Activity activity = new Activity(
-                "testing the question models", ANSWER_TO_THE_ULTIMATE_QUESTION,
-                "it was me. I said it. haha", "client/images/xd.png");
-        return new ConsumptionQuestion(activity, new Random());
+        return server.getQuestion(serverUrl, gameIndex, answerCount);
     }
 
     /**
