@@ -2,18 +2,19 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-//import commons.entities.User;
-//import jakarta.ws.rs.WebApplicationException;
+import commons.entities.SoloUser;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
-//import javafx.scene.control.Alert;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ProgressIndicator;
-//import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-//import javafx.stage.Modality;
+import javafx.stage.Modality;
 
 import java.util.List;
 
@@ -89,19 +90,21 @@ public class RankingCtrl implements SceneController,QuestionNumController {
      * the list view and the users on the podium
      * @param serverUrl the url of the server to fetch the users from
      */
-  /*  public void fetchUsers(String serverUrl) {
+    public void fetchUsers(String serverUrl) {
         scoreTable = new TableView();
         try {
-            //List<User> users = server.getAllUsersByScore(serverUrl);
+            List<SoloUser> users = server.getAllUsersByScore(serverUrl);
             TableColumn usersColumn = new TableColumn ( "Players" );
+            usersColumn.setCellValueFactory( new PropertyValueFactory<>( "username" ) );
             TableColumn scoreColumn = new TableColumn ( "Score" );
+            scoreColumn.setCellValueFactory( new PropertyValueFactory<>( "points") );
             scoreTable.getColumns().addAll( usersColumn, scoreColumn );
-            for(User user : users) {
-                scoreTable.getItems().add( user.username, user.points );
+            for(SoloUser user : users) {
+                scoreTable.getItems().add( user );
             }
-            ranking1stPlayer.setText( scoreTable.getItems().get(0) ) ;
-            ranking2ndPlayer.setText( scoreTable.getItems().get(1) ) ;
-            ranking3rdPlayer.setText( scoreTable.getItems().get(2) ) ;
+            ranking1stPlayer.setText( users.get(0).username ) ;
+            ranking2ndPlayer.setText( users.get(1).username ) ;
+            ranking3rdPlayer.setText( users.get(2).username ) ;
 
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -110,7 +113,7 @@ public class RankingCtrl implements SceneController,QuestionNumController {
             alert.showAndWait();
             return;
         }
-    } */
+    }
 
 //    /**
 //     * Sets up a timeline with keyFrames that have an interval of one second. This allows us to create a
