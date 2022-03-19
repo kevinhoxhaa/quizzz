@@ -90,10 +90,11 @@ public class RankingCtrl implements SceneController,QuestionNumController {
      * the list view and the users on the podium
      * @param serverUrl the url of the server to fetch the users from
      */
-    public void fetchUsers(String serverUrl) {
+   /* public void fetchUsers(String serverUrl) {
         scoreTable = new TableView();
         try {
-            List<SoloUser> users = server.getAllUsersByScore(serverUrl);
+            //List<SoloUser> users = server.getAllUsersByScore(serverUrl);
+            //TODO : fetch all the users from the multiplayer game
             TableColumn usersColumn = new TableColumn ( "Players" );
             usersColumn.setCellValueFactory( new PropertyValueFactory<>( "username" ) );
             TableColumn scoreColumn = new TableColumn ( "Score" );
@@ -113,7 +114,7 @@ public class RankingCtrl implements SceneController,QuestionNumController {
             alert.showAndWait();
             return;
         }
-    }
+    } */
 
 //    /**
 //     * Sets up a timeline with keyFrames that have an interval of one second. This allows us to create a
