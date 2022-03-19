@@ -58,7 +58,7 @@ public class MultiplayerResultsCtrl implements QuestionNumController{
         updateCircleColor(colors);
 
         scoreTableUserName.setText( String.format( "%s", mainCtrl.getUser().username) );
-        scoreTableUserScore.setText( String.format( "%d", mainCtrl.getSoloScore()) );
+        // scoreTableUserScore.setText( String.format( "%d", mainCtrl.getSoloScore()) );
         //TODO: Show all players in the leaderboard.
     }
 

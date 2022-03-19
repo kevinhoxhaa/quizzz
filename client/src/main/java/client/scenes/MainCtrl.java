@@ -397,7 +397,7 @@ public class MainCtrl {
                 showQuestion();
             }
         } else {
-//            showResultsPage();
+            // showMultiplayerResults();
             // Once the game is over, the results page should be shown
         }
     }
