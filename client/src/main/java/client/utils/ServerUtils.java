@@ -154,4 +154,17 @@ public class ServerUtils {
         }
         return soloGame;
     }
+
+    /**
+     * Returns an arraylist of solo users with their corresponding scores in descending order
+     * @param serverUrl
+     * @return Arraylist of solo users
+     */
+    public List<SoloUser> getAllUsersByScore(String serverUrl){
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path("api/users/solo/leaderboard")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<SoloUser>>() {});
+    }
 }

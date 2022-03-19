@@ -20,7 +20,9 @@ import static com.google.inject.Guice.createInjector;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import client.scenes.QuoteOverviewCtrl;
 import client.scenes.AddQuoteCtrl;
+import client.scenes.MultiplayerAnswerCtrl;
 import client.scenes.HomeCtrl;
 import client.scenes.MultiplayerAnswerCtrl;
 import client.scenes.MultiplayerResultsCtrl;
@@ -33,6 +35,7 @@ import client.scenes.SoloResultsCtrl;
 import client.scenes.EstimationQuestionCtrl;
 import client.scenes.RankingCtrl;
 import client.scenes.MainCtrl;
+
 import com.google.inject.Injector;
 
 import javafx.application.Application;

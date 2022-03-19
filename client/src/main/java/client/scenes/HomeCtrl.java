@@ -129,7 +129,7 @@ public class HomeCtrl {
                 return;
             }
             mainCtrl.setServerUrl(serverUrl);
-            mainCtrl.bindUser(server.addUserSolo(serverUrl, user));
+            mainCtrl.bindUser(getSoloUser());
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -14,7 +15,6 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<?import javafx.scene.Cursor?>
 <VBox fx:id="userSelf" minHeight="492.0" minWidth="748.0" prefHeight="492.0" prefWidth="748.0" spacing="20.0" HBox.hgrow="ALWAYS" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SoloResultsCtrl">
    <children>
       <HBox alignment="CENTER" layoutX="23.0" layoutY="34.0" prefHeight="19.0" prefWidth="725.0" spacing="4.0" VBox.vgrow="NEVER">
@@ -155,8 +155,8 @@
                      <children>
                         <TableView fx:id="scoreTable" prefHeight="277.0" prefWidth="167.0">
                            <columns>
-                              <TableColumn prefWidth="240.66664123535156" text="Users" />
-                              <TableColumn prefWidth="132.00006866455078" text="Score" />
+                              <TableColumn fx:id="tableUsers" prefWidth="240.66664123535156" text="Users" />
+                              <TableColumn fx:id="tableScore" prefWidth="132.00006866455078" text="Score" />
                            </columns>
                         </TableView>
                         <HBox prefHeight="59.0" prefWidth="373.0">
@@ -181,40 +181,35 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <VBox prefHeight="241.0" prefWidth="229.0">
+                  <Pane prefHeight="312.0" prefWidth="336.0">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Leaderboard">
+                        <Text layoutX="55.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Leaderboard">
                            <font>
                               <Font size="40.0" />
                            </font>
-                           <VBox.margin>
-                              <Insets left="50.0" />
-                           </VBox.margin></Text>
-                        <Text fx:id="ranking1stPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="1st player" textAlignment="CENTER" wrappingWidth="296.56768226623535">
-                           <VBox.margin>
-                              <Insets left="15.0" />
-                           </VBox.margin>
                         </Text>
-                        <Text fx:id="ranking2ndPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="2nd player" wrappingWidth="201.26686716079712">
-                           <VBox.margin>
-                              <Insets left="75.0" />
-                           </VBox.margin>
-                        </Text>
-                        <Text fx:id="ranking3rdPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="3rd player" wrappingWidth="71.47009086608887">
-                           <VBox.margin>
-                              <Insets left="200.0" />
-                           </VBox.margin>
-                        </Text>
-                        <ImageView fitHeight="201.0" fitWidth="260.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="255.0" fitWidth="288.0" layoutX="24.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/leaderboard.png" />
+                              <Image url="/client/images/leaderboard.png" />
                            </image>
-                           <VBox.margin>
-                              <Insets left="45.0" />
-                           </VBox.margin>
                         </ImageView>
+                        <Text fx:id="ranking1stPlayer" layoutX="125.0" layoutY="74.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1st player" textAlignment="CENTER" wrappingWidth="84.56771564483643">
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="ranking2ndPlayer" layoutX="29.0" layoutY="112.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2nd player" textAlignment="RIGHT" wrappingWidth="84.56771564483643">
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="ranking3rdPlayer" layoutX="223.0" layoutY="148.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3rd player" wrappingWidth="84.56771564483643">
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                        </Text>
                      </children>
-                  </VBox>
+                  </Pane>
                </children>
             </HBox>
             <HBox prefHeight="105.0" prefWidth="708.0">
@@ -247,6 +242,7 @@
             </HBox>
          </children>
       </VBox>
+      <VBox prefHeight="241.0" prefWidth="229.0" />
    </children>
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

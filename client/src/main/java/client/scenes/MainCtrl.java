@@ -103,7 +103,6 @@ public class MainCtrl {
     private Thread timerThread;
 
     private int answerCount = 0;
-    private long soloScore = 0;
     private static final int TOTAL_ANSWERS = 20;
     private static final int HALFWAY_ANSWERS = 10;
 
@@ -191,17 +190,7 @@ public class MainCtrl {
      */
 
     public long getSoloScore() {
-        return this.soloScore;
-    }
-
-    /**
-     * add the score to the player's own score
-     *
-     * @param score the score to be added
-     */
-
-    public void addScore ( long score ) {
-        this.soloScore += score;
+        return getUser().getPoints();
     }
 
     /**
@@ -444,7 +433,7 @@ public class MainCtrl {
      */
     public void startSoloGame() {
         answerCount = 0;
-        soloScore = 0;
+        getUser().resetScore();
         colors = new ArrayList<>();
 
         soloQuestionCtrl.resetCircleColor();
