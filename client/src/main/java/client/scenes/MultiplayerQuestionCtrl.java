@@ -4,20 +4,34 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.entities.Activity;
 import commons.entities.MultiplayerUser;
-import commons.models.*;
+import commons.models.Answer;
+import commons.models.ChoiceQuestion;
+import commons.models.ComparisonQuestion;
+import commons.models.ConsumptionQuestion;
+import commons.models.Question;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
-import static commons.utils.CompareType.*;
+import static commons.utils.CompareType.EQUAL;
+import static commons.utils.CompareType.LARGER;
+import static commons.utils.CompareType.SMALLER;
 
 
 public class MultiplayerQuestionCtrl implements SceneController, QuestionNumController {

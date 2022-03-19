@@ -81,7 +81,7 @@ public class GameControllerTest {
     @Test
     public void startGameMovesUsers() {
         sut.startGame((int) NUMBER);
-        assertEquals(0, waitingUserRepo.count());
+        assertEquals(0, waitingUserRepo.findByGameIDIsNull().size());
         assertEquals(NUMBER, gameUserRepo.count());
     }
 

@@ -3,10 +3,22 @@ package server.api;
 import commons.entities.Activity;
 import commons.entities.MultiplayerUser;
 import commons.entities.User;
-import commons.models.*;
+import commons.models.ChoiceQuestion;
+import commons.models.ComparisonQuestion;
+import commons.models.ConsumptionQuestion;
+import commons.models.EstimationQuestion;
+import commons.models.Game;
+import commons.models.GameList;
+import commons.models.Question;
+import commons.models.SoloGame;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import server.database.ActivityRepository;
 import server.database.GameUserRepository;
 import server.database.WaitingUserRepository;
@@ -189,7 +201,7 @@ public class GameController {
 
     @GetMapping(path = "/find/{userId}")
     public ResponseEntity<Integer> findGameIndex(@PathVariable("userId") long userId) {
-        if(userId < 0 || waitingUserRepo.existsById(userId)) {
+        if(userId < 0) {
             return ResponseEntity.badRequest().build();
         }
 
