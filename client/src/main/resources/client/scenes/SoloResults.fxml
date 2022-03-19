@@ -190,7 +190,7 @@
                         </Text>
                         <ImageView fitHeight="255.0" fitWidth="288.0" layoutX="24.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@client/images/leaderboard.png" />
+                              <Image url="/client/images/leaderboard.png" />
                            </image>
                         </ImageView>
                         <Text fx:id="ranking1stPlayer" layoutX="125.0" layoutY="74.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1st player" textAlignment="CENTER" wrappingWidth="84.56771564483643">
