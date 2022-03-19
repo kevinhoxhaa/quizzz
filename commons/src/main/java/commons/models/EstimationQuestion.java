@@ -12,6 +12,12 @@ public class EstimationQuestion extends Question {
 
     private Activity activity;
 
+    @SuppressWarnings("unused")
+    private EstimationQuestion() {
+        super(QuestionType.ESTIMATION);
+        // for object mapper
+    }
+
     /**
      * Constructs a new estimation question object based
      * on a certain activity from the database

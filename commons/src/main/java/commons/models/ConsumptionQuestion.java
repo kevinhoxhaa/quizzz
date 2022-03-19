@@ -15,7 +15,13 @@ public class ConsumptionQuestion extends Question {
 
     private Activity activity;
     private List<Long> answers;
-    private final Random random;
+    private Random random;
+
+    @SuppressWarnings("unused")
+    private ConsumptionQuestion() {
+        super(QuestionType.CONSUMPTION);
+        // for object mapper
+    }
 
     /**
      * Constructs a new consumption question object based
