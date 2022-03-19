@@ -21,6 +21,7 @@ import commons.entities.User;
 import commons.models.ConsumptionQuestion;
 import commons.models.Question;
 import commons.models.SoloGame;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
@@ -48,10 +49,13 @@ public class MainCtrl {
     public static final double MIN_WIDTH = 768.0;
     public static final double MIN_HEIGHT = 512.0;
     private static final int POLLING_DELAY = 0;
-    private static final int POLLING_INTERVAL = 1500;
+    private static final int POLLING_INTERVAL = 200;
     private static final long ANSWER_TO_THE_ULTIMATE_QUESTION = 42;
     private static final int STANDARD_PAGE_TIME = 15;
     private static final int QUESTIONS_PER_GAME = 20;
+
+    private String serverUrl;
+    private Timer waitingTimer;
 
     private Stage primaryStage;
 
@@ -92,9 +96,10 @@ public class MainCtrl {
 
     private User user;
     private List<Color> colors;
+    private Thread timerThread;
 
     private int answerCount = 0;
-    private int soloScore = 0;
+    private long soloScore = 0;
     private static final int TOTAL_ANSWERS = 20;
     private static final int HALFWAY_ANSWERS = 10;
 
@@ -141,9 +146,7 @@ public class MainCtrl {
         this.soloAnswer = new Scene(soloAnswer.getValue());
 
         this.soloResultsCtrl = soloResults.getKey();
-        this.soloResults = new Scene(soloResults.getValue());
-
-        colors = new ArrayList<>();
+        this.soloResults=new Scene(soloResults.getValue());
 
         showHome();
         primaryStage.show();
@@ -173,7 +176,7 @@ public class MainCtrl {
      * @return the score
      */
 
-    public int getSoloScore() {
+    public long getSoloScore() {
         return this.soloScore;
     }
 
@@ -183,7 +186,7 @@ public class MainCtrl {
      * @param score the score to be added
      */
 
-    public void addScore ( int score ) {
+    public void addScore ( long score ) {
         this.soloScore += score;
     }
 
@@ -198,20 +201,37 @@ public class MainCtrl {
 
     /**
      * Displays the waiting page of the quiz application
+     * Resets the colorList and the answerCount to 0 every time someone enters the waiting room.
      */
     public void showWaiting() {
         primaryStage.setTitle("Quizzz: Waiting");
         primaryStage.setScene(waiting);
+
+        colors = new ArrayList<>();
+        answerCount=0;
+        multiplayerQuestionCtrl.resetCircleColor();
+        multiplayerAnswerCtrl.resetCircleColor();
+        rankingCtrl.resetCircleColor();
+
         waitingCtrl.scaleButton();
-        new Timer().schedule(
+        waitingTimer = new Timer();
+        waitingTimer.schedule(
                 new TimerTask() {
 
                     @Override
                     public void run() {
                         System.out.println("REFRESH");
-                        Platform.runLater(() -> waitingCtrl.fetchUsers(homeCtrl.getServerUrl()));
+                        Platform.runLater(() -> waitingCtrl.fetchUsers());
                     }
                 }, POLLING_DELAY, POLLING_INTERVAL);
+    }
+
+    /**
+     * Stops the waiting room timer for continuous
+     * user polling
+     */
+    public void stopWaitingTimer() {
+        waitingTimer.cancel();
     }
 
     public void showOverview() {
@@ -276,6 +296,7 @@ public class MainCtrl {
         multiplayerQuestionCtrl.setup(question);
         multiplayerQuestionCtrl.resetAnswerColors();
         multiplayerQuestionCtrl.updateQuestionNumber();
+
         multiplayerQuestionCtrl.startTimer();
         multiplayerQuestionCtrl.setStartTime();
         primaryStage.setTitle("Question screen");
@@ -311,6 +332,7 @@ public class MainCtrl {
         return answerCount;
     }
 
+
     /**
      * Fetches a random question from the server. For now, it just returns a placeholder for testing.
      *
@@ -336,9 +358,14 @@ public class MainCtrl {
 
                     @Override
                     public void run() {
-                        homeCtrl.getServer().removeMultiplayerUser(homeCtrl.getServer().getURL(), user);
-                        user = null;
-                        System.exit(0);
+                        try {
+                            homeCtrl.getServer().removeMultiplayerUser(homeCtrl.getServer().getURL(), user);
+                            user = null;
+                        } catch(WebApplicationException e) {
+                            System.out.println("User to remove not found!");
+                        } finally {
+                            System.exit(0);
+                        }
                     }
                 });
             }
@@ -370,7 +397,7 @@ public class MainCtrl {
 
     /**
      * Starts a particular countdown timer and initiates the
-     * timer animation
+     * timer animation with a new thread
      *
      * @param countdownCircle the circle to perform the
      *                        animation on
@@ -380,7 +407,10 @@ public class MainCtrl {
     public void startTimer(ProgressIndicator countdownCircle, SceneController sceneController) {
         countdownCircle.applyCss();
         Text text = (Text) countdownCircle.lookup(".text.percentage");
-        new Thread(() -> {
+        if(timerThread!=null && timerThread.isAlive()){
+            timerThread.interrupt();
+        }
+        timerThread = new Thread(() -> {
             double countdown = START_TIME;
             while (countdown >= 0.0) {
                 try {
@@ -395,7 +425,9 @@ public class MainCtrl {
                     Thread.sleep(MILLIS);
                     countdown -= INTERVAL;
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+//                    e.printStackTrace();
+                    //This kills the current running thread
+                    return;
                 }
             }
             Platform.runLater(
@@ -408,18 +440,33 @@ public class MainCtrl {
                         }
                     }
             });
-        }).start();
+        });
+        timerThread.start();
+    }
+
+    /**
+     * Kills the thread that is running the timer
+     */
+    public void killThread() {
+        timerThread.interrupt();
     }
 
     /**
      * Called once, initializes a solo game and shows the first question screen
+     * Resets the state of the solo game
      */
     public void startSoloGame() {
+        answerCount = 0;
+        soloScore = 0;
+        colors = new ArrayList<>();
+
+        soloQuestionCtrl.resetCircleColor();
+        soloAnswerCtrl.resetCircleColor();
+
         SoloGame soloGame = server.getSoloGame(server.getURL(), QUESTIONS_PER_GAME);
-        soloQuestionCtrl.setup(soloGame);
         primaryStage.setTitle("Solo game");
-        primaryStage.setScene(soloQuestion);
-        soloQuestionCtrl.startTimer();
+
+        showSoloQuestion(soloGame);
     }
 
     /**
@@ -427,29 +474,60 @@ public class MainCtrl {
      * @param game the solo game instance
      */
     public void showSoloAnswerPage(SoloGame game) {
-        soloAnswerCtrl.setup(game);
+        Question prevQuestion = game.getCurrentQuestion();
+        if (prevQuestion.hasCorrectUserAnswer()) {
+            colors.add(Color.LIGHTGREEN);
+        } else {
+            colors.add(Color.INDIANRED);
+        }
+        soloAnswerCtrl.setup(game, colors);
         primaryStage.setScene(soloAnswer);
         soloAnswerCtrl.startTimer();
     }
 
     /**
+     * Getter for the number of questions per game
+     * @return QUESTIONS_PER_GAME
+     */
+    public int getQuestionsPerGame(){
+        return QUESTIONS_PER_GAME;
+    }
+    /**
      * Shows the relevant question screen for the given solo game instance
      * @param game the solo game instance
      */
     public void showSoloQuestion(SoloGame game) {
-        soloQuestionCtrl.setup(game);
+        soloQuestionCtrl.setup(game, colors);
         primaryStage.setScene(soloQuestion);
         soloQuestionCtrl.startTimer();
+        soloQuestionCtrl.setStartTime();
+    }
+
+    /**
+     * Sets the server URL for the application
+     * @param serverUrl the new server URL
+     */
+    public void setServerUrl(String serverUrl) {
+        this.serverUrl = serverUrl;
+    }
+
+    /**
+     * Returns the server URL the application makes requests
+     * to
+     * @return the app server URL
+     */
+    public String getServerUrl() {
+        return serverUrl;
     }
 
     /**
      * THIS STILL NEEDS TO BE IMPLEMENTED
      * Called after the last answer screen's timer is up, shows the solo results page
+     * @param game
      */
-    public void showSoloResults() {
-        //TODO
-        soloResultsCtrl.setup();
+    public void showSoloResults(SoloGame game) {
+        soloResultsCtrl.setup(game,colors);
         primaryStage.setScene(soloResults);
-        primaryStage.setTitle("Solo results");
+//        System.out.println("game over lol");
     }
 }

@@ -30,7 +30,6 @@ import commons.entities.MultiplayerUser;
 import commons.entities.SoloUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
 
 public class UserControllerTest {
 
@@ -106,20 +105,6 @@ public class UserControllerTest {
         sut.addMultiplayerUser(getMultiplayerUser("q1"));
         var actual = sut.addMultiplayerUser(getMultiplayerUser("q1"));
         assertEquals(UNAUTHORIZED, actual.getStatusCode());
-    }
-
-    @Test
-    public void getAllByIdReturnsList() {
-        var user = sut.addMultiplayerUser(getMultiplayerUser("q1"));
-        sut.addMultiplayerUser(getMultiplayerUser("q2"));
-        assertTrue(sut.getAllById(user.getBody().id).getBody().size() > 0);
-    }
-
-    @Test
-    public void getAllByIdReturnsNoContent() {
-        sut.addMultiplayerUser(getMultiplayerUser("q1"));
-        var user = sut.addMultiplayerUser(getMultiplayerUser("q2"));
-        assertEquals(HttpStatus.NO_CONTENT, sut.getAllById(user.getBody().id + 1).getStatusCode());
     }
 
     @Test

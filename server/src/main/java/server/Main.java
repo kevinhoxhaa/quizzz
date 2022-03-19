@@ -15,15 +15,75 @@
  */
 package server;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import commons.entities.Activity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.util.ResourceUtils;
+import server.database.ActivityRepository;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 @EntityScan(basePackages = { "commons", "server" })
-public class Main {
+public class Main implements CommandLineRunner {
+
+    @Autowired
+    private ActivityRepository activityRepo;
 
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
+    }
+
+    /**
+     * Fills up the activities repository with activities from the resources/activities directory.
+     * @param args
+     * @throws IOException
+     */
+    @Override
+    public void run(String[] args) throws IOException {
+        if(activityRepo.count() == 0){
+            String content = "";
+            try {
+                content = Files.readString(
+                        Path.of(
+                                ResourceUtils.getFile("classpath:activities/activities.json").getPath()
+                        ), StandardCharsets.US_ASCII);
+            }
+            catch (FileNotFoundException e){
+                System.out.println("Please put some files in the activities directory!");
+            }
+
+            JsonParser parser = new JsonParser();
+            JsonElement element = parser.parse(content);
+            JsonArray array = element.getAsJsonArray();
+
+            List<Activity> activities = new ArrayList<>();
+            array.forEach(e -> {
+                JsonObject o = e.getAsJsonObject();
+                String id = String.valueOf(o.get("id"));
+
+                String imagePath = String.valueOf(o.get("image_path"));
+                String title = String.valueOf(o.get("title"));
+                long consumption = Long.parseLong(String.valueOf(o.get("consumption_in_wh")));
+                String source = String.valueOf(o.get("source"));
+
+                Activity activity = new Activity(id, title, consumption, source, imagePath);
+                activities.add(activity);
+            });
+            activityRepo.saveAll(activities);
+        }
     }
 }

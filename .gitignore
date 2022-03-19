@@ -5,7 +5,10 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+/server/src/main/resources/activities/
+
 **/*.mv.db
+**/*.trace.db
 
 **/*.swp
 

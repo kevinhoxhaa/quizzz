@@ -8,18 +8,46 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import commons.models.SoloGame;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 
-public class SoloResultsCtrl {
+import java.util.List;
+
+public class SoloResultsCtrl implements QuestionNumController{
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private ObservableList<SoloUser> users;
+
+    @FXML
+    private Text scoreTableUserName;
+    @FXML
+    private Text scoreTableUserScore;
+
+    @FXML
+    private Text personalBest;
+
+    @FXML
+    private Button quitButton;
+
+    @FXML
+    private Button restartButton;
+
+    @FXML
+    private Text questionNum;
+
+    @FXML
+    private HBox circles;
+
+    private SoloGame game;
 
     /**
      * Creates a controller for the solo results page screen, with the given server and mainCtrl parameters.
@@ -33,17 +61,38 @@ public class SoloResultsCtrl {
         this.mainCtrl = mainCtrl;
     }
 
-    @FXML
-    private Text score;
 
-    @FXML
-    private Text personalBest;
+    /**
+     * Setups the page quit button that redirects to the main page, and fills in the score and personal best
+     * @param game
+     * @param colors
+     */
 
-    @FXML
-    private Button quit;
+    protected void setup(SoloGame game,List<Color>colors) {
+        this.game=game;
 
+        updateQuestionNumber();
+        updateCircleColor(colors);
+
+        scoreTableUserName.setText( String.format( "%s", mainCtrl.getUser().username) );
+        scoreTableUserScore.setText( String.format( "%d", mainCtrl.getSoloScore()) );
+        //TODO : add personal best to server side and link it
+    }
+
+    /**
+     * Starts another game when restart button is clicked
+     */
     @FXML
-    private Button restart;
+    protected void onRestartButton(){
+        mainCtrl.startSoloGame();
+    }
+    /**
+     * Redirects the user to the home page when the quit button is clicked
+     */
+    @FXML
+    protected void onQuitButton(){
+        mainCtrl.showHome();
+    }
 
     @FXML
     private TableColumn<User, String> tableUsers;
@@ -56,27 +105,47 @@ public class SoloResultsCtrl {
 
 
     /**
-     * Setups the page quit button that redirects to the main page, and fills in the score and personal best
+     * Getter for the current question number
+     * @return questionNum
      */
+    public Text getQuestionNum(){
+        return questionNum;
+    }
 
-    public void setup() {
-        quit.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-            @Override
-            public void handle(javafx.event.ActionEvent event) {
-                mainCtrl.showHome();
-            }
-        });
+    /**
+     * Getter for the circles bar
+     * @return circles
+     */
+    public HBox getCirclesHBox(){
+        return circles;
+    }
 
-        restart.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                // TODO : restart the solo game
-            }
-        });
+    /**
+     * Updates the color of the past questions' circles on the circle bar
+     * (green/red depending on the correctness of the answer)
+     *
+     * @param colors Is the list of colors of previous answers(green/red depending on their correctness)
+     */
+    @Override
+    public void updateCircleColor(List<Color> colors) {
+        for (int i = 0; i < colors.size(); i++) {
+            Circle c = (Circle) getCirclesHBox().getChildren().get(i);
+            c.setFill(colors.get(i));
+        }
+    }
 
         score.setText(String.format("%d", mainCtrl.getSoloScore()));
         // TODO : add personal best to server side and link it
         setTable();
+    /**
+     * Resets the circles colors every time the game starts
+     */
+    @Override
+    public void resetCircleColor() {
+        for(int i=0; i<mainCtrl.getQuestionsPerGame();i++){
+            Circle circle = (Circle) getCirclesHBox().getChildren().get(i);
+            circle.setFill(Color.LIGHTGRAY);
+        }
     }
 
 
@@ -92,5 +161,12 @@ public class SoloResultsCtrl {
 
         scoreTable.setItems(users);
 
+    }
+    /**
+     * Updates the number of the current question (e.g 11/20)
+     */
+    @Override
+    public void updateQuestionNumber() {
+        getQuestionNum().setText("" + (game.getCurrentQuestionNum()));
     }
 }

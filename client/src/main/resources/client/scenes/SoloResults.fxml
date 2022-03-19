@@ -14,6 +14,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
+<?import javafx.scene.Cursor?>
 <VBox fx:id="userSelf" minHeight="492.0" minWidth="748.0" prefHeight="492.0" prefWidth="748.0" spacing="20.0" HBox.hgrow="ALWAYS" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SoloResultsCtrl">
    <children>
       <HBox alignment="CENTER" layoutX="23.0" layoutY="34.0" prefHeight="19.0" prefWidth="725.0" spacing="4.0" VBox.vgrow="NEVER">
@@ -168,7 +169,7 @@
                                     <Insets left="110.0" top="10.0" />
                                  </HBox.margin>
                               </Text>
-                              <Text fx:id="scoreTableUserSore" strokeType="OUTSIDE" strokeWidth="0.0" text="Score">
+                              <Text fx:id="scoreTableUserScore" strokeType="OUTSIDE" strokeWidth="0.0" text="Score">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -220,19 +221,25 @@
                <children>
                   <Pane prefHeight="92.0" prefWidth="357.0">
                      <children>
-                        <Button id="restart" fx:id="restartButton" layoutX="14.0" layoutY="12.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="211.0" text="Restart">
+                        <Button id="restart" fx:id="restartButton" layoutX="14.0" layoutY="12.0" mnemonicParsing="false" onAction="#onRestartButton" prefHeight="67.0" prefWidth="211.0" text="Restart">
                            <font>
                               <Font size="20.0" />
                            </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </Button>
                      </children>
                   </Pane>
                   <Pane prefHeight="92.0" prefWidth="350.0">
                      <children>
-                        <Button id="quit" fx:id="quitButton" layoutX="125.0" layoutY="13.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="211.0" text="Quit">
+                        <Button id="quit" fx:id="quitButton" layoutX="125.0" layoutY="13.0" mnemonicParsing="false" onAction="#onQuitButton" prefHeight="67.0" prefWidth="211.0" text="Quit">
                            <font>
                               <Font size="20.0" />
                            </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </Button>
                      </children>
                   </Pane>

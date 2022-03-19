@@ -128,6 +128,7 @@ public class HomeCtrl {
             if (!isValidUsername(user)) {
                 return;
             }
+            mainCtrl.setServerUrl(serverUrl);
             mainCtrl.bindUser(server.addUserSolo(serverUrl, user));
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -148,7 +149,7 @@ public class HomeCtrl {
             return;
         }
 
-        mainCtrl.showQuestion();
+        mainCtrl.startSoloGame();
     }
 
     /**
@@ -163,6 +164,7 @@ public class HomeCtrl {
             if (!isValidUsername(user)) {
                 return;
             }
+            mainCtrl.setServerUrl(serverUrl);
             mainCtrl.bindUser(server.addUserMultiplayer(serverUrl, user));
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
