@@ -100,7 +100,7 @@ public class MultiplayerResultsCtrl implements QuestionNumController, SceneContr
     @Override
     public void redirect() {
         if (rematch) {
-            mainCtrl.showWaiting();
+            mainCtrl.showQuestion();
         } else {
             onQuit();
         }
