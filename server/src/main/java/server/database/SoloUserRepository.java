@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface SoloUserRepository extends JpaRepository<SoloUser, Long> {
-    @Query(value = "SELECT * FROM SOLO_USER ORDER BY POINTS DESC", nativeQuery = true)
+    @Query(value = "SELECT * FROM SOLO_USER ORDER BY POINTS DESC LIMIT 30", nativeQuery = true)
     List<SoloUser> sortUserByDescendingOrder();
 }

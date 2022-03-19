@@ -7,7 +7,6 @@ import commons.entities.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import commons.models.SoloGame;
-import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
@@ -25,7 +24,6 @@ public class SoloResultsCtrl implements QuestionNumController{
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private ObservableList<SoloUser> users;
-    private static final int MAX_ROWS = 30;
 
     @FXML
     private Text scoreTableUserName;
@@ -156,9 +154,8 @@ public class SoloResultsCtrl implements QuestionNumController{
         tableUsers.setCellValueFactory(new PropertyValueFactory<User, String>("username"));
         tableScore.setCellValueFactory(new PropertyValueFactory<User, Long>("points"));
         this.users = FXCollections.observableList(server.getAllUsersByScore(server.getURL()));
-        FilteredList<SoloUser> filteredUsers = new FilteredList<>(users,soloUser -> users.indexOf(soloUser) < MAX_ROWS);
 
-        scoreTable.setItems(filteredUsers);
+        scoreTable.setItems(users);
 
     }
     /**
