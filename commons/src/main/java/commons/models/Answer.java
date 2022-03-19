@@ -6,15 +6,18 @@ import commons.utils.CompareType;
 
 import java.util.Objects;
 
-import static commons.utils.AnswerType.LONG;
-import static commons.utils.AnswerType.ACTIVITY;
-import static commons.utils.AnswerType.COMPARETYPE;
+import static commons.utils.AnswerType.*;
 
 public class Answer {
     private Long longAnswer;
     private Activity activity;
     private CompareType compareType;
     private AnswerType answerType;
+
+    @SuppressWarnings("unused")
+    private Answer() {
+        // for object mapper
+    }
 
     /**
      * A constructor for a long type answer. The type of this instance is *not* tied to just long.
@@ -69,7 +72,7 @@ public class Answer {
      * A setter for the answer (long)
      * @param answer the new answer
      */
-    public void setAnswer(Long answer){
+    public void setLongAnswer(Long answer){
         this.longAnswer = answer;
         this.answerType = LONG;
     }
@@ -78,7 +81,7 @@ public class Answer {
      * A setter for the answer (activity)
      * @param answer the new answer
      */
-    public void setAnswer(Activity answer){
+    public void setActivityAnswer(Activity answer){
         this.activity = answer;
         this.answerType = ACTIVITY;
     }
@@ -87,7 +90,7 @@ public class Answer {
      * A setter for the answer (compare type)
      * @param answer the new answer
      */
-    public void setAnswer(CompareType answer){
+    public void setCompareAnswer(CompareType answer){
         this.compareType = answer;
         this.answerType = COMPARETYPE;
     }

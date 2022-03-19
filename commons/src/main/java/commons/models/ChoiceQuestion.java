@@ -6,6 +6,7 @@ import commons.utils.QuestionType;
 import java.util.List;
 import java.util.Objects;
 
+
 public class ChoiceQuestion extends Question {
     private static final long TRUE_FACTOR = 500;
     private static final long TIME_FACTOR = 800;
@@ -13,6 +14,12 @@ public class ChoiceQuestion extends Question {
     private Activity comparedActivity;
     private List<Activity> activities;
     private Activity answer;
+
+    @SuppressWarnings("unused")
+    private ChoiceQuestion() {
+        super(QuestionType.CHOICE);
+        // for object mapper
+    }
 
     /**
      * Constructs a choice question (what will you do instead of...?)

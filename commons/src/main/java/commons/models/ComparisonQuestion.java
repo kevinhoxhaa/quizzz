@@ -14,6 +14,12 @@ public class ComparisonQuestion extends Question {
     private Activity firstActivity;
     private Activity secondActivity;
 
+    @SuppressWarnings("unused")
+    private ComparisonQuestion() {
+        super(QuestionType.COMPARISON);
+        // for object mapper
+    }
+
     /**
      * Constructs a new comparison question object with the given
      * activities to compare (whether their consumptions are equal,

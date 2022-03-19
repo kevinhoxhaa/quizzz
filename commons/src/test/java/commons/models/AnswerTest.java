@@ -42,11 +42,11 @@ public class AnswerTest {
 
     @Test
     public void setter(){
-        longAnswer.setAnswer(CompareType.LARGER);
+        longAnswer.setCompareAnswer(CompareType.LARGER);
         assertEquals(CompareType.LARGER, longAnswer.getAnswer());
-        activityAnswer.setAnswer(POSITIVE+POSITIVE);
+        activityAnswer.setLongAnswer(POSITIVE+POSITIVE);
         assertEquals(POSITIVE+POSITIVE, activityAnswer.getAnswer());
-        compareTypeAnswer.setAnswer(activity);
+        compareTypeAnswer.setActivityAnswer(activity);
         assertEquals(activity, compareTypeAnswer.getAnswer());
     }
 
@@ -59,11 +59,11 @@ public class AnswerTest {
 
     @Test
     public void setterAnswerType(){
-        longAnswer.setAnswer(CompareType.LARGER);
+        longAnswer.setCompareAnswer(CompareType.LARGER);
         assertEquals(AnswerType.COMPARETYPE, longAnswer.getAnswerType());
-        activityAnswer.setAnswer(POSITIVE+POSITIVE);
+        activityAnswer.setLongAnswer(POSITIVE+POSITIVE);
         assertEquals(AnswerType.LONG, activityAnswer.getAnswerType());
-        compareTypeAnswer.setAnswer(activity);
+        compareTypeAnswer.setActivityAnswer(activity);
         assertEquals(AnswerType.ACTIVITY, compareTypeAnswer.getAnswerType());
     }
 
@@ -83,7 +83,7 @@ public class AnswerTest {
 
     @Test
     public void equalsAfterSetter(){
-        longAnswer.setAnswer(activity);
+        longAnswer.setActivityAnswer(activity);
         assertEquals(activityAnswer, longAnswer);
     }
 
