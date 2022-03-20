@@ -1,5 +1,6 @@
 package commons.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import commons.entities.Activity;
 import commons.utils.QuestionType;
 
@@ -9,13 +10,21 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ConsumptionQuestion extends Question {
     private static final long TRUE_FACTOR = 500;
     private static final long TIME_FACTOR = 800;
 
     private Activity activity;
     private List<Long> answers;
-    private final Random random;
+    private Random random;
+
+    @SuppressWarnings("unused")
+    private ConsumptionQuestion() {
+        super(QuestionType.CONSUMPTION);
+        this.random = new Random();
+        // for object mapper
+    }
 
     /**
      * Constructs a new consumption question object based
@@ -31,7 +40,7 @@ public class ConsumptionQuestion extends Question {
         this.userAnswer = new Answer(Long.valueOf(-1));
         this.random = random;
         this.imagePath = activity.imagePath;
-        setAnswers(activity.consumption);
+        loadAnswers(activity.consumption);
     }
 
     /**
@@ -49,7 +58,7 @@ public class ConsumptionQuestion extends Question {
      */
     public void setActivity(Activity activity) {
         this.activity = activity;
-        setAnswers(activity.consumption);
+        loadAnswers(activity.consumption);
     }
 
     /**
@@ -61,7 +70,7 @@ public class ConsumptionQuestion extends Question {
      * @param correctAnswer the correct answer
      */
     // CHECKSTYLE:OFF
-    public void setAnswers(long correctAnswer) {
+    private void loadAnswers(long correctAnswer) {
         answers = new ArrayList<>();
 
         long firstAlternative;
@@ -84,6 +93,10 @@ public class ConsumptionQuestion extends Question {
     }
     // CHECKSTYLE:ON
 
+    public void setAnswers(List<Long> answers) {
+        this.answers = answers;
+    }
+
     /**
      * Returns the generated answers to the question
      * @return the question alternative answers
@@ -105,7 +118,7 @@ public class ConsumptionQuestion extends Question {
 
     @Override
     public boolean hasCorrectUserAnswer() {
-        if (userAnswer == null) {
+        if (userAnswer == null || userAnswer.getAnswer() == null) {
             return false;
         }
         return activity.consumption == (Long) userAnswer.getAnswer();

@@ -4,20 +4,19 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.entities.Activity;
 import commons.models.Answer;
-import commons.models.Question;
-import commons.models.ConsumptionQuestion;
 import commons.models.ChoiceQuestion;
 import commons.models.ComparisonQuestion;
+import commons.models.ConsumptionQuestion;
+import commons.models.Question;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.control.ProgressIndicator;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -25,9 +24,9 @@ import javafx.scene.text.Text;
 import java.util.ArrayList;
 import java.util.List;
 
-import static commons.utils.CompareType.SMALLER;
 import static commons.utils.CompareType.EQUAL;
 import static commons.utils.CompareType.LARGER;
+import static commons.utils.CompareType.SMALLER;
 
 
 public class MultiplayerQuestionCtrl implements SceneController,QuestionNumController {
@@ -112,7 +111,7 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
     protected void setup(Question question) {
         selectedAnswerButton=null;
         this.currentQuestion = question;
-        questionImg.setImage(new Image(currentQuestion.getImagePath()));
+//        questionImg.setImage(new Image(currentQuestion.getImagePath()));
 
         switch (question.getType()){
             case CONSUMPTION:
@@ -396,20 +395,19 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
     @Override
     public void onQuit() {
         mainCtrl.bindUser(null);
-        mainCtrl.killThread();
-        mainCtrl.showHome();
+        mainCtrl.quitGame(false);
     }
 
     /**
      * Getter for the circles bar
      * @return circles
      */
-    public HBox getCircles(){
+    public HBox getCirclesHBox(){
         return circles;
     }
 
     /**
-     * Getter for the current question number
+     * Getter for the text node containing the current question number
      * @return questionNum
      */
     public Text getQuestionNum(){
@@ -438,7 +436,7 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
     @Override
     public void updateCircleColor(List<Color> colors) {
         for (int i = 0; i < mainCtrl.getAnswerCount(); i++) {
-            Circle circle = (Circle) getCircles().getChildren().get(i);
+            Circle circle = (Circle) getCirclesHBox().getChildren().get(i);
             circle.setFill(colors.get(i));
         }
     }
@@ -446,7 +444,7 @@ public class MultiplayerQuestionCtrl implements SceneController,QuestionNumContr
     @Override
     public void resetCircleColor() {
         for(int i=0; i<mainCtrl.getQuestionsPerGame();i++){
-            Circle circle = (Circle) getCircles().getChildren().get(i);
+            Circle circle = (Circle) getCirclesHBox().getChildren().get(i);
             circle.setFill(Color.LIGHTGRAY);
         }
     }

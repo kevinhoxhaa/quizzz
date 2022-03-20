@@ -2,6 +2,7 @@ package server.api;
 
 import commons.entities.Activity;
 import commons.entities.MultiplayerUser;
+import commons.entities.User;
 import commons.models.ConsumptionQuestion;
 import commons.models.GameList;
 import org.junit.jupiter.api.BeforeEach;
@@ -82,6 +83,19 @@ public class GameControllerTest {
         sut.startGame((int) NUMBER);
         assertEquals(0, waitingUserRepo.count());
         assertEquals(NUMBER, gameUserRepo.count());
+    }
+
+    @Test
+    public void findGameIndexFindsIndex() {
+        sut.startGame((int) NUMBER);
+        User user = gameUserRepo.users.get(0);
+        assertEquals(0, sut.findGameIndex(user.id).getBody());
+    }
+
+    @Test
+    public void findGameIndexReturnsBadRequestOnInvalidIndex() {
+        sut.startGame((int) NUMBER);
+        assertTrue(sut.findGameIndex(-NUMBER).getStatusCode().is4xxClientError());
     }
 
     @Test

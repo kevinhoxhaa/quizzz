@@ -8,6 +8,7 @@ import commons.models.ConsumptionQuestion;
 import commons.models.EstimationQuestion;
 import commons.models.Question;
 import commons.models.SoloGame;
+import commons.utils.QuestionType;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.ListView;
@@ -18,10 +19,13 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
+import java.util.List;
 
-public class SoloAnswerCtrl implements SceneController {
+
+public class SoloAnswerCtrl implements SceneController, QuestionNumController {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -68,12 +72,13 @@ public class SoloAnswerCtrl implements SceneController {
      *  based on if the player answered correctly or not. <br>
      *  - Fills in the question and correct answer in their corresponding text boxes. <br>
      * @param soloGame The solo game instance
+     * @param colors The list of colors associated with the past questions
      */
-    protected void setup(SoloGame soloGame) {
+    protected void setup(SoloGame soloGame, List<Color> colors) {
         this.game = soloGame;
-        Question prevQuestion = soloGame.getCurrentQuestion();
+        Question prevQuestion = soloGame.loadCurrentQuestion();
+        mainCtrl.getUser().incrementScore(prevQuestion.getPoints());
         if (prevQuestion.hasCorrectUserAnswer()) {
-            mainCtrl.addScore(prevQuestion.getPoints());
             currentScore.setFill(Color.GREEN);
             this.answerResponse.setText("Well done!");
             answerPane.setBackground(new Background(
@@ -101,6 +106,9 @@ public class SoloAnswerCtrl implements SceneController {
                 setupEstimationAnswer(prevQuestion);
                 break;
         }
+
+        updateQuestionNumber();
+        updateCircleColor(colors);
     }
 
     /**
@@ -152,7 +160,7 @@ public class SoloAnswerCtrl implements SceneController {
                         prevChoiceQuestion.getComparedActivity().title)
         );
 
-        this.answer.setText(prevChoiceQuestion.getAnswer().toString());
+        this.answer.setText(prevChoiceQuestion.getAnswer().title);
     }
 
     /**
@@ -185,16 +193,70 @@ public class SoloAnswerCtrl implements SceneController {
     @Override
     public void redirect() {
         if(game.incrementCurrentQuestionNum() < QUESTIONS_PER_GAME){
-            mainCtrl.showSoloQuestion(game);
+            if(game.loadCurrentQuestion().getType() == QuestionType.ESTIMATION){
+                mainCtrl.showSoloEstimationQuestion(game);
+            }
+            else{
+                mainCtrl.showSoloQuestion(game);
+            }
         }
         else{
-            mainCtrl.showSoloResults();
+            mainCtrl.showSoloResults(game);
         }
     }
+
+    /**
+     * Getter for the current question number
+     * @return questionNum
+     */
+    public Text getQuestionNum(){
+        return questionNum;
+    }
+    /**
+     * Getter for the circles bar
+     * @return circles
+     */
+    public HBox getCirclesHBox(){
+        return circles;
+    }
+
+    /**
+     * Updates the colors of the little circles based on the array given
+     * @param colors Is the list of colors of previous answers(green/red depending on their correctness)
+     */
+    @Override
+    public void updateCircleColor(List<Color> colors) {
+        for (int i = 0; i < colors.size(); i++) {
+            Circle c = (Circle) getCirclesHBox().getChildren().get(i);
+            c.setFill(colors.get(i));
+        }
+    }
+
+    /**
+     * Resets the colors of the little circles to gray.
+     */
+    @Override
+    public void resetCircleColor() {
+        for(int i=0; i<mainCtrl.getQuestionsPerGame();i++){
+            Circle circle = (Circle) getCirclesHBox().getChildren().get(i);
+            circle.setFill(Color.LIGHTGRAY);
+        }
+    }
+
+    /**
+     * Updates the question number on the top of the screen.
+     */
+    @Override
+    public void updateQuestionNumber(){
+        getQuestionNum().setText("" + (game.getCurrentQuestionNum() + 1));
+    }
+
+    /**
+     * Handles the user clicking the quit button.
+     */
     @Override
     @FXML
     public void onQuit(){
-        mainCtrl.killThread();
-        mainCtrl.showHome();
+        mainCtrl.quitGame(false);
     }
 }

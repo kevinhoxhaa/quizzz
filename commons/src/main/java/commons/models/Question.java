@@ -1,9 +1,18 @@
 package commons.models;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import commons.utils.QuestionType;
 
 import java.util.Objects;
 
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = ConsumptionQuestion.class, name = "CONSUMPTION"),
+        @JsonSubTypes.Type(value = EstimationQuestion.class, name = "ESTIMATION"),
+        @JsonSubTypes.Type(value = ChoiceQuestion.class, name = "CHOICE"),
+        @JsonSubTypes.Type(value = ComparisonQuestion.class, name = "COMPARISON")
+})
 public abstract class Question {
     protected QuestionType type;
     protected double seconds;

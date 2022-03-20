@@ -4,6 +4,7 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.entities.MultiplayerUser;
 import commons.entities.User;
+import commons.models.Question;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.animation.Animation;
 import javafx.animation.PauseTransition;
@@ -81,9 +82,12 @@ public class WaitingCtrl {
             List<MultiplayerUser> users = server.getUsers(serverUrl);
 
             if(!users.contains(mainCtrl.getUser())) {
+                Integer gameIndex = server.findGameIndex(serverUrl, userId);
+                mainCtrl.setGameIndex(gameIndex);
+                Question firstQuestion = server.getQuestion(serverUrl, gameIndex, 0);
+                System.out.println(firstQuestion);
                 mainCtrl.stopWaitingTimer();
-                // TODO: find started game for user
-                mainCtrl.showQuestion();
+                mainCtrl.showQuestion(firstQuestion);
             }
 
             for(MultiplayerUser user : users) {
@@ -91,11 +95,7 @@ public class WaitingCtrl {
             }
             counterLabel.setText(String.format("%d player(s) in this room:", users.size()));
         } catch (WebApplicationException e) {
-            System.out.println(e.getResponse().getStatus());
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
+            System.out.println("User not found!");
         }
     }
 
@@ -122,11 +122,11 @@ public class WaitingCtrl {
         try {
             String serverUrl = mainCtrl.getServerUrl();
             Integer gameIndex = server.startGame(serverUrl);
+            Question firstQuestion = server.getQuestion(serverUrl, gameIndex, 0);
+            System.out.println(firstQuestion);
             mainCtrl.stopWaitingTimer();
-            // TODO: handle started game
-            mainCtrl.showQuestion();
+            mainCtrl.showQuestion(firstQuestion);
         } catch (WebApplicationException e) {
-            System.out.println(e.getResponse().getStatus());
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText(e.getMessage());

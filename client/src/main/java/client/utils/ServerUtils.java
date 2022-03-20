@@ -15,28 +15,28 @@
  */
 package client.utils;
 
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import commons.entities.MultiplayerUser;
+import commons.entities.Quote;
+import commons.entities.SoloUser;
+import commons.entities.User;
+import commons.models.ChoiceQuestion;
+import commons.models.ComparisonQuestion;
+import commons.models.ConsumptionQuestion;
+import commons.models.EstimationQuestion;
+import commons.models.Question;
+import commons.models.SoloGame;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.GenericType;
+import org.glassfish.jersey.client.ClientConfig;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.List;
-import java.util.Random;
 
-import commons.entities.MultiplayerUser;
-import commons.entities.SoloUser;
-import commons.entities.Activity;
-import commons.entities.User;
-import commons.models.ConsumptionQuestion;
-import commons.models.Question;
-import commons.models.SoloGame;
-import org.glassfish.jersey.client.ClientConfig;
-
-import commons.entities.Quote;
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.core.GenericType;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
 
@@ -104,6 +104,125 @@ public class ServerUtils {
     }
 
     /**
+     * Returns the index of the game a user participates in
+     * @param serverUrl the server URL
+     * @param userId the user id
+     * @return the index of the game
+     */
+    public Integer findGameIndex(String serverUrl, long userId) {
+        String path = String.format("/api/games/find/%d", userId);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path(path)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(Integer.class);
+    }
+
+    /**
+     * A getter for a given question
+     * @param serverUrl the server url
+     * @param gameIndex the game index
+     * @param questionIndex the index of the question inside the game
+     * @return a question
+     */
+    public Question getQuestion(String serverUrl, int gameIndex, int questionIndex) {
+        String questionType = getQuestionType(serverUrl, gameIndex, questionIndex);
+
+        switch(questionType) {
+            case "CONSUMPTION":
+                return getConsumptionQuestion(serverUrl, gameIndex, questionIndex);
+            case "ESTIMATION":
+                return getEstimationQuestion(serverUrl, gameIndex, questionIndex);
+            case "CHOICE":
+                return getChoiceQuestion(serverUrl, gameIndex, questionIndex);
+            case "COMPARISON":
+                return getComparisonQuestion(serverUrl, gameIndex, questionIndex);
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * A getter for the type of a given question
+     * @param serverUrl the server url
+     * @param gameIndex the game index
+     * @param questionIndex the index of the question inside the game
+     * @return a question
+     */
+    public String getQuestionType(String serverUrl, int gameIndex, int questionIndex) {
+        String path = String.format("/api/games/%d/questionType/%d", gameIndex, questionIndex);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path(path)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(String.class);
+    }
+
+    /**
+     * A getter for a given consumption question
+     * @param serverUrl the server url
+     * @param gameIndex the game index
+     * @param questionIndex the index of the question inside the game
+     * @return a question
+     */
+    public ConsumptionQuestion getConsumptionQuestion(String serverUrl, int gameIndex, int questionIndex) {
+        String path = String.format("/api/games/%d/consumption/%d", gameIndex, questionIndex);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path(path)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(ConsumptionQuestion.class);
+    }
+
+    /**
+     * A getter for a given estimation question
+     * @param serverUrl the server url
+     * @param gameIndex the game index
+     * @param questionIndex the index of the question inside the game
+     * @return a question
+     */
+    public EstimationQuestion getEstimationQuestion(String serverUrl, int gameIndex, int questionIndex) {
+        String path = String.format("/api/games/%d/estimation/%d", gameIndex, questionIndex);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path(path)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(EstimationQuestion.class);
+    }
+
+    /**
+     * A getter for a given choice question
+     * @param serverUrl the server url
+     * @param gameIndex the game index
+     * @param questionIndex the index of the question inside the game
+     * @return a question
+     */
+    public ChoiceQuestion getChoiceQuestion(String serverUrl, int gameIndex, int questionIndex) {
+        String path = String.format("/api/games/%d/choice/%d", gameIndex, questionIndex);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path(path)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(ChoiceQuestion.class);
+    }
+
+    /**
+     * A getter for a given comparison question
+     * @param serverUrl the server url
+     * @param gameIndex the game index
+     * @param questionIndex the index of the question inside the game
+     * @return a question
+     */
+    public ComparisonQuestion getComparisonQuestion(String serverUrl, int gameIndex, int questionIndex) {
+        String path = String.format("/api/games/%d/comparison/%d", gameIndex, questionIndex);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path(path)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(ComparisonQuestion.class);
+    }
+
+    /**
      * Adds a user to the user repository for solo games.
      * @param serverUrl The server URL of the game the user is in.
      * @param user The user that has to be saved in the repository.
@@ -139,22 +258,24 @@ public class ServerUtils {
      * @return a new (solo) game instance
      */
     public SoloGame getSoloGame(String serverUrl, int count) {
-        /*
+
         return ClientBuilder.newClient(new ClientConfig())
                 .target(serverUrl).path("api/games/startSolo/" + count)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(SoloGame.class);
-        */
+    }
 
-        //THE FORMER PART WILL BE USED ONCE THE BACKEND IS SET UP PROPERLY, THE FOLLOWING PART IS A DUMMY
-        SoloGame soloGame = new SoloGame();
-        Activity activity = new Activity("starting a solo game on client side", MAGICNUMBER,
-                "source", "client/images/angry.png");
-        Question dummyQuestion = new ConsumptionQuestion(activity, new Random());
-        for (int i = 0; i < QUESTIONS_PER_GAME; i++) {
-            soloGame.getQuestions().add(dummyQuestion);
-        }
-        return soloGame;
+    /**
+     * Returns an arraylist of solo users with their corresponding scores in descending order
+     * @param serverUrl
+     * @return Arraylist of solo users
+     */
+    public List<SoloUser> getAllUsersByScore(String serverUrl){
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path("api/users/solo/leaderboard")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<SoloUser>>() {});
     }
 }

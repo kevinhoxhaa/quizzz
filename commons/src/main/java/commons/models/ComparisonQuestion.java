@@ -1,11 +1,13 @@
 package commons.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import commons.entities.Activity;
 import commons.utils.CompareType;
 import commons.utils.QuestionType;
 
 import java.util.Objects;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ComparisonQuestion extends Question {
     private static final long TRUE_FACTOR = 500;
     private static final long TIME_FACTOR = 800;
@@ -13,6 +15,12 @@ public class ComparisonQuestion extends Question {
 
     private Activity firstActivity;
     private Activity secondActivity;
+
+    @SuppressWarnings("unused")
+    private ComparisonQuestion() {
+        super(QuestionType.COMPARISON);
+        // for object mapper
+    }
 
     /**
      * Constructs a new comparison question object with the given
@@ -97,7 +105,7 @@ public class ComparisonQuestion extends Question {
      */
     @Override
     public boolean hasCorrectUserAnswer() {
-        return userAnswer != null && (
+        return userAnswer != null && userAnswer.getAnswer() != null && (
                 (userAnswer.getAnswer().equals(CompareType.EQUAL) &&
                         firstActivity.consumption == secondActivity.consumption)
                         || (userAnswer.getAnswer().equals(CompareType.SMALLER) &&

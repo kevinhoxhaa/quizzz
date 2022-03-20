@@ -1,16 +1,24 @@
 package commons.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import commons.entities.Activity;
 import commons.utils.QuestionType;
 
 import java.util.Objects;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class EstimationQuestion extends Question {
     private static final long POINTS = 1000;
     private static final long TIME_FACTOR = 800;
     private static final double ERROR_MARGIN = 0.05;
 
     private Activity activity;
+
+    @SuppressWarnings("unused")
+    private EstimationQuestion() {
+        super(QuestionType.ESTIMATION);
+        // for object mapper
+    }
 
     /**
      * Constructs a new estimation question object based
@@ -43,6 +51,9 @@ public class EstimationQuestion extends Question {
      */
     @Override
     public long getPoints() {
+        if (userAnswer == null || userAnswer.getAnswer() == null){
+            return 0;
+        }
         long answerPoints = (POINTS - Math.round(
                  (double) Math.abs(activity.consumption - ((long) userAnswer.getAnswer())) / activity.consumption
         ) * POINTS);
@@ -58,7 +69,7 @@ public class EstimationQuestion extends Question {
      */
     @Override
     public boolean hasCorrectUserAnswer() {
-        if (userAnswer == null) {
+        if (userAnswer == null || userAnswer.getAnswer() == null) {
             return false;
         }
         return Math.abs(activity.consumption - (Long) userAnswer.getAnswer()) < ERROR_MARGIN * activity.consumption;
