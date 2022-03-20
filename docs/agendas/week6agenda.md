@@ -1,6 +1,4 @@
 # Week 6 Agenda
-
-
 Date:           15.03.2022\
 Location:       Drebbelweg\
 Chair:          Georgescu Calin\
