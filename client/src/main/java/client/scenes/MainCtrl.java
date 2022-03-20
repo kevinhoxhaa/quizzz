@@ -21,6 +21,7 @@ import commons.entities.User;
 import commons.models.ConsumptionQuestion;
 import commons.models.Question;
 import commons.models.SoloGame;
+import commons.utils.QuestionType;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.application.Platform;
 import javafx.scene.Parent;
@@ -50,7 +51,7 @@ public class MainCtrl {
     public static final double MIN_WIDTH = 768.0;
     public static final double MIN_HEIGHT = 512.0;
     private static final int POLLING_DELAY = 0;
-    private static final int POLLING_INTERVAL = 200;
+    private static final int POLLING_INTERVAL = 500;
     private static final long ANSWER_TO_THE_ULTIMATE_QUESTION = 42;
     private static final int STANDARD_PAGE_TIME = 15;
     private static final int QUESTIONS_PER_GAME = 20;
@@ -83,8 +84,11 @@ public class MainCtrl {
     private RankingCtrl rankingCtrl;
     private Scene ranking;
 
-    private EstimationQuestionCtrl estimationQuestionCtrl;
-    private Scene estimation;
+    private EstimationQuestionCtrl multiplayerEstimationCtrl;
+    private Scene multiplayerEstimation;
+
+    private SoloEstimationQuestionCtrl soloEstimationCtrl;
+    private Scene soloEstimation;
 
     private SoloQuestionCtrl soloQuestionCtrl;
     private Scene soloQuestion;
@@ -99,6 +103,7 @@ public class MainCtrl {
     private Scene multiplayerResults;
 
     private User user;
+    private int gameIndex;
     private List<Color> colors;
     private Thread timerThread;
 
@@ -110,9 +115,12 @@ public class MainCtrl {
             Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home,
             Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> multiplayerQuestion,
             Pair<MultiplayerAnswerCtrl, Parent> multiplayerAnswer, Pair<RankingCtrl, Parent> ranking,
-            Pair<EstimationQuestionCtrl, Parent> estimation, Pair<SoloQuestionCtrl, Parent> soloQuestion,
-            Pair<SoloAnswerCtrl, Parent> soloAnswer, Pair<SoloResultsCtrl, Parent> soloResults,
-            Pair<MultiplayerResultsCtrl, Parent> multiplayerResults) {
+            Pair<EstimationQuestionCtrl, Parent> multiplayerEstimation,
+                           Pair<SoloEstimationQuestionCtrl, Parent> soloEstimation,
+                           Pair<SoloQuestionCtrl, Parent> soloQuestion,
+                           Pair<SoloAnswerCtrl, Parent> soloAnswer, Pair<SoloResultsCtrl, Parent> soloResults, 
+                           Pair<MultiplayerResultsCtrl, Parent> multiplayerResults
+                           ) {
         this.primaryStage = primaryStage;
         primaryStage.setMinHeight(MIN_HEIGHT);
         primaryStage.setMinWidth(MIN_WIDTH);
@@ -140,8 +148,11 @@ public class MainCtrl {
         this.rankingCtrl = ranking.getKey();
         this.ranking = new Scene(ranking.getValue());
 
-        this.estimationQuestionCtrl = estimation.getKey();
-        this.estimation = new Scene(estimation.getValue());
+        this.multiplayerEstimationCtrl = multiplayerEstimation.getKey();
+        this.multiplayerEstimation = new Scene(multiplayerEstimation.getValue());
+
+        this.soloEstimationCtrl = soloEstimation.getKey();
+        this.soloEstimation = new Scene(soloEstimation.getValue());
 
         this.soloQuestionCtrl = soloQuestion.getKey();
         this.soloQuestion = new Scene(soloQuestion.getValue());
@@ -184,6 +195,22 @@ public class MainCtrl {
     }
 
     /**
+     * Returns the current game index
+     * @return the current game index
+     */
+    public int getGameIndex() {
+        return gameIndex;
+    }
+
+    /**
+     * Sets the index of the multiplayer game a user participates in
+     * @param gameIndex the multiplayer game index
+     */
+    public void setGameIndex(int gameIndex) {
+        this.gameIndex = gameIndex;
+    }
+
+    /**
      * Getter for the solo score points
      *
      * @return the score
@@ -223,7 +250,6 @@ public class MainCtrl {
 
                     @Override
                     public void run() {
-                        System.out.println("REFRESH");
                         Platform.runLater(() -> waitingCtrl.fetchUsers());
                     }
                 }, POLLING_DELAY, POLLING_INTERVAL);
@@ -289,9 +315,9 @@ public class MainCtrl {
     /**
      * Sets the scene in the primary stage to the one corresponding to a multiplayer question screen.
      * Sets the timer to an initial 10 seconds for the players to answer the question.
+     * @param question the question to visualise
      */
-    public void showQuestion() {
-        Question question = getNextQuestion();
+    public void showQuestion(Question question) {
 
         multiplayerQuestionCtrl.updateCircleColor(colors);
         multiplayerQuestionCtrl.resetHighlight();
@@ -322,8 +348,8 @@ public class MainCtrl {
      */
     public void showEstimation() {
         primaryStage.setTitle("Estimation");
-        primaryStage.setScene(estimation);
-        estimationQuestionCtrl.startTimer();
+        primaryStage.setScene(multiplayerEstimation);
+        multiplayerEstimationCtrl.startTimer();
     }
 
     /**
@@ -341,7 +367,7 @@ public class MainCtrl {
      *
      * @return a random question
      */
-    private Question getNextQuestion() {
+    public Question getNextQuestion() {
         //TODO instead of this, return a random question fetched from the server
         Activity activity = new Activity(
                 "testing the question models", ANSWER_TO_THE_ULTIMATE_QUESTION,
@@ -364,7 +390,7 @@ public class MainCtrl {
             //If the User is not redirected to the ranking page, they go to the next Question
             else {
                 multiplayerQuestionCtrl.resetAnswerColors();
-                showQuestion();
+                showQuestion(getNextQuestion());
             }
         } else {
             showMultiplayerResults();
@@ -442,7 +468,12 @@ public class MainCtrl {
         SoloGame soloGame = server.getSoloGame(server.getURL(), QUESTIONS_PER_GAME);
         primaryStage.setTitle("Solo game");
 
-        showSoloQuestion(soloGame);
+        if(soloGame.loadCurrentQuestion().getType() == QuestionType.ESTIMATION){
+            showSoloEstimationQuestion(soloGame);
+        }
+        else {
+            showSoloQuestion(soloGame);
+        }
     }
 
     /**
@@ -450,7 +481,7 @@ public class MainCtrl {
      * @param game the solo game instance
      */
     public void showSoloAnswerPage(SoloGame game) {
-        Question prevQuestion = game.getCurrentQuestion();
+        Question prevQuestion = game.loadCurrentQuestion();
         if (prevQuestion.hasCorrectUserAnswer()) {
             colors.add(Color.LIGHTGREEN);
         } else {
@@ -477,6 +508,17 @@ public class MainCtrl {
         primaryStage.setScene(soloQuestion);
         soloQuestionCtrl.startTimer();
         soloQuestionCtrl.setStartTime();
+    }
+
+    /**
+     * Shows the solo estimation question page relevant to the given solo game
+     * @param game the solo game instance
+     */
+    public void showSoloEstimationQuestion(SoloGame game) {
+        soloEstimationCtrl.setup(game, colors);
+        primaryStage.setScene(soloEstimation);
+        soloEstimationCtrl.startTimer();
+        soloEstimationCtrl.setStartTime();
     }
 
     /**

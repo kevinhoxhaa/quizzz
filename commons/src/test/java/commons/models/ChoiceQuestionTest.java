@@ -17,11 +17,13 @@ public class ChoiceQuestionTest {
 
     private ChoiceQuestion question;
     private List<Activity> activities;
+    private Activity firstActivity;
 
     @BeforeEach
     public void startup() {
         activities = new ArrayList<>();
-        activities.add(new Activity("q1", POSITIVE, "src"));
+        firstActivity = new Activity("q1", POSITIVE, "src");
+        activities.add(firstActivity);
         activities.add(new Activity("q2", POSITIVE + POSITIVE, "src"));
         activities.add(new Activity("q3", POSITIVE + POSITIVE + POSITIVE, "src"));
         activities.add(new Activity("q4", POSITIVE + POSITIVE + POSITIVE + POSITIVE, "src"));
@@ -66,19 +68,19 @@ public class ChoiceQuestionTest {
 
     @Test
     public void setUserAnswerSetsUserAnswer() {
-        question.setUserAnswer(new Answer(question.getActivities().get(0)), POSITIVE);
+        question.setUserAnswer(new Answer(firstActivity), POSITIVE);
         assertEquals("q1", ((Activity) question.getUserAnswer().getAnswer()).title);
     }
 
     @Test
     public void getSecondsReturnsSeconds() {
-        question.setUserAnswer(new Answer(question.getActivities().get(0)), POSITIVE);
+        question.setUserAnswer(new Answer(firstActivity), POSITIVE);
         assertEquals(POSITIVE, question.getSeconds());
     }
 
     @Test
     public void getPointsCalculatesPoints() {
-        question.setUserAnswer(new Answer(question.getActivities().get(0)), 1);
+        question.setUserAnswer(new Answer(firstActivity), 1);
         assertEquals(TOTAL, question.getPoints());
     }
 

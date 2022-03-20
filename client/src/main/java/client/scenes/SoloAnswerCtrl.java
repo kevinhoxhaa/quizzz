@@ -8,6 +8,7 @@ import commons.models.ConsumptionQuestion;
 import commons.models.EstimationQuestion;
 import commons.models.Question;
 import commons.models.SoloGame;
+import commons.utils.QuestionType;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.ListView;
@@ -75,9 +76,9 @@ public class SoloAnswerCtrl implements SceneController, QuestionNumController {
      */
     protected void setup(SoloGame soloGame, List<Color> colors) {
         this.game = soloGame;
-        Question prevQuestion = soloGame.getCurrentQuestion();
+        Question prevQuestion = soloGame.loadCurrentQuestion();
+        mainCtrl.getUser().incrementScore(prevQuestion.getPoints());
         if (prevQuestion.hasCorrectUserAnswer()) {
-            mainCtrl.getUser().incrementScore(prevQuestion.getPoints());
             currentScore.setFill(Color.GREEN);
             this.answerResponse.setText("Well done!");
             answerPane.setBackground(new Background(
@@ -159,7 +160,7 @@ public class SoloAnswerCtrl implements SceneController, QuestionNumController {
                         prevChoiceQuestion.getComparedActivity().title)
         );
 
-        this.answer.setText(prevChoiceQuestion.getAnswer().toString());
+        this.answer.setText(prevChoiceQuestion.getAnswer().title);
     }
 
     /**
@@ -192,7 +193,12 @@ public class SoloAnswerCtrl implements SceneController, QuestionNumController {
     @Override
     public void redirect() {
         if(game.incrementCurrentQuestionNum() < QUESTIONS_PER_GAME){
-            mainCtrl.showSoloQuestion(game);
+            if(game.loadCurrentQuestion().getType() == QuestionType.ESTIMATION){
+                mainCtrl.showSoloEstimationQuestion(game);
+            }
+            else{
+                mainCtrl.showSoloQuestion(game);
+            }
         }
         else{
             mainCtrl.showSoloResults(game);

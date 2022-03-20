@@ -1,18 +1,29 @@
 package commons.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import commons.entities.Activity;
 import commons.utils.QuestionType;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ChoiceQuestion extends Question {
     private static final long TRUE_FACTOR = 500;
     private static final long TIME_FACTOR = 800;
 
     private Activity comparedActivity;
+    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     private List<Activity> activities;
     private Activity answer;
+
+    @SuppressWarnings("unused")
+    private ChoiceQuestion() {
+        super(QuestionType.CHOICE);
+        // for object mapper
+    }
 
     /**
      * Constructs a choice question (what will you do instead of...?)
@@ -22,6 +33,7 @@ public class ChoiceQuestion extends Question {
      */
     public ChoiceQuestion(List<Activity> activities) {
         super(QuestionType.CHOICE);
+        Collections.shuffle(activities);
         setActivities(activities);
         this.userAnswer = null;
     }
@@ -32,7 +44,7 @@ public class ChoiceQuestion extends Question {
      * @param activities the activities this question
      *                   is based on
      */
-    private void setAnswer(List<Activity> activities) {
+    private void loadAnswer(List<Activity> activities) {
         long minConsumption = Integer.MAX_VALUE;
         for(Activity a : activities) {
             if(a.consumption < minConsumption) {
@@ -40,6 +52,22 @@ public class ChoiceQuestion extends Question {
                 minConsumption = a.consumption;
             }
         }
+    }
+
+    /**
+     * Removes the compared activity from the list of activities belonging to the question.
+     * (Should be called only on the frontend)
+     */
+    public void removeComparedFromActivities(){
+        activities.remove(comparedActivity);
+    }
+
+    /**
+     * A setter for the answer activity
+     * @param answer
+     */
+    public void setAnswer(Activity answer) {
+        this.answer = answer;
     }
 
     /**
@@ -57,7 +85,7 @@ public class ChoiceQuestion extends Question {
      *                   activity is chosen as the second
      *                   maximal
      */
-    private void setComparedActivity(List<Activity> activities) {
+    private void loadComparedActivity(List<Activity> activities) {
         long minConsumption = Integer.MAX_VALUE;
         for(Activity a : activities) {
             if(a.consumption < minConsumption && a != answer) {
@@ -66,6 +94,14 @@ public class ChoiceQuestion extends Question {
                 minConsumption = a.consumption;
             }
         }
+    }
+
+    /**
+     * A setter for the compared activity
+     * @param activity the compared activity to be set
+     */
+    public void setComparedActivity(Activity activity) {
+        this.comparedActivity = activity;
     }
 
     /**
@@ -92,8 +128,8 @@ public class ChoiceQuestion extends Question {
      */
     public void setActivities(List<Activity> activities) {
         this.activities = activities;
-        setAnswer(activities);
-        setComparedActivity(activities);
+        loadAnswer(activities);
+        loadComparedActivity(activities);
     }
 
     /**
@@ -115,10 +151,10 @@ public class ChoiceQuestion extends Question {
      */
     @Override
     public boolean hasCorrectUserAnswer() {
-        if (userAnswer == null) {
+        if (userAnswer == null || userAnswer.getAnswer() == null) {
             return false;
         }
-        return answer == userAnswer.getAnswer();
+        return answer.equals(userAnswer.getAnswer());
     }
 
     /**

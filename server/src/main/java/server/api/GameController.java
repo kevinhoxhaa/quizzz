@@ -35,6 +35,7 @@ public class GameController {
     private static final double CONSUMPTION_LIMIT = 0.25;
     private static final double ESTIMATION_LIMIT = 0.5;
     private static final double CHOICE_LIMIT = 0.75;
+    private static final int GENERATION_TRY_COUNT = 40;
 
     private final Random random;
     private final GameList gameList;
@@ -108,9 +109,18 @@ public class GameController {
      */
     private ChoiceQuestion generateChoiceQuestion() {
         List<Activity> activities = new ArrayList<>();
-        for(int i = 0; i < CHOICE_COUNT; i++) {
-            activities.add(getRandomActivity());
+        List<Long> consumptions = new ArrayList<>();
+        int tryCounter = 0;
+
+        while (activities.size() < CHOICE_COUNT && tryCounter++ < GENERATION_TRY_COUNT) {
+            Activity randomActivity = getRandomActivity();
+
+            if(!consumptions.contains(randomActivity.consumption)){
+                activities.add(randomActivity);
+                consumptions.add(randomActivity.consumption);
+            }
         }
+
         return new ChoiceQuestion(activities);
     }
 
@@ -121,7 +131,10 @@ public class GameController {
      */
     private ComparisonQuestion generateComparisonQuestion() {
         Activity firstActivity = getRandomActivity();
-        Activity secondActivity = getRandomActivity();
+        Activity secondActivity;
+        do {
+            secondActivity = getRandomActivity();
+        } while (firstActivity.equals(secondActivity));
         return new ComparisonQuestion(firstActivity, secondActivity);
     }
 
@@ -192,6 +205,29 @@ public class GameController {
         return ResponseEntity.ok(game);
     }
 
+    @GetMapping(path = "/find/{userId}")
+    public ResponseEntity<Integer> findGameIndex(@PathVariable("userId") long userId) {
+        System.out.println("Searching for user " + userId);
+        if(userId < 0 || waitingUserRepo.existsById(userId)) {
+            System.out.println("Invalid user id " + userId);
+            return ResponseEntity.badRequest().build();
+        }
+
+        List<Game> games = gameList.getGames();
+        int index = -1;
+
+        for(int i = 0; i < games.size(); i++) {
+            if(games.get(i).getUserIds().contains(userId)) {
+                index = i;
+                break;
+            }
+        }
+
+        System.out.println("User found in game " + index);
+
+        return ResponseEntity.ok(index);
+    }
+
     /**
      * Retrieves the requested question from the game state object
      * and sends it to the user
@@ -215,6 +251,136 @@ public class GameController {
         }
 
         return ResponseEntity.ok(game.getQuestions().get(questionIndex));
+    }
+
+    /**
+     * Retrieves the type of the requested question from the game state object
+     * and sends it to the user
+     * Returns a bad request if the game or question index
+     * is invalid
+     * @param gameIndex the index of the game
+     * @param questionIndex the index of the question
+     * @return the requested question
+     */
+    @GetMapping(path =  "/{gameIndex}/questionType/{questionIndex}")
+    public ResponseEntity<String> getQuestionType(
+            @PathVariable(name = "gameIndex") int gameIndex,
+                                                @PathVariable(name = "questionIndex") int questionIndex) {
+        if(gameIndex >= gameList.getGames().size()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Game game = gameList.getGames().get(gameIndex);
+
+        if(questionIndex >= game.getQuestions().size()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(game.getQuestions().get(questionIndex).getType().name());
+    }
+
+    /**
+     * Retrieves the requested question from the game state object
+     * and sends it to the user
+     * Returns a bad request if the game or question index
+     * is invalid
+     * @param gameIndex the index of the game
+     * @param questionIndex the index of the question
+     * @return the requested question
+     */
+    @GetMapping(path =  "/{gameIndex}/consumption/{questionIndex}")
+    public ResponseEntity<ConsumptionQuestion> getConsumptionQuestion(
+            @PathVariable(name = "gameIndex") int gameIndex,
+                                                @PathVariable(name = "questionIndex") int questionIndex) {
+        if(gameIndex >= gameList.getGames().size()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Game game = gameList.getGames().get(gameIndex);
+
+        if(questionIndex >= game.getQuestions().size()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok((ConsumptionQuestion) game.getQuestions().get(questionIndex));
+    }
+
+    /**
+     * Retrieves the requested question from the game state object
+     * and sends it to the user
+     * Returns a bad request if the game or question index
+     * is invalid
+     * @param gameIndex the index of the game
+     * @param questionIndex the index of the question
+     * @return the requested question
+     */
+    @GetMapping(path =  "/{gameIndex}/estimation/{questionIndex}")
+    public ResponseEntity<EstimationQuestion> getEstimationQuestion(
+            @PathVariable(name = "gameIndex") int gameIndex,
+                                                @PathVariable(name = "questionIndex") int questionIndex) {
+        if(gameIndex >= gameList.getGames().size()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Game game = gameList.getGames().get(gameIndex);
+
+        if(questionIndex >= game.getQuestions().size()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok((EstimationQuestion) game.getQuestions().get(questionIndex));
+    }
+
+    /**
+     * Retrieves the requested question from the game state object
+     * and sends it to the user
+     * Returns a bad request if the game or question index
+     * is invalid
+     * @param gameIndex the index of the game
+     * @param questionIndex the index of the question
+     * @return the requested question
+     */
+    @GetMapping(path =  "/{gameIndex}/choice/{questionIndex}")
+    public ResponseEntity<ChoiceQuestion> getChoiceQuestion(
+            @PathVariable(name = "gameIndex") int gameIndex,
+                                                @PathVariable(name = "questionIndex") int questionIndex) {
+        if(gameIndex >= gameList.getGames().size()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Game game = gameList.getGames().get(gameIndex);
+
+        if(questionIndex >= game.getQuestions().size()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok((ChoiceQuestion) game.getQuestions().get(questionIndex));
+    }
+
+    /**
+     * Retrieves the requested question from the game state object
+     * and sends it to the user
+     * Returns a bad request if the game or question index
+     * is invalid
+     * @param gameIndex the index of the game
+     * @param questionIndex the index of the question
+     * @return the requested question
+     */
+    @GetMapping(path =  "/{gameIndex}/comparison/{questionIndex}")
+    public ResponseEntity<ComparisonQuestion> getComparisonQuestion(
+            @PathVariable(name = "gameIndex") int gameIndex,
+                                                @PathVariable(name = "questionIndex") int questionIndex) {
+        if(gameIndex >= gameList.getGames().size()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Game game = gameList.getGames().get(gameIndex);
+
+        if(questionIndex >= game.getQuestions().size()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok((ComparisonQuestion) game.getQuestions().get(questionIndex));
     }
 
     /**

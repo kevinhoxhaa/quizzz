@@ -29,6 +29,7 @@ import client.scenes.MultiplayerResultsCtrl;
 import client.scenes.QuoteOverviewCtrl;
 import client.scenes.MultiplayerQuestionCtrl;
 import client.scenes.SoloAnswerCtrl;
+import client.scenes.SoloEstimationQuestionCtrl;
 import client.scenes.SoloQuestionCtrl;
 import client.scenes.WaitingCtrl;
 import client.scenes.SoloResultsCtrl;
@@ -70,8 +71,11 @@ public class Main extends Application {
 
         var ranking = FXML.load(RankingCtrl.class, "client", "scenes", "Ranking.fxml");
 
-        var estimation = FXML.load(
-                EstimationQuestionCtrl.class, "client", "scenes", "Estimation.fxml");
+        var multiplayerEstimation = FXML.load(
+                EstimationQuestionCtrl.class, "client", "scenes", "MultiplayerEstimation.fxml");
+
+        var soloEstimation = FXML.load(
+                SoloEstimationQuestionCtrl.class, "client", "scenes", "SoloEstimation.fxml");
 
         var soloQuestion = FXML.load(
                 SoloQuestionCtrl.class, "client", "scenes", "SoloQuestion.fxml");
@@ -87,7 +91,7 @@ public class Main extends Application {
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, overview, add, home, waiting, multiplayerQuestion,
-                multiplayerAnswer, ranking, estimation, soloQuestion, soloAnswer, soloResults,
-                multiplayerResults);
+                multiplayerAnswer, ranking, multiplayerEstimation, soloEstimation, soloQuestion,
+                soloAnswer, soloResults, multiplayerResults);
     }
 }

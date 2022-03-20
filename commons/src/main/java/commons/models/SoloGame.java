@@ -32,7 +32,7 @@ public class SoloGame extends Game{
      * A getter for the current question
      * @return the current question
      */
-    public Question getCurrentQuestion() {
+    public Question loadCurrentQuestion() {
         return questions.get(currentQuestionNum);
     }
 
