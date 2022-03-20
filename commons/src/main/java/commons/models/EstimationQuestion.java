@@ -51,6 +51,9 @@ public class EstimationQuestion extends Question {
      */
     @Override
     public long getPoints() {
+        if (userAnswer == null || userAnswer.getAnswer() == null){
+            return 0;
+        }
         long answerPoints = (POINTS - Math.round(
                  (double) Math.abs(activity.consumption - ((long) userAnswer.getAnswer())) / activity.consumption
         ) * POINTS);
