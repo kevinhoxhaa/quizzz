@@ -151,7 +151,7 @@ public class ChoiceQuestion extends Question {
      */
     @Override
     public boolean hasCorrectUserAnswer() {
-        if (userAnswer.getAnswer() == null) {
+        if (userAnswer == null || userAnswer.getAnswer() == null) {
             return false;
         }
         return answer.equals(userAnswer.getAnswer());
