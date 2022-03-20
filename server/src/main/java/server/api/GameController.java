@@ -131,7 +131,10 @@ public class GameController {
      */
     private ComparisonQuestion generateComparisonQuestion() {
         Activity firstActivity = getRandomActivity();
-        Activity secondActivity = getRandomActivity();
+        Activity secondActivity;
+        do {
+            secondActivity = getRandomActivity();
+        } while (firstActivity.equals(secondActivity));
         return new ComparisonQuestion(firstActivity, secondActivity);
     }
 
