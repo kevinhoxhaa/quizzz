@@ -105,7 +105,7 @@ public class ComparisonQuestion extends Question {
      */
     @Override
     public boolean hasCorrectUserAnswer() {
-        return userAnswer != null && (
+        return userAnswer.getAnswer() != null && (
                 (userAnswer.getAnswer().equals(CompareType.EQUAL) &&
                         firstActivity.consumption == secondActivity.consumption)
                         || (userAnswer.getAnswer().equals(CompareType.SMALLER) &&

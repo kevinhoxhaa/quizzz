@@ -210,7 +210,6 @@ public class SoloEstimationQuestionCtrl implements SceneController, QuestionNumC
     @Override
     @FXML
     public void onQuit(){
-        mainCtrl.killThread();
-        mainCtrl.showHome();
+        mainCtrl.quitGame(false);
     }
 }

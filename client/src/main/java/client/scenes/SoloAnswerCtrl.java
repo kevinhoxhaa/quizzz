@@ -77,8 +77,8 @@ public class SoloAnswerCtrl implements SceneController, QuestionNumController {
     protected void setup(SoloGame soloGame, List<Color> colors) {
         this.game = soloGame;
         Question prevQuestion = soloGame.loadCurrentQuestion();
+        mainCtrl.getUser().incrementScore(prevQuestion.getPoints());
         if (prevQuestion.hasCorrectUserAnswer()) {
-            mainCtrl.getUser().incrementScore(prevQuestion.getPoints());
             currentScore.setFill(Color.GREEN);
             this.answerResponse.setText("Well done!");
             answerPane.setBackground(new Background(
