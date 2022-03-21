@@ -40,8 +40,11 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     private static final double STANDARD_CIRCLE_BORDER_SIZE = 1.0;
     private static final int POLLING_DELAY = 0;
     private static final int POLLING_INTERVAL = 500;
+
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+
+    private MultiplayerGameCtrl gameCtrl;
     private Question currentQuestion;
 
     private double startTime;
@@ -464,6 +467,14 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
             Circle circle = (Circle) circles.getChildren().get(i);
             circle.setStrokeWidth(STANDARD_CIRCLE_BORDER_SIZE);
         }
+    }
+
+    /**
+     * Sets the current game controller
+     * @param gameCtrl the current game controller
+     */
+    public void setGameCtrl(MultiplayerGameCtrl gameCtrl) {
+        this.gameCtrl = gameCtrl;
     }
 
     @Override

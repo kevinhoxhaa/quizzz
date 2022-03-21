@@ -76,15 +76,19 @@ public class MultiplayerGameCtrl {
         this.answerCount = 0;
 
         this.mcQuestionCtrl = mcQuestion.getKey();
+        mcQuestionCtrl.setGameCtrl(this);
         this.mcQuestion = mcQuestion.getValue();
 
         this.estimationQuestionCtrl = estimationQuestion.getKey();
+        estimationQuestionCtrl.setGameCtrl(this);
         this.estimationQuestion = estimationQuestion.getValue();
 
         this.answerCtrl = answer.getKey();
+        answerCtrl.setGameCtrl(this);
         this.answer = answer.getValue();
 
         this.rankingCtrl = ranking.getKey();
+        rankingCtrl.setGameCtrl(this);
         this.ranking = ranking.getValue();
     }
 

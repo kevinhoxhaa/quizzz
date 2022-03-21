@@ -18,6 +18,8 @@ public class RankingCtrl implements SceneController, QuestionNumController {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private MultiplayerGameCtrl gameCtrl;
+
     @FXML
     private HBox circles;
     @FXML
@@ -93,6 +95,13 @@ public class RankingCtrl implements SceneController, QuestionNumController {
 //        });
 //    }
 
+    /**
+     * Sets the current game controller
+     * @param gameCtrl the current game controller
+     */
+    public void setGameCtrl(MultiplayerGameCtrl gameCtrl) {
+        this.gameCtrl = gameCtrl;
+    }
 
     @Override
     public void redirect() {

@@ -27,6 +27,8 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private MultiplayerGameCtrl gameCtrl;
+
     private Question currentQuestion;
     private double startTime;
 
@@ -89,6 +91,14 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
                         answerTimer.cancel();
                     }
                 }, POLLING_DELAY, POLLING_INTERVAL);
+    }
+
+    /**
+     * Sets the current game controller
+     * @param gameCtrl the current game controller
+     */
+    public void setGameCtrl(MultiplayerGameCtrl gameCtrl) {
+        this.gameCtrl = gameCtrl;
     }
 
     @Override

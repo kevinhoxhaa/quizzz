@@ -28,6 +28,7 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private MultiplayerGameCtrl gameCtrl;
 
     @FXML
     private VBox answerPane;
@@ -194,6 +195,14 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
      */
     public void startTimer() {
         mainCtrl.startTimer(countdownCircle, this);
+    }
+
+    /**
+     * Sets the current game controller
+     * @param gameCtrl the current game controller
+     */
+    public void setGameCtrl(MultiplayerGameCtrl gameCtrl) {
+        this.gameCtrl = gameCtrl;
     }
 
     @Override
