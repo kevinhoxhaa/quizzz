@@ -207,7 +207,8 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
 
     @Override
     public void redirect() {
-        mainCtrl.afterAnswerScreen();
+        Question nextQuestion = gameCtrl.fetchQuestion();
+        gameCtrl.showQuestion(nextQuestion);
     }
 
     @Override
@@ -215,6 +216,7 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
         mainCtrl.bindUser(null);
         mainCtrl.killThread();
         mainCtrl.showHome();
+        server.removeMultiplayerUser(mainCtrl.getServerUrl(), mainCtrl.getUser());
     }
     //TODO After a certain amount of time in the answer screen, the afterAnswerScreen() method should be called.
 

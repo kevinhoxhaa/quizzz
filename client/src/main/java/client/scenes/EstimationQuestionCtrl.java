@@ -106,6 +106,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
         mainCtrl.bindUser(null);
         mainCtrl.killThread();
         mainCtrl.showHome();
+        server.removeMultiplayerUser(mainCtrl.getServerUrl(), mainCtrl.getUser());
     }
 
     /**

@@ -259,6 +259,7 @@ public class MainCtrl {
                 new Pair<>(this.multiplayerAnswerCtrl, this.multiplayerAnswer),
                 new Pair<>(this.rankingCtrl, this.ranking)
         );
+        multiplayerCtrl.startGame();
     }
 
     /**
@@ -403,7 +404,7 @@ public class MainCtrl {
                     @Override
                     public void run() {
                         try {
-                            homeCtrl.getServer().removeMultiplayerUser(homeCtrl.getServer().getURL(), user);
+                            server.removeMultiplayerUser(server.getURL(), user);
                             user = null;
                         } catch (WebApplicationException e) {
                             System.out.println("User to remove not found!");
@@ -478,6 +479,7 @@ public class MainCtrl {
                     new Runnable() {
                         @Override
                         public void run() {
+                            System.out.println("Redirecting...");
                             sceneController.redirect();
                             if (text != null) {
                                 text.setText("Timeout");

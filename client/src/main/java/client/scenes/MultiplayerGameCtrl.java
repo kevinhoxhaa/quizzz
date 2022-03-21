@@ -116,6 +116,7 @@ public class MultiplayerGameCtrl {
      * @param answeredQuestion the answered question to post
      */
     public void postAnswer(Question answeredQuestion) {
+        answerTimer = new Timer();
         answerTimer.schedule(
                 new TimerTask() {
 
@@ -125,10 +126,11 @@ public class MultiplayerGameCtrl {
                             List<MultiplayerUser> correctUsers = fetchCorrectUsers(answeredQuestion);
 
                             Platform.runLater(() -> {
-                                mainCtrl.showAnswerPage(answeredQuestion, correctUsers);
+                                showAnswer(answeredQuestion, correctUsers);
                             });
                             answerTimer.cancel();
                         } catch (WebApplicationException e) {
+                            System.out.println(e.getResponse());
                             // Not all users have answered
                         }
                     }
@@ -196,6 +198,7 @@ public class MultiplayerGameCtrl {
         mcQuestionCtrl.resetAnswerColors();
         mcQuestionCtrl.updateQuestionNumber();
 
+        mcQuestionCtrl.resetAnswerColors();
         mcQuestionCtrl.enableAnswers();
         mcQuestionCtrl.startTimer();
         mcQuestionCtrl.setStartTime();

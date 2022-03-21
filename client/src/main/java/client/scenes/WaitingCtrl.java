@@ -84,11 +84,8 @@ public class WaitingCtrl {
 
             if (!users.contains(mainCtrl.getUser())) {
                 Integer gameIndex = server.findGameIndex(serverUrl, userId);
-                mainCtrl.setGameIndex(gameIndex);
-                mainCtrl.startMultiplayerGame(gameIndex);
-                Question firstQuestion = server.getQuestion(serverUrl, gameIndex, 0);
                 mainCtrl.stopWaitingTimer();
-                mainCtrl.showQuestion(firstQuestion);
+                mainCtrl.startMultiplayerGame(gameIndex);
             }
 
             for (MultiplayerUser user : users) {
@@ -123,10 +120,8 @@ public class WaitingCtrl {
         try {
             String serverUrl = mainCtrl.getServerUrl();
             Integer gameIndex = server.startGame(serverUrl);
-            mainCtrl.setGameIndex(gameIndex);
-            Question firstQuestion = server.getQuestion(serverUrl, gameIndex, 0);
             mainCtrl.stopWaitingTimer();
-            mainCtrl.showQuestion(firstQuestion);
+            mainCtrl.startMultiplayerGame(gameIndex);
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);

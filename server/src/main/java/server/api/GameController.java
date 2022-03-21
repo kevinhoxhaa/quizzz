@@ -410,7 +410,7 @@ public class GameController {
             user.totalAnswers += 1;
             user.correctAnswers += answeredQuestion.getPoints() == 0 ? 0 : 1;
             user.lastAnswerCorrect = answeredQuestion.hasCorrectUserAnswer();
-            System.out.println(user.totalAnswers);
+            System.out.println(answeredQuestion.getUserAnswer().getAnswer());
             gameUserRepo.save(user);
         }
 
@@ -425,6 +425,7 @@ public class GameController {
                 rightUsers.add(u);
             }
         }
+        System.out.println(rightUsers);
 
         return ResponseEntity.ok(rightUsers);
     }

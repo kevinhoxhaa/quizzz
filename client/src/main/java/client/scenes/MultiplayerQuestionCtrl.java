@@ -200,6 +200,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      */
     private void setupChoiceQuestion(Question generalQuestion) {
         ChoiceQuestion question = (ChoiceQuestion) generalQuestion;
+        System.out.println("Choice question setup: " + question.toString());
 
         activityText.setText(
                 String.format("What could you do instead of %s to consume less energy?",
@@ -232,11 +233,8 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      * @param answer       The answer corresponding to the answer button.
      */
     private void onAnswerClicked(StackPane answerButton, Answer answer) {
-
-        System.out.println(answer);
-
         if (!answerButton.equals(selectedAnswerButton)) {
-
+            System.out.println(answer.getAnswer());
             currentQuestion.setUserAnswer(answer, getSeconds());
 
             selectedAnswerButton = answerButton;
@@ -274,28 +272,8 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      * - Redirecting to the answer page
      */
     public void finalizeAndSend() {
-        Timer answerTimer = new Timer();
-        answerTimer.schedule(
-                new TimerTask() {
-
-                    @Override
-                    public void run() {
-                        List<MultiplayerUser> correctUsers =
-                                server.answerQuestion(mainCtrl.getServerUrl(), mainCtrl.getGameIndex(),
-                                        mainCtrl.getUser().id, mainCtrl.getAnswerCount(), currentQuestion);
-                        System.out.println(correctUsers);
-
-                        if (correctUsers == null) {
-                            return;
-                        }
-
-                        Platform.runLater(() -> {
-                            resetAnswerColors();
-                            mainCtrl.showAnswerPage(currentQuestion, correctUsers);
-                        });
-                        answerTimer.cancel();
-                    }
-                }, POLLING_DELAY, POLLING_INTERVAL);
+        System.out.println("In finalize and send...");
+        gameCtrl.postAnswer(currentQuestion);
     }
 
 
@@ -430,6 +408,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
         mainCtrl.bindUser(null);
         mainCtrl.killThread();
         mainCtrl.showHome();
+        server.removeMultiplayerUser(mainCtrl.getServerUrl(), mainCtrl.getUser());
     }
 
     /**
