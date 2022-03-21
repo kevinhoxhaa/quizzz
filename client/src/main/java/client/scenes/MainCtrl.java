@@ -143,14 +143,6 @@ public class MainCtrl {
         this.soloResultsCtrl = soloResults.getKey();
         this.soloResults = new Scene(soloResults.getValue());
 
-        multiplayerCtrl = new MultiplayerGameController(
-                primaryStage,
-                new Pair<>(this.multiplayerQuestionCtrl, this.multiplayerQuestion),
-                new Pair<>(this.estimationQuestionCtrl, this.estimation),
-                new Pair<>(this.multiplayerAnswerCtrl, this.multiplayerAnswer),
-                new Pair<>(this.rankingCtrl, this.ranking)
-        );
-
         showHome();
         primaryStage.show();
     }
@@ -202,6 +194,14 @@ public class MainCtrl {
     }
 
     /**
+     * Returns the app primary stage
+     * @return the app primary stage
+     */
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    /**
      * add the score to the player's own score
      *
      * @param score the score to be added
@@ -244,6 +244,21 @@ public class MainCtrl {
                         Platform.runLater(() -> waitingCtrl.fetchUsers());
                     }
                 }, POLLING_DELAY, POLLING_INTERVAL);
+    }
+
+    /**
+     * Initialises the multiplayer game controller and starts
+     * a multiplayer game
+     * @param gameIndex the index of the multiplayer game
+     */
+    public void startMultiplayerGame(int gameIndex) {
+        multiplayerCtrl = new MultiplayerGameController(
+                gameIndex, this, server,
+                new Pair<>(this.multiplayerQuestionCtrl, this.multiplayerQuestion),
+                new Pair<>(this.estimationQuestionCtrl, this.estimation),
+                new Pair<>(this.multiplayerAnswerCtrl, this.multiplayerAnswer),
+                new Pair<>(this.rankingCtrl, this.ranking)
+        );
     }
 
     /**
