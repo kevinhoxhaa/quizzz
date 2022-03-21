@@ -233,10 +233,8 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
     public void onQuit() {
         server.removeMultiplayerUser(gameCtrl.getServerUrl(), gameCtrl.getUser());
         mainCtrl.bindUser(null);
-        mainCtrl.killThread();
-        mainCtrl.showHome();
+        mainCtrl.quitGame(false);
     }
-    //TODO After a certain amount of time in the answer screen, the afterAnswerScreen() method should be called.
 
     /**
      * Getter for the current question number

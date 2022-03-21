@@ -2,12 +2,19 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.entities.SoloUser;
+import commons.entities.User;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import commons.models.SoloGame;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 
 import java.util.List;
@@ -16,6 +23,7 @@ public class SoloResultsCtrl implements QuestionNumController {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private ObservableList<SoloUser> users;
 
     @FXML
     private Text scoreTableUserName;
@@ -36,6 +44,15 @@ public class SoloResultsCtrl implements QuestionNumController {
 
     @FXML
     private HBox circles;
+
+    @FXML
+    private Text ranking1stPlayer;
+
+    @FXML
+    private Text ranking2ndPlayer;
+
+    @FXML
+    private Text ranking3rdPlayer;
 
     private SoloGame game;
 
@@ -67,6 +84,14 @@ public class SoloResultsCtrl implements QuestionNumController {
 
         scoreTableUserName.setText(String.format("%s", mainCtrl.getUser().username));
         scoreTableUserScore.setText(String.format("%d", mainCtrl.getSoloScore()));
+        server.addUserSolo(mainCtrl.getServerUrl(), (SoloUser) mainCtrl.getUser());
+
+        scoreTableUserName.setText( String.format( "%s", mainCtrl.getUser().username) );
+        scoreTableUserScore.setText( String.format( "%d", mainCtrl.getSoloScore()) );
+        setTable();
+        ranking1stPlayer.setText(users.get ( 0 ).username );
+        ranking2ndPlayer.setText(users.get ( 1 ).username );
+        ranking3rdPlayer.setText(users.get ( 2 ).username );
         //TODO : add personal best to server side and link it
     }
 
@@ -85,6 +110,16 @@ public class SoloResultsCtrl implements QuestionNumController {
     protected void onQuitButton() {
         mainCtrl.showHome();
     }
+
+    @FXML
+    private TableColumn<User, String> tableUsers;
+
+    @FXML
+    private TableColumn<User, Long> tableScore;
+
+    @FXML
+    private TableView<SoloUser> scoreTable;
+
 
     /**
      * Getter for the current question number
@@ -129,6 +164,18 @@ public class SoloResultsCtrl implements QuestionNumController {
         }
     }
 
+    /**
+     * sets up the table for the solo users result page consisting of users with their username
+     * and scores in descending order
+     */
+    public void setTable() {
+        tableUsers.setCellValueFactory(new PropertyValueFactory<User, String>("username"));
+        tableScore.setCellValueFactory(new PropertyValueFactory<User, Long>("points"));
+        this.users = FXCollections.observableList(server.getAllUsersByScore(server.getURL()));
+
+        scoreTable.setItems(users);
+
+    }
     /**
      * Updates the number of the current question (e.g 11/20)
      */

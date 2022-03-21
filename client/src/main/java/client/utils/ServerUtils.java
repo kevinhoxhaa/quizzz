@@ -15,7 +15,6 @@
  */
 package client.utils;
 
-import commons.entities.Activity;
 import commons.entities.MultiplayerUser;
 import commons.entities.Quote;
 import commons.entities.SoloUser;
@@ -38,8 +37,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
-
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
@@ -122,6 +119,13 @@ public class ServerUtils {
                 .get(Integer.class);
     }
 
+    /**
+     * A getter for a given question
+     * @param serverUrl the server url
+     * @param gameIndex the game index
+     * @param questionIndex the index of the question inside the game
+     * @return a question
+     */
     public Question getQuestion(String serverUrl, int gameIndex, int questionIndex) {
         String questionType = getQuestionType(serverUrl, gameIndex, questionIndex);
 
@@ -139,6 +143,13 @@ public class ServerUtils {
         }
     }
 
+    /**
+     * A getter for the type of a given question
+     * @param serverUrl the server url
+     * @param gameIndex the game index
+     * @param questionIndex the index of the question inside the game
+     * @return a question
+     */
     public String getQuestionType(String serverUrl, int gameIndex, int questionIndex) {
         String path = String.format("/api/games/%d/questionType/%d", gameIndex, questionIndex);
         return ClientBuilder.newClient(new ClientConfig())
@@ -148,6 +159,13 @@ public class ServerUtils {
                 .get(String.class);
     }
 
+    /**
+     * A getter for a given consumption question
+     * @param serverUrl the server url
+     * @param gameIndex the game index
+     * @param questionIndex the index of the question inside the game
+     * @return a question
+     */
     public ConsumptionQuestion getConsumptionQuestion(String serverUrl, int gameIndex, int questionIndex) {
         String path = String.format("/api/games/%d/consumption/%d", gameIndex, questionIndex);
         return ClientBuilder.newClient(new ClientConfig())
@@ -157,6 +175,13 @@ public class ServerUtils {
                 .get(ConsumptionQuestion.class);
     }
 
+    /**
+     * A getter for a given estimation question
+     * @param serverUrl the server url
+     * @param gameIndex the game index
+     * @param questionIndex the index of the question inside the game
+     * @return a question
+     */
     public EstimationQuestion getEstimationQuestion(String serverUrl, int gameIndex, int questionIndex) {
         String path = String.format("/api/games/%d/estimation/%d", gameIndex, questionIndex);
         return ClientBuilder.newClient(new ClientConfig())
@@ -166,6 +191,13 @@ public class ServerUtils {
                 .get(EstimationQuestion.class);
     }
 
+    /**
+     * A getter for a given choice question
+     * @param serverUrl the server url
+     * @param gameIndex the game index
+     * @param questionIndex the index of the question inside the game
+     * @return a question
+     */
     public ChoiceQuestion getChoiceQuestion(String serverUrl, int gameIndex, int questionIndex) {
         String path = String.format("/api/games/%d/choice/%d", gameIndex, questionIndex);
         return ClientBuilder.newClient(new ClientConfig())
@@ -175,6 +207,13 @@ public class ServerUtils {
                 .get(ChoiceQuestion.class);
     }
 
+    /**
+     * A getter for a given comparison question
+     * @param serverUrl the server url
+     * @param gameIndex the game index
+     * @param questionIndex the index of the question inside the game
+     * @return a question
+     */
     public ComparisonQuestion getComparisonQuestion(String serverUrl, int gameIndex, int questionIndex) {
         String path = String.format("/api/games/%d/comparison/%d", gameIndex, questionIndex);
         return ClientBuilder.newClient(new ClientConfig())
@@ -282,21 +321,24 @@ public class ServerUtils {
      * @return a new (solo) game instance
      */
     public SoloGame getSoloGame(String serverUrl, int count) {
-        /*
+
         return ClientBuilder.newClient(new ClientConfig())
                 .target(serverUrl).path("api/games/startSolo/" + count)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(SoloGame.class);
-        */
+    }
 
-        //THE FORMER PART WILL BE USED ONCE THE BACKEND IS SET UP PROPERLY, THE FOLLOWING PART IS A DUMMY
-        SoloGame soloGame = new SoloGame();
-        Activity activity = new Activity("starting a solo game on client side", MAGICNUMBER,
-                "source", "client/images/angry.png");
-        for (int i = 0; i < QUESTIONS_PER_GAME; i++) {
-            soloGame.getQuestions().add(new ConsumptionQuestion(activity, new Random()));
-        }
-        return soloGame;
+    /**
+     * Returns an arraylist of solo users with their corresponding scores in descending order
+     * @param serverUrl
+     * @return Arraylist of solo users
+     */
+    public List<SoloUser> getAllUsersByScore(String serverUrl){
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path("api/users/solo/leaderboard")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<SoloUser>>() {});
     }
 }

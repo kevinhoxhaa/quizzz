@@ -199,4 +199,10 @@ public class TestSoloUserRepository implements SoloUserRepository {
         // TODO Auto-generated method stub
         return null;
     }
+    @Override
+    public List<SoloUser> sortUserByDescendingOrder(){
+        users.sort((o1, o2)
+                -> o2.points.compareTo(o1.points));
+        return users;
+    }
 }

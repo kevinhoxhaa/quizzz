@@ -146,7 +146,7 @@ public class MultiplayerGameCtrl {
      * answered by everyone
      */
     public List<MultiplayerUser> fetchCorrectUsers(Question answeredQuestion) throws WebApplicationException {
-        return server.answerQuestion(mainCtrl.getServerUrl(), mainCtrl.getGameIndex(),
+        return server.answerQuestion(serverUrl, gameIndex,
                 mainCtrl.getUser().id, answerCount, answeredQuestion);
     }
 

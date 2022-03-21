@@ -12,7 +12,6 @@ import commons.models.SoloGame;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.ProgressIndicator;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -107,10 +106,12 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
      */
     protected void setup(SoloGame soloGame, List<Color> colors) {
         this.game = soloGame;
-        currentScore.setText(String.format("Score: %d", mainCtrl.getSoloScore()));
-        Question question = soloGame.getCurrentQuestion();
+
+        currentScore.setText( String.format( "Score: %d", mainCtrl.getSoloScore()) );
+        Question question = soloGame.loadCurrentQuestion();
+
         this.currentQuestion = question;
-        questionImg.setImage(new Image(currentQuestion.getImagePath()));
+        //questionImg.setImage(new Image(currentQuestion.getImagePath()));
 
         updateCircleColor(colors);
         resetHighlight();
@@ -203,11 +204,11 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
         );
 
         List<Activity> answers = question.getActivities();
+        answers.remove(question.getComparedActivity());
 
-        //TODO figure out how the answers work exactly (shuffling)
-        answerTopText.setText(answers.get(0).toString());
-        answerMidText.setText(answers.get(1).toString());
-        answerBotText.setText(answers.get(2).toString());
+        answerTopText.setText(answers.get(0).title);
+        answerMidText.setText(answers.get(1).title);
+        answerBotText.setText(answers.get(2).title);
 
         answerTopAnswer = new Answer(answers.get(0));
         answerMidAnswer = new Answer(answers.get(1));
@@ -476,8 +477,7 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
      */
     @Override
     @FXML
-    public void onQuit() {
-        mainCtrl.killThread();
-        mainCtrl.showHome();
+    public void onQuit(){
+        mainCtrl.quitGame(false);
     }
 }

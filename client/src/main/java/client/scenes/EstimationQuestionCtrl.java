@@ -21,8 +21,6 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     private static final double STANDARD_CIRCLE_BORDER_SIZE = 1.0;
     private static final double TIMEOUT = 8.0;
 
-    private static final int POLLING_DELAY = 0;
-    private static final int POLLING_INTERVAL = 500;
     private static final double MILLISECONDS_PER_SECONDS = 1000.0;
 
     private final ServerUtils server;
@@ -96,15 +94,23 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
 
     @FXML
     protected void onAnswerPostClick() {
-        long answer = Long.parseLong(answerField.getText());
-        currentQuestion.setUserAnswer(new Answer(answer), getSeconds());
+        try {
+            long answer = Long.parseLong(answerField.getText());
+            currentQuestion.setUserAnswer(new Answer(answer), getSeconds());
+        } catch(NumberFormatException ex) {
+            System.out.println("Enter a number!");
+        }
     }
 
     @Override
     public void redirect() {
-        if(currentQuestion.getUserAnswer().getLongAnswer().equals(-1L)) {
-            long answer = Long.parseLong(answerField.getText());
-            currentQuestion.setUserAnswer(new Answer(answer), TIMEOUT);
+        try {
+            if (currentQuestion.getUserAnswer().getLongAnswer().equals(-1L)) {
+                long answer = Long.parseLong(answerField.getText());
+                currentQuestion.setUserAnswer(new Answer(answer), TIMEOUT);
+            }
+        } catch(NumberFormatException ex) {
+            System.out.println("Enter a number!");
         }
 
         answerField.setText("");

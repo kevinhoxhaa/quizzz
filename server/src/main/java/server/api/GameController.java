@@ -35,6 +35,7 @@ public class GameController {
     private static final double CONSUMPTION_LIMIT = 0.25;
     private static final double ESTIMATION_LIMIT = 0.5;
     private static final double CHOICE_LIMIT = 0.75;
+    private static final int GENERATION_TRY_COUNT = 40;
 
     private final Random random;
     private final GameList gameList;
@@ -108,6 +109,18 @@ public class GameController {
      */
     private ChoiceQuestion generateChoiceQuestion() {
         List<Activity> activities = activityRepo.getRandomList(CHOICE_COUNT);
+        List<Long> consumptions = new ArrayList<>();
+        int tryCounter = 0;
+
+        while (activities.size() < CHOICE_COUNT && tryCounter++ < GENERATION_TRY_COUNT) {
+            Activity randomActivity = getRandomActivity();
+
+            if(!consumptions.contains(randomActivity.consumption)){
+                activities.add(randomActivity);
+                consumptions.add(randomActivity.consumption);
+            }
+        }
+
         return new ChoiceQuestion(activities);
     }
 

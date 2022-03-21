@@ -118,7 +118,6 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
         selectedAnswerButton = null;
         this.currentQuestion = question;
         currentScore.setText("Score: " + gameCtrl.getUser().points);
-//        questionImg.setImage(new Image(currentQuestion.getImagePath()));
 
         switch (question.getType()) {
             case CONSUMPTION:
@@ -403,8 +402,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     public void onQuit() {
         server.removeMultiplayerUser(gameCtrl.getServerUrl(), gameCtrl.getUser());
         mainCtrl.bindUser(null);
-        mainCtrl.killThread();
-        mainCtrl.showHome();
+        mainCtrl.quitGame(false);
     }
 
     /**

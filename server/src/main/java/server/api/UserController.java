@@ -140,4 +140,15 @@ public class UserController {
         waitingRepo.deleteById(id);
         return ResponseEntity.ok().build();
     }
+
+    /**
+     * This endpoint is supposed to be used to get all the users from the solo user repository
+     * in a descending points order to generate the solo game results page`s leaderboard consisting
+     * of the username and the corresponding score for it
+     * @return arraylist of users with their corresponding score
+     */
+    @GetMapping(path={"/solo/leaderboard"})
+    public List<SoloUser> getAllScores(){
+        return soloRepo.sortUserByDescendingOrder();
+    }
 }

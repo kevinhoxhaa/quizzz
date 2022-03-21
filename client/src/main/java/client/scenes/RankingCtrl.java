@@ -3,13 +3,19 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.models.Question;
+import commons.entities.MultiplayerUser;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 
 import java.util.List;
 
@@ -28,7 +34,8 @@ public class RankingCtrl implements SceneController, QuestionNumController {
     @FXML
     private Text questionNum;
     @FXML
-    private TableView<?> scoreTable;
+    private TableView<MultiplayerUser> scoreTable;
+
     @FXML
     private Text scoreTableUserSore;
     @FXML
@@ -77,6 +84,38 @@ public class RankingCtrl implements SceneController, QuestionNumController {
         return questionNum;
     }
 
+    /**
+     * Fetches the users in the current waiting room and updates
+     * the list view and the users on the podium
+     * @param serverUrl the url of the server to fetch the users from
+     */
+    public void fetchUsers(String serverUrl) {
+        scoreTable = new TableView();
+        try {
+            List<MultiplayerUser> users = server.getUsers(serverUrl);
+            TableColumn usersColumn = new TableColumn ( "Players" );
+            usersColumn.setCellValueFactory( new PropertyValueFactory<>( "username" ) );
+            TableColumn scoreColumn = new TableColumn ( "Score" );
+            scoreColumn.setCellValueFactory( new PropertyValueFactory<>( "points") );
+            scoreTable.getColumns().addAll( usersColumn, scoreColumn );
+            for(MultiplayerUser user : users) {
+                scoreTable.getItems().add(user);
+            }
+            scoreColumn.setSortType ( TableColumn.SortType.DESCENDING );
+            scoreTable.getSortOrder().add ( scoreColumn );
+            ranking1stPlayer.setText( users.get(0).username ) ;
+            ranking2ndPlayer.setText( users.get(1).username ) ;
+            ranking3rdPlayer.setText( users.get(2).username ) ;
+
+        } catch (WebApplicationException e) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            return;
+        }
+    }
+
 //    /**
 //     * Sets up a timeline with keyFrames that have an interval of one second. This allows us to create a
 //     * visual countdown timer.
@@ -85,6 +124,7 @@ public class RankingCtrl implements SceneController, QuestionNumController {
 //     */
 //    @Override
 //    public void initialize(URL location, ResourceBundle resources) {
+//
 //        startTimer();
 //        countdownCircle.progressProperty().addListener((ov, oldValue, newValue) -> {
 //            countdownCircle.applyCss();
@@ -113,8 +153,7 @@ public class RankingCtrl implements SceneController, QuestionNumController {
     @Override
     public void onQuit() {
         mainCtrl.bindUser(null);
-        mainCtrl.killThread();
-        mainCtrl.showHome();
+        mainCtrl.quitGame(false);
     }
 
     @Override
