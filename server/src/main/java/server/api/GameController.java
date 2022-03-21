@@ -150,7 +150,6 @@ public class GameController {
      * that number of questions
      */
     private boolean allUsersHaveAnswered(List<Long> userIds, int questionNumber) {
-        System.out.println("Users in game: " + userIds);
         for(Long id : userIds) {
             User user = gameUserRepo.findById(id).get();
             if(user.totalAnswers < questionNumber) {

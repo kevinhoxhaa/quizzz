@@ -196,7 +196,6 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      */
     private void setupChoiceQuestion(Question generalQuestion) {
         ChoiceQuestion question = (ChoiceQuestion) generalQuestion;
-        System.out.println("Choice question setup: " + question.toString());
 
         activityText.setText(
                 String.format("What could you do instead of %s to consume less energy?",
@@ -230,7 +229,6 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      */
     private void onAnswerClicked(StackPane answerButton, Answer answer) {
         if (!answerButton.equals(selectedAnswerButton)) {
-            System.out.println(answer.generateAnswer());
             currentQuestion.setUserAnswer(answer, getSeconds());
 
             selectedAnswerButton = answerButton;

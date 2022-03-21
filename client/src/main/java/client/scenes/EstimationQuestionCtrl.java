@@ -127,10 +127,9 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
 
     @Override
     public void onQuit() {
-        server.removeMultiplayerUser(mainCtrl.getServerUrl(), mainCtrl.getUser());
+        server.removeMultiplayerUser(gameCtrl.getServerUrl(), gameCtrl.getUser());
         mainCtrl.bindUser(null);
-        mainCtrl.killThread();
-        mainCtrl.showHome();
+        mainCtrl.quitGame(false);
     }
 
     /**
