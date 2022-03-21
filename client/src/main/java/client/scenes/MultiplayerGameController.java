@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.entities.MultiplayerUser;
+import commons.models.Question;
 import javafx.scene.Scene;
 import javafx.util.Pair;
 
@@ -64,5 +65,14 @@ public class MultiplayerGameController {
 
         this.rankingCtrl = ranking.getKey();
         this.ranking = ranking.getValue();
+    }
+
+    /**
+     * Polls the next question from the server using the
+     * answers counter
+     * @return the next question
+     */
+    public Question fetchQuestion() {
+        return server.getQuestion(serverUrl, gameIndex, answerCount);
     }
 }
