@@ -97,8 +97,8 @@ public class MultiplayerGameCtrl {
      * the game loop
      */
     public void startGame() {
-         // TODO: starts a multiplayer game by polling the first question
-        // TODO: inits the question-answer cycle in a game loop
+         Question firstQuestion = fetchQuestion();
+         showQuestion(firstQuestion);
     }
 
     /**
