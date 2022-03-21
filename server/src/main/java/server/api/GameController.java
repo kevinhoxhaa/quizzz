@@ -414,14 +414,8 @@ public class GameController {
             gameUserRepo.save(user);
         }
 
-        // If no next question, return FORBIDDEN and handle
-        // game end on the client
-        if(questionIndex + 1 >= game.getQuestions().size()) {
-            ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-
         if(!allUsersHaveAnswered(game.getUserIds(), questionIndex + 1)) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
         }
 
         List<MultiplayerUser> rightUsers = new ArrayList<>();
