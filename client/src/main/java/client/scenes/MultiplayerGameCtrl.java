@@ -2,7 +2,9 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.entities.MultiplayerUser;
+import commons.models.EstimationQuestion;
 import commons.models.Question;
+import commons.utils.QuestionType;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -152,5 +154,51 @@ public class MultiplayerGameCtrl {
         answerCtrl.setup(answeredQuestion, correctUsers);
         mainCtrl.getPrimaryStage().setTitle("Answer screen");
         mainCtrl.getPrimaryStage().setScene(answer);
+    }
+
+    /**
+     * Visualises a question on one of the question
+     * screens according to the question type
+     * @param question the question to visualise
+     */
+    public void showQuestion(Question question) {
+        if (question.getType() == QuestionType.ESTIMATION) {
+            showEstimationQuestion((EstimationQuestion) question);
+            return;
+        }
+
+        showMultipleChoiceQuestion(question);
+    }
+
+    /**
+     * Sets the scene in the primary stage to the multiple choice
+     * question screen
+     * @param question the question to visualise
+     */
+    public void showMultipleChoiceQuestion(Question question) {
+        mcQuestionCtrl.updateCircleColor(colors);
+        mcQuestionCtrl.resetHighlight();
+        mcQuestionCtrl.highlightCurrentCircle();
+        mcQuestionCtrl.setup(question);
+        mcQuestionCtrl.resetAnswerColors();
+        mcQuestionCtrl.updateQuestionNumber();
+
+        mcQuestionCtrl.enableAnswers();
+        mcQuestionCtrl.startTimer();
+        mcQuestionCtrl.setStartTime();
+        mainCtrl.getPrimaryStage().setTitle("Question screen");
+        mainCtrl.getPrimaryStage().setScene(mcQuestion);
+    }
+
+    /**
+     * Sets the scene in the primary stage to the estimation screen
+     *
+     * @param question the estimation question to visualise
+     */
+    public void showEstimationQuestion(EstimationQuestion question) {
+        mainCtrl.getPrimaryStage().setTitle("Estimation");
+        mainCtrl.getPrimaryStage().setScene(estimationQuestion);
+        estimationQuestionCtrl.startTimer();
+        estimationQuestionCtrl.loadQuestion(question);
     }
 }
