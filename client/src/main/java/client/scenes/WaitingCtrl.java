@@ -4,7 +4,6 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.entities.MultiplayerUser;
 import commons.entities.User;
-import commons.models.Question;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.animation.Animation;
 import javafx.animation.PauseTransition;

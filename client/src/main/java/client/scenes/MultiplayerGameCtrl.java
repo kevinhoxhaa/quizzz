@@ -146,7 +146,7 @@ public class MultiplayerGameCtrl {
      */
     public List<MultiplayerUser> fetchCorrectUsers(Question answeredQuestion) throws WebApplicationException {
         return server.answerQuestion(mainCtrl.getServerUrl(), mainCtrl.getGameIndex(),
-                mainCtrl.getUser().id, mainCtrl.getAnswerCount(), answeredQuestion);
+                mainCtrl.getUser().id, answerCount, answeredQuestion);
     }
 
     /**
@@ -157,6 +157,7 @@ public class MultiplayerGameCtrl {
      */
     public void showAnswer(Question answeredQuestion, List<MultiplayerUser> correctUsers) {
         answerCtrl.updateQuestionNumber();
+        answerCount++;
 
         if (answeredQuestion.hasCorrectUserAnswer()) {
             colors.add(Color.LIGHTGREEN);
@@ -164,7 +165,6 @@ public class MultiplayerGameCtrl {
             colors.add(Color.INDIANRED);
         }
 
-        answerCount++;
         answerCtrl.updateCircleColor(colors);
         answerCtrl.setup(answeredQuestion, correctUsers);
         mainCtrl.getPrimaryStage().setTitle("Answer screen");
@@ -249,5 +249,13 @@ public class MultiplayerGameCtrl {
      */
     public void showResults(List<MultiplayerUser> rankedUsers) {
         // TODO: display list of ranked users on results screen
+    }
+
+    /**
+     * Returns the current answer count
+     * @return the current answer count
+     */
+    public int getAnswerCount() {
+        return answerCount;
     }
 }

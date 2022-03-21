@@ -1,6 +1,5 @@
 package commons.models;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import commons.entities.Activity;
 import commons.utils.QuestionType;
@@ -14,7 +13,6 @@ public class ChoiceQuestion extends Question {
     private static final long TIME_FACTOR = 800;
 
     private Activity comparedActivity;
-    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     private List<Activity> activities;
     private Activity answer;
 
@@ -33,7 +31,7 @@ public class ChoiceQuestion extends Question {
     public ChoiceQuestion(List<Activity> activities) {
         super(QuestionType.CHOICE);
         setActivities(activities);
-        this.userAnswer = new Answer(comparedActivity);
+        this.userAnswer = new Answer((Activity) null);
     }
 
     /**

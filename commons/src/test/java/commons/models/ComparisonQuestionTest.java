@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class ComparisonQuestionTest {
     private static final long POSITIVE = 8;
@@ -53,7 +52,7 @@ public class ComparisonQuestionTest {
 
     @Test
     public void getUserAnswerReturnsUserAnswer() {
-        assertNull(question.getUserAnswer());
+        assertEquals(new Answer(CompareType.EMPTY), question.getUserAnswer());
     }
 
     @Test

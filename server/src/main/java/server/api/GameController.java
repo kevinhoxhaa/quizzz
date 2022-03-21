@@ -292,8 +292,6 @@ public class GameController {
             return ResponseEntity.badRequest().build();
         }
 
-        System.out.println("Sent question with answer: " + game.getQuestions().get(questionIndex).getUserAnswer().generateAnswer());
-
         return ResponseEntity.ok((ConsumptionQuestion) game.getQuestions().get(questionIndex));
     }
 
@@ -319,8 +317,6 @@ public class GameController {
         if(questionIndex >= game.getQuestions().size()) {
             return ResponseEntity.badRequest().build();
         }
-
-        System.out.println("Sent question with answer: " + game.getQuestions().get(questionIndex).getUserAnswer().generateAnswer());
 
         return ResponseEntity.ok((EstimationQuestion) game.getQuestions().get(questionIndex));
     }
@@ -348,8 +344,6 @@ public class GameController {
             return ResponseEntity.badRequest().build();
         }
 
-        System.out.println("Sent question with answer: " + game.getQuestions().get(questionIndex).getUserAnswer().generateAnswer());
-
         return ResponseEntity.ok((ChoiceQuestion) game.getQuestions().get(questionIndex));
     }
 
@@ -375,8 +369,6 @@ public class GameController {
         if(questionIndex >= game.getQuestions().size()) {
             return ResponseEntity.badRequest().build();
         }
-
-        System.out.println("Sent question with answer: " + game.getQuestions().get(questionIndex).getUserAnswer().generateAnswer());
 
         return ResponseEntity.ok((ComparisonQuestion) game.getQuestions().get(questionIndex));
     }
@@ -413,13 +405,11 @@ public class GameController {
         }
 
         MultiplayerUser user = gameUserRepo.findById(userId).get();
-        System.out.println("Question index: " + questionIndex + " User answers: " + user.totalAnswers);
         if(user.totalAnswers <= questionIndex) {
             user.points += answeredQuestion.calculatePoints();
             user.totalAnswers += 1;
             user.correctAnswers += answeredQuestion.calculatePoints() == 0 ? 0 : 1;
             user.lastAnswerCorrect = answeredQuestion.hasCorrectUserAnswer();
-            System.out.println("User answer: " + answeredQuestion.getUserAnswer().generateAnswer());
             gameUserRepo.save(user);
         }
 
@@ -434,7 +424,6 @@ public class GameController {
                 rightUsers.add(u);
             }
         }
-        System.out.println("Correct users: " + rightUsers);
 
         return ResponseEntity.ok(rightUsers);
     }

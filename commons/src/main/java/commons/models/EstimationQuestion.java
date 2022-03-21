@@ -78,7 +78,8 @@ public class EstimationQuestion extends Question {
             return false;
         }
 
-        return Math.abs(activity.consumption - (long) userAnswer.generateAnswer()) < ERROR_MARGIN * activity.consumption;
+        return Math.abs(activity.consumption - (long) userAnswer.generateAnswer()) < ERROR_MARGIN
+                * activity.consumption;
     }
 
     /**

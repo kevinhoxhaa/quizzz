@@ -2,28 +2,28 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.entities.MultiplayerUser;
+import commons.models.Answer;
 import commons.models.EstimationQuestion;
 import commons.models.Question;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class EstimationQuestionCtrl implements SceneController, QuestionNumController {
 
     private static final double CIRCLE_BORDER_SIZE = 1.7;
     private static final double STANDARD_CIRCLE_BORDER_SIZE = 1.0;
+    private static final double TIMEOUT = 8.0;
 
     private static final int POLLING_DELAY = 0;
     private static final int POLLING_INTERVAL = 500;
+    private static final double MILLISECONDS_PER_SECONDS = 1000.0;
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -43,6 +43,9 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
 
     @FXML
     private Text questionDescription;
+
+    @FXML
+    private TextField answerField;
 
     /**
      * Creates a controller for the estimation question screen,
@@ -69,28 +72,38 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
         questionDescription.setText("How much energy in Wh does " + question.getActivity().title + " use?");
     }
 
+    /**
+     * Captures the exact time the question page started showing used for measuring the time
+     * players needed for answering the question.
+     */
+    protected void setStartTime() {
+        startTime = System.currentTimeMillis();
+    }
+
+    /**
+     * Returns the time since the timer started, in seconds.
+     * For now, a placeholder method.
+     *
+     * @return the time since the timer started, in seconds.
+     */
+    private double getSeconds() {
+        return (System.currentTimeMillis() - startTime) / MILLISECONDS_PER_SECONDS;
+    }
+
+    @FXML
+    protected void onAnswerPostClick() {
+        long answer = Long.parseLong(answerField.getText());
+        currentQuestion.setUserAnswer(new Answer(answer), getSeconds());
+    }
+
     @Override
     public void redirect() {
-        Timer answerTimer = new Timer();
-        answerTimer.schedule(
-                new TimerTask() {
+        if(currentQuestion.getUserAnswer().getLongAnswer().equals(-1L)) {
+            long answer = Long.parseLong(answerField.getText());
+            currentQuestion.setUserAnswer(new Answer(answer), TIMEOUT);
+        }
 
-                    @Override
-                    public void run() {
-                        List<MultiplayerUser> correctUsers =
-                                server.answerQuestion(mainCtrl.getServerUrl(), mainCtrl.getGameIndex(),
-                                        mainCtrl.getUser().id, mainCtrl.getAnswerCount(), currentQuestion);
-
-                        if (correctUsers.size() == 0) {
-                            return;
-                        }
-
-                        Platform.runLater(() -> {
-                            mainCtrl.showAnswerPage(currentQuestion, mainCtrl.getCorrectPlayersMock());
-                        });
-                        answerTimer.cancel();
-                    }
-                }, POLLING_DELAY, POLLING_INTERVAL);
+        gameCtrl.postAnswer(currentQuestion);
     }
 
     /**
@@ -103,10 +116,10 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
 
     @Override
     public void onQuit() {
+        server.removeMultiplayerUser(mainCtrl.getServerUrl(), mainCtrl.getUser());
         mainCtrl.bindUser(null);
         mainCtrl.killThread();
         mainCtrl.showHome();
-        server.removeMultiplayerUser(mainCtrl.getServerUrl(), mainCtrl.getUser());
     }
 
     /**

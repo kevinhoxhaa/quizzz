@@ -1,6 +1,5 @@
 package commons.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import commons.entities.Activity;
 import commons.utils.AnswerType;
@@ -131,12 +130,24 @@ public class Answer {
         }
         Answer answer = (Answer) o;
         switch (this.answerType){
-            case COMPARETYPE:
+            case COMPARETYPE: {
+                if(this.compareType == null) {
+                    return answer.getAnswerType() == COMPARETYPE && answer.compareType == null;
+                }
                 return answer.getAnswerType() == COMPARETYPE && this.compareType.equals(answer.compareType);
-            case LONG:
+            }
+            case LONG: {
+                if(this.longAnswer == null) {
+                    return answer.getAnswerType() == LONG && answer.longAnswer == null;
+                }
                 return answer.getAnswerType() == LONG && this.longAnswer.equals(answer.longAnswer);
-            case ACTIVITY:
+            }
+            case ACTIVITY: {
+                if(this.activity == null) {
+                    return answer.getAnswerType() == ACTIVITY && answer.activity == null;
+                }
                 return answer.getAnswerType() == ACTIVITY && this.activity.equals(answer.activity);
+            }
         }
         return false;
     }

@@ -116,6 +116,7 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
         }
 
         startTimer();
+        this.correctPlayers.getItems().clear();
         correctPlayers.forEach(u -> this.correctPlayers.getItems().add(u.username));
     }
 
@@ -213,10 +214,10 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
 
     @Override
     public void onQuit() {
+        server.removeMultiplayerUser(mainCtrl.getServerUrl(), mainCtrl.getUser());
         mainCtrl.bindUser(null);
         mainCtrl.killThread();
         mainCtrl.showHome();
-        server.removeMultiplayerUser(mainCtrl.getServerUrl(), mainCtrl.getUser());
     }
     //TODO After a certain amount of time in the answer screen, the afterAnswerScreen() method should be called.
 
@@ -240,7 +241,7 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
 
     @Override
     public void updateCircleColor(List<Color> colors) {
-        for (int i = 0; i < mainCtrl.getAnswerCount(); i++) {
+        for (int i = 0; i < gameCtrl.getAnswerCount(); i++) {
             Circle circle = (Circle) getCircles().getChildren().get(i);
             circle.setFill(colors.get(i));
         }
@@ -256,6 +257,6 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
 
     @Override
     public void updateQuestionNumber() {
-        getQuestionNum().setText("" + (mainCtrl.getAnswerCount() + 1));
+        getQuestionNum().setText("" + (gameCtrl.getAnswerCount() + 1));
     }
 }

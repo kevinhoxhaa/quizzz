@@ -180,8 +180,8 @@
                                        </font></Label>
                                     <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="256.0">
                                        <children>
-                                          <TextField prefWidth="192.0" />
-                                           <Button mnemonicParsing="false">
+                                          <TextField fx:id="answerField" prefWidth="192.0" />
+                                           <Button mnemonicParsing="false" onAction="#onAnswerPostClick">
                                                <graphic>
                                                    <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                                                        <image>

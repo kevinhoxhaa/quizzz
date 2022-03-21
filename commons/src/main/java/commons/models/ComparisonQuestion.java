@@ -33,7 +33,7 @@ public class ComparisonQuestion extends Question {
         super(QuestionType.COMPARISON);
         this.firstActivity = firstActivity;
         this.secondActivity = secondActivity;
-        this.userAnswer = new Answer(CompareType.EQUAL);
+        this.userAnswer = new Answer(CompareType.EMPTY);
         this.imagePath = Math.random() < HALF ? firstActivity.imagePath : secondActivity.imagePath;
     }
 

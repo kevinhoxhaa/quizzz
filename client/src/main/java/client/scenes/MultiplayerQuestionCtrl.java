@@ -268,8 +268,6 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      * - Redirecting to the answer page
      */
     public void finalizeAndSend() {
-        System.out.println(currentQuestion.getUserAnswer().generateAnswer());
-        System.out.println(currentQuestion.getSeconds());
         gameCtrl.postAnswer(currentQuestion);
     }
 
@@ -402,10 +400,10 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
 
     @Override
     public void onQuit() {
+        server.removeMultiplayerUser(mainCtrl.getServerUrl(), mainCtrl.getUser());
         mainCtrl.bindUser(null);
         mainCtrl.killThread();
         mainCtrl.showHome();
-        server.removeMultiplayerUser(mainCtrl.getServerUrl(), mainCtrl.getUser());
     }
 
     /**
@@ -430,7 +428,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      * Highlights current question so the user is aware which circle corresponds to his current question
      */
     public void highlightCurrentCircle() {
-        Circle circle = (Circle) circles.getChildren().get(mainCtrl.getAnswerCount());
+        Circle circle = (Circle) circles.getChildren().get(gameCtrl.getAnswerCount());
         circle.setFill(Color.DARKGRAY);
         circle.setStrokeWidth(CIRCLE_BORDER_SIZE);
     }
@@ -455,7 +453,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
 
     @Override
     public void updateCircleColor(List<Color> colors) {
-        for (int i = 0; i < mainCtrl.getAnswerCount(); i++) {
+        for (int i = 0; i < gameCtrl.getAnswerCount(); i++) {
             Circle circle = (Circle) getCirclesHBox().getChildren().get(i);
             circle.setFill(colors.get(i));
         }
@@ -471,6 +469,6 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
 
     @Override
     public void updateQuestionNumber() {
-        getQuestionNum().setText("" + (mainCtrl.getAnswerCount() + 1));
+        getQuestionNum().setText("" + (gameCtrl.getAnswerCount() + 1));
     }
 }
