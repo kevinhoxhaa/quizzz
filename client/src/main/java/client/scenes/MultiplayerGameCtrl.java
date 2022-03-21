@@ -89,6 +89,15 @@ public class MultiplayerGameCtrl {
     }
 
     /**
+     * Polls the first question and initialises
+     * the game loop
+     */
+    public void startGame() {
+         // TODO: starts a multiplayer game by polling the first question
+        // TODO: inits the question-answer cycle in a game loop
+    }
+
+    /**
      * Polls the next question from the server using the
      * answers counter
      * @return the next question
@@ -200,5 +209,37 @@ public class MultiplayerGameCtrl {
         mainCtrl.getPrimaryStage().setScene(estimationQuestion);
         estimationQuestionCtrl.startTimer();
         estimationQuestionCtrl.loadQuestion(question);
+    }
+
+    /**
+     * Polls the ranked users for the current game from
+     * the server
+     * @return the ranked users
+     */
+    public List<MultiplayerUser> fetchRanking() {
+        // TODO: fetch users ranked by points from server
+        return new ArrayList<>();
+    }
+
+    /**
+     * Displays the list of ranked users on the ranking page
+     * @param rankedUsers the list of ranked users to display
+     */
+    public void showRanking(List<MultiplayerUser> rankedUsers) {
+        // TODO: handle passed multiplayer users
+        rankingCtrl.updateCircleColor(colors);
+        rankingCtrl.updateQuestionNumber();
+        mainCtrl.getPrimaryStage().setTitle("Ranking Screen");
+        mainCtrl.getPrimaryStage().setScene(ranking);
+        rankingCtrl.startTimer();
+    }
+
+    /**
+     * Displays the list of ranked users on the game
+     * results page
+     * @param rankedUsers the list of ranked users to display
+     */
+    public void showResults(List<MultiplayerUser> rankedUsers) {
+        // TODO: display list of ranked users on results screen
     }
 }
