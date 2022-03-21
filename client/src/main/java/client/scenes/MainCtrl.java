@@ -80,6 +80,8 @@ public class MainCtrl {
     private Scene soloAnswer;
     private SoloResultsCtrl soloResultsCtrl;
     private Scene soloResults;
+    private MultiplayerGameController multiplayerCtrl;
+
     private User user;
     private int gameIndex;
     private List<Color> colors;
@@ -140,6 +142,14 @@ public class MainCtrl {
 
         this.soloResultsCtrl = soloResults.getKey();
         this.soloResults = new Scene(soloResults.getValue());
+
+        multiplayerCtrl = new MultiplayerGameController(
+                primaryStage,
+                new Pair<>(this.multiplayerQuestionCtrl, this.multiplayerQuestion),
+                new Pair<>(this.estimationQuestionCtrl, this.estimation),
+                new Pair<>(this.multiplayerAnswerCtrl, this.multiplayerAnswer),
+                new Pair<>(this.rankingCtrl, this.ranking)
+        );
 
         showHome();
         primaryStage.show();
