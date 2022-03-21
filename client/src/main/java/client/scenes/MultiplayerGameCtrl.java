@@ -267,4 +267,12 @@ public class MultiplayerGameCtrl {
     public MultiplayerUser getUser() {
         return user;
     }
+
+    /**
+     * Returns the current server url
+     * @return the game server url
+     */
+    public String getServerUrl() {
+        return serverUrl;
+    }
 }

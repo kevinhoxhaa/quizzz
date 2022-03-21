@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.models.Question;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableView;
@@ -105,7 +106,8 @@ public class RankingCtrl implements SceneController, QuestionNumController {
 
     @Override
     public void redirect() {
-        mainCtrl.showQuestion(mainCtrl.getNextQuestion());
+        Question nextQuestion = gameCtrl.fetchQuestion();
+        gameCtrl.showQuestion(nextQuestion);
     }
 
     @Override

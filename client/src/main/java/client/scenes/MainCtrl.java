@@ -404,10 +404,12 @@ public class MainCtrl {
                     @Override
                     public void run() {
                         try {
-                            server.removeMultiplayerUser(server.getURL(), user);
+                            server.removeMultiplayerUser(multiplayerCtrl.getServerUrl(), multiplayerCtrl.getUser());
                             user = null;
                         } catch (WebApplicationException e) {
                             System.out.println("User to remove not found!");
+                        } catch (NullPointerException ex) {
+                            System.out.println("Multiplayer game to remove from not found!");
                         } finally {
                             System.exit(0);
                         }

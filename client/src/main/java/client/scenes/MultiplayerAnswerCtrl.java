@@ -26,6 +26,9 @@ import java.util.List;
 
 public class MultiplayerAnswerCtrl implements SceneController, QuestionNumController {
 
+    private static final int HALF_QUESTIONS = 10;
+    private static final int TOTAL_QUESTIONS = 20;
+
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private MultiplayerGameCtrl gameCtrl;
@@ -210,13 +213,19 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
 
     @Override
     public void redirect() {
+        if(gameCtrl.getAnswerCount() == HALF_QUESTIONS) {
+            List<MultiplayerUser> rankedUsers = gameCtrl.fetchRanking();
+            gameCtrl.showRanking(rankedUsers);
+            return;
+        }
+
         Question nextQuestion = gameCtrl.fetchQuestion();
         gameCtrl.showQuestion(nextQuestion);
     }
 
     @Override
     public void onQuit() {
-        server.removeMultiplayerUser(mainCtrl.getServerUrl(), mainCtrl.getUser());
+        server.removeMultiplayerUser(gameCtrl.getServerUrl(), gameCtrl.getUser());
         mainCtrl.bindUser(null);
         mainCtrl.killThread();
         mainCtrl.showHome();

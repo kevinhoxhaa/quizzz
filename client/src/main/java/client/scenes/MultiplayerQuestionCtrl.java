@@ -401,7 +401,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
 
     @Override
     public void onQuit() {
-        server.removeMultiplayerUser(mainCtrl.getServerUrl(), mainCtrl.getUser());
+        server.removeMultiplayerUser(gameCtrl.getServerUrl(), gameCtrl.getUser());
         mainCtrl.bindUser(null);
         mainCtrl.killThread();
         mainCtrl.showHome();
