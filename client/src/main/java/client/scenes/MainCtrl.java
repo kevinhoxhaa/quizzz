@@ -80,7 +80,7 @@ public class MainCtrl {
     private Scene soloAnswer;
     private SoloResultsCtrl soloResultsCtrl;
     private Scene soloResults;
-    private MultiplayerGameController multiplayerCtrl;
+    private MultiplayerGameCtrl multiplayerCtrl;
 
     private User user;
     private int gameIndex;
@@ -252,7 +252,7 @@ public class MainCtrl {
      * @param gameIndex the index of the multiplayer game
      */
     public void startMultiplayerGame(int gameIndex) {
-        multiplayerCtrl = new MultiplayerGameController(
+        multiplayerCtrl = new MultiplayerGameCtrl(
                 gameIndex, this, server,
                 new Pair<>(this.multiplayerQuestionCtrl, this.multiplayerQuestion),
                 new Pair<>(this.estimationQuestionCtrl, this.estimation),

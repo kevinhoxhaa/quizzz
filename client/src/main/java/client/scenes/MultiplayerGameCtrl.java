@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MultiplayerGameController {
+public class MultiplayerGameCtrl {
     private static final int POLLING_DELAY = 0;
     private static final int POLLING_INTERVAL = 500;
 
@@ -56,11 +56,11 @@ public class MultiplayerGameController {
      * @param ranking the ranking controller-scene pair
      * @param gameIndex the index of the multiplayer game
      */
-    public MultiplayerGameController(int gameIndex, MainCtrl mainCtrl, ServerUtils server,
-                                     Pair<MultiplayerQuestionCtrl, Scene> mcQuestion,
-                                     Pair<EstimationQuestionCtrl, Scene> estimationQuestion,
-                                     Pair<MultiplayerAnswerCtrl, Scene> answer,
-                                     Pair<RankingCtrl, Scene> ranking) {
+    public MultiplayerGameCtrl(int gameIndex, MainCtrl mainCtrl, ServerUtils server,
+                               Pair<MultiplayerQuestionCtrl, Scene> mcQuestion,
+                               Pair<EstimationQuestionCtrl, Scene> estimationQuestion,
+                               Pair<MultiplayerAnswerCtrl, Scene> answer,
+                               Pair<RankingCtrl, Scene> ranking) {
         this.gameIndex = gameIndex;
         this.mainCtrl = mainCtrl;
 
