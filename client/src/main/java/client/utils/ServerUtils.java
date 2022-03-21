@@ -150,6 +150,7 @@ public class ServerUtils {
 
     public ConsumptionQuestion getConsumptionQuestion(String serverUrl, int gameIndex, int questionIndex) {
         String path = String.format("/api/games/%d/consumption/%d", gameIndex, questionIndex);
+        System.out.println(path);
         return ClientBuilder.newClient(new ClientConfig())
                 .target(serverUrl).path(path)
                 .request(APPLICATION_JSON)
@@ -159,6 +160,7 @@ public class ServerUtils {
 
     public EstimationQuestion getEstimationQuestion(String serverUrl, int gameIndex, int questionIndex) {
         String path = String.format("/api/games/%d/estimation/%d", gameIndex, questionIndex);
+        System.out.println(path);
         return ClientBuilder.newClient(new ClientConfig())
                 .target(serverUrl).path(path)
                 .request(APPLICATION_JSON)
@@ -168,6 +170,7 @@ public class ServerUtils {
 
     public ChoiceQuestion getChoiceQuestion(String serverUrl, int gameIndex, int questionIndex) {
         String path = String.format("/api/games/%d/choice/%d", gameIndex, questionIndex);
+        System.out.println(path);
         return ClientBuilder.newClient(new ClientConfig())
                 .target(serverUrl).path(path)
                 .request(APPLICATION_JSON)
@@ -177,6 +180,7 @@ public class ServerUtils {
 
     public ComparisonQuestion getComparisonQuestion(String serverUrl, int gameIndex, int questionIndex) {
         String path = String.format("/api/games/%d/comparison/%d", gameIndex, questionIndex);
+        System.out.println(path);
         return ClientBuilder.newClient(new ClientConfig())
                 .target(serverUrl).path(path)
                 .request(APPLICATION_JSON)
@@ -222,6 +226,8 @@ public class ServerUtils {
                 question.getType().name().toLowerCase(Locale.ROOT),
                 questionIndex
         );
+
+        System.out.println("Posting question with answer: " + question.getUserAnswer().generateAnswer());
 
         switch(question.getType()) {
             case CONSUMPTION:

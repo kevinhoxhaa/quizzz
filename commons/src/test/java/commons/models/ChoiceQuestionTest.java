@@ -67,7 +67,7 @@ public class ChoiceQuestionTest {
     @Test
     public void setUserAnswerSetsUserAnswer() {
         question.setUserAnswer(new Answer(question.getActivities().get(0)), POSITIVE);
-        assertEquals("q1", ((Activity) question.getUserAnswer().getAnswer()).title);
+        assertEquals("q1", ((Activity) question.getUserAnswer().generateAnswer()).title);
     }
 
     @Test
@@ -79,7 +79,7 @@ public class ChoiceQuestionTest {
     @Test
     public void getPointsCalculatesPoints() {
         question.setUserAnswer(new Answer(question.getActivities().get(0)), 1);
-        assertEquals(TOTAL, question.getPoints());
+        assertEquals(TOTAL, question.calculatePoints());
     }
 
     @Test

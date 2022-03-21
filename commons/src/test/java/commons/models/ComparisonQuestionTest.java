@@ -59,13 +59,13 @@ public class ComparisonQuestionTest {
     @Test
     public void setUserAnswerChangesUserAnswer() {
         question.setUserAnswer(new Answer(CompareType.EQUAL), POSITIVE);
-        assertEquals(CompareType.EQUAL, question.getUserAnswer().getAnswer());
+        assertEquals(CompareType.EQUAL, question.getUserAnswer().generateAnswer());
     }
 
     @Test
     public void getPointsReturnsPoints() {
         question.setUserAnswer(new Answer(CompareType.SMALLER), POSITIVE);
-        assertEquals(TOTAL, question.getPoints());
+        assertEquals(TOTAL, question.calculatePoints());
     }
 
     @Test

@@ -177,6 +177,7 @@ public class MultiplayerGameCtrl {
      * @param question the question to visualise
      */
     public void showQuestion(Question question) {
+        System.out.println("Received question answer: " + question.getUserAnswer().generateAnswer());
         if (question.getType() == QuestionType.ESTIMATION) {
             showEstimationQuestion((EstimationQuestion) question);
             return;

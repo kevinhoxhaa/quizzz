@@ -1,6 +1,7 @@
 package commons.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import commons.entities.Activity;
 import commons.utils.AnswerType;
 import commons.utils.CompareType;
@@ -11,11 +12,14 @@ import static commons.utils.AnswerType.ACTIVITY;
 import static commons.utils.AnswerType.COMPARETYPE;
 import static commons.utils.AnswerType.LONG;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Answer {
+    @JsonInclude
     private Long longAnswer;
+    @JsonInclude
     private Activity activity;
+    @JsonInclude
     private CompareType compareType;
+    @JsonInclude
     private AnswerType answerType;
 
     @SuppressWarnings("unused")
@@ -62,7 +66,7 @@ public class Answer {
      * A getter for the answer
      * @return the answer
      */
-    public Object getAnswer(){
+    public Object generateAnswer(){
         switch (answerType) {
             case LONG:
                 return longAnswer;
@@ -97,6 +101,18 @@ public class Answer {
     public void setCompareAnswer(CompareType answer){
         this.compareType = answer;
         this.answerType = COMPARETYPE;
+    }
+
+    public Activity getActivity() {
+        return activity;
+    }
+
+    public CompareType getCompareType() {
+        return compareType;
+    }
+
+    public Long getLongAnswer() {
+        return longAnswer;
     }
 
     /**

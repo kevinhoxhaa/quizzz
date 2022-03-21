@@ -1,14 +1,14 @@
 package commons.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import commons.entities.Activity;
 import commons.utils.QuestionType;
 
 import java.util.List;
 import java.util.Objects;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonTypeName(value = "choice")
 public class ChoiceQuestion extends Question {
     private static final long TRUE_FACTOR = 500;
     private static final long TIME_FACTOR = 800;
@@ -33,7 +33,7 @@ public class ChoiceQuestion extends Question {
     public ChoiceQuestion(List<Activity> activities) {
         super(QuestionType.CHOICE);
         setActivities(activities);
-        this.userAnswer = null;
+        this.userAnswer = new Answer(comparedActivity);
     }
 
     /**
@@ -121,7 +121,7 @@ public class ChoiceQuestion extends Question {
      * @return the current answer points
      */
     @Override
-    public long getPoints() {
+    public long calculatePoints() {
         return ((hasCorrectUserAnswer() ? 1 : 0) * Math.round(TRUE_FACTOR + TIME_FACTOR / (seconds + 1)));
     }
 
@@ -133,10 +133,11 @@ public class ChoiceQuestion extends Question {
      */
     @Override
     public boolean hasCorrectUserAnswer() {
-        if (userAnswer == null || userAnswer.getAnswer() == null) {
+        if (userAnswer == null || userAnswer.generateAnswer() == null) {
             return false;
         }
-        return answer == userAnswer.getAnswer();
+
+        return answer.title.equals(((Activity) userAnswer.generateAnswer()).title);
     }
 
     /**

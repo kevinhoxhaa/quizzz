@@ -35,19 +35,19 @@ public class AnswerTest {
 
     @Test
     public void getAnswerReturnsGoodValues(){
-        assertEquals(POSITIVE, longAnswer.getAnswer());
-        assertEquals(activity, activityAnswer.getAnswer());
-        assertEquals(CompareType.SMALLER, compareTypeAnswer.getAnswer());
+        assertEquals(POSITIVE, longAnswer.generateAnswer());
+        assertEquals(activity, activityAnswer.generateAnswer());
+        assertEquals(CompareType.SMALLER, compareTypeAnswer.generateAnswer());
     }
 
     @Test
     public void setter(){
         longAnswer.setCompareAnswer(CompareType.LARGER);
-        assertEquals(CompareType.LARGER, longAnswer.getAnswer());
+        assertEquals(CompareType.LARGER, longAnswer.generateAnswer());
         activityAnswer.setLongAnswer(POSITIVE+POSITIVE);
-        assertEquals(POSITIVE+POSITIVE, activityAnswer.getAnswer());
+        assertEquals(POSITIVE+POSITIVE, activityAnswer.generateAnswer());
         compareTypeAnswer.setActivityAnswer(activity);
-        assertEquals(activity, compareTypeAnswer.getAnswer());
+        assertEquals(activity, compareTypeAnswer.generateAnswer());
     }
 
     @Test

@@ -1,13 +1,13 @@
 package commons.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import commons.entities.Activity;
 import commons.utils.CompareType;
 import commons.utils.QuestionType;
 
 import java.util.Objects;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonTypeName(value = "comparison")
 public class ComparisonQuestion extends Question {
     private static final long TRUE_FACTOR = 500;
     private static final long TIME_FACTOR = 800;
@@ -33,7 +33,7 @@ public class ComparisonQuestion extends Question {
         super(QuestionType.COMPARISON);
         this.firstActivity = firstActivity;
         this.secondActivity = secondActivity;
-        this.userAnswer = null;
+        this.userAnswer = new Answer(CompareType.EQUAL);
         this.imagePath = Math.random() < HALF ? firstActivity.imagePath : secondActivity.imagePath;
     }
 
@@ -75,11 +75,11 @@ public class ComparisonQuestion extends Question {
      */
     private boolean answerIsCorrect() {
         return userAnswer != null && (
-                (userAnswer.getAnswer().equals(CompareType.EQUAL)
+                (userAnswer.generateAnswer().equals(CompareType.EQUAL)
                         && firstActivity.consumption == secondActivity.consumption)
-                || (userAnswer.getAnswer().equals(CompareType.SMALLER)
+                || (userAnswer.generateAnswer().equals(CompareType.SMALLER)
                         && firstActivity.consumption < secondActivity.consumption)
-                || (userAnswer.getAnswer().equals(CompareType.LARGER)
+                || (userAnswer.generateAnswer().equals(CompareType.LARGER)
                         && firstActivity.consumption > secondActivity.consumption)
         );
     }
@@ -94,7 +94,7 @@ public class ComparisonQuestion extends Question {
      * @return the calculated points
      */
     @Override
-    public long getPoints() {
+    public long calculatePoints() {
         return ((hasCorrectUserAnswer() ? 1 : 0) *
                 Math.round(TRUE_FACTOR + TIME_FACTOR / (seconds + 1)));
     }
@@ -105,12 +105,12 @@ public class ComparisonQuestion extends Question {
      */
     @Override
     public boolean hasCorrectUserAnswer() {
-        return userAnswer != null && userAnswer.getAnswer() != null && (
-                (userAnswer.getAnswer().equals(CompareType.EQUAL) &&
+        return userAnswer != null && userAnswer.generateAnswer() != null && (
+                (userAnswer.generateAnswer().toString().equals(CompareType.EQUAL.name()) &&
                         firstActivity.consumption == secondActivity.consumption)
-                        || (userAnswer.getAnswer().equals(CompareType.SMALLER) &&
+                        || (userAnswer.generateAnswer().toString().equals(CompareType.SMALLER.name()) &&
                         firstActivity.consumption < secondActivity.consumption)
-                        || (userAnswer.getAnswer().equals(CompareType.LARGER) &&
+                        || (userAnswer.generateAnswer().toString().equals(CompareType.LARGER.name()) &&
                         firstActivity.consumption > secondActivity.consumption)
         );
     }

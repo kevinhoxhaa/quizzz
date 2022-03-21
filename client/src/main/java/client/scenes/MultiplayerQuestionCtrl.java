@@ -3,13 +3,11 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.entities.Activity;
-import commons.entities.MultiplayerUser;
 import commons.models.Answer;
 import commons.models.ChoiceQuestion;
 import commons.models.ComparisonQuestion;
 import commons.models.ConsumptionQuestion;
 import commons.models.Question;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.ProgressIndicator;
@@ -26,8 +24,6 @@ import javafx.scene.text.Text;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static commons.utils.CompareType.EQUAL;
 import static commons.utils.CompareType.LARGER;
@@ -234,7 +230,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      */
     private void onAnswerClicked(StackPane answerButton, Answer answer) {
         if (!answerButton.equals(selectedAnswerButton)) {
-            System.out.println(answer.getAnswer());
+            System.out.println(answer.generateAnswer());
             currentQuestion.setUserAnswer(answer, getSeconds());
 
             selectedAnswerButton = answerButton;
@@ -272,7 +268,8 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      * - Redirecting to the answer page
      */
     public void finalizeAndSend() {
-        System.out.println("In finalize and send...");
+        System.out.println(currentQuestion.getUserAnswer().generateAnswer());
+        System.out.println(currentQuestion.getSeconds());
         gameCtrl.postAnswer(currentQuestion);
     }
 

@@ -31,13 +31,13 @@ public class EstimationQuestionTest {
 
     @Test
     public void getUserAnswerReturnsUserAnswer() {
-        assertEquals(Long.valueOf(-1), question.getUserAnswer().getAnswer());
+        assertEquals(Long.valueOf(-1), question.getUserAnswer().generateAnswer());
     }
 
     @Test
     public void setUserAnswerSetsUserAnswer() {
         question.setUserAnswer(new Answer(POSITIVE * POSITIVE), POSITIVE);
-        assertEquals(POSITIVE * POSITIVE, question.getUserAnswer().getAnswer());
+        assertEquals(POSITIVE * POSITIVE, question.getUserAnswer().generateAnswer());
     }
 
     @Test
@@ -50,7 +50,7 @@ public class EstimationQuestionTest {
     public void getPointsReturnsPoints() {
         question.setUserAnswer(new Answer(POSITIVE), POSITIVE);
         long expected = TOTAL;
-        assertEquals(expected, question.getPoints());
+        assertEquals(expected, question.calculatePoints());
     }
 
     @Test
