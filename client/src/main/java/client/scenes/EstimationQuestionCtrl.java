@@ -39,6 +39,9 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     private HBox circles;
 
     @FXML
+    private Text currentScore;
+
+    @FXML
     private ProgressIndicator countdownCircle;
 
     @FXML
@@ -67,7 +70,8 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
         mainCtrl.startTimer(countdownCircle, this);
     }
 
-    public void loadQuestion(EstimationQuestion question) {
+    public void setup(EstimationQuestion question) {
+        currentScore.setText("Score: " + gameCtrl.getUser().points);
         currentQuestion = question;
         questionDescription.setText("How much energy in Wh does " + question.getActivity().title + " use?");
     }

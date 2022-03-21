@@ -107,10 +107,7 @@ public class GameController {
      * @return random choice question
      */
     private ChoiceQuestion generateChoiceQuestion() {
-        List<Activity> activities = new ArrayList<>();
-        for(int i = 0; i < CHOICE_COUNT; i++) {
-            activities.add(getRandomActivity());
-        }
+        List<Activity> activities = activityRepo.getRandomList(CHOICE_COUNT);
         return new ChoiceQuestion(activities);
     }
 
@@ -121,7 +118,13 @@ public class GameController {
      */
     private ComparisonQuestion generateComparisonQuestion() {
         Activity firstActivity = getRandomActivity();
+
         Activity secondActivity = getRandomActivity();
+
+        while(secondActivity.equals(firstActivity)) {
+            secondActivity = getRandomActivity();
+        }
+
         return new ComparisonQuestion(firstActivity, secondActivity);
     }
 

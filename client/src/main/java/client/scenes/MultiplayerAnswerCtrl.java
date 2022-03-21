@@ -100,6 +100,8 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
                     new BackgroundFill(Color.LIGHTCORAL, CornerRadii.EMPTY, Insets.EMPTY)));
         }
 
+        currentScore.setText("Score: " + gameCtrl.getUser().points);
+
         switch (prevQuestion.getType()) {
             case CONSUMPTION:
                 setupConsumptionAnswer(prevQuestion);

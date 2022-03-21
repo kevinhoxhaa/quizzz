@@ -210,6 +210,11 @@
                                </ProgressIndicator>
                            </children>
                         </HBox>
+                        <Text fx:id="currentScore" strokeType="OUTSIDE" strokeWidth="0.0" text="Score: 500">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Text>
                      </children>
                   </VBox>
                   <VBox alignment="CENTER" prefHeight="200.0" prefWidth="216.0" spacing="16.0">

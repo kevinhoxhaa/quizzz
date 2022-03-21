@@ -117,6 +117,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     protected void setup(Question question) {
         selectedAnswerButton = null;
         this.currentQuestion = question;
+        currentScore.setText("Score: " + gameCtrl.getUser().points);
 //        questionImg.setImage(new Image(currentQuestion.getImagePath()));
 
         switch (question.getType()) {

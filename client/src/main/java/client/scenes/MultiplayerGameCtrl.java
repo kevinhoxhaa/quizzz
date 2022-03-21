@@ -116,6 +116,7 @@ public class MultiplayerGameCtrl {
      * @param answeredQuestion the answered question to post
      */
     public void postAnswer(Question answeredQuestion) {
+        user.points += answeredQuestion.calculatePoints();
         answerTimer = new Timer();
         answerTimer.schedule(
                 new TimerTask() {
@@ -216,7 +217,7 @@ public class MultiplayerGameCtrl {
         mainCtrl.getPrimaryStage().setTitle("Estimation");
         mainCtrl.getPrimaryStage().setScene(estimationQuestion);
         estimationQuestionCtrl.startTimer();
-        estimationQuestionCtrl.loadQuestion(question);
+        estimationQuestionCtrl.setup(question);
     }
 
     /**
@@ -257,5 +258,13 @@ public class MultiplayerGameCtrl {
      */
     public int getAnswerCount() {
         return answerCount;
+    }
+
+    /**
+     * Returns the current user
+     * @return the current user
+     */
+    public MultiplayerUser getUser() {
+        return user;
     }
 }

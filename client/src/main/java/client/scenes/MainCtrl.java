@@ -369,7 +369,7 @@ public class MainCtrl {
         primaryStage.setTitle("Estimation");
         primaryStage.setScene(estimation);
         estimationQuestionCtrl.startTimer();
-        estimationQuestionCtrl.loadQuestion(question);
+        estimationQuestionCtrl.setup(question);
     }
 
     /**
