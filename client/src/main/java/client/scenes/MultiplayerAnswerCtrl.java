@@ -219,6 +219,12 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
             return;
         }
 
+        if(gameCtrl.getAnswerCount() == TOTAL_QUESTIONS) {
+            List<MultiplayerUser> rankedUsers = gameCtrl.fetchRanking();
+            gameCtrl.showResults(rankedUsers);
+            return;
+        }
+
         Question nextQuestion = gameCtrl.fetchQuestion();
         gameCtrl.showQuestion(nextQuestion);
     }
