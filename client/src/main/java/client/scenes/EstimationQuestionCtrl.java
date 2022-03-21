@@ -107,6 +107,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
             currentQuestion.setUserAnswer(new Answer(answer), TIMEOUT);
         }
 
+        answerField.setText("");
         gameCtrl.postAnswer(currentQuestion);
     }
 
