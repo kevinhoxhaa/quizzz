@@ -6,6 +6,7 @@ import commons.models.Answer;
 import commons.models.EstimationQuestion;
 import commons.models.Question;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -29,6 +30,9 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
 
     private Question currentQuestion;
     private double startTime;
+
+    @FXML
+    private Label yourAnswer;
 
     @FXML
     private Text questionNum;
@@ -97,6 +101,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
         try {
             long answer = Long.parseLong(answerField.getText());
             currentQuestion.setUserAnswer(new Answer(answer), getSeconds());
+            yourAnswer.setText("Your answer: " + answer);
         } catch(NumberFormatException ex) {
             System.out.println("Enter a number!");
         }
@@ -114,6 +119,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
         }
 
         answerField.setText("");
+        yourAnswer.setText("Your answer: ");
         gameCtrl.postAnswer(currentQuestion);
     }
 
