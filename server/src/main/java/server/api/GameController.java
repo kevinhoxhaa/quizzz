@@ -25,6 +25,7 @@ import server.database.WaitingUserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Random;
 
 @RestController
@@ -144,16 +145,22 @@ public class GameController {
     /**
      * Returns true if all users in a given list of users
      * have answered a question with a particular number
-     * @param userIds the ids of the users to validate
+     * @param game the game containing the ids of the users to validate
      * @param questionNumber the question number
      * @return true if all users have answered at least
      * that number of questions
      */
-    private boolean allUsersHaveAnswered(List<Long> userIds, int questionNumber) {
+    private boolean allUsersHaveAnswered(Game game, int questionNumber) {
+        List<Long> userIds = new ArrayList<>(game.getUserIds());
         for(Long id : userIds) {
-            User user = gameUserRepo.findById(id).get();
-            if(user.totalAnswers < questionNumber) {
-                return false;
+            try {
+                User user = gameUserRepo.findById(id).get();
+                if (user.totalAnswers < questionNumber) {
+                    return false;
+                }
+            } catch(NoSuchElementException ex) {
+                // User has left the game and is removed from it
+                game.getUserIds().remove(id);
             }
         }
         return true;
@@ -298,7 +305,7 @@ public class GameController {
             gameUserRepo.save(user);
         }
 
-        if(!allUsersHaveAnswered(game.getUserIds(), questionIndex + 1)) {
+        if(!allUsersHaveAnswered(game, questionIndex + 1)) {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
         }
 

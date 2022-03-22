@@ -181,7 +181,7 @@ public class MainCtrl {
         primaryStage.show();
         primaryStage.setOnCloseRequest(event -> {
 
-            quitGame(true);
+            quitGame(true, true);
 
             event.consume();
         });
@@ -660,11 +660,13 @@ public class MainCtrl {
 
     /**
      * Shows a pop up on screen to confirm quitting the game
-     * @param removeUser is used to decide whether the application should be closed or not
-     *                  If removeUser is true: the application is closed
-     *                  If removeUser is false: the user is redirected to home page
+     * @param quitApp is used to decide whether the application should be closed or not
+     *                  If isMultiplayer is true: the application is closed
+     *                  If isMultiplayer is false: the user is redirected to home page
+     * @param isMultiplayer is used to decide whether the user is a multiplayer user
+     *                      If so, it deletes the user from the database.
      */
-    public void quitGame(boolean removeUser){
+    public void quitGame(boolean quitApp, boolean isMultiplayer){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Quit solo game");
         alert.setContentText("Are you sure you want to quit?");
@@ -673,14 +675,16 @@ public class MainCtrl {
         alert.getButtonTypes().setAll(okButton, noButton);
         alert.showAndWait().ifPresent(type -> {
             if (type == okButton) {
-                if(removeUser){
+                if(isMultiplayer) {
                     try {
-                        homeCtrl.getServer().removeMultiplayerUser(homeCtrl.getServer().getURL(), user);
+                        server.removeMultiplayerUser(serverUrl, user);
                         user = null;
                     } catch(WebApplicationException e) {
                         System.out.println("User to remove not found!");
                     } finally {
-                        System.exit(0);
+                        if(quitApp) {
+                            System.exit(0);
+                        }
                     }
                 }
                 killThread();

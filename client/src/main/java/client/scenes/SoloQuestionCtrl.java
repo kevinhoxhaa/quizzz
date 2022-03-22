@@ -478,6 +478,6 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
     @Override
     @FXML
     public void onQuit(){
-        mainCtrl.quitGame(false);
+        mainCtrl.quitGame(false, false);
     }
 }
