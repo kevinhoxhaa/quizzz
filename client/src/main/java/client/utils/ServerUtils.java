@@ -127,100 +127,12 @@ public class ServerUtils {
      * @return a question
      */
     public Question getQuestion(String serverUrl, int gameIndex, int questionIndex) {
-        String questionType = getQuestionType(serverUrl, gameIndex, questionIndex);
-
-        switch(questionType) {
-            case "CONSUMPTION":
-                return getConsumptionQuestion(serverUrl, gameIndex, questionIndex);
-            case "ESTIMATION":
-                return getEstimationQuestion(serverUrl, gameIndex, questionIndex);
-            case "CHOICE":
-                return getChoiceQuestion(serverUrl, gameIndex, questionIndex);
-            case "COMPARISON":
-                return getComparisonQuestion(serverUrl, gameIndex, questionIndex);
-            default:
-                return null;
-        }
-    }
-
-    /**
-     * A getter for the type of a given question
-     * @param serverUrl the server url
-     * @param gameIndex the game index
-     * @param questionIndex the index of the question inside the game
-     * @return a question
-     */
-    public String getQuestionType(String serverUrl, int gameIndex, int questionIndex) {
-        String path = String.format("/api/games/%d/questionType/%d", gameIndex, questionIndex);
+        String path = String.format("/api/games/%d/question/%d", gameIndex, questionIndex);
         return ClientBuilder.newClient(new ClientConfig())
                 .target(serverUrl).path(path)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .get(String.class);
-    }
-
-    /**
-     * A getter for a given consumption question
-     * @param serverUrl the server url
-     * @param gameIndex the game index
-     * @param questionIndex the index of the question inside the game
-     * @return a question
-     */
-    public ConsumptionQuestion getConsumptionQuestion(String serverUrl, int gameIndex, int questionIndex) {
-        String path = String.format("/api/games/%d/consumption/%d", gameIndex, questionIndex);
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(serverUrl).path(path)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(ConsumptionQuestion.class);
-    }
-
-    /**
-     * A getter for a given estimation question
-     * @param serverUrl the server url
-     * @param gameIndex the game index
-     * @param questionIndex the index of the question inside the game
-     * @return a question
-     */
-    public EstimationQuestion getEstimationQuestion(String serverUrl, int gameIndex, int questionIndex) {
-        String path = String.format("/api/games/%d/estimation/%d", gameIndex, questionIndex);
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(serverUrl).path(path)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(EstimationQuestion.class);
-    }
-
-    /**
-     * A getter for a given choice question
-     * @param serverUrl the server url
-     * @param gameIndex the game index
-     * @param questionIndex the index of the question inside the game
-     * @return a question
-     */
-    public ChoiceQuestion getChoiceQuestion(String serverUrl, int gameIndex, int questionIndex) {
-        String path = String.format("/api/games/%d/choice/%d", gameIndex, questionIndex);
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(serverUrl).path(path)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(ChoiceQuestion.class);
-    }
-
-    /**
-     * A getter for a given comparison question
-     * @param serverUrl the server url
-     * @param gameIndex the game index
-     * @param questionIndex the index of the question inside the game
-     * @return a question
-     */
-    public ComparisonQuestion getComparisonQuestion(String serverUrl, int gameIndex, int questionIndex) {
-        String path = String.format("/api/games/%d/comparison/%d", gameIndex, questionIndex);
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(serverUrl).path(path)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(ComparisonQuestion.class);
+                .get(Question.class);
     }
 
     /**
