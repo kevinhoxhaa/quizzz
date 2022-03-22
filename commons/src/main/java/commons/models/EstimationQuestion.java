@@ -55,7 +55,7 @@ public class EstimationQuestion extends Question {
      */
     @Override
     public long calculatePoints() {
-        if(userAnswer.generateAnswer() == null) {
+        if(userAnswer.generateAnswer() == null || !hasCorrectUserAnswer()) {
             return 0L;
         }
 
