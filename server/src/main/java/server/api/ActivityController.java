@@ -114,19 +114,14 @@ public class ActivityController {
      * Returns the image of a particular activity as a base-64-encoded
      * byte array with the image format appended in the end with
      * a whitespace
-     * @param id the id of the activity
+     * @param imagePath the image path to the requested image
      * @return the encoded image
      */
-    @GetMapping("/image/{id}")
-    public ResponseEntity<String> getImage(@PathVariable("id") long id) {
-        if(id < 0 || !repo.existsById(id)) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        Activity activity = repo.findById(id).orElse(null);
+    @PostMapping("/image")
+    public ResponseEntity<String> getImageFromPath(@RequestBody String imagePath) {
 
         try {
-            File imageFile = ResourceUtils.getFile("classpath:activities/" + activity.imagePath);
+            File imageFile = ResourceUtils.getFile("classpath:activities/" + imagePath);
             BufferedImage bImage = ImageIO.read(imageFile);
 
             ByteArrayOutputStream bos = new ByteArrayOutputStream();

@@ -138,28 +138,13 @@ public class ActivityControllerTest {
 
     @Test
     public void getImageReturnsValidImage() {
-        Activity activity = getActivity("q1", NUMBER, "src");
-        activity.imagePath = "49/ps5.jpg";
-        var added = sut.add(activity);
-        var response = sut.getImage(added.getBody().id);
+        var response = sut.getImageFromPath("49/ps5.jpg");
         assertTrue(response.getStatusCode().is2xxSuccessful());
     }
 
     @Test
-    public void getImageReturnsBadRequestWithNoActivity() {
-        Activity activity = getActivity("q1", NUMBER, "src");
-        activity.imagePath = "49/ps5.jpg";
-        var added = sut.add(activity);
-        var response = sut.getImage(NUMBER * NUMBER);
-        assertEquals(response.getStatusCode(), BAD_REQUEST);
-    }
-
-    @Test
     public void getImageReturnsNotFoundWithInvalidImage() {
-        Activity activity = getActivity("q1", NUMBER, "src");
-        activity.imagePath = "49/ps6.jpg";
-        var added = sut.add(activity);
-        var response = sut.getImage(added.getBody().id);
+        var response = sut.getImageFromPath("49/ps6.jpg");
         assertEquals(response.getStatusCode(), NOT_FOUND);
     }
 }
