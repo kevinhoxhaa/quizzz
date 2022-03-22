@@ -660,11 +660,11 @@ public class MainCtrl {
 
     /**
      * Shows a pop up on screen to confirm quitting the game
-     * @param check is used to decide whether the application should be closed or not
-     *                  If check is true: the application is closed
-     *                  If check is false: the user is redirected to home page
+     * @param removeUser is used to decide whether the application should be closed or not
+     *                  If removeUser is true: the application is closed
+     *                  If removeUser is false: the user is redirected to home page
      */
-    public void quitGame(boolean check){
+    public void quitGame(boolean removeUser){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Quit solo game");
         alert.setContentText("Are you sure you want to quit?");
@@ -673,7 +673,7 @@ public class MainCtrl {
         alert.getButtonTypes().setAll(okButton, noButton);
         alert.showAndWait().ifPresent(type -> {
             if (type == okButton) {
-                if(check){
+                if(removeUser){
                     try {
                         homeCtrl.getServer().removeMultiplayerUser(homeCtrl.getServer().getURL(), user);
                         user = null;
