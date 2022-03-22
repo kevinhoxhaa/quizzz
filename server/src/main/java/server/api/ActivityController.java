@@ -1,8 +1,10 @@
 package server.api;
 
 import commons.entities.Activity;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import server.database.ActivityRepository;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Random;
 
@@ -99,6 +108,41 @@ public class ActivityController {
     public ResponseEntity<Optional<Activity>> getRandom() {
         var idx = random.nextInt((int) repo.count());
         return ResponseEntity.ok(repo.findById((long) idx));
+    }
+
+    /**
+     * Returns the image of a particular activity as a base-64-encoded
+     * byte array with the image format appended in the end with
+     * a whitespace
+     * @param id the id of the activity
+     * @return the encoded image
+     */
+    @GetMapping("/image/{id}")
+    public ResponseEntity<String> getImage(@PathVariable("id") long id) {
+        if(id < 0 || !repo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Activity activity = repo.findById(id).orElse(null);
+
+        try {
+            File imageFile = ResourceUtils.getFile("classpath:activities/" + activity.imagePath);
+            BufferedImage bImage = ImageIO.read(imageFile);
+
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ImageIO.write(
+                    bImage,
+                    FilenameUtils.getExtension(imageFile.getName()).toLowerCase(Locale.ROOT),
+                    bos
+            );
+
+            return ResponseEntity.ok(
+                    Base64.getEncoder().encodeToString(bos.toByteArray())
+                            + " " + FilenameUtils.getExtension(imageFile.getName()).toLowerCase(Locale.ROOT)
+            );
+        } catch(IllegalArgumentException | IOException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     /**
