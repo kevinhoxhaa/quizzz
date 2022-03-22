@@ -226,7 +226,9 @@ public class ServerUtils {
         catch(Exception e){
             String defaultPathString = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
 
-            defaultPathString = defaultPathString.substring(6, defaultPathString.length() - 18) + "resources/main/client/images/lightning.jpg";
+            defaultPathString = defaultPathString.substring(
+                    "file:/".length(), defaultPathString.length() - "classes/java/main/".length())
+                    + "resources/main/client/images/lightning.jpg";
 
             return new Image(defaultPathString);
         }
