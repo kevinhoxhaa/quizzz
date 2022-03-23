@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.entities.MultiplayerUser;
+import commons.models.Emoji;
 import commons.models.EstimationQuestion;
 import commons.models.Question;
 import commons.utils.QuestionType;
@@ -95,10 +96,18 @@ public class MultiplayerGameCtrl {
     /**
      * Polls the first question and initialises
      * the game loop
+     * Initiates the websocket connection with the client
+     * for receiving emojis
      */
     public void startGame() {
-         Question firstQuestion = fetchQuestion();
-         showQuestion(firstQuestion);
+        connectToWebsocket();
+        Question firstQuestion = fetchQuestion();
+        showQuestion(firstQuestion);
+    }
+
+    public void connectToWebsocket() {
+        server.connect(serverUrl);
+        server.registerForMessages("/topic/emoji", Emoji.class, System.out::println);
     }
 
     /**
