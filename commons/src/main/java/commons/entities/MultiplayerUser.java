@@ -8,6 +8,7 @@ import javax.persistence.Table;
 public class MultiplayerUser extends User{
 
     public Long gameID;
+    public int unansweredQuestions = 0;
 
     @SuppressWarnings("unused")
     private MultiplayerUser() {
