@@ -8,7 +8,6 @@ import commons.models.ComparisonQuestion;
 import commons.models.ConsumptionQuestion;
 import commons.models.EstimationQuestion;
 import commons.models.Question;
-import commons.models.Answer;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.ListView;
@@ -29,6 +28,7 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
 
     private static final int HALF_QUESTIONS = 10;
     private static final int TOTAL_QUESTIONS = 20;
+    private static final int KICK_AT_X_QUESTIONS = 3;
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -102,7 +102,7 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
         for ( MultiplayerUser user : allPlayers ) {
             if ( !playersThatAnswered.contains( user ) ) {
                 user.unansweredQuestions++;
-                if ( user.unansweredQuestions == 3 ) {
+                if ( user.unansweredQuestions == KICK_AT_X_QUESTIONS ) {
                     server.removeMultiplayerUser(gameCtrl.getServerUrl(), user );
                 }
             } else {
