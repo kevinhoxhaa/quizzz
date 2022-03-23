@@ -246,16 +246,6 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
     }
 
     /**
-     * Getter for the players that answered the last question
-     *
-     * @return playersThatAnswered
-     */
-
-    /*public List<MultiplayerUser> getPlayersThatAnswered() {
-        return playersThatAnswered;
-    } */
-
-    /**
      * Getter for the circles bar
      *
      * @return circles
