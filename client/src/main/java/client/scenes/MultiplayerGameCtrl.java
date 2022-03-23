@@ -103,6 +103,7 @@ public class MultiplayerGameCtrl {
         connectToWebsocket();
         Question firstQuestion = fetchQuestion();
         showQuestion(firstQuestion);
+        server.send("/app/emoji", new Emoji("image", "user"));
     }
 
     /**

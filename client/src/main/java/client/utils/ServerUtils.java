@@ -245,6 +245,16 @@ public class ServerUtils {
     }
 
     /**
+     * Sends an object to the server
+     * @param dest the destination to send to
+     * @param o the object to send
+     */
+    public void send(String dest, Object o) {
+        System.out.println("Sending " + o);
+        session.send(dest, o);
+    }
+
+    /**
      * Registers for websocket messages from the server
      * to the client
      * @param dest the destination url of the server to register to
