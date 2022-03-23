@@ -26,6 +26,8 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import org.glassfish.jersey.client.ClientConfig;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.simp.stomp.StompFrameHandler;
+import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
@@ -34,9 +36,11 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -211,6 +215,11 @@ public class ServerUtils {
 
     private StompSession session;
 
+    /**
+     * Initiates the websocket connection with the server
+     * and sets the current session
+     * @param httpUrl the url of the http server to connect to
+     */
     public void connect(String httpUrl) {
         String websocketUrl = httpUrl.replace("http", "ws");
 
@@ -233,5 +242,29 @@ public class ServerUtils {
         }
 
         throw new IllegalStateException();
+    }
+
+    /**
+     * Registers for websocket messages from the server
+     * to the client
+     * @param dest the destination url of the server to register to
+     * @param type the type of the payload to expect from the server
+     * @param consumer the consumer that handles the received payload
+     * @param <T> the type of the payload to expect from the server
+     */
+    public <T> void registerForMessages(String dest, Class<T> type, Consumer<T> consumer) {
+        //noinspection NullableProblems
+        session.subscribe(dest, new StompFrameHandler() {
+            @Override
+            public Type getPayloadType(StompHeaders headers) {
+                return type;
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            public void handleFrame(StompHeaders headers, Object payload) {
+                consumer.accept((T) payload);
+            }
+        });
     }
 }
