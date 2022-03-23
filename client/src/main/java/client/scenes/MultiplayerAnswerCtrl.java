@@ -28,12 +28,10 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
 
     private static final int HALF_QUESTIONS = 10;
     private static final int TOTAL_QUESTIONS = 20;
-    private static final int KICK_AT_X_QUESTIONS = 3;
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private MultiplayerGameCtrl gameCtrl;
-    private List<MultiplayerUser> playersThatAnswered;
 
     @FXML
     private VBox answerPane;
@@ -98,7 +96,7 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
      */
     protected void setup(Question prevQuestion, List<MultiplayerUser> correctPlayers) {
 
-        List<MultiplayerUser> allPlayers = server.getUsers ( gameCtrl.getServerUrl());
+       /* List<MultiplayerUser> allPlayers = server.getUsers ( gameCtrl.getServerUrl());
         for ( MultiplayerUser user : allPlayers ) {
             if ( !playersThatAnswered.contains( user ) ) {
                 user.unansweredQuestions++;
@@ -108,7 +106,7 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
             } else {
                 user.unansweredQuestions = 0;
             }
-        }
+        } */
 
         if (prevQuestion.hasCorrectUserAnswer()) {
             answerPane.setBackground(new Background(
@@ -266,9 +264,9 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
      * @return playersThatAnswered
      */
 
-    public List<MultiplayerUser> getPlayersThatAnswered() {
+    /*public List<MultiplayerUser> getPlayersThatAnswered() {
         return playersThatAnswered;
-    }
+    } */
 
     /**
      * Getter for the circles bar

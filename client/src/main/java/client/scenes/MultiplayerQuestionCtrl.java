@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.entities.Activity;
+import commons.entities.MultiplayerUser;
 import commons.models.Answer;
 import commons.models.ChoiceQuestion;
 import commons.models.ComparisonQuestion;
@@ -34,6 +35,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     private static final double MILLISECONDS_PER_SECONDS = 1000.0;
     private static final double CIRCLE_BORDER_SIZE = 1.7;
     private static final double STANDARD_CIRCLE_BORDER_SIZE = 1.0;
+    private static final int KICK_AT_X_QUESTIONS = 3;
     private static final int POLLING_DELAY = 0;
     private static final int POLLING_INTERVAL = 500;
 
@@ -42,6 +44,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
 
     private MultiplayerGameCtrl gameCtrl;
     private Question currentQuestion;
+    private boolean answeredQuestion = false;
 
     private double startTime;
 
@@ -101,7 +104,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      */
     @Inject
 
-    public MultiplayerQuestionCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public MultiplayerQuestionCtrl(ServerUtils server, MainCtrl mainCtrl ) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
@@ -228,6 +231,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      * @param answer       The answer corresponding to the answer button.
      */
     private void onAnswerClicked(StackPane answerButton, Answer answer) {
+        answeredQuestion = true;
         if (!answerButton.equals(selectedAnswerButton)) {
             currentQuestion.setUserAnswer(answer, getSeconds());
 
@@ -393,6 +397,17 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
 
     @Override
     public void redirect() {
+        MultiplayerUser user = ( MultiplayerUser ) mainCtrl.getUser();
+        if ( !answeredQuestion ) {
+            user.unansweredQuestions++;
+            if ( user.unansweredQuestions == KICK_AT_X_QUESTIONS ) {
+                server.removeMultiplayerUser ( mainCtrl.getServerUrl(), user );
+            }
+        } else {
+            user.unansweredQuestions = 0;
+        }
+
+        answeredQuestion = false;
         finalizeAndSend();
     }
 
