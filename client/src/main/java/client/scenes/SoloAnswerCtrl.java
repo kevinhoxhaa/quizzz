@@ -27,10 +27,9 @@ import java.util.List;
 
 public class SoloAnswerCtrl implements SceneController, QuestionNumController {
 
+    private static final int QUESTIONS_PER_GAME = 20;
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
-    private static final int QUESTIONS_PER_GAME = 20;
-
     @FXML
     private VBox answerPane;
     @FXML
@@ -57,6 +56,7 @@ public class SoloAnswerCtrl implements SceneController, QuestionNumController {
 
     /**
      * Creates a controller for the multiplayer answer screen, with the given server and main controller.
+     *
      * @param server
      * @param mainCtrl
      */
@@ -68,17 +68,19 @@ public class SoloAnswerCtrl implements SceneController, QuestionNumController {
 
     /**
      * Sets up the answer page screen: <br>
-     *  - Sets up a fitting message (with corresponding color) for the player
-     *  based on if the player answered correctly or not. <br>
-     *  - Fills in the question and correct answer in their corresponding text boxes. <br>
+     * - Sets up a fitting message (with corresponding color) for the player
+     * based on if the player answered correctly or not. <br>
+     * - Fills in the question and correct answer in their corresponding text boxes. <br>
+     *
      * @param soloGame The solo game instance
-     * @param colors The list of colors associated with the past questions
+     * @param colors   The list of colors associated with the past questions
      */
     protected void setup(SoloGame soloGame, List<Color> colors) {
         this.game = soloGame;
         Question prevQuestion = soloGame.loadCurrentQuestion();
-        mainCtrl.getUser().incrementScore(prevQuestion.getPoints());
+        mainCtrl.getUser().incrementScore(prevQuestion.calculatePoints());
         if (prevQuestion.hasCorrectUserAnswer()) {
+            mainCtrl.addScore(prevQuestion.calculatePoints());
             currentScore.setFill(Color.GREEN);
             this.answerResponse.setText("Well done!");
             answerPane.setBackground(new Background(
@@ -90,9 +92,9 @@ public class SoloAnswerCtrl implements SceneController, QuestionNumController {
                     new BackgroundFill(Color.LIGHTCORAL, CornerRadii.EMPTY, Insets.EMPTY)));
         }
 
-        currentScore.setText( String.format( "Score: %d", mainCtrl.getSoloScore()) );
+        currentScore.setText(String.format("Score: %d", mainCtrl.getSoloScore()));
 
-        switch(prevQuestion.getType()) {
+        switch (prevQuestion.getType()) {
             case CONSUMPTION:
                 setupConsumptionAnswer(prevQuestion);
                 break;
@@ -113,6 +115,7 @@ public class SoloAnswerCtrl implements SceneController, QuestionNumController {
 
     /**
      * Sets up the previous question and correct answer for an answer page of a consumption question.
+     *
      * @param prevQuestion The question that has just been asked to the players.
      */
     public void setupConsumptionAnswer(Question prevQuestion) {
@@ -128,6 +131,7 @@ public class SoloAnswerCtrl implements SceneController, QuestionNumController {
 
     /**
      * Sets up the previous question and correct answer for an answer page of a comparison question.
+     *
      * @param prevQuestion The question that has just been asked to the players.
      */
     public void setupComparisonAnswer(Question prevQuestion) {
@@ -150,6 +154,7 @@ public class SoloAnswerCtrl implements SceneController, QuestionNumController {
 
     /**
      * Sets up the previous question and correct answer for an answer page of a choice question.
+     *
      * @param prevQuestion The question that has just been asked to the players.
      */
     public void setupChoiceAnswer(Question prevQuestion) {
@@ -165,6 +170,7 @@ public class SoloAnswerCtrl implements SceneController, QuestionNumController {
 
     /**
      * Sets up the previous question and correct answer for an answer page of an estimation question.
+     *
      * @param prevQuestion The question that has just been asked to the players.
      */
     public void setupEstimationAnswer(Question prevQuestion) {
@@ -187,8 +193,8 @@ public class SoloAnswerCtrl implements SceneController, QuestionNumController {
 
     /**
      * redirects to:
-     *   - either the next question
-     *   - or the results page
+     * - either the next question
+     * - or the results page
      */
     @Override
     public void redirect() {
@@ -207,21 +213,25 @@ public class SoloAnswerCtrl implements SceneController, QuestionNumController {
 
     /**
      * Getter for the current question number
+     *
      * @return questionNum
      */
-    public Text getQuestionNum(){
+    public Text getQuestionNum() {
         return questionNum;
     }
+
     /**
      * Getter for the circles bar
+     *
      * @return circles
      */
-    public HBox getCirclesHBox(){
+    public HBox getCirclesHBox() {
         return circles;
     }
 
     /**
      * Updates the colors of the little circles based on the array given
+     *
      * @param colors Is the list of colors of previous answers(green/red depending on their correctness)
      */
     @Override
@@ -237,7 +247,7 @@ public class SoloAnswerCtrl implements SceneController, QuestionNumController {
      */
     @Override
     public void resetCircleColor() {
-        for(int i=0; i<mainCtrl.getQuestionsPerGame();i++){
+        for (int i = 0; i < mainCtrl.getQuestionsPerGame(); i++) {
             Circle circle = (Circle) getCirclesHBox().getChildren().get(i);
             circle.setFill(Color.LIGHTGRAY);
         }
@@ -247,7 +257,7 @@ public class SoloAnswerCtrl implements SceneController, QuestionNumController {
      * Updates the question number on the top of the screen.
      */
     @Override
-    public void updateQuestionNumber(){
+    public void updateQuestionNumber() {
         getQuestionNum().setText("" + (game.getCurrentQuestionNum() + 1));
     }
 
@@ -257,6 +267,6 @@ public class SoloAnswerCtrl implements SceneController, QuestionNumController {
     @Override
     @FXML
     public void onQuit(){
-        mainCtrl.quitGame(false);
+        mainCtrl.quitGame(false, false);
     }
 }

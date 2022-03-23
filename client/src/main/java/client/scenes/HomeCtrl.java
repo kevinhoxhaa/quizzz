@@ -42,8 +42,9 @@ public class HomeCtrl {
 
     /**
      * Creates a new home controller instance.
-     * @param server the server utils used for communication
-     *               with the Spring server.
+     *
+     * @param server   the server utils used for communication
+     *                 with the Spring server.
      * @param mainCtrl the main controller used for transition
      *                 between different scenes.
      */
@@ -55,11 +56,12 @@ public class HomeCtrl {
 
     /**
      * Shows a dialog displaying the rules of the game.
+     *
      * @throws IOException in case the static how-to layout file is not found
      */
     @FXML
     protected void onHelpButtonClick() throws IOException {
-        if(dialog != null) {
+        if (dialog != null) {
             dialog.show();
             return;
         }
@@ -84,6 +86,7 @@ public class HomeCtrl {
 
     /**
      * Returns a new solo user with the given name
+     *
      * @return a solo user
      */
     public SoloUser getSoloUser() {
@@ -93,6 +96,7 @@ public class HomeCtrl {
 
     /**
      * Returns a new multiplayer user with the given name
+     *
      * @return a multiplayer user
      */
     public MultiplayerUser getMultiplayerUser() {
@@ -102,14 +106,16 @@ public class HomeCtrl {
 
     /**
      * Getter for the server
+     *
      * @return server
      */
     public ServerUtils getServer() {
-       return server;
+        return server;
     }
 
     /**
      * Returns the server URL the user has connected to
+     *
      * @return the server URL
      */
     protected String getServerUrl() {
@@ -134,7 +140,7 @@ public class HomeCtrl {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
 
-            switch(e.getResponse().getStatus()) {
+            switch (e.getResponse().getStatus()) {
                 case FORBIDDEN:
                     alert.setContentText("Username cannot be null or empty!");
                     break;
@@ -170,7 +176,7 @@ public class HomeCtrl {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
 
-            switch(e.getResponse().getStatus()) {
+            switch (e.getResponse().getStatus()) {
                 case UNAUTHORIZED:
                     alert.setContentText("A user with that name already exists on the server!");
                     break;
@@ -183,7 +189,7 @@ public class HomeCtrl {
 
             alert.showAndWait();
             return;
-        } catch(Exception e) {
+        } catch (Exception e) {
             invalidURL();
             return;
         }
@@ -199,7 +205,7 @@ public class HomeCtrl {
     }
 
     private boolean isValidUsername(User user) {
-        if(user.username.contains(" ") || user.username.length() > USERNAME_LENGTH) {
+        if (user.username.contains(" ") || user.username.length() > USERNAME_LENGTH) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText("Invalid username!");

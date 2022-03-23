@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.models.Question;
 import commons.entities.MultiplayerUser;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
@@ -19,14 +20,36 @@ import javafx.stage.Modality;
 import java.util.List;
 
 
-public class RankingCtrl implements SceneController,QuestionNumController {
+public class RankingCtrl implements SceneController, QuestionNumController {
 
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private MultiplayerGameCtrl gameCtrl;
+
+    @FXML
+    private HBox circles;
+    @FXML
+    private ProgressIndicator countdownCircle;
+    @FXML
+    private Text questionNum;
+    @FXML
+    private TableView<MultiplayerUser> scoreTable;
+
+    @FXML
+    private Text scoreTableUserSore;
+    @FXML
+    private Text ranking1stPlayer;
+    @FXML
+    private Text ranking2ndPlayer;
+    @FXML
+    private Text ranking3rdPlayer;
+    @FXML
+    private Text scoreTableUserName;
 
     /**
      * Creates a controller for the ranking page screen, with the given server and mainCtrl parameters.
+     *
      * @param server
      * @param mainCtrl
      */
@@ -35,33 +58,6 @@ public class RankingCtrl implements SceneController,QuestionNumController {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
-
-    @FXML
-    private HBox circles;
-
-    @FXML
-    private ProgressIndicator countdownCircle;
-
-    @FXML
-    private Text questionNum;
-
-    @FXML
-    private TableView scoreTable;
-
-    @FXML
-    private Text scoreTableUserSore;
-
-    @FXML
-    private Text ranking1stPlayer;
-
-    @FXML
-    private Text ranking2ndPlayer;
-
-    @FXML
-    private Text ranking3rdPlayer;
-
-    @FXML
-    private Text scoreTableUserName;
 
     /**
      * Initiates the timer countdown and animation
@@ -72,16 +68,19 @@ public class RankingCtrl implements SceneController,QuestionNumController {
 
     /**
      * Getter for the circles that show past questions' correctness
+     *
      * @return circles
      */
-    public HBox getCircles(){
+    public HBox getCircles() {
         return circles;
     }
+
     /**
      * Getter for the current question number
+     *
      * @return questionNum
      */
-    public Text getQuestionNum(){
+    public Text getQuestionNum() {
         return questionNum;
     }
 
@@ -100,7 +99,7 @@ public class RankingCtrl implements SceneController,QuestionNumController {
             scoreColumn.setCellValueFactory( new PropertyValueFactory<>( "points") );
             scoreTable.getColumns().addAll( usersColumn, scoreColumn );
             for(MultiplayerUser user : users) {
-                scoreTable.getItems().add( user );
+                scoreTable.getItems().add(user);
             }
             scoreColumn.setSortType ( TableColumn.SortType.DESCENDING );
             scoreTable.getSortOrder().add ( scoreColumn );
@@ -137,16 +136,24 @@ public class RankingCtrl implements SceneController,QuestionNumController {
 //        });
 //    }
 
+    /**
+     * Sets the current game controller
+     * @param gameCtrl the current game controller
+     */
+    public void setGameCtrl(MultiplayerGameCtrl gameCtrl) {
+        this.gameCtrl = gameCtrl;
+    }
 
     @Override
     public void redirect() {
-        mainCtrl.showQuestion(mainCtrl.getNextQuestion());
+        Question nextQuestion = gameCtrl.fetchQuestion();
+        gameCtrl.showQuestion(nextQuestion);
     }
 
     @Override
     public void onQuit() {
+        mainCtrl.quitGame(false, true);
         mainCtrl.bindUser(null);
-        mainCtrl.quitGame(false);
     }
 
     @Override
@@ -159,14 +166,14 @@ public class RankingCtrl implements SceneController,QuestionNumController {
 
     @Override
     public void resetCircleColor() {
-        for(int i=0; i<mainCtrl.getQuestionsPerGame();i++){
+        for (int i = 0; i < mainCtrl.getQuestionsPerGame(); i++) {
             Circle circle = (Circle) getCircles().getChildren().get(i);
             circle.setFill(Color.LIGHTGRAY);
         }
     }
 
     @Override
-    public void updateQuestionNumber(){
+    public void updateQuestionNumber() {
         getQuestionNum().setText("" + (mainCtrl.getAnswerCount()));
     }
 }
