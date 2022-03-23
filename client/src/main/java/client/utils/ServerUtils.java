@@ -223,7 +223,7 @@ public class ServerUtils {
     public void connect(String httpUrl) {
         String websocketUrl = httpUrl.replace("http", "ws");
 
-        if(websocketUrl.charAt(httpUrl.length() - 1) != '/') {
+        if(websocketUrl.charAt(websocketUrl.length() - 1) != '/') {
             websocketUrl += "/";
         }
         websocketUrl += "websocket";

@@ -105,6 +105,10 @@ public class MultiplayerGameCtrl {
         showQuestion(firstQuestion);
     }
 
+    /**
+     * Initiates the websocket connection with the client
+     * for receiving emojis
+     */
     public void connectToWebsocket() {
         server.connect(serverUrl);
         server.registerForMessages("/topic/emoji", Emoji.class, System.out::println);
