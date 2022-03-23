@@ -93,6 +93,10 @@ public class MultiplayerGameCtrl {
         this.ranking = ranking.getValue();
     }
 
+    public MultiplayerGameCtrl(){
+
+    }
+
     /**
      * Polls the first question and initialises
      * the game loop
@@ -103,7 +107,6 @@ public class MultiplayerGameCtrl {
         connectToWebsocket();
         Question firstQuestion = fetchQuestion();
         showQuestion(firstQuestion);
-        server.send("/app/emoji", new Emoji("image", "user"));
     }
 
     /**
@@ -112,7 +115,7 @@ public class MultiplayerGameCtrl {
      */
     public void connectToWebsocket() {
         server.connect(serverUrl);
-        server.registerForMessages("/topic/emoji", Emoji.class, System.out::println);
+        server.registerForMessages("/topic/emoji/" + gameIndex, Emoji.class, System.out::println);
     }
 
     /**
@@ -288,5 +291,13 @@ public class MultiplayerGameCtrl {
      */
     public String getServerUrl() {
         return serverUrl;
+    }
+
+    /**
+     * Returns the game index
+     * @return the game index
+     */
+    public int getGameIndex() {
+        return gameIndex;
     }
 }

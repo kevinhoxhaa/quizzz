@@ -7,6 +7,7 @@ import commons.models.Answer;
 import commons.models.ChoiceQuestion;
 import commons.models.ComparisonQuestion;
 import commons.models.ConsumptionQuestion;
+import commons.models.Emoji;
 import commons.models.Question;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -228,6 +229,9 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      * @param answer       The answer corresponding to the answer button.
      */
     private void onAnswerClicked(StackPane answerButton, Answer answer) {
+
+        server.send("/app/emoji/" + gameCtrl.getGameIndex(),
+                new Emoji("image", String.valueOf(gameCtrl.getGameIndex())));
         if (!answerButton.equals(selectedAnswerButton)) {
             currentQuestion.setUserAnswer(answer, getSeconds());
 

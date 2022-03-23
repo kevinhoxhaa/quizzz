@@ -50,6 +50,8 @@ public class ServerUtils {
     private static final long MAGICNUMBER = 42;
     private static final int QUESTIONS_PER_GAME = 20;
 
+    private StompSession session;
+
     public void getQuotesTheHardWay() throws IOException {
         var url = new URL("http://localhost:8080/api/quotes");
         var is = url.openConnection().getInputStream();
@@ -212,8 +214,6 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON)
                 .get(new GenericType<List<SoloUser>>() {});
     }
-
-    private StompSession session;
 
     /**
      * Initiates the websocket connection with the server
