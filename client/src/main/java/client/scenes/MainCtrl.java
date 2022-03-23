@@ -658,8 +658,8 @@ public class MainCtrl {
     /**
      * Shows a pop up on screen to confirm quitting the game
      * @param quitApp is used to decide whether the application should be closed or not
-     *                  If isMultiplayer is true: the application is closed
-     *                  If isMultiplayer is false: the user is redirected to home page
+     *                  If quitApp is true: the application is closed
+     *                  If quitApp is false: the user is redirected to home page
      * @param isMultiplayer is used to decide whether the user is a multiplayer user
      *                      If so, it deletes the user from the database.
      */
