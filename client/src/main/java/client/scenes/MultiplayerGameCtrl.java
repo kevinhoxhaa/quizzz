@@ -98,6 +98,7 @@ public class MultiplayerGameCtrl {
      * the game loop
      */
     public void startGame() {
+         user.unansweredQuestions = 0;
          Question firstQuestion = fetchQuestion();
          showQuestion(firstQuestion);
     }
