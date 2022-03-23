@@ -119,6 +119,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      */
     protected void setup(Question question) {
         selectedAnswerButton = null;
+        answeredQuestion = false;
         this.currentQuestion = question;
         currentScore.setText("Score: " + gameCtrl.getUser().points);
 
@@ -401,7 +402,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
         if ( !answeredQuestion ) {
             user.unansweredQuestions++;
             if ( user.unansweredQuestions == KICK_AT_X_QUESTIONS ) {
-                server.removeMultiplayerUser ( mainCtrl.getServerUrl(), user );
+                onQuit();
             }
         } else {
             user.unansweredQuestions = 0;

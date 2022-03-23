@@ -88,27 +88,14 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
      * based on if the player answered correctly or not. <br>
      * - Fills in the question and correct answer in their corresponding text boxes. <br>
      * - Fills the correctPlayers ListView with players that answered correctly.
-     * - Updates the counters of the players that didn't answer the question
-     * or resets the counter if they answered
-     * - Kicks the players that have 3 unansweredQuestions in a row
+     *
      * @param prevQuestion   The question that has just been asked to the players.
      * @param correctPlayers A list of all the players that answered the precious question correctly.
      */
     protected void setup(Question prevQuestion, List<MultiplayerUser> correctPlayers) {
 
-       /* List<MultiplayerUser> allPlayers = server.getUsers ( gameCtrl.getServerUrl());
-        for ( MultiplayerUser user : allPlayers ) {
-            if ( !playersThatAnswered.contains( user ) ) {
-                user.unansweredQuestions++;
-                if ( user.unansweredQuestions == KICK_AT_X_QUESTIONS ) {
-                    server.removeMultiplayerUser(gameCtrl.getServerUrl(), user );
-                }
-            } else {
-                user.unansweredQuestions = 0;
-            }
-        } */
-
         if (prevQuestion.hasCorrectUserAnswer()) {
+            this.answerResponse.setText("Well done!");
             answerPane.setBackground(new Background(
                     new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
         } else {
