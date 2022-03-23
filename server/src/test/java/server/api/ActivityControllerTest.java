@@ -4,6 +4,8 @@ import commons.entities.Activity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Random;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -11,8 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
-
-import java.util.Random;
 
 public class ActivityControllerTest {
 
@@ -134,12 +134,6 @@ public class ActivityControllerTest {
         var actual = sut.delete(activity.getBody().id);
         assertTrue(actual.getStatusCode().is2xxSuccessful());
         assertFalse(repo.existsById(activity.getBody().id));
-    }
-
-    @Test
-    public void getImageReturnsValidImage() {
-        var response = sut.getImageFromPath("49/ps5.jpg");
-        assertTrue(response.getStatusCode().is2xxSuccessful());
     }
 
     @Test
