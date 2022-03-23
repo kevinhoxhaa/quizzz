@@ -25,12 +25,19 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import org.glassfish.jersey.client.ClientConfig;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
@@ -200,5 +207,31 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(new GenericType<List<SoloUser>>() {});
+    }
+
+    private StompSession session;
+
+    public void connect(String httpUrl) {
+        String websocketUrl = httpUrl.replace("http", "ws");
+
+        if(websocketUrl.charAt(httpUrl.length() - 1) != '/') {
+            websocketUrl += "/";
+        }
+        websocketUrl += "websocket";
+
+        var client = new StandardWebSocketClient();
+        var stomp = new WebSocketStompClient(client);
+        stomp.setMessageConverter(new MappingJackson2MessageConverter());
+
+        try {
+            session = stomp.connect(websocketUrl, new StompSessionHandlerAdapter() {}).get();
+            return;
+        } catch(ExecutionException ex) {
+            throw new RuntimeException(ex);
+        } catch(InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
+
+        throw new IllegalStateException();
     }
 }
