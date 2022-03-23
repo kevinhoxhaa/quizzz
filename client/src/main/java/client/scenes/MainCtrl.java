@@ -606,8 +606,6 @@ public class MainCtrl {
     }
 
     /**
-<<<<<<< HEAD
-=======
      * Shows the solo estimation question page relevant to the given solo game
      * @param game the solo game instance
      */
@@ -619,7 +617,6 @@ public class MainCtrl {
     }
 
     /**
->>>>>>> dev
      * Returns the server URL the application makes requests
      * to
      *
