@@ -68,6 +68,7 @@ public class MultiplayerGameCtrl {
 
         this.server = server;
         this.user = (MultiplayerUser) mainCtrl.getUser();
+        user.unansweredQuestions = 0;
         this.colors = new ArrayList<>();
 
         this.answerTimer = new Timer();
