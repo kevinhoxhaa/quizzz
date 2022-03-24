@@ -22,7 +22,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
 
 public class EstimationQuestionCtrl implements SceneController, QuestionNumController {
@@ -80,6 +80,9 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     @FXML
     private ImageView shortenTimeImage;
 
+    @FXML
+    private ImageView questionImg;
+
     /**
      * Creates a controller for the estimation question screen,
      * with the given server and main controller
@@ -117,6 +120,11 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
         questionDescription.setText("How much energy in Wh does " + question.getActivity().title + " use?");
 
         x2image.setVisible(false);
+        try {
+            questionImg.setImage(server.fetchImage(mainCtrl.getServerUrl(), currentQuestion.getImagePath()));
+        }
+        catch (IOException e){
+        }
     }
 
     /**
