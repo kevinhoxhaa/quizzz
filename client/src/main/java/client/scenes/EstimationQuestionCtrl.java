@@ -7,6 +7,7 @@ import commons.models.Emoji;
 import commons.models.EstimationQuestion;
 import commons.models.Question;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
@@ -20,7 +21,7 @@ import javafx.scene.text.Text;
 
 import java.util.List;
 
-public class EstimationQuestionCtrl implements SceneController, QuestionNumController {
+public class EstimationQuestionCtrl implements SceneController, QuestionNumController, EmojiController {
 
     private static final double CIRCLE_BORDER_SIZE = 1.7;
     private static final double STANDARD_CIRCLE_BORDER_SIZE = 1.0;
@@ -85,12 +86,8 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
         emojiPane.getChildren().forEach(n -> {
             if(n instanceof ImageView) {
                 ImageView e = (ImageView) n;
-                e.setOnMouseClicked(event -> {
-                    String[] imageComponents = e.getImage().getUrl().split("/");
-                    String imageName = imageComponents[imageComponents.length - 1];
-                    String username = gameCtrl.getUser().username;
-                    server.send("/app/emoji", new Emoji(imageName, username));
-                });
+                e.setOnMouseClicked(event -> gameCtrl.sendEmoji(e));
+                e.setCursor(Cursor.HAND);
             }
         });
     }
@@ -110,6 +107,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
      * Visualise emoji on the screen
      * @param emoji the emoji to visualise
      */
+    @Override
     public void displayEmoji(Emoji emoji) {
         String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
         emojiPath = emojiPath.substring(
@@ -127,6 +125,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     }
 
     public void setup(EstimationQuestion question) {
+        enableEmojis();
         currentScore.setText("Score: " + gameCtrl.getUser().points);
         currentQuestion = question;
         questionDescription.setText("How much energy in Wh does " + question.getActivity().title + " use?");
@@ -172,6 +171,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
             System.out.println("Enter a number!");
         }
 
+        disableEmojis();
         answerField.setText("");
         yourAnswer.setText("Your answer: ");
         gameCtrl.postAnswer(currentQuestion);

@@ -197,7 +197,7 @@
                 </VBox>
                 <VBox alignment="CENTER" prefHeight="200.0" prefWidth="156.0">
                     <children>
-                        <ImageView fx:id="emojiImage" fitHeight="150.0" fitWidth="156.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="emojiImage" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" />
                         <Text fx:id="emojiText" smooth="false" strokeType="OUTSIDE" strokeWidth="0.0" text="Emoji">
                             <font>
                                 <Font size="18.0" />
@@ -223,13 +223,9 @@
                         <ListView fx:id="correctPlayers" prefHeight="194.0" prefWidth="245.0" style="-fx-border-color: black;" />
                     </children>
                 </VBox>
-                <VBox alignment="CENTER" prefHeight="223.0" prefWidth="360.0">
+                <VBox alignment="CENTER" prefHeight="223.0" prefWidth="360.0" spacing="8.0">
                     <children>
-                        <Pane prefHeight="103.0" prefWidth="202.0">
-                            <children>
-                                <Text layoutX="64.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Next activity in:" wrappingWidth="96.34042358398432" />
-                            </children>
-                        </Pane>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Next activity in: " />
                         <ProgressIndicator fx:id="countdownCircle" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="70.0" progress="0.0">
 
                         </ProgressIndicator>
@@ -284,7 +280,7 @@
                 </Pane>
             </children>
         </HBox>
-        <AnchorPane prefHeight="20.0" prefWidth="708.0">
+        <AnchorPane prefHeight="10.0" prefWidth="708.0">
             <children>
                 <Button fx:id="quitButton" layoutX="595.0" layoutY="14.0" mnemonicParsing="false" onAction="#onQuit" prefHeight="40.0" prefWidth="90.0" text="Quit" AnchorPane.rightAnchor="23.0">
                     <font>

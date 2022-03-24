@@ -11,6 +11,7 @@ import commons.models.EstimationQuestion;
 import commons.models.Question;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Cursor;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
@@ -27,7 +28,7 @@ import javafx.scene.text.Text;
 
 import java.util.List;
 
-public class MultiplayerAnswerCtrl implements SceneController, QuestionNumController {
+public class MultiplayerAnswerCtrl implements SceneController, QuestionNumController, EmojiController {
 
     private static final int HALF_QUESTIONS = 10;
     private static final int TOTAL_QUESTIONS = 20;
@@ -124,6 +125,7 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
         }
 
         startTimer();
+        enableEmojis();
         this.correctPlayers.getItems().clear();
         correctPlayers.forEach(u -> this.correctPlayers.getItems().add(u.username));
     }
@@ -206,12 +208,8 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
         emojiPane.getChildren().forEach(n -> {
             if(n instanceof ImageView) {
                 ImageView e = (ImageView) n;
-                e.setOnMouseClicked(event -> {
-                    String[] imageComponents = e.getImage().getUrl().split("/");
-                    String imageName = imageComponents[imageComponents.length - 1];
-                    String username = gameCtrl.getUser().username;
-                    server.send("/app/emoji", new Emoji(imageName, username));
-                });
+                e.setOnMouseClicked(event -> gameCtrl.sendEmoji(e));
+                e.setCursor(Cursor.HAND);
             }
         });
     }
@@ -231,6 +229,7 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
      * Visualise emoji on the screen
      * @param emoji the emoji to visualise
      */
+    @Override
     public void displayEmoji(Emoji emoji) {
         String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
         emojiPath = emojiPath.substring(
@@ -257,6 +256,7 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
 
     @Override
     public void redirect() {
+        disableEmojis();
         if(gameCtrl.getAnswerCount() == HALF_QUESTIONS) {
             List<MultiplayerUser> rankedUsers = gameCtrl.fetchRanking();
             gameCtrl.showRanking(rankedUsers);

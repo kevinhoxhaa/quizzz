@@ -11,6 +11,7 @@ import commons.models.Emoji;
 import commons.models.Question;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Cursor;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -33,7 +34,7 @@ import static commons.utils.CompareType.LARGER;
 import static commons.utils.CompareType.SMALLER;
 
 
-public class MultiplayerQuestionCtrl implements SceneController, QuestionNumController {
+public class MultiplayerQuestionCtrl implements SceneController, QuestionNumController, EmojiController {
     private static final double MILLISECONDS_PER_SECONDS = 1000.0;
     private static final double CIRCLE_BORDER_SIZE = 1.7;
     private static final double STANDARD_CIRCLE_BORDER_SIZE = 1.0;
@@ -469,12 +470,8 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
         emojiPane.getChildren().forEach(n -> {
             if(n instanceof ImageView) {
                 ImageView e = (ImageView) n;
-                e.setOnMouseClicked(event -> {
-                    String[] imageComponents = e.getImage().getUrl().split("/");
-                    String imageName = imageComponents[imageComponents.length - 1];
-                    String username = gameCtrl.getUser().username;
-                    server.send("/app/emoji", new Emoji(imageName, username));
-                });
+                e.setOnMouseClicked(event -> gameCtrl.sendEmoji(e));
+                e.setCursor(Cursor.HAND);
             }
         });
     }
@@ -494,6 +491,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      * Visualise emoji on the screen
      * @param emoji the emoji to visualise
      */
+    @Override
     public void displayEmoji(Emoji emoji) {
         String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
         emojiPath = emojiPath.substring(
