@@ -12,6 +12,9 @@ import commons.models.Question;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -410,6 +413,19 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
                 }
                 mainCtrl.killThread();
                 mainCtrl.showHome();
+                mainCtrl.bindUser( null );
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle ( "Kicked :(" );
+                alert.setHeaderText(null);
+                alert.setGraphic(null);
+                alert.setContentText("You've been kicked for not answering 3 question in a row!");
+                ButtonType okButton = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
+                alert.getButtonTypes().setAll( okButton );
+                alert.showAndWait().ifPresent(type -> {
+                    if ( type == okButton ) {
+                        mainCtrl.killThread();
+                    }
+                });
             }
         } else {
             user.unansweredQuestions = 0;
