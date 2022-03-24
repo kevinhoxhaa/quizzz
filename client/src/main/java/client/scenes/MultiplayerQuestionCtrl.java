@@ -98,6 +98,10 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     private Text currentScore;
     @FXML
     private ImageView x2image;
+    @FXML
+    private ImageView minus1image;
+    @FXML
+    private ImageView shortenTimeImage;
 
     /**
      * Creates a controller for the multiplayer question screen, with the given server and main controller.

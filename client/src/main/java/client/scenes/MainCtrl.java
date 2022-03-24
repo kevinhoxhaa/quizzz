@@ -673,6 +673,7 @@ public class MainCtrl {
                     }
                 }
                 killThread();
+                multiplayerEstimationCtrl.resetDoublePoints();
                 multiplayerQuestionCtrl.resetDoublePoints();
                 showHome();
             }

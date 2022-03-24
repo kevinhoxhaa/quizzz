@@ -6,10 +6,17 @@ import commons.models.Answer;
 import commons.models.EstimationQuestion;
 import commons.models.Question;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -19,8 +26,10 @@ import java.util.List;
 public class EstimationQuestionCtrl implements SceneController, QuestionNumController {
 
     private static final double CIRCLE_BORDER_SIZE = 1.7;
-    private static final double STANDARD_CIRCLE_BORDER_SIZE = 1.0;
     private static final double TIMEOUT = 8.0;
+    private static final double STANDARD_SIZE = 1.0;
+    private static final double OPACITY = 0.5;
+    private static final double RGB_VALUE = (double) 244/255;
 
     private static final double MILLISECONDS_PER_SECONDS = 1000.0;
 
@@ -51,6 +60,18 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
 
     @FXML
     private TextField answerField;
+
+    @FXML
+    private StackPane doublePoints;
+
+    @FXML
+    private ImageView x2image;
+
+    @FXML
+    private ImageView minus1image;
+
+    @FXML
+    private ImageView shortenTimeImage;
 
     /**
      * Creates a controller for the estimation question screen,
@@ -138,6 +159,35 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     }
 
     /**
+     * This method is called when the double points joker is clicked.
+     * It disables the joker for further use and shows an image when the button is clicked.
+     */
+    @FXML
+    public void useDoublePoints(){
+        doublePoints.setBackground(new Background(
+                new BackgroundFill(Color.BURLYWOOD, CornerRadii.EMPTY, Insets.EMPTY)));
+        doublePoints.setOpacity(OPACITY);
+        x2image.setVisible(true);
+        mainCtrl.setIsAvailableDoublePoints(false);
+        doublePoints.setOnMouseClicked(null);
+        doublePoints.setCursor(Cursor.DEFAULT);
+    }
+
+    /**
+     * This method resets the double point jokers so that it can be used again when another game starts
+     */
+    public void resetDoublePoints(){
+        doublePoints.setOnMouseClicked(event -> {
+            useDoublePoints();
+        });
+        doublePoints.setBackground(new Background(
+                new BackgroundFill(Color.color(RGB_VALUE, RGB_VALUE, RGB_VALUE), CornerRadii.EMPTY, Insets.EMPTY)));
+        doublePoints.setOpacity(STANDARD_SIZE);
+        mainCtrl.setIsAvailableDoublePoints(true);
+        doublePoints.setCursor(Cursor.HAND);
+    }
+
+    /**
      * Getter for the circles bar
      *
      * @return circles
@@ -161,7 +211,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     public void resetHighlight() {
         for (int i = 0; i < circles.getChildren().size(); i++) {
             Circle circle = (Circle) circles.getChildren().get(i);
-            circle.setStrokeWidth(STANDARD_CIRCLE_BORDER_SIZE);
+            circle.setStrokeWidth(STANDARD_SIZE);
         }
     }
 
