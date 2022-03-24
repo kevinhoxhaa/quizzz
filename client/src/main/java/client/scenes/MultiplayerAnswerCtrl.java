@@ -94,9 +94,6 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
      */
     protected void setup(Question prevQuestion, List<MultiplayerUser> correctPlayers) {
 
-        MultiplayerUser multiplayerUser =  ( MultiplayerUser ) mainCtrl.getUser();
-        multiplayerUser.unansweredQuestions = 0;
-
         if (prevQuestion.hasCorrectUserAnswer()) {
             this.answerResponse.setText("Well done!");
             answerPane.setBackground(new Background(
