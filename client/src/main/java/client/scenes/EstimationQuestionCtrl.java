@@ -19,6 +19,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
+import java.io.IOException;
 import java.util.List;
 
 public class EstimationQuestionCtrl implements SceneController, QuestionNumController, EmojiController {
@@ -56,6 +57,9 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
 
     @FXML
     private TextField answerField;
+
+    @FXML
+    private ImageView questionImg;
 
     @FXML
     private GridPane emojiPane;
@@ -129,6 +133,11 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
         currentScore.setText("Score: " + gameCtrl.getUser().points);
         currentQuestion = question;
         questionDescription.setText("How much energy in Wh does " + question.getActivity().title + " use?");
+        try {
+            questionImg.setImage(server.fetchImage(mainCtrl.getServerUrl(), currentQuestion.getImagePath()));
+        }
+        catch (IOException e){
+        }
     }
 
     /**

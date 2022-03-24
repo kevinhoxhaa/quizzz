@@ -15,6 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
+import java.io.IOException;
 import java.util.List;
 
 public class SoloEstimationQuestionCtrl implements SceneController, QuestionNumController {
@@ -77,6 +78,7 @@ public class SoloEstimationQuestionCtrl implements SceneController, QuestionNumC
         currentScore.setText(String.format( "Score: %d", mainCtrl.getSoloScore()));
         currentQuestion = (EstimationQuestion) soloGame.loadCurrentQuestion();
 
+        resetCircleColor();
         updateCircleColor(colors);
         resetHighlight();
         highlightCurrentCircle();
@@ -87,6 +89,11 @@ public class SoloEstimationQuestionCtrl implements SceneController, QuestionNumC
         );
         yourAnswer.setText("Your answer:");
         userInput.setText("");
+        try {
+            questionImg.setImage(server.fetchImage(mainCtrl.getServerUrl(), currentQuestion.getImagePath()));
+        }
+        catch (IOException e){
+        }
     }
 
     /**
