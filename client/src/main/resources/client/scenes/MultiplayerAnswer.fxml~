@@ -8,7 +8,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<VBox minHeight="492.0" minWidth="748.0" prefHeight="492.0" prefWidth="748.0" spacing="20.0" HBox.hgrow="ALWAYS" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.MultiplayerQuestionCtrl">
+<VBox minHeight="492.0" minWidth="748.0" prefHeight="492.0" prefWidth="748.0" spacing="20.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.MultiplayerAnswerCtrl">
    <children>
       <HBox alignment="CENTER" layoutX="23.0" layoutY="34.0" prefHeight="17.0" prefWidth="344.0" spacing="4.0" VBox.vgrow="NEVER">
          <children>
@@ -140,171 +140,140 @@
             </TextFlow>
          </children>
       </HBox>
-      <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+      <HBox prefHeight="216.0" prefWidth="200.0" spacing="8.0">
          <children>
-            <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+            <VBox fx:id="answerPane" prefHeight="202.0" prefWidth="708.0" style="-fx-border-color: black;">
                <children>
-                  <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="SOMETIMES">
+                  <HBox prefHeight="100.0" prefWidth="730.0">
                      <children>
-                        <StackPane prefHeight="110.0" prefWidth="76.0">
+                        <Pane prefHeight="56.0" prefWidth="707.0">
                            <children>
-                              <ImageView fx:id="questionImg" fitHeight="99.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/thonk.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </StackPane>
-                        <StackPane prefHeight="110.0" prefWidth="214.0">
-                           <children>
-                              <Text fx:id="activityText" strokeType="OUTSIDE" strokeWidth="0.0" text="What is the answer to this activity?" wrappingWidth="182.0">
+                              <Text fx:id="answerResponse" layoutX="-1.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You got that right or wrong!" textAlignment="CENTER" wrappingWidth="444.0">
                                  <font>
-                                    <Font name="System Bold" size="15.0" />
+                                    <Font size="30.0" />
                                  </font>
                               </Text>
                            </children>
-                        </StackPane>
+                        </Pane>
                      </children>
                   </HBox>
-                  <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                  <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <VBox prefHeight="149.0" prefWidth="194.0" HBox.hgrow="ALWAYS">
+                        <Pane prefHeight="57.0" prefWidth="708.0">
                            <children>
-                              <StackPane fx:id="answerTop" onMouseClicked="#onAnswerTopClicked" onMouseEntered="#enterAnswerTop" onMouseExited="#resetAnswerColors" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;">
-                                 <VBox.margin>
-                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                                 </VBox.margin>
-                                 <children>
-                                    <Text fx:id="answerTopText" strokeType="OUTSIDE" strokeWidth="0.0" text="Answer 1" />
-                                 </children>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </StackPane>
-                              <StackPane fx:id="answerMid" onMouseClicked="#onAnswerMidClicked" onMouseEntered="#enterAnswerMid" onMouseExited="#resetAnswerColors" prefHeight="150.0" prefWidth="190.0" style="-fx-border-color: black;">
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                                 <VBox.margin>
-                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                                 </VBox.margin>
-                                 <children>
-                                    <Text fx:id="answerMidText" strokeType="OUTSIDE" strokeWidth="0.0" text="Answer 2" />
-                                 </children>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </StackPane>
-                              <StackPane fx:id="answerBot" onMouseClicked="#onAnswerBotClicked" onMouseEntered="#enterAnswerBot" onMouseExited="#resetAnswerColors" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;">
-                                 <VBox.margin>
-                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                                 </VBox.margin>
-                                 <children>
-                                    <Text fx:id="answerBotText" strokeType="OUTSIDE" strokeWidth="0.0" text="Answer 3" />
-                                 </children>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </StackPane>
+                              <Text fx:id="activity" layoutX="138.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="What is the answer to this activity?" wrappingWidth="444.0">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Text>
+                              <Text layoutX="37.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Question :" wrappingWidth="96.34042358398438">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Text>
                            </children>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="16.0" HBox.hgrow="ALWAYS">
+                        </Pane>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Pane prefHeight="46.0" prefWidth="706.0">
                            <children>
-                              <Text text="Time remaining:" />
-                              <ProgressIndicator fx:id="countdownCircle" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="70.0" progress="0.0">
-                              </ProgressIndicator>
+                              <Text fx:id="answer" layoutX="136.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This is the answer to the activity." wrappingWidth="444.0">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Text>
+                              <Text layoutX="52.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Answer :" wrappingWidth="83.54043579101562">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Text>
                            </children>
-                        </VBox>
+                        </Pane>
                      </children>
                   </HBox>
                </children>
             </VBox>
-            <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="156.0">
                <children>
-                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
+                  <ImageView fx:id="emojiImage" fitHeight="150.0" fitWidth="156.0" pickOnBounds="true" preserveRatio="true" />
+                  <Text fx:id="emojiText" smooth="false" strokeType="OUTSIDE" strokeWidth="0.0" text="Emoji">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <HBox prefHeight="255.0" prefWidth="708.0">
+         <children>
+            <VBox prefHeight="223.0" prefWidth="402.0">
+               <children>
+                  <Pane prefHeight="34.0" prefWidth="316.0">
                      <children>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-                           <children>
-                              <ImageView fx:id="emojiImage" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" />
-                              <Text fx:id="emojiText" strokeType="OUTSIDE" strokeWidth="0.0" text="Emoji">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Text>
-                           </children>
-                        </VBox>
-                     </children></HBox>
-                  <VBox prefHeight="149.0" prefWidth="175.0">
-                     <children>
-                        <StackPane fx:id="doublePoints" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;" VBox.vgrow="ALWAYS">
-                           <VBox.margin>
-                              <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                           </VBox.margin>
-                           <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Double points" />
-                           </children>
-                        </StackPane>
-                        <StackPane fx:id="disableIncorrect" prefHeight="150.0" prefWidth="271.0" style="-fx-border-color: black;" VBox.vgrow="ALWAYS">
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <VBox.margin>
-                              <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                           </VBox.margin>
-                           <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Disable incorrect answer" />
-                           </children>
-                        </StackPane>
-                        <StackPane fx:id="reduceTime" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;" VBox.vgrow="ALWAYS">
-                           <VBox.margin>
-                              <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                           </VBox.margin>
-                           <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Reduce time for other players" />
-                           </children>
-                        </StackPane>
+                        <Text layoutX="57.0" layoutY="3.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Who got it right?">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
                      </children>
-                  </VBox>
-                  <GridPane fx:id="emojiBoard" alignment="CENTER" prefHeight="110.0" prefWidth="200.0">
+                  </Pane>
+                  <ListView fx:id="correctPlayers" prefHeight="194.0" prefWidth="245.0" style="-fx-border-color: black;" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="223.0" prefWidth="360.0">
+               <children>
+                  <Pane prefHeight="103.0" prefWidth="202.0">
+                     <children>
+                        <Text layoutX="64.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Next activity in:" wrappingWidth="96.34042358398432" />
+                     </children>
+                  </Pane>
+                  <ProgressIndicator fx:id="countdownCircle" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="70.0" progress="0.0">
+
+                  </ProgressIndicator>
+               </children>
+            </VBox>
+            <Pane prefHeight="223.0" prefWidth="418.0">
+               <children>
+                  <GridPane layoutX="26.0" layoutY="53.0" prefHeight="133.0" prefWidth="223.0">
                     <columnConstraints>
-                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <ImageView fx:id="thumbsup" fitHeight="52.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true" GridPane.hgrow="ALWAYS">
+                        <ImageView fx:id="thumbsup" fitHeight="59.0" fitWidth="71.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../images/thumbsup.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="52.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1" fx:id="xd">
-                           <image>
-                              <Image url="@../images/xd.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fx:id="thumbsdown" fitHeight="52.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+                        <ImageView fx:id="thumbsdown" fitHeight="62.0" fitWidth="66.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                            <image>
                               <Image url="@../images/thumbsdown.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="sad" fitHeight="52.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                           <image>
-                              <Image url="@../images/sad.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fx:id="heart" fitHeight="52.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                        <ImageView fx:id="heart" fitHeight="62.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                            <image>
                               <Image url="@../images/heart.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="angry" fitHeight="52.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                        <ImageView fitHeight="60.0" fitWidth="61.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1" fx:id="xd">
+                           <image>
+                              <Image url="@../images/xd.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="sad" fitHeight="60.0" fitWidth="61.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <image>
+                              <Image url="@../images/sad.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="angry" fitHeight="65.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
                            <image>
                               <Image url="@../images/angry.png" />
                            </image>
@@ -312,10 +281,10 @@
                      </children>
                   </GridPane>
                </children>
-            </VBox>
+            </Pane>
          </children>
       </HBox>
-      <AnchorPane prefHeight="49.0" prefWidth="708.0">
+      <AnchorPane prefHeight="20.0" prefWidth="708.0">
          <children>
             <Button fx:id="quitButton" layoutX="595.0" layoutY="14.0" mnemonicParsing="false" onAction="#onQuit" prefHeight="40.0" prefWidth="90.0" text="Quit" AnchorPane.rightAnchor="23.0">
                <font>
