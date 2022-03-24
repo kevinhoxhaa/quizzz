@@ -31,13 +31,11 @@ import static commons.utils.CompareType.SMALLER;
 
 
 public class SoloQuestionCtrl implements SceneController, QuestionNumController {
-    private final ServerUtils server;
-    private final MainCtrl mainCtrl;
-
     private static final double MILLISECONDS_PER_SECONDS = 1000.0;
     private static final double CIRCLE_BORDER_SIZE = 1.7;
     private static final double STANDARD_CIRCLE_BORDER_SIZE = 1.0;
-
+    private final ServerUtils server;
+    private final MainCtrl mainCtrl;
     private Question currentQuestion;
 
     private double startTime;
@@ -86,6 +84,7 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
     /**
      * Creates a controller for the solo question screen, with the given server and main controller.
      * Creates the list answerButtons for iterating through all of these.
+     *
      * @param server
      * @param mainCtrl
      */
@@ -98,16 +97,19 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
 
     /**
      * Sets up the question page scene: <br>
-     *  - Sets up the question/answers according to the type of the question given <br>
-     *  - Fills the answerButtons list for iterations <br>
-     *  - Resets all buttons to their default colors
+     * - Sets up the question/answers according to the type of the question given <br>
+     * - Fills the answerButtons list for iterations <br>
+     * - Resets all buttons to their default colors
+     *
      * @param soloGame the game instance
-     * @param colors the list of colors corresponding to past questions
+     * @param colors   the list of colors corresponding to past questions
      */
     protected void setup(SoloGame soloGame, List<Color> colors) {
         this.game = soloGame;
+
         currentScore.setText( String.format( "Score: %d", mainCtrl.getSoloScore()) );
         Question question = soloGame.loadCurrentQuestion();
+
         this.currentQuestion = question;
         //questionImg.setImage(new Image(currentQuestion.getImagePath()));
 
@@ -119,7 +121,7 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
 
         setStartTime();
 
-        switch (question.getType()){
+        switch (question.getType()) {
             case CONSUMPTION:
                 setupConsumptionQuestion(question);
                 break;
@@ -145,6 +147,7 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
 
     /**
      * Sets up the questions and answers on the page for the given comparison question
+     *
      * @param generalQuestion the given question
      */
     private void setupComparisonQuestion(Question generalQuestion) {
@@ -165,6 +168,7 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
 
     /**
      * Sets up the questions and answers on the page for the given consumption question
+     *
      * @param generalQuestion the given question
      */
     private void setupConsumptionQuestion(Question generalQuestion) {
@@ -188,11 +192,11 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
 
     /**
      * Sets up the questions and answers on the page for the given choice question
+     *
      * @param generalQuestion the given question
      */
     private void setupChoiceQuestion(Question generalQuestion) {
         ChoiceQuestion question = (ChoiceQuestion) generalQuestion;
-        question.removeComparedFromActivities();
 
         activityText.setText(
                 String.format("What could you do instead of %s to consume less energy?",
@@ -200,6 +204,7 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
         );
 
         List<Activity> answers = question.getActivities();
+        answers.remove(question.getComparedActivity());
 
         answerTopText.setText(answers.get(0).title);
         answerMidText.setText(answers.get(1).title);
@@ -213,6 +218,7 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
     /**
      * Sets up the questions and answers on the page for the given estimation question
      * Needs to be thought through, will probably be in a different class
+     *
      * @param generalQuestion the given question
      */
     private void setupEstimationQuestion(Question generalQuestion) {
@@ -223,12 +229,13 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
     /**
      * Saves the answer selected last by the user, as well as the amount of time it took.
      * Changes the scene visuals accordingly.
+     *
      * @param answerButton The answer button pressed.
-     * @param answer The answer corresponding to the answer button.
+     * @param answer       The answer corresponding to the answer button.
      */
-    private void onAnswerClicked(StackPane answerButton, Answer answer){
+    private void onAnswerClicked(StackPane answerButton, Answer answer) {
 
-        if(!answerButton.equals(selectedAnswerButton)) {
+        if (!answerButton.equals(selectedAnswerButton)) {
 
             currentQuestion.setUserAnswer(answer, getSeconds());
 
@@ -237,11 +244,11 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
             answerButton.setBackground(new Background(
                     new BackgroundFill(Color.DARKCYAN, CornerRadii.EMPTY, Insets.EMPTY)));
 
-            for (StackPane answerBtnLoop: answerButtons) {
+            for (StackPane answerBtnLoop : answerButtons) {
                 answerBtnLoop.setStyle("-fx-border-width: 1; -fx-border-color: black");
-                ((Text) answerBtnLoop.getChildren().get(0)).setStyle("-fx-font-weight: normal");
+                answerBtnLoop.getChildren().get(0).setStyle("-fx-font-weight: normal");
             }
-            ((Text) answerButton.getChildren().get(0)).setStyle("-fx-font-weight: bold");
+            answerButton.getChildren().get(0).setStyle("-fx-font-weight: bold");
             answerButton.setStyle("-fx-border-width: 2; -fx-border-color: black");
         }
 
@@ -250,25 +257,25 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
     /**
      * Returns the time since the timer started, in seconds.
      * For now, a placeholder method.
+     *
      * @return the time since the timer started, in seconds.
      */
     private double getSeconds() {
-        return (System.currentTimeMillis() - startTime)/MILLISECONDS_PER_SECONDS;
+        return (System.currentTimeMillis() - startTime) / MILLISECONDS_PER_SECONDS;
     }
 
     /**
      * Called when the timer is up.
      * Responsible for:
-     *  - Disabling inputs
-     *  - Sending the question instance back to the server
-     *  - Making sure the answer page has all the necessary information
-     *  - Redirecting to the answer page
+     * - Disabling inputs
+     * - Sending the question instance back to the server
+     * - Making sure the answer page has all the necessary information
+     * - Redirecting to the answer page
      */
-    private void finalizeAndSend(){
+    private void finalizeAndSend() {
         disableAnswers();
-        mainCtrl.showAnswerPage(currentQuestion);
+        mainCtrl.showAnswerPage(currentQuestion, mainCtrl.getCorrectPlayersMock());
     }
-
 
 
     /**
@@ -284,7 +291,7 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
      * Calls the generic method for clicking an answer, specifying that it was the top button.
      */
     @FXML
-    protected void onAnswerTopClicked(){
+    protected void onAnswerTopClicked() {
         onAnswerClicked(answerTop, answerTopAnswer);
     }
 
@@ -293,7 +300,7 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
      * Calls the generic method for clicking an answer, specifying that it was the middle button.
      */
     @FXML
-    protected void onAnswerMidClicked(){
+    protected void onAnswerMidClicked() {
         onAnswerClicked(answerMid, answerMidAnswer);
     }
 
@@ -302,7 +309,7 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
      * Calls the generic method for clicking an answer, specifying that it was the bottom button.
      */
     @FXML
-    protected void onAnswerBotClicked(){
+    protected void onAnswerBotClicked() {
         onAnswerClicked(answerBot, answerBotAnswer);
     }
 
@@ -311,7 +318,7 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
      * Sets answerTop's background color according to whether it is selected.
      */
     @FXML
-    protected void enterAnswerTop(){
+    protected void enterAnswerTop() {
         enterAnswer(answerTop);
     }
 
@@ -320,7 +327,7 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
      * Sets answerMid's background color according to whether it is selected.
      */
     @FXML
-    protected void enterAnswerMid(){
+    protected void enterAnswerMid() {
         enterAnswer(answerMid);
     }
 
@@ -329,23 +336,24 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
      * Sets answerBot's background color according to whether it is selected.
      */
     @FXML
-    protected void enterAnswerBot(){
+    protected void enterAnswerBot() {
         enterAnswer(answerBot);
     }
 
     /**
      * A general method for setting an answer button's background color upon the cursor enters it,
      * according to whether it is selected.
+     *
      * @param answerBtn The answer button to be recolor.
      */
-    private void enterAnswer(StackPane answerBtn){
-            if (answerBtn.equals(selectedAnswerButton)) {
-                answerBtn.setBackground(new Background(
-                        new BackgroundFill(Color.DARKCYAN, CornerRadii.EMPTY, Insets.EMPTY)));
-            } else {
-                answerBtn.setBackground(new Background(
-                        new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
-            }
+    private void enterAnswer(StackPane answerBtn) {
+        if (answerBtn.equals(selectedAnswerButton)) {
+            answerBtn.setBackground(new Background(
+                    new BackgroundFill(Color.DARKCYAN, CornerRadii.EMPTY, Insets.EMPTY)));
+        } else {
+            answerBtn.setBackground(new Background(
+                    new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+        }
     }
 
     /**
@@ -353,9 +361,9 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
      * Resets all answer boxes' background color according to whether they are selected.
      */
     @FXML
-    protected void resetAnswerColors(){
+    protected void resetAnswerColors() {
 
-        for (StackPane answerBtn: answerButtons) {
+        for (StackPane answerBtn : answerButtons) {
             if (answerBtn.equals(selectedAnswerButton)) {
                 answerBtn.setBackground(new Background(
                         new BackgroundFill(Color.LIGHTSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -363,7 +371,7 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
                 answerBtn.setBackground(new Background(
                         new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
                 answerBtn.setStyle("-fx-border-width: 1; -fx-border-color: black");
-                (answerBtn.getChildren().get(0)).setStyle("-fx-font-weight: normal");
+                answerBtn.getChildren().get(0).setStyle("-fx-font-weight: normal");
             }
         }
     }
@@ -397,17 +405,19 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
 
     /**
      * Getter for the circles bar
+     *
      * @return circles
      */
-    public HBox getCirclesHBox(){
+    public HBox getCirclesHBox() {
         return circles;
     }
 
     /**
      * Getter for the text node containing the current question number
+     *
      * @return questionNum
      */
-    public Text getQuestionNum(){
+    public Text getQuestionNum() {
         return questionNum;
     }
 
@@ -423,8 +433,8 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
     /**
      * Resets the highlighting of the circle borders
      */
-    public void resetHighlight(){
-        for(int i=0;i<circles.getChildren().size();i++){
+    public void resetHighlight() {
+        for (int i = 0; i < circles.getChildren().size(); i++) {
             Circle circle = (Circle) circles.getChildren().get(i);
             circle.setStrokeWidth(STANDARD_CIRCLE_BORDER_SIZE);
         }
@@ -432,6 +442,7 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
 
     /**
      * Updates the colors of the little circles based on the array given
+     *
      * @param colors Is the list of colors of previous answers(green/red depending on their correctness)
      */
     @Override
@@ -447,7 +458,7 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
      */
     @Override
     public void resetCircleColor() {
-        for(int i=0; i<mainCtrl.getQuestionsPerGame();i++){
+        for (int i = 0; i < mainCtrl.getQuestionsPerGame(); i++) {
             Circle circle = (Circle) getCirclesHBox().getChildren().get(i);
             circle.setFill(Color.LIGHTGRAY);
         }
@@ -457,16 +468,16 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
      * Updates the question number on the top of the screen.
      */
     @Override
-    public void updateQuestionNumber(){
-        getQuestionNum().setText("" + (game.getCurrentQuestionNum()+ 1));
+    public void updateQuestionNumber() {
+        getQuestionNum().setText("" + (game.getCurrentQuestionNum() + 1));
     }
-    
+
     /**
      * Handles the user clicking the quit button.
      */
     @Override
     @FXML
     public void onQuit(){
-        mainCtrl.quitGame(false);
+        mainCtrl.quitGame(false, false);
     }
 }

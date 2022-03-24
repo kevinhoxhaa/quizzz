@@ -19,7 +19,7 @@ import javafx.scene.text.Text;
 
 import java.util.List;
 
-public class SoloResultsCtrl implements QuestionNumController{
+public class SoloResultsCtrl implements QuestionNumController {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -71,16 +71,19 @@ public class SoloResultsCtrl implements QuestionNumController{
 
     /**
      * Setups the page quit button that redirects to the main page, and fills in the score and personal best
+     *
      * @param game
      * @param colors
      */
 
-    protected void setup(SoloGame game,List<Color>colors) {
-        this.game=game;
+    protected void setup(SoloGame game, List<Color> colors) {
+        this.game = game;
 
         updateQuestionNumber();
         updateCircleColor(colors);
 
+        scoreTableUserName.setText(String.format("%s", mainCtrl.getUser().username));
+        scoreTableUserScore.setText(String.format("%d", mainCtrl.getSoloScore()));
         server.addUserSolo(mainCtrl.getServerUrl(), (SoloUser) mainCtrl.getUser());
 
         scoreTableUserName.setText( String.format( "%s", mainCtrl.getUser().username) );
@@ -96,7 +99,7 @@ public class SoloResultsCtrl implements QuestionNumController{
      * Starts another game when restart button is clicked
      */
     @FXML
-    protected void onRestartButton(){
+    protected void onRestartButton() {
         mainCtrl.startSoloGame();
     }
 
@@ -104,7 +107,7 @@ public class SoloResultsCtrl implements QuestionNumController{
      * Quits the solo game, unbinds the user and redirects the user to the home page.
      */
     @FXML
-    public void onQuitButton() {
+    protected void onQuitButton() {
         mainCtrl.showHome();
     }
 
@@ -120,17 +123,19 @@ public class SoloResultsCtrl implements QuestionNumController{
 
     /**
      * Getter for the current question number
+     *
      * @return questionNum
      */
-    public Text getQuestionNum(){
+    public Text getQuestionNum() {
         return questionNum;
     }
 
     /**
      * Getter for the circles bar
+     *
      * @return circles
      */
-    public HBox getCirclesHBox(){
+    public HBox getCirclesHBox() {
         return circles;
     }
 
@@ -153,7 +158,7 @@ public class SoloResultsCtrl implements QuestionNumController{
      */
     @Override
     public void resetCircleColor() {
-        for(int i=0; i<mainCtrl.getQuestionsPerGame();i++){
+        for (int i = 0; i < mainCtrl.getQuestionsPerGame(); i++) {
             Circle circle = (Circle) getCirclesHBox().getChildren().get(i);
             circle.setFill(Color.LIGHTGRAY);
         }

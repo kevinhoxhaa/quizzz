@@ -1,21 +1,18 @@
 package commons.models;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import commons.entities.Activity;
 import commons.utils.QuestionType;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonTypeName(value = "choice")
 public class ChoiceQuestion extends Question {
     private static final long TRUE_FACTOR = 500;
     private static final long TIME_FACTOR = 800;
 
     private Activity comparedActivity;
-    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     private List<Activity> activities;
     private Activity answer;
 
@@ -33,9 +30,8 @@ public class ChoiceQuestion extends Question {
      */
     public ChoiceQuestion(List<Activity> activities) {
         super(QuestionType.CHOICE);
-        Collections.shuffle(activities);
         setActivities(activities);
-        this.userAnswer = null;
+        this.userAnswer = new Answer((Activity) null);
     }
 
     /**
@@ -54,18 +50,6 @@ public class ChoiceQuestion extends Question {
         }
     }
 
-    /**
-     * Removes the compared activity from the list of activities belonging to the question.
-     * (Should be called only on the frontend)
-     */
-    public void removeComparedFromActivities(){
-        activities.remove(comparedActivity);
-    }
-
-    /**
-     * A setter for the answer activity
-     * @param answer
-     */
     public void setAnswer(Activity answer) {
         this.answer = answer;
     }
@@ -96,10 +80,6 @@ public class ChoiceQuestion extends Question {
         }
     }
 
-    /**
-     * A setter for the compared activity
-     * @param activity the compared activity to be set
-     */
     public void setComparedActivity(Activity activity) {
         this.comparedActivity = activity;
     }
@@ -139,7 +119,7 @@ public class ChoiceQuestion extends Question {
      * @return the current answer points
      */
     @Override
-    public long getPoints() {
+    public long calculatePoints() {
         return ((hasCorrectUserAnswer() ? 1 : 0) * Math.round(TRUE_FACTOR + TIME_FACTOR / (seconds + 1)));
     }
 
@@ -151,10 +131,11 @@ public class ChoiceQuestion extends Question {
      */
     @Override
     public boolean hasCorrectUserAnswer() {
-        if (userAnswer == null || userAnswer.getAnswer() == null) {
+        if (userAnswer == null || userAnswer.generateAnswer() == null) {
             return false;
         }
-        return answer.equals(userAnswer.getAnswer());
+
+        return answer.title.equals(((Activity) userAnswer.generateAnswer()).title);
     }
 
     /**

@@ -16,14 +16,15 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import commons.entities.Activity;
+import commons.entities.MultiplayerUser;
 import commons.entities.User;
-import commons.models.ConsumptionQuestion;
+import commons.models.EstimationQuestion;
 import commons.models.Question;
 import commons.models.SoloGame;
 import commons.utils.QuestionType;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -33,34 +34,33 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Random;
 
 public class MainCtrl {
 
+    public static final double MIN_WIDTH = 768.0;
+    public static final double MIN_HEIGHT = 512.0;
     private static final double TIMEOUT = 8.0;
     private static final double START_TIME = 7.95;
     private static final double INTERVAL = 0.05;
     private static final int MILLIS = 50;
-
-    public static final double MIN_WIDTH = 768.0;
-    public static final double MIN_HEIGHT = 512.0;
     private static final int POLLING_DELAY = 0;
     private static final int POLLING_INTERVAL = 500;
     private static final long ANSWER_TO_THE_ULTIMATE_QUESTION = 42;
     private static final int STANDARD_PAGE_TIME = 15;
     private static final int QUESTIONS_PER_GAME = 20;
+    private static final int TOTAL_ANSWERS = 20;
+    private static final int HALFWAY_ANSWERS = 10;
 
     private String serverUrl;
     private Timer waitingTimer;
-
     private Stage primaryStage;
-
     private ServerUtils server;
 
     private QuoteOverviewCtrl overviewCtrl;
@@ -99,6 +99,8 @@ public class MainCtrl {
     private SoloResultsCtrl soloResultsCtrl;
     private Scene soloResults;
 
+    private MultiplayerGameCtrl multiplayerCtrl;
+
     private MultiplayerResultsCtrl multiplayerResultsCtrl;
     private Scene multiplayerResults;
 
@@ -106,10 +108,18 @@ public class MainCtrl {
     private int gameIndex;
     private List<Color> colors;
     private Thread timerThread;
-
     private int answerCount = 0;
-    private static final int TOTAL_ANSWERS = 20;
-    private static final int HALFWAY_ANSWERS = 10;
+
+    private long soloScore = 0;
+    private int currentQuestion = 0;
+
+    public int getCurrentQuestion() {
+        return currentQuestion;
+    }
+
+    public void setCurrentQuestion(int currentQuestion) {
+        this.currentQuestion = currentQuestion;
+    }
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
             Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home,
@@ -118,7 +128,8 @@ public class MainCtrl {
             Pair<EstimationQuestionCtrl, Parent> multiplayerEstimation,
                            Pair<SoloEstimationQuestionCtrl, Parent> soloEstimation,
                            Pair<SoloQuestionCtrl, Parent> soloQuestion,
-                           Pair<SoloAnswerCtrl, Parent> soloAnswer, Pair<SoloResultsCtrl, Parent> soloResults, 
+                           Pair<SoloAnswerCtrl, Parent> soloAnswer,
+                           Pair<SoloResultsCtrl, Parent> soloResults,
                            Pair<MultiplayerResultsCtrl, Parent> multiplayerResults
                            ) {
         this.primaryStage = primaryStage;
@@ -161,7 +172,7 @@ public class MainCtrl {
         this.soloAnswer = new Scene(soloAnswer.getValue());
 
         this.soloResultsCtrl = soloResults.getKey();
-        this.soloResults=new Scene(soloResults.getValue());
+        this.soloResults = new Scene(soloResults.getValue());
 
         this.multiplayerResultsCtrl = multiplayerResults.getKey();
         this.multiplayerResults = new Scene(multiplayerResults.getValue());
@@ -170,7 +181,7 @@ public class MainCtrl {
         primaryStage.show();
         primaryStage.setOnCloseRequest(event -> {
 
-            quitGame(true);
+            quitGame(true, true);
 
             event.consume();
         });
@@ -196,6 +207,7 @@ public class MainCtrl {
 
     /**
      * Returns the current game index
+     *
      * @return the current game index
      */
     public int getGameIndex() {
@@ -204,6 +216,7 @@ public class MainCtrl {
 
     /**
      * Sets the index of the multiplayer game a user participates in
+     *
      * @param gameIndex the multiplayer game index
      */
     public void setGameIndex(int gameIndex) {
@@ -211,11 +224,25 @@ public class MainCtrl {
     }
 
     /**
-     * Getter for the solo score points
-     *
-     * @return the score
+     * Returns the app primary stage
+     * @return the app primary stage
      */
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
 
+    /**
+     * add the score to the player's own score
+     * @param score the player score
+     */
+    public void addScore(long score) {
+        this.soloScore += score;
+    }
+
+    /**
+     * Returns the solo game points
+     * @return the solo game points
+     */
     public long getSoloScore() {
         return getUser().getPoints();
     }
@@ -238,7 +265,7 @@ public class MainCtrl {
         primaryStage.setScene(waiting);
 
         colors = new ArrayList<>();
-        answerCount=0;
+        answerCount = 0;
         multiplayerQuestionCtrl.resetCircleColor();
         multiplayerAnswerCtrl.resetCircleColor();
         rankingCtrl.resetCircleColor();
@@ -253,6 +280,22 @@ public class MainCtrl {
                         Platform.runLater(() -> waitingCtrl.fetchUsers());
                     }
                 }, POLLING_DELAY, POLLING_INTERVAL);
+    }
+
+    /**
+     * Initialises the multiplayer game controller and starts
+     * a multiplayer game
+     * @param gameIndex the index of the multiplayer game
+     */
+    public void startMultiplayerGame(int gameIndex) {
+        multiplayerCtrl = new MultiplayerGameCtrl(
+                gameIndex, this, server,
+                new Pair<>(this.multiplayerQuestionCtrl, this.multiplayerQuestion),
+                new Pair<>(this.multiplayerEstimationCtrl, this.multiplayerEstimation),
+                new Pair<>(this.multiplayerAnswerCtrl, this.multiplayerAnswer),
+                new Pair<>(this.rankingCtrl, this.ranking)
+        );
+        multiplayerCtrl.startGame();
     }
 
     /**
@@ -280,9 +323,10 @@ public class MainCtrl {
      * and gives the primary stage a corresponding title.
      * Furthermore, it increments the answerCount and first sets up the answer page.
      *
+     * @param correctUsers the users that have answered correctly
      * @param prevQuestion The question that has just been asked to the players.
      */
-    public void showAnswerPage(Question prevQuestion) {
+    public void showAnswerPage(Question prevQuestion, List<MultiplayerUser> correctUsers) {
         multiplayerAnswerCtrl.updateQuestionNumber();
         //Adds the color of the answer correctness to a list of answers
         if (prevQuestion.hasCorrectUserAnswer()) {
@@ -292,7 +336,7 @@ public class MainCtrl {
         }
         answerCount++;
         multiplayerAnswerCtrl.updateCircleColor(colors);
-        multiplayerAnswerCtrl.setup(prevQuestion, getCorrectPlayersMock());
+        multiplayerAnswerCtrl.setup(prevQuestion, correctUsers);
         primaryStage.setTitle("Answer screen");
         primaryStage.setScene(multiplayerAnswer);
     }
@@ -303,22 +347,30 @@ public class MainCtrl {
      *
      * @return A list of Strings that represent players that answered the previous question correctly.
      */
-    public List<String> getCorrectPlayersMock() {
-        //TODO: Instead get list from server.
-        List<String> correctPlayers = new ArrayList<>();
-        correctPlayers.add("Patrik");
-        correctPlayers.add("Bink");
-        correctPlayers.add("Boris");
+    public List<MultiplayerUser> getCorrectPlayersMock() {
+        List<MultiplayerUser> correctPlayers = new ArrayList<>();
+        correctPlayers.add(new MultiplayerUser("Patrik"));
+        correctPlayers.add(new MultiplayerUser("Bink"));
+        correctPlayers.add(new MultiplayerUser("Boris"));
         return correctPlayers;
     }
 
     /**
      * Sets the scene in the primary stage to the one corresponding to a multiplayer question screen.
      * Sets the timer to an initial 10 seconds for the players to answer the question.
+     *
      * @param question the question to visualise
      */
     public void showQuestion(Question question) {
+        if (question.getType() == QuestionType.ESTIMATION) {
+            showEstimationQuestion((EstimationQuestion) question);
+            return;
+        }
 
+        showMultipleChoiceQuestion(question);
+    }
+
+    public void showMultipleChoiceQuestion(Question question) {
         multiplayerQuestionCtrl.updateCircleColor(colors);
         multiplayerQuestionCtrl.resetHighlight();
         multiplayerQuestionCtrl.highlightCurrentCircle();
@@ -326,6 +378,7 @@ public class MainCtrl {
         multiplayerQuestionCtrl.resetAnswerColors();
         multiplayerQuestionCtrl.updateQuestionNumber();
 
+        multiplayerQuestionCtrl.enableAnswers();
         multiplayerQuestionCtrl.startTimer();
         multiplayerQuestionCtrl.setStartTime();
         primaryStage.setTitle("Question screen");
@@ -345,9 +398,16 @@ public class MainCtrl {
 
     /**
      * Sets the scene in the primary stage to the estimation screen
+     *
+     * @param question the estimation question to visualise
      */
-    public void showEstimation() {
+    public void showEstimationQuestion(EstimationQuestion question) {
         primaryStage.setTitle("Estimation");
+        primaryStage.setScene(multiplayerEstimation);
+
+        multiplayerEstimationCtrl.startTimer();
+        multiplayerEstimationCtrl.setup(question);
+
         primaryStage.setScene(multiplayerEstimation);
         multiplayerEstimationCtrl.startTimer();
     }
@@ -368,6 +428,39 @@ public class MainCtrl {
      * @return a random question
      */
     public Question getNextQuestion() {
+        return server.getQuestion(serverUrl, gameIndex, answerCount);
+    }
+
+    /**
+     * Deletes user from database when the close button is clicked
+     */
+    public void onClose() {
+        primaryStage.setOnHiding(new EventHandler<WindowEvent>() {
+
+            @Override
+            public void handle(WindowEvent event) {
+                Platform.runLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        try {
+                            server.removeMultiplayerUser(multiplayerCtrl.getServerUrl(), multiplayerCtrl.getUser());
+                            user = null;
+                        } catch (WebApplicationException e) {
+                            System.out.println("User to remove not found!");
+                        } catch (NullPointerException ex) {
+                            System.out.println("Multiplayer game to remove from not found!");
+                        } finally {
+                            System.exit(0);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+=======
         //TODO instead of this, return a random question fetched from the server
         Activity activity = new Activity(
                 "testing the question models", ANSWER_TO_THE_ULTIMATE_QUESTION,
@@ -376,6 +469,7 @@ public class MainCtrl {
     }
 
     /**
+>>>>>>> dev
      * A method that redirects the User to:
      * - The next question if the number of previous answers is less than 20 and not equal to 10
      * - The Ranking Page if the User is halfway through the game (10 answers so far)
@@ -409,7 +503,7 @@ public class MainCtrl {
     public void startTimer(ProgressIndicator countdownCircle, SceneController sceneController) {
         countdownCircle.applyCss();
         Text text = (Text) countdownCircle.lookup(".text.percentage");
-        if(timerThread!=null && timerThread.isAlive()){
+        if (timerThread != null && timerThread.isAlive()) {
             timerThread.interrupt();
         }
         timerThread = new Thread(() -> {
@@ -433,15 +527,12 @@ public class MainCtrl {
                 }
             }
             Platform.runLater(
-                new Runnable(){
-                    @Override
-                    public void run() {
+                    () -> {
                         sceneController.redirect();
-                        if(text != null) {
+                        if (text != null) {
                             text.setText("Timeout");
                         }
-                    }
-            });
+                    });
         });
         timerThread.start();
     }
@@ -478,6 +569,7 @@ public class MainCtrl {
 
     /**
      * Shows the relevant answer screen for the given solo game instance
+     *
      * @param game the solo game instance
      */
     public void showSoloAnswerPage(SoloGame game) {
@@ -494,13 +586,16 @@ public class MainCtrl {
 
     /**
      * Getter for the number of questions per game
+     *
      * @return QUESTIONS_PER_GAME
      */
-    public int getQuestionsPerGame(){
+    public int getQuestionsPerGame() {
         return QUESTIONS_PER_GAME;
     }
+
     /**
      * Shows the relevant question screen for the given solo game instance
+     *
      * @param game the solo game instance
      */
     public void showSoloQuestion(SoloGame game) {
@@ -522,16 +617,9 @@ public class MainCtrl {
     }
 
     /**
-     * Sets the server URL for the application
-     * @param serverUrl the new server URL
-     */
-    public void setServerUrl(String serverUrl) {
-        this.serverUrl = serverUrl;
-    }
-
-    /**
      * Returns the server URL the application makes requests
      * to
+     *
      * @return the app server URL
      */
     public String getServerUrl() {
@@ -539,11 +627,22 @@ public class MainCtrl {
     }
 
     /**
+     * Sets the server URL for the application
+     *
+     * @param serverUrl the new server URL
+     */
+    public void setServerUrl(String serverUrl) {
+        this.serverUrl = serverUrl;
+    }
+
+    /**
+     * THIS STILL NEEDS TO BE IMPLEMENTED
      * Called after the last answer screen's timer is up, shows the solo results page
+     *
      * @param game
      */
     public void showSoloResults(SoloGame game) {
-        soloResultsCtrl.setup(game,colors);
+        soloResultsCtrl.setup(game, colors);
         primaryStage.setScene(soloResults);
     }
 
@@ -559,11 +658,13 @@ public class MainCtrl {
 
     /**
      * Shows a pop up on screen to confirm quitting the game
-     * @param check is used to decide whether the application should be closed or not
-     *                  If check is true: the application is closed
-     *                  If check is false: the user is redirected to home page
+     * @param quitApp is used to decide whether the application should be closed or not
+     *                  If quitApp is true: the application is closed
+     *                  If quitApp is false: the user is redirected to home page
+     * @param isMultiplayer is used to decide whether the user is a multiplayer user
+     *                      If so, it deletes the user from the database.
      */
-    public void quitGame(boolean check){
+    public void quitGame(boolean quitApp, boolean isMultiplayer){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Quit solo game");
         alert.setContentText("Are you sure you want to quit?");
@@ -572,14 +673,16 @@ public class MainCtrl {
         alert.getButtonTypes().setAll(okButton, noButton);
         alert.showAndWait().ifPresent(type -> {
             if (type == okButton) {
-                if(check){
+                if(isMultiplayer) {
                     try {
-                        homeCtrl.getServer().removeMultiplayerUser(homeCtrl.getServer().getURL(), user);
+                        server.removeMultiplayerUser(serverUrl, user);
                         user = null;
                     } catch(WebApplicationException e) {
                         System.out.println("User to remove not found!");
                     } finally {
-                        System.exit(0);
+                        if(quitApp) {
+                            System.exit(0);
+                        }
                     }
                 }
                 killThread();

@@ -1,5 +1,5 @@
 package commons.utils;
 
 public enum CompareType {
-    LARGER, SMALLER, EQUAL
+    LARGER, SMALLER, EQUAL, EMPTY
 }
