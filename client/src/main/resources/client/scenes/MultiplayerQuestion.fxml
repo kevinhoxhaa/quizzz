@@ -268,7 +268,7 @@
                         </StackPane>
                      </children>
                   </VBox>
-                  <GridPane fx:id="emojiBoard" alignment="CENTER" prefHeight="110.0" prefWidth="200.0">
+                  <GridPane fx:id="emojiPane" alignment="CENTER" prefHeight="110.0" prefWidth="200.0">
                     <columnConstraints>
                       <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                       <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

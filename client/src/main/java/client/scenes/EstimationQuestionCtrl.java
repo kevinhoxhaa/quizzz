@@ -3,12 +3,16 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.models.Answer;
+import commons.models.Emoji;
 import commons.models.EstimationQuestion;
 import commons.models.Question;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -52,6 +56,15 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     @FXML
     private TextField answerField;
 
+    @FXML
+    private GridPane emojiPane;
+
+    @FXML
+    private ImageView emojiImage;
+
+    @FXML
+    private Text emojiText;
+
     /**
      * Creates a controller for the estimation question screen,
      * with the given server and main controller
@@ -63,6 +76,47 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     public EstimationQuestionCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+    }
+
+    /**
+     * Send emojis to the server on emoji click
+     */
+    public void enableEmojis() {
+        emojiPane.getChildren().forEach(n -> {
+            if(n instanceof ImageView) {
+                ImageView e = (ImageView) n;
+                e.setOnMouseClicked(event -> {
+                    String[] imageComponents = e.getImage().getUrl().split("/");
+                    String imageName = imageComponents[imageComponents.length - 1];
+                    String username = gameCtrl.getUser().username;
+                    server.send("/app/emoji", new Emoji(imageName, username));
+                });
+            }
+        });
+    }
+    /**
+     * Disable emoji clicks
+     */
+    public void disableEmojis() {
+        emojiPane.getChildren().forEach(n -> {
+            if(n instanceof ImageView) {
+                ImageView e = (ImageView) n;
+                e.setOnMouseClicked(null);
+            }
+        });
+    }
+
+    /**
+     * Visualise emoji on the screen
+     * @param emoji the emoji to visualise
+     */
+    public void displayEmoji(Emoji emoji) {
+        String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
+        emojiPath = emojiPath.substring(
+                "file:/".length(), emojiPath.length() - "classes/java/main/".length())
+                + "resources/main/client/images/" + emoji.getImageName();
+        emojiImage.setImage(new Image(emojiPath));
+        emojiText.setText(emoji.getUsername());
     }
 
     /**

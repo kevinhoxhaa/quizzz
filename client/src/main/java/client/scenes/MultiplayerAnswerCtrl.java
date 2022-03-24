@@ -6,16 +6,19 @@ import commons.entities.MultiplayerUser;
 import commons.models.ChoiceQuestion;
 import commons.models.ComparisonQuestion;
 import commons.models.ConsumptionQuestion;
+import commons.models.Emoji;
 import commons.models.EstimationQuestion;
 import commons.models.Question;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -35,14 +38,21 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
 
     @FXML
     private VBox answerPane;
+
     @FXML
     private Text activity;
+
     @FXML
     private Text answer;
+
     @FXML
     private Text answerResponse;
+
     @FXML
     private Text questionNum;
+
+    @FXML
+    private GridPane emojiPane;
 
     @FXML
     private ProgressIndicator countdownCircle;
@@ -57,17 +67,10 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
     private Text currentScore;
 
     @FXML
-    private ImageView thumbsup;
+    private ImageView emojiImage;
+
     @FXML
-    private ImageView thumbsdown;
-    @FXML
-    private ImageView sad;
-    @FXML
-    private ImageView heart;
-    @FXML
-    private ImageView xd;
-    @FXML
-    private ImageView angry;
+    private Text emojiText;
 
 
     /**
@@ -194,6 +197,47 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
         );
 
         this.answer.setText(Long.toString(prevEstimQuestion.getActivity().consumption));
+    }
+
+    /**
+     * Send emojis to the server on emoji click
+     */
+    public void enableEmojis() {
+        emojiPane.getChildren().forEach(n -> {
+            if(n instanceof ImageView) {
+                ImageView e = (ImageView) n;
+                e.setOnMouseClicked(event -> {
+                    String[] imageComponents = e.getImage().getUrl().split("/");
+                    String imageName = imageComponents[imageComponents.length - 1];
+                    String username = gameCtrl.getUser().username;
+                    server.send("/app/emoji", new Emoji(imageName, username));
+                });
+            }
+        });
+    }
+    /**
+     * Disable emoji clicks
+     */
+    public void disableEmojis() {
+        emojiPane.getChildren().forEach(n -> {
+            if(n instanceof ImageView) {
+                ImageView e = (ImageView) n;
+                e.setOnMouseClicked(null);
+            }
+        });
+    }
+
+    /**
+     * Visualise emoji on the screen
+     * @param emoji the emoji to visualise
+     */
+    public void displayEmoji(Emoji emoji) {
+        String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
+        emojiPath = emojiPath.substring(
+                "file:/".length(), emojiPath.length() - "classes/java/main/".length())
+                + "resources/main/client/images/" + emoji.getImageName();
+        emojiImage.setImage(new Image(emojiPath));
+        emojiText.setText(emoji.getUsername());
     }
 
     /**
