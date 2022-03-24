@@ -12,7 +12,6 @@ public class WebsocketController {
     @MessageMapping("/emoji/{gameId}")
     @SendTo("/topic/emoji/{gameId}")
     public Emoji addEmoji(Emoji emoji, @DestinationVariable String gameId){
-        System.out.println("Received emoji: " + emoji);
         return emoji;
     }
 
