@@ -423,6 +423,7 @@ public class MainCtrl {
 
     /**
      * Sets the isAvailableDoublePoints to either true or false
+     * @param available
      */
     public void setIsAvailableDoublePoints(boolean available){
         isAvailableDoublePoints=available;

@@ -35,6 +35,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     private static final double MILLISECONDS_PER_SECONDS = 1000.0;
     private static final double CIRCLE_BORDER_SIZE = 1.7;
     private static final double STANDARD_CIRCLE_BORDER_SIZE = 1.0;
+    private static final double OPACITY = 0.5;
     private static final int POLLING_DELAY = 0;
     private static final int POLLING_INTERVAL = 500;
 
@@ -372,7 +373,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     public void useDoublePoints(){
         doublePoints.setBackground(new Background(
                 new BackgroundFill(Color.BURLYWOOD, CornerRadii.EMPTY, Insets.EMPTY)));
-        doublePoints.setOpacity(0.5);
+        doublePoints.setOpacity(OPACITY);
         mainCtrl.setIsAvailableDoublePoints(false);
         doublePoints.setOnMouseClicked(null);
         doublePoints.setCursor(Cursor.DEFAULT);
