@@ -2,10 +2,6 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.models.Game;
-import commons.models.Question;
-import jakarta.ws.rs.WebApplicationException;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -19,8 +15,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MultiplayerResultsCtrl implements QuestionNumController, SceneController {
 

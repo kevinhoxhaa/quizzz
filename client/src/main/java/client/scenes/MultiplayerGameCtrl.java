@@ -58,6 +58,7 @@ public class MultiplayerGameCtrl {
      * @param answer the answer controller-scene pair
      * @param ranking the ranking controller-scene pair
      * @param gameIndex the index of the multiplayer game
+     * @param results The results controller-scene pair.
      */
     public MultiplayerGameCtrl(int gameIndex, MainCtrl mainCtrl, ServerUtils server,
                                Pair<MultiplayerQuestionCtrl, Scene> mcQuestion,
