@@ -21,6 +21,7 @@ public class MultiplayerGameCtrl {
     private static final int POLLING_INTERVAL = 500;
 
     private List<Color> colors;
+    private boolean answeredQuestion = false;
 
     private Timer answerTimer;
 
@@ -252,6 +253,26 @@ public class MultiplayerGameCtrl {
      */
     public void showResults(List<MultiplayerUser> rankedUsers) {
         // TODO: display list of ranked users on results screen
+    }
+
+    /**
+     * Getter for the answeredQuestion flag
+     *
+     * @return boolean value for the flag
+     */
+
+    public boolean getAnsweredQuestion() {
+        return this.answeredQuestion;
+    }
+
+    /**
+     * Setter for the answeredQuestion flag
+     *
+     * @param answeredQuestion the boolean to be set to
+     */
+
+    public void setAnsweredQuestion ( boolean answeredQuestion ) {
+        this.answeredQuestion = answeredQuestion;
     }
 
     /**

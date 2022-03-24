@@ -98,6 +98,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
 
     @FXML
     protected void onAnswerPostClick() {
+        gameCtrl.setAnsweredQuestion( true );
         try {
             long answer = Long.parseLong(answerField.getText());
             currentQuestion.setUserAnswer(new Answer(answer), getSeconds());

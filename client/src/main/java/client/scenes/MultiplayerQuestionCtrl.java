@@ -45,7 +45,6 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
 
     private MultiplayerGameCtrl gameCtrl;
     private Question currentQuestion;
-    private boolean answeredQuestion = false;
 
     private double startTime;
 
@@ -120,7 +119,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      */
     protected void setup(Question question) {
         selectedAnswerButton = null;
-        answeredQuestion = false;
+        gameCtrl.setAnsweredQuestion ( false );
         this.currentQuestion = question;
         currentScore.setText("Score: " + gameCtrl.getUser().points);
 
@@ -233,7 +232,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      * @param answer       The answer corresponding to the answer button.
      */
     private void onAnswerClicked(StackPane answerButton, Answer answer) {
-        answeredQuestion = true;
+        gameCtrl.setAnsweredQuestion ( true );
         if (!answerButton.equals(selectedAnswerButton)) {
             currentQuestion.setUserAnswer(answer, getSeconds());
 
@@ -400,7 +399,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     @Override
     public void redirect() {
         MultiplayerUser user = gameCtrl.getUser();
-        if ( !answeredQuestion ) {
+        if ( !gameCtrl.getAnsweredQuestion() ) {
             user.unansweredQuestions++;
             if ( user.unansweredQuestions == KICK_AT_X_QUESTIONS ) {
                 try {
@@ -416,7 +415,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
             user.unansweredQuestions = 0;
         }
 
-        answeredQuestion = false;
+        gameCtrl.setAnsweredQuestion( false );
         finalizeAndSend();
     }
 
