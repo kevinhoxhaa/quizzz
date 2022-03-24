@@ -17,6 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EstimationQuestionCtrl implements SceneController, QuestionNumController {
@@ -94,9 +95,22 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     }
 
     public void setup(EstimationQuestion question) {
+        List<StackPane> jokers=new ArrayList<>();
+        jokers.add(doublePoints);
+        jokers.add(removeIncorrect);
+        jokers.add(reduceTime);
+
+        for(StackPane joker:jokers){
+            if(gameCtrl.getUsedJokers().contains(joker.idProperty().getValue())){
+                gameCtrl.disableJokerButton(joker);
+            }
+        }
+
         currentScore.setText("Score: " + gameCtrl.getUser().points);
         currentQuestion = question;
         questionDescription.setText("How much energy in Wh does " + question.getActivity().title + " use?");
+
+        x2image.setVisible(false);
     }
 
     /**
@@ -164,13 +178,15 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
      */
     @FXML
     public void useDoublePoints(){
-        gameCtrl.useJoker(doublePoints);
+        gameCtrl.setIsActiveDoublePoints(true);
+        gameCtrl.useJoker(doublePoints,x2image);
     }
 
     /**
      * This method resets the double point jokers so that it can be used again when another game starts
      */
     public void resetDoublePoints(){
+        doublePoints.setOnMouseClicked(event -> useDoublePoints());
         gameCtrl.resetJoker(doublePoints);
     }
 

@@ -10,6 +10,7 @@ import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -55,8 +56,9 @@ public class MultiplayerGameCtrl {
     private RankingCtrl rankingCtrl;
 
     private boolean isAvailableDoublePoints = true;
-    private List<StackPane> jokers;
-    private List<StackPane> usedJokers;
+    private boolean isActiveDoublePoints;
+
+    private List<String> usedJokers;
 
     // TODO: add results and resultsCtrl
 
@@ -83,13 +85,13 @@ public class MultiplayerGameCtrl {
         this.user = (MultiplayerUser) mainCtrl.getUser();
         this.colors = new ArrayList<>();
 
-        this.jokers=new ArrayList<>();
         this.usedJokers=new ArrayList<>();
 
         this.answerTimer = new Timer();
 
         this.serverUrl = mainCtrl.getServerUrl();
         this.answerCount = 0;
+        isActiveDoublePoints=false;
 
         this.mcQuestionCtrl = mcQuestion.getKey();
         mcQuestionCtrl.setGameCtrl(this);
@@ -135,9 +137,9 @@ public class MultiplayerGameCtrl {
      * @param answeredQuestion the answered question to post
      */
     public void postAnswer(Question answeredQuestion) {
-        if(!getIsAvailableDoublePoints()){
+        if(getIsActiveDoublePoints()){
             user.points += 2*answeredQuestion.calculatePoints();
-            setIsAvailableDoublePoints(true);
+            setIsActiveDoublePoints(false);
         }
         else{
             user.points += answeredQuestion.calculatePoints();
@@ -297,7 +299,7 @@ public class MultiplayerGameCtrl {
      * Returns the list of used jokers
      * @return usedJokers
      */
-    public List<StackPane> getUsedJokers() {
+    public List<String> getUsedJokers() {
         return usedJokers;
     }
 
@@ -310,32 +312,40 @@ public class MultiplayerGameCtrl {
     }
 
     /**
-     * A getter that returns true/false whether the Double Points joker is available to use
-     * @return isAvailableDoublePoints, which shows whether the DP joker is used
+     * A getter that returns true/false whether the Double Points joker is activated this round
+     * @return isActiveDoublePoints, which shows whether the DP joker is being used
      */
-    public boolean getIsAvailableDoublePoints(){
-        return isAvailableDoublePoints;
+    public boolean getIsActiveDoublePoints(){
+        return isActiveDoublePoints;
     }
-
     /**
-     * Sets the isAvailableDoublePoints to either true or false
-     * @param available
+     * Sets the isActiveDoublePoints to either true or false
+     * @param active
      */
-    public void setIsAvailableDoublePoints(boolean available){
-        isAvailableDoublePoints=available;
+    public void setIsActiveDoublePoints(boolean active){
+        isActiveDoublePoints=active;
     }
 
     /**
      * This method is called when a joker is clicked.
      * It disables the joker for further use and shows an image when the button is clicked.
      * @param joker
+     * @param image
      */
-    public void useJoker(StackPane joker){
+    public void useJoker(StackPane joker, ImageView image){
+        image.setVisible(true);
+        disableJokerButton(joker);
+        usedJokers.add(joker.idProperty().getValue());
+    }
+
+    /**
+     * Disables the joker so it can't be used again
+     * @param joker
+     */
+    public void disableJokerButton(StackPane joker){
         joker.setBackground(new Background(
                 new BackgroundFill(Color.BURLYWOOD, CornerRadii.EMPTY, Insets.EMPTY)));
         joker.setOpacity(OPACITY);
-        joker.setVisible(true);
-        setIsAvailableDoublePoints(false);
         joker.setOnMouseClicked(null);
         joker.setCursor(Cursor.DEFAULT);
     }
@@ -345,13 +355,9 @@ public class MultiplayerGameCtrl {
      * @param joker
      */
     public void resetJoker(StackPane joker){
-        joker.setOnMouseClicked(event -> {
-            useJoker(joker);
-        });
         joker.setBackground(new Background(
                 new BackgroundFill(Color.color(RGB_VALUE, RGB_VALUE, RGB_VALUE), CornerRadii.EMPTY, Insets.EMPTY)));
         joker.setOpacity(STANDARD_SIZE);
-        setIsAvailableDoublePoints(true);
         joker.setCursor(Cursor.HAND);
     }
 }

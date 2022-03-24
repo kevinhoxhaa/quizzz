@@ -88,7 +88,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     @FXML
     private StackPane doublePoints;
     @FXML
-    private StackPane disableIncorrect;
+    private StackPane removeIncorrect;
     @FXML
     private StackPane reduceTime;
     @FXML
@@ -123,6 +123,17 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      * @param question the question instance upon which the setup is based
      */
     protected void setup(Question question) {
+        List<StackPane> jokers=new ArrayList<>();
+        jokers.add(doublePoints);
+        jokers.add(removeIncorrect);
+        jokers.add(reduceTime);
+
+        for(StackPane joker:jokers){
+            if(gameCtrl.getUsedJokers().contains(joker.idProperty().getValue())){
+                gameCtrl.disableJokerButton(joker);
+            }
+        }
+
         selectedAnswerButton = null;
         this.currentQuestion = question;
         currentScore.setText("Score: " + gameCtrl.getUser().points);
@@ -381,13 +392,15 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      */
     @FXML
     public void useDoublePoints(){
-        gameCtrl.useJoker(doublePoints);
+        gameCtrl.setIsActiveDoublePoints(true);
+        gameCtrl.useJoker(doublePoints,x2image);
     }
 
     /**
      * This method resets the double point jokers so that it can be used again when another game starts
      */
     public void resetDoublePoints(){
+        doublePoints.setOnMouseClicked(event -> useDoublePoints());
         gameCtrl.resetJoker(doublePoints);
     }
 
