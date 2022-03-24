@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class TestGameUserRepository implements GameUserRepository {
 
@@ -208,5 +209,10 @@ public class TestGameUserRepository implements GameUserRepository {
                                         Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public List<MultiplayerUser> findByGameID(Long gameID) {
+        return users.stream().filter(u -> gameID.equals(u.gameID)).collect(Collectors.toList());
     }
 }

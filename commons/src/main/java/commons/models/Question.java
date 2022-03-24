@@ -6,12 +6,15 @@ import commons.utils.QuestionType;
 
 import java.util.Objects;
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = ConsumptionQuestion.class, name = "CONSUMPTION"),
-        @JsonSubTypes.Type(value = EstimationQuestion.class, name = "ESTIMATION"),
-        @JsonSubTypes.Type(value = ChoiceQuestion.class, name = "CHOICE"),
-        @JsonSubTypes.Type(value = ComparisonQuestion.class, name = "COMPARISON")
+        @JsonSubTypes.Type(value = ChoiceQuestion.class, name = "choice"),
+        @JsonSubTypes.Type(value = ConsumptionQuestion.class, name = "consumption"),
+        @JsonSubTypes.Type(value = ComparisonQuestion.class, name = "comparison"),
+        @JsonSubTypes.Type(value = EstimationQuestion.class, name = "estimation")
 })
 public abstract class Question {
     protected QuestionType type;
@@ -34,7 +37,7 @@ public abstract class Question {
      * based on the question type
      * @return points for the question
      */
-    public abstract long getPoints();
+    public abstract long calculatePoints();
 
     /**
      * Returns the question type

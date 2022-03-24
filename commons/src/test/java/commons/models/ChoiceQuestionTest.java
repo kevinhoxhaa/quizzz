@@ -9,7 +9,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class ChoiceQuestionTest {
     private static final long POSITIVE = 40;
@@ -63,13 +62,13 @@ public class ChoiceQuestionTest {
 
     @Test
     public void getUserAnswerReturnsUserAnswer() {
-        assertNull(question.getUserAnswer());
+        assertEquals(new Answer((Activity) null), question.getUserAnswer());
     }
 
     @Test
     public void setUserAnswerSetsUserAnswer() {
-        question.setUserAnswer(new Answer(firstActivity), POSITIVE);
-        assertEquals("q1", ((Activity) question.getUserAnswer().getAnswer()).title);
+        question.setUserAnswer(new Answer(question.getActivities().get(0)), POSITIVE);
+        assertEquals("q1", ((Activity) question.getUserAnswer().generateAnswer()).title);
     }
 
     @Test
@@ -80,8 +79,8 @@ public class ChoiceQuestionTest {
 
     @Test
     public void getPointsCalculatesPoints() {
-        question.setUserAnswer(new Answer(firstActivity), 1);
-        assertEquals(TOTAL, question.getPoints());
+        question.setUserAnswer(new Answer(question.getActivities().get(0)), 1);
+        assertEquals(TOTAL, question.calculatePoints());
     }
 
     @Test

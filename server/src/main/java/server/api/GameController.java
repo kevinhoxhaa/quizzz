@@ -25,6 +25,7 @@ import server.database.WaitingUserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Random;
 
 @RestController
@@ -108,7 +109,7 @@ public class GameController {
      * @return random choice question
      */
     private ChoiceQuestion generateChoiceQuestion() {
-        List<Activity> activities = new ArrayList<>();
+        List<Activity> activities = activityRepo.getRandomList(CHOICE_COUNT);
         List<Long> consumptions = new ArrayList<>();
         int tryCounter = 0;
 
@@ -131,26 +132,35 @@ public class GameController {
      */
     private ComparisonQuestion generateComparisonQuestion() {
         Activity firstActivity = getRandomActivity();
-        Activity secondActivity;
-        do {
+
+        Activity secondActivity = getRandomActivity();
+
+        while(secondActivity.equals(firstActivity)) {
             secondActivity = getRandomActivity();
-        } while (firstActivity.equals(secondActivity));
+        }
+
         return new ComparisonQuestion(firstActivity, secondActivity);
     }
 
     /**
      * Returns true if all users in a given list of users
      * have answered a question with a particular number
-     * @param userIds the ids of the users to validate
+     * @param game the game containing the ids of the users to validate
      * @param questionNumber the question number
      * @return true if all users have answered at least
      * that number of questions
      */
-    private boolean allUsersHaveAnswered(List<Long> userIds, int questionNumber) {
+    private boolean allUsersHaveAnswered(Game game, int questionNumber) {
+        List<Long> userIds = new ArrayList<>(game.getUserIds());
         for(Long id : userIds) {
-            User user = gameUserRepo.findById(id).get();
-            if(user.totalAnswers < questionNumber) {
-                return false;
+            try {
+                User user = gameUserRepo.findById(id).get();
+                if (user.totalAnswers < questionNumber) {
+                    return false;
+                }
+            } catch(NoSuchElementException ex) {
+                // User has left the game and is removed from it
+                game.getUserIds().remove(id);
             }
         }
         return true;
@@ -171,14 +181,20 @@ public class GameController {
     public ResponseEntity<Integer> startGame(@PathVariable("count") int count) {
         Game game = new Game();
 
-        if(waitingUserRepo.count() == 0) {
+        if(waitingUserRepo.findByGameIDIsNull().size() == 0) {
             return ResponseEntity.badRequest().build();
         }
 
-        List<MultiplayerUser> users = waitingUserRepo.findAll();
-        gameUserRepo.saveAll(users);
+        List<MultiplayerUser> users = waitingUserRepo.findByGameIDIsNull();
+        for(MultiplayerUser user : users) {
+            user.gameID = (long) gameList.getGames().size();
+        }
+        users.forEach(u -> gameUserRepo.save(u));
+
+        users = gameUserRepo.findByGameID((long) gameList.getGames().size());
         users.forEach(u -> game.getUserIds().add(u.id));
-        waitingUserRepo.deleteAll();
+
+//        waitingUserRepo.deleteAll();
 
         for(int i = 0; i < count; i++) {
             game.getQuestions().add(generateQuestion());
@@ -207,9 +223,7 @@ public class GameController {
 
     @GetMapping(path = "/find/{userId}")
     public ResponseEntity<Integer> findGameIndex(@PathVariable("userId") long userId) {
-        System.out.println("Searching for user " + userId);
-        if(userId < 0 || waitingUserRepo.existsById(userId)) {
-            System.out.println("Invalid user id " + userId);
+        if(userId < 0) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -222,8 +236,6 @@ public class GameController {
                 break;
             }
         }
-
-        System.out.println("User found in game " + index);
 
         return ResponseEntity.ok(index);
     }
@@ -251,136 +263,6 @@ public class GameController {
         }
 
         return ResponseEntity.ok(game.getQuestions().get(questionIndex));
-    }
-
-    /**
-     * Retrieves the type of the requested question from the game state object
-     * and sends it to the user
-     * Returns a bad request if the game or question index
-     * is invalid
-     * @param gameIndex the index of the game
-     * @param questionIndex the index of the question
-     * @return the requested question
-     */
-    @GetMapping(path =  "/{gameIndex}/questionType/{questionIndex}")
-    public ResponseEntity<String> getQuestionType(
-            @PathVariable(name = "gameIndex") int gameIndex,
-                                                @PathVariable(name = "questionIndex") int questionIndex) {
-        if(gameIndex >= gameList.getGames().size()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        Game game = gameList.getGames().get(gameIndex);
-
-        if(questionIndex >= game.getQuestions().size()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        return ResponseEntity.ok(game.getQuestions().get(questionIndex).getType().name());
-    }
-
-    /**
-     * Retrieves the requested question from the game state object
-     * and sends it to the user
-     * Returns a bad request if the game or question index
-     * is invalid
-     * @param gameIndex the index of the game
-     * @param questionIndex the index of the question
-     * @return the requested question
-     */
-    @GetMapping(path =  "/{gameIndex}/consumption/{questionIndex}")
-    public ResponseEntity<ConsumptionQuestion> getConsumptionQuestion(
-            @PathVariable(name = "gameIndex") int gameIndex,
-                                                @PathVariable(name = "questionIndex") int questionIndex) {
-        if(gameIndex >= gameList.getGames().size()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        Game game = gameList.getGames().get(gameIndex);
-
-        if(questionIndex >= game.getQuestions().size()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        return ResponseEntity.ok((ConsumptionQuestion) game.getQuestions().get(questionIndex));
-    }
-
-    /**
-     * Retrieves the requested question from the game state object
-     * and sends it to the user
-     * Returns a bad request if the game or question index
-     * is invalid
-     * @param gameIndex the index of the game
-     * @param questionIndex the index of the question
-     * @return the requested question
-     */
-    @GetMapping(path =  "/{gameIndex}/estimation/{questionIndex}")
-    public ResponseEntity<EstimationQuestion> getEstimationQuestion(
-            @PathVariable(name = "gameIndex") int gameIndex,
-                                                @PathVariable(name = "questionIndex") int questionIndex) {
-        if(gameIndex >= gameList.getGames().size()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        Game game = gameList.getGames().get(gameIndex);
-
-        if(questionIndex >= game.getQuestions().size()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        return ResponseEntity.ok((EstimationQuestion) game.getQuestions().get(questionIndex));
-    }
-
-    /**
-     * Retrieves the requested question from the game state object
-     * and sends it to the user
-     * Returns a bad request if the game or question index
-     * is invalid
-     * @param gameIndex the index of the game
-     * @param questionIndex the index of the question
-     * @return the requested question
-     */
-    @GetMapping(path =  "/{gameIndex}/choice/{questionIndex}")
-    public ResponseEntity<ChoiceQuestion> getChoiceQuestion(
-            @PathVariable(name = "gameIndex") int gameIndex,
-                                                @PathVariable(name = "questionIndex") int questionIndex) {
-        if(gameIndex >= gameList.getGames().size()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        Game game = gameList.getGames().get(gameIndex);
-
-        if(questionIndex >= game.getQuestions().size()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        return ResponseEntity.ok((ChoiceQuestion) game.getQuestions().get(questionIndex));
-    }
-
-    /**
-     * Retrieves the requested question from the game state object
-     * and sends it to the user
-     * Returns a bad request if the game or question index
-     * is invalid
-     * @param gameIndex the index of the game
-     * @param questionIndex the index of the question
-     * @return the requested question
-     */
-    @GetMapping(path =  "/{gameIndex}/comparison/{questionIndex}")
-    public ResponseEntity<ComparisonQuestion> getComparisonQuestion(
-            @PathVariable(name = "gameIndex") int gameIndex,
-                                                @PathVariable(name = "questionIndex") int questionIndex) {
-        if(gameIndex >= gameList.getGames().size()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        Game game = gameList.getGames().get(gameIndex);
-
-        if(questionIndex >= game.getQuestions().size()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        return ResponseEntity.ok((ComparisonQuestion) game.getQuestions().get(questionIndex));
     }
 
     /**
@@ -415,17 +297,16 @@ public class GameController {
         }
 
         MultiplayerUser user = gameUserRepo.findById(userId).get();
-        user.points += answeredQuestion.getPoints();
-        user.totalAnswers += 1;
-        user.correctAnswers += answeredQuestion.getPoints() == 0 ? 0 : 1;
-        // TODO: handle the case where the user has not answered the question at all
-        user.lastAnswerCorrect = answeredQuestion.hasCorrectUserAnswer();
-        gameUserRepo.save(user);
+        if(user.totalAnswers <= questionIndex) {
+            user.points += answeredQuestion.calculatePoints();
+            user.totalAnswers += 1;
+            user.correctAnswers += answeredQuestion.calculatePoints() == 0 ? 0 : 1;
+            user.lastAnswerCorrect = answeredQuestion.hasCorrectUserAnswer();
+            gameUserRepo.save(user);
+        }
 
-        // If no next question, return FORBIDDEN and handle
-        // game end on the client
-        if(questionIndex + 1 >= game.getQuestions().size()) {
-            ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        if(!allUsersHaveAnswered(game, questionIndex + 1)) {
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
         }
 
         List<MultiplayerUser> rightUsers = new ArrayList<>();
@@ -436,10 +317,86 @@ public class GameController {
             }
         }
 
-        if(!allUsersHaveAnswered(game.getUserIds(), questionIndex + 1)) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }
-
         return ResponseEntity.ok(rightUsers);
+    }
+
+    /**
+     * Adds the user consumption answer points to the database and
+     * returns the number of users who have answered the last
+     * question correctly
+     * @param gameIndex the index of the game
+     * @param userId the id of the answering user
+     * @param questionIndex the question index
+     * @param answeredQuestion the answered question with recorded points
+     * @return the list of users who have answered the last question
+     * correctly
+     */
+    @PostMapping(path =  "/{gameIndex}/user/{userId}/consumption/{questionIndex}")
+    public ResponseEntity<List<MultiplayerUser>>
+    postConsumptionAnswer(@PathVariable(name = "gameIndex") int gameIndex,
+               @PathVariable(name = "userId") long userId,
+               @PathVariable(name = "questionIndex") int questionIndex,
+               @RequestBody ConsumptionQuestion answeredQuestion) {
+        return postAnswer(gameIndex, userId, questionIndex, answeredQuestion);
+    }
+
+    /**
+     * Adds the user estimation answer points to the database and
+     * returns the number of users who have answered the last
+     * question correctly
+     * @param gameIndex the index of the game
+     * @param userId the id of the answering user
+     * @param questionIndex the question index
+     * @param answeredQuestion the answered question with recorded points
+     * @return the list of users who have answered the last question
+     * correctly
+     */
+    @PostMapping(path =  "/{gameIndex}/user/{userId}/estimation/{questionIndex}")
+    public ResponseEntity<List<MultiplayerUser>>
+    postEstimationAnswer(@PathVariable(name = "gameIndex") int gameIndex,
+                          @PathVariable(name = "userId") long userId,
+                          @PathVariable(name = "questionIndex") int questionIndex,
+                          @RequestBody EstimationQuestion answeredQuestion) {
+        return postAnswer(gameIndex, userId, questionIndex, answeredQuestion);
+    }
+
+    /**
+     * Adds the user choice answer points to the database and
+     * returns the number of users who have answered the last
+     * question correctly
+     * @param gameIndex the index of the game
+     * @param userId the id of the answering user
+     * @param questionIndex the question index
+     * @param answeredQuestion the answered question with recorded points
+     * @return the list of users who have answered the last question
+     * correctly
+     */
+    @PostMapping(path =  "/{gameIndex}/user/{userId}/choice/{questionIndex}")
+    public ResponseEntity<List<MultiplayerUser>>
+    postChoiceAnswer(@PathVariable(name = "gameIndex") int gameIndex,
+                          @PathVariable(name = "userId") long userId,
+                          @PathVariable(name = "questionIndex") int questionIndex,
+                          @RequestBody ChoiceQuestion answeredQuestion) {
+        return postAnswer(gameIndex, userId, questionIndex, answeredQuestion);
+    }
+
+    /**
+     * Adds the user comparison answer points to the database and
+     * returns the number of users who have answered the last
+     * question correctly
+     * @param gameIndex the index of the game
+     * @param userId the id of the answering user
+     * @param questionIndex the question index
+     * @param answeredQuestion the answered question with recorded points
+     * @return the list of users who have answered the last question
+     * correctly
+     */
+    @PostMapping(path =  "/{gameIndex}/user/{userId}/comparison/{questionIndex}")
+    public ResponseEntity<List<MultiplayerUser>>
+    postComparisonAnswer(@PathVariable(name = "gameIndex") int gameIndex,
+                          @PathVariable(name = "userId") long userId,
+                          @PathVariable(name = "questionIndex") int questionIndex,
+                          @RequestBody ComparisonQuestion answeredQuestion) {
+        return postAnswer(gameIndex, userId, questionIndex, answeredQuestion);
     }
 }

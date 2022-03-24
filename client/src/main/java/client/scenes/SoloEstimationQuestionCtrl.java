@@ -77,6 +77,7 @@ public class SoloEstimationQuestionCtrl implements SceneController, QuestionNumC
         currentScore.setText(String.format( "Score: %d", mainCtrl.getSoloScore()));
         currentQuestion = (EstimationQuestion) soloGame.loadCurrentQuestion();
 
+        resetCircleColor();
         updateCircleColor(colors);
         resetHighlight();
         highlightCurrentCircle();
@@ -210,6 +211,6 @@ public class SoloEstimationQuestionCtrl implements SceneController, QuestionNumC
     @Override
     @FXML
     public void onQuit(){
-        mainCtrl.quitGame(false);
+        mainCtrl.quitGame(false, false);
     }
 }

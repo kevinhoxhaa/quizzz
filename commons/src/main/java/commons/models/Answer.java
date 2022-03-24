@@ -1,6 +1,6 @@
 package commons.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import commons.entities.Activity;
 import commons.utils.AnswerType;
 import commons.utils.CompareType;
@@ -11,11 +11,14 @@ import static commons.utils.AnswerType.ACTIVITY;
 import static commons.utils.AnswerType.COMPARETYPE;
 import static commons.utils.AnswerType.LONG;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Answer {
+    @JsonInclude
     private Long longAnswer;
+    @JsonInclude
     private Activity activity;
+    @JsonInclude
     private CompareType compareType;
+    @JsonInclude
     private AnswerType answerType;
 
     @SuppressWarnings("unused")
@@ -62,7 +65,7 @@ public class Answer {
      * A getter for the answer
      * @return the answer
      */
-    public Object getAnswer(){
+    public Object generateAnswer(){
         switch (answerType) {
             case LONG:
                 return longAnswer;
@@ -99,6 +102,18 @@ public class Answer {
         this.answerType = COMPARETYPE;
     }
 
+    public Activity getActivity() {
+        return activity;
+    }
+
+    public CompareType getCompareType() {
+        return compareType;
+    }
+
+    public Long getLongAnswer() {
+        return longAnswer;
+    }
+
     /**
      * A method that determines whether this is equal to another answer
      * Two answers are equal if they have the same type and equal values for that type.
@@ -115,12 +130,24 @@ public class Answer {
         }
         Answer answer = (Answer) o;
         switch (this.answerType){
-            case COMPARETYPE:
+            case COMPARETYPE: {
+                if(this.compareType == null) {
+                    return answer.getAnswerType() == COMPARETYPE && answer.compareType == null;
+                }
                 return answer.getAnswerType() == COMPARETYPE && this.compareType.equals(answer.compareType);
-            case LONG:
+            }
+            case LONG: {
+                if(this.longAnswer == null) {
+                    return answer.getAnswerType() == LONG && answer.longAnswer == null;
+                }
                 return answer.getAnswerType() == LONG && this.longAnswer.equals(answer.longAnswer);
-            case ACTIVITY:
+            }
+            case ACTIVITY: {
+                if(this.activity == null) {
+                    return answer.getAnswerType() == ACTIVITY && answer.activity == null;
+                }
                 return answer.getAnswerType() == ACTIVITY && this.activity.equals(answer.activity);
+            }
         }
         return false;
     }

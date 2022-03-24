@@ -27,6 +27,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.util.ResourceUtils;
 import server.database.ActivityRepository;
+import server.database.GameUserRepository;
+import server.database.WaitingUserRepository;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -43,6 +45,12 @@ public class Main implements CommandLineRunner {
     @Autowired
     private ActivityRepository activityRepo;
 
+    @Autowired
+    private GameUserRepository gameRepo;
+
+    @Autowired
+    private WaitingUserRepository waitingRepo;
+
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
     }
@@ -54,6 +62,9 @@ public class Main implements CommandLineRunner {
      */
     @Override
     public void run(String[] args) throws IOException {
+        gameRepo.deleteAll();
+        waitingRepo.deleteAll();
+
         if(activityRepo.count() == 0){
             String content = "";
             try {
