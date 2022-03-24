@@ -71,6 +71,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     private Answer userAnswer;
 
     private List<String> correctPlayers;
+    private List<StackPane> jokers;
 
     @FXML
     private Text activityText;
@@ -123,7 +124,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      * @param question the question instance upon which the setup is based
      */
     protected void setup(Question question) {
-        List<StackPane> jokers=new ArrayList<>();
+        jokers=new ArrayList<>();
         jokers.add(doublePoints);
         jokers.add(removeIncorrect);
         jokers.add(reduceTime);
@@ -353,6 +354,33 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     }
 
     /**
+     * The method called when the cursor enters the button double points.
+     * Sets double points' background color according to whether it is selected.
+     */
+    @FXML
+    protected void enterDoublePoints(){
+        enterJoker(doublePoints);
+    }
+
+    /**
+     * The method called when the cursor enters the button remove incorrect question.
+     * Sets remove incorrect question's background color according to whether it is selected.
+     */
+    @FXML
+    protected void enterRemoveIncorrect(){
+        enterJoker(removeIncorrect);
+    }
+
+    /**
+     * The method called when the cursor enters the button reduce time for others.
+     * Sets reduce time for others' background color according to whether it is selected.
+     */
+    @FXML
+    protected void enterReduceTime(){
+        enterJoker(reduceTime);
+    }
+
+    /**
      * A general method for setting an answer button's background color upon the cursor enters it,
      * according to whether it is selected.
      *
@@ -382,6 +410,35 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
             } else {
                 answerBtn.setBackground(new Background(
                         new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+            }
+        }
+    }
+
+    /**
+     * A general method for setting an answer button's background color upon the cursor enters it,
+     * according to whether it is selected.
+     *
+     * @param jokerBtn The joker button to be recolored.
+     */
+    private void enterJoker(StackPane jokerBtn) {
+        if (!gameCtrl.getUsedJokers().contains(jokerBtn.idProperty().getValue())) {
+            jokerBtn.setBackground(new Background(
+                    new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+        }
+    }
+
+    /**
+     * The method called upon loading the question scene, and when the cursor leaves either one of the answer buttons.
+     * Resets all answer boxes' background color according to whether they are selected.
+     */
+    @FXML
+    public void resetJokerColors() {
+
+        for (StackPane joker : jokers) {
+            if (!gameCtrl.getUsedJokers().contains(joker.idProperty().getValue())) {
+                joker.setBackground(new Background(
+                        new BackgroundFill(Color.color(gameCtrl.RGB_VALUE,gameCtrl.RGB_VALUE,gameCtrl.RGB_VALUE),
+                                CornerRadii.EMPTY, Insets.EMPTY)));
             }
         }
     }

@@ -238,7 +238,7 @@
                   <Pane prefHeight="80.0" prefWidth="225.0" />
                   <VBox prefHeight="149.0" prefWidth="175.0">
                      <children>
-                        <StackPane fx:id="doublePoints" onMouseClicked="#useDoublePoints" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;" VBox.vgrow="ALWAYS">
+                        <StackPane fx:id="doublePoints" onMouseClicked="#useDoublePoints" onMouseEntered="#enterDoublePoints" onMouseExited="#resetJokerColors" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                            </VBox.margin>
@@ -262,7 +262,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </StackPane>
-                        <StackPane fx:id="removeIncorrect" prefHeight="150.0" prefWidth="271.0" style="-fx-border-color: black;" VBox.vgrow="ALWAYS">
+                        <StackPane fx:id="removeIncorrect" onMouseEntered="#enterRemoveIncorrect" onMouseExited="#resetJokerColors" prefHeight="150.0" prefWidth="271.0" style="-fx-border-color: black;" VBox.vgrow="ALWAYS">
                            <opaqueInsets>
                               <Insets />
                            </opaqueInsets>
@@ -289,7 +289,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </StackPane>
-                        <StackPane fx:id="reduceTime" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;" VBox.vgrow="ALWAYS">
+                        <StackPane fx:id="reduceTime" onMouseEntered="#enterReduceTime" onMouseExited="#resetJokerColors" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                            </VBox.margin>

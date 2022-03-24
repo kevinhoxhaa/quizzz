@@ -28,7 +28,7 @@ public class MultiplayerGameCtrl {
     private static final int POLLING_INTERVAL = 500;
     private static final double OPACITY = 0.5;
     private static final double STANDARD_SIZE = 1.0;
-    private static final double RGB_VALUE = (double) 244/255;
+    public static final double RGB_VALUE = (double) 244/255;
 
     private List<Color> colors;
 

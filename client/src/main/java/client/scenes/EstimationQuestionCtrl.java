@@ -7,12 +7,17 @@ import commons.models.EstimationQuestion;
 import commons.models.Question;
 import javafx.fxml.FXML;
 
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -34,6 +39,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
 
     private Question currentQuestion;
     private double startTime;
+    private List<StackPane> jokers;
 
     @FXML
     private Label yourAnswer;
@@ -95,7 +101,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     }
 
     public void setup(EstimationQuestion question) {
-        List<StackPane> jokers=new ArrayList<>();
+        jokers=new ArrayList<>();
         jokers.add(doublePoints);
         jokers.add(removeIncorrect);
         jokers.add(reduceTime);
@@ -188,6 +194,62 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     public void resetDoublePoints(){
         doublePoints.setOnMouseClicked(event -> useDoublePoints());
         gameCtrl.resetJoker(doublePoints);
+    }
+
+    /**
+     * The method called when the cursor enters the button double points.
+     * Sets double points' background color according to whether it is selected.
+     */
+    @FXML
+    protected void enterDoublePoints(){
+        enterJoker(doublePoints);
+    }
+
+    /**
+     * The method called when the cursor enters the button remove incorrect question.
+     * Sets remove incorrect question's background color according to whether it is selected.
+     */
+    @FXML
+    protected void enterRemoveIncorrect(){
+        enterJoker(removeIncorrect);
+    }
+
+    /**
+     * The method called when the cursor enters the button reduce time for others.
+     * Sets reduce time for others' background color according to whether it is selected.
+     */
+    @FXML
+    protected void enterReduceTime(){
+        enterJoker(reduceTime);
+    }
+
+    /**
+     * A general method for setting an answer button's background color upon the cursor enters it,
+     * according to whether it is selected.
+     *
+     * @param jokerBtn The joker button to be recolored.
+     */
+    private void enterJoker(StackPane jokerBtn) {
+        if (!gameCtrl.getUsedJokers().contains(jokerBtn.idProperty().getValue())) {
+            jokerBtn.setBackground(new Background(
+                    new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+        }
+    }
+
+    /**
+     * The method called upon loading the question scene, and when the cursor leaves either one of the answer buttons.
+     * Resets all answer boxes' background color according to whether they are selected.
+     */
+    @FXML
+    public void resetJokerColors() {
+
+        for (StackPane joker : jokers) {
+            if (!gameCtrl.getUsedJokers().contains(joker.idProperty().getValue())) {
+                joker.setBackground(new Background(
+                        new BackgroundFill(Color.color(gameCtrl.RGB_VALUE,gameCtrl.RGB_VALUE,gameCtrl.RGB_VALUE),
+                                CornerRadii.EMPTY, Insets.EMPTY)));
+            }
+        }
     }
 
     /**
