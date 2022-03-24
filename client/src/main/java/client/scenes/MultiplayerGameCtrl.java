@@ -45,7 +45,8 @@ public class MultiplayerGameCtrl {
     private Scene ranking;
     private RankingCtrl rankingCtrl;
 
-    // TODO: add results and resultsCtrl
+    private Scene results;
+    private MultiplayerResultsCtrl resultsCtrl;
 
     /**
      * Constructs a multiplayer game controller with the given
@@ -62,7 +63,8 @@ public class MultiplayerGameCtrl {
                                Pair<MultiplayerQuestionCtrl, Scene> mcQuestion,
                                Pair<EstimationQuestionCtrl, Scene> estimationQuestion,
                                Pair<MultiplayerAnswerCtrl, Scene> answer,
-                               Pair<RankingCtrl, Scene> ranking) {
+                               Pair<RankingCtrl, Scene> ranking,
+                               Pair<MultiplayerResultsCtrl, Scene> results) {
         this.gameIndex = gameIndex;
         this.mainCtrl = mainCtrl;
 
@@ -90,6 +92,10 @@ public class MultiplayerGameCtrl {
         this.rankingCtrl = ranking.getKey();
         rankingCtrl.setGameCtrl(this);
         this.ranking = ranking.getValue();
+
+        this.resultsCtrl = results.getKey();
+        resultsCtrl.setGameCtrl(this);
+        this.results = results.getValue();
     }
 
     /**
@@ -97,6 +103,7 @@ public class MultiplayerGameCtrl {
      * the game loop
      */
     public void startGame() {
+         user.gameID = (long) gameIndex;
          Question firstQuestion = fetchQuestion();
          showQuestion(firstQuestion);
     }
@@ -250,6 +257,11 @@ public class MultiplayerGameCtrl {
      */
     public void showResults(List<MultiplayerUser> rankedUsers) {
         // TODO: display list of ranked users on results screen
+        resultsCtrl.updateCircleColor(colors);
+        resultsCtrl.updateQuestionNumber();
+        mainCtrl.getPrimaryStage().setTitle("Results Screen");
+        mainCtrl.getPrimaryStage().setScene(results);
+        resultsCtrl.startTimer();
     }
 
     /**
@@ -274,5 +286,19 @@ public class MultiplayerGameCtrl {
      */
     public String getServerUrl() {
         return serverUrl;
+    }
+
+    /**
+     * Returns the index of the current game.
+     * @return The current game index.
+     */
+    public int getGameIndex() {
+        return gameIndex;
+    }
+
+    public void resetGameCtrl() {
+        mainCtrl.resetMainCtrl();
+        this.answerCount = 0;
+        this.colors = new ArrayList<>();
     }
 }

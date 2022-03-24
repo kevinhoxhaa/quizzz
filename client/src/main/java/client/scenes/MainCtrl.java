@@ -293,7 +293,8 @@ public class MainCtrl {
                 new Pair<>(this.multiplayerQuestionCtrl, this.multiplayerQuestion),
                 new Pair<>(this.multiplayerEstimationCtrl, this.multiplayerEstimation),
                 new Pair<>(this.multiplayerAnswerCtrl, this.multiplayerAnswer),
-                new Pair<>(this.rankingCtrl, this.ranking)
+                new Pair<>(this.rankingCtrl, this.ranking),
+                new Pair<>(this.multiplayerResultsCtrl, this.multiplayerResults)
         );
         multiplayerCtrl.startGame();
     }
@@ -476,7 +477,7 @@ public class MainCtrl {
      * - The Final Results Page if the User has answered all 20 questions
      */
     public void afterAnswerScreen() {
-        if (getAnswerCount() <= TOTAL_ANSWERS) {
+        if (getAnswerCount() < TOTAL_ANSWERS) {
             if (getAnswerCount() == HALFWAY_ANSWERS) {
                 showRanking();
                 // The ranking page will be showed here
@@ -675,9 +676,9 @@ public class MainCtrl {
             if (type == okButton) {
                 if(isMultiplayer) {
                     try {
-                        server.removeMultiplayerUser(serverUrl, user);
+                        server.removeMultiplayerUser(serverUrl, (MultiplayerUser) user);
                         user = null;
-                    } catch(WebApplicationException e) {
+                    } catch (WebApplicationException e) {
                         System.out.println("User to remove not found!");
                     } finally {
                         if(quitApp) {
@@ -689,5 +690,14 @@ public class MainCtrl {
                 showHome();
             }
         });
+    }
+
+    public void resetMainCtrl() {
+        multiplayerQuestionCtrl.resetCircleColor();
+        multiplayerAnswerCtrl.resetCircleColor();
+        rankingCtrl.resetCircleColor();
+        multiplayerResultsCtrl.resetCircleColor();
+        this.colors = new ArrayList<>();
+        this.answerCount = 0;
     }
 }

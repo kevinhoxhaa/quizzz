@@ -2,6 +2,10 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.models.Game;
+import commons.models.Question;
+import jakarta.ws.rs.WebApplicationException;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -15,11 +19,17 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MultiplayerResultsCtrl implements QuestionNumController, SceneController {
 
+    private static final int POLLING_DELAY = 0;
+    private static final int POLLING_INTERVAL = 500;
+
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private MultiplayerGameCtrl gameCtrl;
 
     private boolean rematch;
 
@@ -73,15 +83,25 @@ public class MultiplayerResultsCtrl implements QuestionNumController, SceneContr
     }
 
     /**
+     * Sets the current game controller
+     * @param gameCtrl the current game controller
+     */
+    public void setGameCtrl(MultiplayerGameCtrl gameCtrl) {
+        this.gameCtrl = gameCtrl;
+    }
+
+    /**
      * Indicates that the player wants (or doesn't want) to rematch the players from the last game.
      */
     @FXML
     protected void onRematchButton(){
         rematch = !rematch;
         if (rematch) {
+            server.addRestartUserID(server.getURL(), gameCtrl.getGameIndex(), gameCtrl.getUser().id);
             rematchButton.setBackground(new Background(
                     new BackgroundFill(Color.DARKCYAN, CornerRadii.EMPTY, Insets.EMPTY)));
         } else {
+            server.removeRestartUserID(server.getURL(), gameCtrl.getGameIndex(), gameCtrl.getUser().id);
             rematchButton.setBackground(new Background(
                     new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
         }
@@ -92,15 +112,22 @@ public class MultiplayerResultsCtrl implements QuestionNumController, SceneContr
     @Override
     @FXML
     public void onQuit(){
+        server.removeMultiplayerUser(server.getURL(), gameCtrl.getUser());
+        mainCtrl.quitGame(false, true);
         mainCtrl.bindUser(null);
-        mainCtrl.killThread();
-        mainCtrl.showHome();
     }
 
+    /**
+     * Redirects the user to the question page if the user clicked rematch
+     * and after a new game has started, otherwise, the user is redirected to the home page.
+     */
     @Override
     public void redirect() {
         if (rematch) {
-            mainCtrl.showQuestion();
+            gameCtrl.resetGameCtrl();
+            String serverUrl = mainCtrl.getServerUrl();
+            gameCtrl.showQuestion(server.restartGame(serverUrl, gameCtrl.getGameIndex(),
+                    gameCtrl.getUser().id));
         } else {
             onQuit();
         }
@@ -159,6 +186,6 @@ public class MultiplayerResultsCtrl implements QuestionNumController, SceneContr
      */
     @Override
     public void updateQuestionNumber() {
-        getQuestionNum().setText("" + mainCtrl.getAnswerCount());
+        getQuestionNum().setText("" + gameCtrl.getAnswerCount());
     }
 }
