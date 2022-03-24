@@ -235,7 +235,14 @@
             </VBox>
             <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                <children>
-                  <Pane prefHeight="80.0" prefWidth="225.0" />
+                  <Pane prefHeight="80.0" prefWidth="225.0">
+                     <children>
+                        <ImageView fitHeight="42.0" fitWidth="65.0" layoutX="77.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" visible="false" fx:id="x2image">
+                           <image>
+                              <Image url="@../images/x2points.png" />
+                           </image>
+                        </ImageView>
+                     </children></Pane>
                   <VBox prefHeight="149.0" prefWidth="175.0">
                      <children>
                         <StackPane fx:id="doublePoints" onMouseClicked="#useDoublePoints" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;" VBox.vgrow="ALWAYS">
@@ -243,7 +250,20 @@
                               <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                            </VBox.margin>
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Double points" />
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <ImageView fitHeight="42.0" fitWidth="65.0" layoutX="41.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/x2points.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Text layoutX="111.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Double points">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </AnchorPane>
                            </children>
                            <cursor>
                               <Cursor fx:constant="HAND" />
@@ -272,8 +292,8 @@
                   </VBox>
                   <GridPane fx:id="emojiBoard" alignment="CENTER" prefHeight="110.0" prefWidth="200.0">
                     <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="136.60003662109375" minWidth="10.0" prefWidth="118.19994506835937" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="131.2" minWidth="10.0" prefWidth="117.40005493164062" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>

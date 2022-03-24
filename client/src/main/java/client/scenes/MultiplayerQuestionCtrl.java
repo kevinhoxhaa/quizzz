@@ -94,6 +94,8 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     private StackPane reduceTime;
     @FXML
     private Text currentScore;
+    @FXML
+    private ImageView x2image;
 
     /**
      * Creates a controller for the multiplayer question screen, with the given server and main controller.
@@ -145,6 +147,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
         }
 
         resetAnswerColors();
+        x2image.setVisible(false);
     }
 
     /**
@@ -374,6 +377,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
         doublePoints.setBackground(new Background(
                 new BackgroundFill(Color.BURLYWOOD, CornerRadii.EMPTY, Insets.EMPTY)));
         doublePoints.setOpacity(OPACITY);
+        x2image.setVisible(true);
         mainCtrl.setIsAvailableDoublePoints(false);
         doublePoints.setOnMouseClicked(null);
         doublePoints.setCursor(Cursor.DEFAULT);
