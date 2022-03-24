@@ -7,7 +7,13 @@ import commons.models.Question;
 import commons.utils.QuestionType;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.util.Pair;
 
@@ -19,6 +25,9 @@ import java.util.TimerTask;
 public class MultiplayerGameCtrl {
     private static final int POLLING_DELAY = 0;
     private static final int POLLING_INTERVAL = 500;
+    private static final double OPACITY = 0.5;
+    private static final double STANDARD_SIZE = 1.0;
+    private static final double RGB_VALUE = (double) 244/255;
 
     private List<Color> colors;
 
@@ -45,6 +54,10 @@ public class MultiplayerGameCtrl {
     private Scene ranking;
     private RankingCtrl rankingCtrl;
 
+    private boolean isAvailableDoublePoints = true;
+    private List<StackPane> jokers;
+    private List<StackPane> usedJokers;
+
     // TODO: add results and resultsCtrl
 
     /**
@@ -69,6 +82,9 @@ public class MultiplayerGameCtrl {
         this.server = server;
         this.user = (MultiplayerUser) mainCtrl.getUser();
         this.colors = new ArrayList<>();
+
+        this.jokers=new ArrayList<>();
+        this.usedJokers=new ArrayList<>();
 
         this.answerTimer = new Timer();
 
@@ -119,9 +135,9 @@ public class MultiplayerGameCtrl {
      * @param answeredQuestion the answered question to post
      */
     public void postAnswer(Question answeredQuestion) {
-        if(!mainCtrl.getIsAvailableDoublePoints()){
+        if(!getIsAvailableDoublePoints()){
             user.points += 2*answeredQuestion.calculatePoints();
-            mainCtrl.setIsAvailableDoublePoints(true);
+            setIsAvailableDoublePoints(true);
         }
         else{
             user.points += answeredQuestion.calculatePoints();
@@ -278,10 +294,64 @@ public class MultiplayerGameCtrl {
     }
 
     /**
+     * Returns the list of used jokers
+     * @return usedJokers
+     */
+    public List<StackPane> getUsedJokers() {
+        return usedJokers;
+    }
+
+    /**
      * Returns the current server url
      * @return the game server url
      */
     public String getServerUrl() {
         return serverUrl;
+    }
+
+    /**
+     * A getter that returns true/false whether the Double Points joker is available to use
+     * @return isAvailableDoublePoints, which shows whether the DP joker is used
+     */
+    public boolean getIsAvailableDoublePoints(){
+        return isAvailableDoublePoints;
+    }
+
+    /**
+     * Sets the isAvailableDoublePoints to either true or false
+     * @param available
+     */
+    public void setIsAvailableDoublePoints(boolean available){
+        isAvailableDoublePoints=available;
+    }
+
+    /**
+     * This method is called when a joker is clicked.
+     * It disables the joker for further use and shows an image when the button is clicked.
+     * @param joker
+     */
+    public void useJoker(StackPane joker){
+        joker.setBackground(new Background(
+                new BackgroundFill(Color.BURLYWOOD, CornerRadii.EMPTY, Insets.EMPTY)));
+        joker.setOpacity(OPACITY);
+        joker.setVisible(true);
+        setIsAvailableDoublePoints(false);
+        joker.setOnMouseClicked(null);
+        joker.setCursor(Cursor.DEFAULT);
+    }
+
+    /**
+     * Resets the disabled jokers for the next game.
+     * @param joker
+     */
+    public void resetJoker(StackPane joker){
+        joker.setOnMouseClicked(event -> {
+            useJoker(joker);
+        });
+        joker.setBackground(new Background(
+                new BackgroundFill(Color.color(RGB_VALUE, RGB_VALUE, RGB_VALUE), CornerRadii.EMPTY, Insets.EMPTY)));
+        joker.setOpacity(STANDARD_SIZE);
+        setIsAvailableDoublePoints(true);
+        joker.setCursor(Cursor.HAND);
     }
 }

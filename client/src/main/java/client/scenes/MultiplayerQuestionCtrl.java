@@ -10,7 +10,6 @@ import commons.models.ConsumptionQuestion;
 import commons.models.Question;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.Cursor;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -35,8 +34,6 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     private static final double MILLISECONDS_PER_SECONDS = 1000.0;
     private static final double CIRCLE_BORDER_SIZE = 1.7;
     private static final double STANDARD_SIZE = 1.0;
-    private static final double OPACITY = 0.5;
-    private static final double RGB_VALUE = (double) 244/255;
 
     private static final int POLLING_DELAY = 0;
     private static final int POLLING_INTERVAL = 500;
@@ -380,31 +377,18 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
 
     /**
      * This method is called when the double points joker is clicked.
-     * It disables the joker for further use and shows an image when the button is clicked.
+     * It gives double points for the current question if the answer is correct.
      */
     @FXML
     public void useDoublePoints(){
-        doublePoints.setBackground(new Background(
-                new BackgroundFill(Color.BURLYWOOD, CornerRadii.EMPTY, Insets.EMPTY)));
-        doublePoints.setOpacity(OPACITY);
-        x2image.setVisible(true);
-        mainCtrl.setIsAvailableDoublePoints(false);
-        doublePoints.setOnMouseClicked(null);
-        doublePoints.setCursor(Cursor.DEFAULT);
+        gameCtrl.useJoker(doublePoints);
     }
 
     /**
      * This method resets the double point jokers so that it can be used again when another game starts
      */
     public void resetDoublePoints(){
-        doublePoints.setOnMouseClicked(event -> {
-            useDoublePoints();
-        });
-        doublePoints.setBackground(new Background(
-                new BackgroundFill(Color.color(RGB_VALUE, RGB_VALUE, RGB_VALUE), CornerRadii.EMPTY, Insets.EMPTY)));
-        doublePoints.setOpacity(STANDARD_SIZE);
-        mainCtrl.setIsAvailableDoublePoints(true);
-        doublePoints.setCursor(Cursor.HAND);
+        gameCtrl.resetJoker(doublePoints);
     }
 
     /**

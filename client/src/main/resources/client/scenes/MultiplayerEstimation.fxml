@@ -129,7 +129,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </StackPane>
-                  <StackPane fx:id="disableIncorrect" prefHeight="150.0" prefWidth="271.0" style="-fx-border-color: black;" VBox.vgrow="ALWAYS">
+                  <StackPane fx:id="removeIncorrect" prefHeight="150.0" prefWidth="271.0" style="-fx-border-color: black;" VBox.vgrow="ALWAYS">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
