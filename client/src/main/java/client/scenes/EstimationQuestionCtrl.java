@@ -9,11 +9,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
+import java.io.IOException;
 import java.util.List;
 
 public class EstimationQuestionCtrl implements SceneController, QuestionNumController {
@@ -52,6 +54,9 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     @FXML
     private TextField answerField;
 
+    @FXML
+    private ImageView questionImg;
+
     /**
      * Creates a controller for the estimation question screen,
      * with the given server and main controller
@@ -76,6 +81,11 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
         currentScore.setText("Score: " + gameCtrl.getUser().points);
         currentQuestion = question;
         questionDescription.setText("How much energy in Wh does " + question.getActivity().title + " use?");
+        try {
+            questionImg.setImage(server.fetchImage(mainCtrl.getServerUrl(), currentQuestion.getImagePath()));
+        }
+        catch (IOException e){
+        }
     }
 
     /**
