@@ -399,7 +399,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
 
     @Override
     public void redirect() {
-        MultiplayerUser user = ( MultiplayerUser ) mainCtrl.getUser();
+        MultiplayerUser user = gameCtrl.getUser();
         if ( !answeredQuestion ) {
             user.unansweredQuestions++;
             if ( user.unansweredQuestions == KICK_AT_X_QUESTIONS ) {
