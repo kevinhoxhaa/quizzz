@@ -23,6 +23,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EstimationQuestionCtrl implements SceneController, QuestionNumController {

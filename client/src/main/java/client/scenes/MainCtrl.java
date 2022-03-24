@@ -647,6 +647,8 @@ public class MainCtrl {
                     try {
                         server.removeMultiplayerUser(serverUrl, user);
                         user = null;
+                        multiplayerEstimationCtrl.resetDoublePoints();
+                        multiplayerQuestionCtrl.resetDoublePoints();
                     } catch(WebApplicationException e) {
                         System.out.println("User to remove not found!");
                     } finally {
@@ -656,8 +658,6 @@ public class MainCtrl {
                     }
                 }
                 killThread();
-                multiplayerEstimationCtrl.resetDoublePoints();
-                multiplayerQuestionCtrl.resetDoublePoints();
                 showHome();
             }
         });
