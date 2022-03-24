@@ -34,8 +34,10 @@ import static commons.utils.CompareType.SMALLER;
 public class MultiplayerQuestionCtrl implements SceneController, QuestionNumController {
     private static final double MILLISECONDS_PER_SECONDS = 1000.0;
     private static final double CIRCLE_BORDER_SIZE = 1.7;
-    private static final double STANDARD_CIRCLE_BORDER_SIZE = 1.0;
+    private static final double STANDARD_SIZE = 1.0;
     private static final double OPACITY = 0.5;
+    private static final double RGB_VALUE = (double) 244/255;
+
     private static final int POLLING_DELAY = 0;
     private static final int POLLING_INTERVAL = 500;
 
@@ -388,6 +390,20 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     }
 
     /**
+     * This method resets the double point jokers so that it can be used again when another game starts
+     */
+    public void resetDoublePoints(){
+        doublePoints.setOnMouseClicked(event -> {
+            useDoublePoints();
+        });
+        doublePoints.setBackground(new Background(
+                new BackgroundFill(Color.color(RGB_VALUE, RGB_VALUE, RGB_VALUE), CornerRadii.EMPTY, Insets.EMPTY)));
+        doublePoints.setOpacity(STANDARD_SIZE);
+        mainCtrl.setIsAvailableDoublePoints(true);
+        doublePoints.setCursor(Cursor.HAND);
+    }
+
+    /**
      * Initiates the timer countdown and animation
      */
     public void startTimer() {
@@ -456,7 +472,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     public void resetHighlight() {
         for (int i = 0; i < circles.getChildren().size(); i++) {
             Circle circle = (Circle) circles.getChildren().get(i);
-            circle.setStrokeWidth(STANDARD_CIRCLE_BORDER_SIZE);
+            circle.setStrokeWidth(STANDARD_SIZE);
         }
     }
 
