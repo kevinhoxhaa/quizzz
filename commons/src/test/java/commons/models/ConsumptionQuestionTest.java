@@ -58,13 +58,13 @@ public class ConsumptionQuestionTest {
 
     @Test
     public void getUserAnswerReturnsUserAnswer() {
-        assertEquals(NEGATIVE, question.getUserAnswer().getAnswer());
+        assertEquals(NEGATIVE, question.getUserAnswer().generateAnswer());
     }
 
     @Test
     public void setUserAnswerSetsUserAnswer() {
         question.setUserAnswer(new Answer(POSITIVE * POSITIVE), POSITIVE);
-        assertEquals(POSITIVE * POSITIVE, question.getUserAnswer().getAnswer());
+        assertEquals(POSITIVE * POSITIVE, question.getUserAnswer().generateAnswer());
     }
 
     @Test
@@ -112,7 +112,7 @@ public class ConsumptionQuestionTest {
     public void getPointsShouldReturnPointsForAnswer() {
         question.setUserAnswer(new Answer(POSITIVE), 1);
         long expected = TOTAL;
-        assertEquals(expected, question.getPoints());
+        assertEquals(expected, question.calculatePoints());
     }
 
     @Test

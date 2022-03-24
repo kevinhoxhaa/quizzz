@@ -1,12 +1,12 @@
 package commons.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import commons.entities.Activity;
 import commons.utils.QuestionType;
 
 import java.util.Objects;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonTypeName(value = "estimation")
 public class EstimationQuestion extends Question {
     private static final long POINTS = 1000;
     private static final long TIME_FACTOR = 800;
@@ -32,6 +32,10 @@ public class EstimationQuestion extends Question {
         this.imagePath = activity.imagePath;
     }
 
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+    }
+
     /**
      * Returns the activity the question is based on
      * @return the activity the question is based on
@@ -50,12 +54,13 @@ public class EstimationQuestion extends Question {
      * @return the calculated points
      */
     @Override
-    public long getPoints() {
-        if (userAnswer == null || userAnswer.getAnswer() == null){
-            return 0;
+    public long calculatePoints() {
+        if(userAnswer.generateAnswer() == null || !hasCorrectUserAnswer()) {
+            return 0L;
         }
+
         long answerPoints = (POINTS - Math.round(
-                 (double) Math.abs(activity.consumption - ((long) userAnswer.getAnswer())) / activity.consumption
+                 (double) Math.abs(activity.consumption - ((long) userAnswer.generateAnswer())) / activity.consumption
         ) * POINTS);
         long timePoints = Math.round((TIME_FACTOR / (seconds + 1)));
         return answerPoints < 0 ? 0 : (answerPoints + timePoints);
@@ -69,10 +74,12 @@ public class EstimationQuestion extends Question {
      */
     @Override
     public boolean hasCorrectUserAnswer() {
-        if (userAnswer == null || userAnswer.getAnswer() == null) {
+        if (userAnswer == null || userAnswer.generateAnswer() == null) {
             return false;
         }
-        return Math.abs(activity.consumption - (Long) userAnswer.getAnswer()) < ERROR_MARGIN * activity.consumption;
+
+        return Math.abs(activity.consumption - (long) userAnswer.generateAnswer()) < ERROR_MARGIN
+                * activity.consumption;
     }
 
     /**

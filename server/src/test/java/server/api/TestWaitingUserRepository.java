@@ -15,11 +15,6 @@
  */
 package server.api;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
-
 import commons.entities.MultiplayerUser;
 import commons.entities.User;
 import org.springframework.data.domain.Example;
@@ -27,8 +22,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuery;
-
 import server.database.WaitingUserRepository;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class TestWaitingUserRepository implements WaitingUserRepository {
 
@@ -226,5 +226,10 @@ public class TestWaitingUserRepository implements WaitingUserRepository {
             }
         }
         return false;
+    }
+
+    @Override
+    public List<MultiplayerUser> findByGameIDIsNull() {
+        return users.stream().filter(u -> u.gameID == null).collect(Collectors.toList());
     }
 }

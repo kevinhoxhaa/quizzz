@@ -19,21 +19,22 @@ import commons.entities.MultiplayerUser;
 import commons.entities.Quote;
 import commons.entities.SoloUser;
 import commons.entities.User;
-import commons.models.ChoiceQuestion;
-import commons.models.ComparisonQuestion;
-import commons.models.ConsumptionQuestion;
-import commons.models.EstimationQuestion;
 import commons.models.Question;
 import commons.models.SoloGame;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
+import javafx.scene.image.Image;
 import org.glassfish.jersey.client.ClientConfig;
 
+import javax.imageio.ImageIO;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.Base64;
 import java.util.List;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -126,100 +127,12 @@ public class ServerUtils {
      * @return a question
      */
     public Question getQuestion(String serverUrl, int gameIndex, int questionIndex) {
-        String questionType = getQuestionType(serverUrl, gameIndex, questionIndex);
-
-        switch(questionType) {
-            case "CONSUMPTION":
-                return getConsumptionQuestion(serverUrl, gameIndex, questionIndex);
-            case "ESTIMATION":
-                return getEstimationQuestion(serverUrl, gameIndex, questionIndex);
-            case "CHOICE":
-                return getChoiceQuestion(serverUrl, gameIndex, questionIndex);
-            case "COMPARISON":
-                return getComparisonQuestion(serverUrl, gameIndex, questionIndex);
-            default:
-                return null;
-        }
-    }
-
-    /**
-     * A getter for the type of a given question
-     * @param serverUrl the server url
-     * @param gameIndex the game index
-     * @param questionIndex the index of the question inside the game
-     * @return a question
-     */
-    public String getQuestionType(String serverUrl, int gameIndex, int questionIndex) {
-        String path = String.format("/api/games/%d/questionType/%d", gameIndex, questionIndex);
+        String path = String.format("/api/games/%d/question/%d", gameIndex, questionIndex);
         return ClientBuilder.newClient(new ClientConfig())
                 .target(serverUrl).path(path)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .get(String.class);
-    }
-
-    /**
-     * A getter for a given consumption question
-     * @param serverUrl the server url
-     * @param gameIndex the game index
-     * @param questionIndex the index of the question inside the game
-     * @return a question
-     */
-    public ConsumptionQuestion getConsumptionQuestion(String serverUrl, int gameIndex, int questionIndex) {
-        String path = String.format("/api/games/%d/consumption/%d", gameIndex, questionIndex);
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(serverUrl).path(path)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(ConsumptionQuestion.class);
-    }
-
-    /**
-     * A getter for a given estimation question
-     * @param serverUrl the server url
-     * @param gameIndex the game index
-     * @param questionIndex the index of the question inside the game
-     * @return a question
-     */
-    public EstimationQuestion getEstimationQuestion(String serverUrl, int gameIndex, int questionIndex) {
-        String path = String.format("/api/games/%d/estimation/%d", gameIndex, questionIndex);
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(serverUrl).path(path)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(EstimationQuestion.class);
-    }
-
-    /**
-     * A getter for a given choice question
-     * @param serverUrl the server url
-     * @param gameIndex the game index
-     * @param questionIndex the index of the question inside the game
-     * @return a question
-     */
-    public ChoiceQuestion getChoiceQuestion(String serverUrl, int gameIndex, int questionIndex) {
-        String path = String.format("/api/games/%d/choice/%d", gameIndex, questionIndex);
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(serverUrl).path(path)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(ChoiceQuestion.class);
-    }
-
-    /**
-     * A getter for a given comparison question
-     * @param serverUrl the server url
-     * @param gameIndex the game index
-     * @param questionIndex the index of the question inside the game
-     * @return a question
-     */
-    public ComparisonQuestion getComparisonQuestion(String serverUrl, int gameIndex, int questionIndex) {
-        String path = String.format("/api/games/%d/comparison/%d", gameIndex, questionIndex);
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(serverUrl).path(path)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(ComparisonQuestion.class);
+                .get(Question.class);
     }
 
     /**
@@ -251,6 +164,22 @@ public class ServerUtils {
                 .delete(MultiplayerUser.class);
     }
 
+    public List<MultiplayerUser> answerQuestion(String serverUrl, int gameIndex,
+                                                long userId, int questionIndex, Question question) {
+        String path = String.format(
+                "api/games/%d/user/%d/question/%d",
+                gameIndex,
+                userId,
+                questionIndex
+        );
+
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path(path)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(question, APPLICATION_JSON), new GenericType<List<MultiplayerUser>>() {});
+    }
+
     /**
      * Returns a new (solo) game instance with the given number of questions
      * @param serverUrl the server url
@@ -277,5 +206,34 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(new GenericType<List<SoloUser>>() {});
+    }
+
+    public Image fetchImage(String serverUrl, String path) throws IOException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        try {
+            String fetched = ClientBuilder.newClient(new ClientConfig())
+                    .target(serverUrl).path("api/activities/image")
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .post(Entity.entity(path, APPLICATION_JSON), String.class);
+
+            String[] fetchedSplit = fetched.split(" ");
+
+            ImageIO.write(ImageIO.read(new ByteArrayInputStream(
+                            Base64.getDecoder().decode(fetchedSplit[0]))),
+                    fetchedSplit[1], bos);
+        }
+        catch(Exception e){
+            String defaultPathString = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
+
+            defaultPathString = defaultPathString.substring(
+                    "file:/".length(), defaultPathString.length() - "classes/java/main/".length())
+                    + "resources/main/client/images/lightning.jpg";
+
+            return new Image(defaultPathString);
+        }
+        byte[] buffer = bos.toByteArray();
+
+        return new Image(new ByteArrayInputStream(buffer));
     }
 }

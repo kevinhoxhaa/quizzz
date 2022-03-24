@@ -81,7 +81,7 @@ public class GameControllerTest {
     @Test
     public void startGameMovesUsers() {
         sut.startGame((int) NUMBER);
-        assertEquals(0, waitingUserRepo.count());
+        assertEquals(0, waitingUserRepo.findByGameIDIsNull().size());
         assertEquals(NUMBER, gameUserRepo.count());
     }
 
@@ -154,11 +154,11 @@ public class GameControllerTest {
     }
 
     @Test
-    public void postAnswerReturnsNoContentWhenNotEveryoneHasAnswered() {
+    public void postAnswerReturnsExpectationFailedIfNotAllUsersHaveAnswered() {
         sut.startGame((int) NUMBER);
         ResponseEntity<List<MultiplayerUser>> actual = (ResponseEntity<List<MultiplayerUser>>) sut.postAnswer(
                 0, 0, 1,
                 new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random));
-        assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
+        assertEquals(HttpStatus.EXPECTATION_FAILED, actual.getStatusCode());
     }
 }
