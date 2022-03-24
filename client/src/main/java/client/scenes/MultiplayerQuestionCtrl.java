@@ -372,6 +372,10 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
         }
     }
 
+    /**
+     * This method is called when the double points joker is clicked.
+     * It disables the joker for further use and shows an image when the button is clicked.
+     */
     @FXML
     public void useDoublePoints(){
         doublePoints.setBackground(new Background(

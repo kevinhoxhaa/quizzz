@@ -252,12 +252,12 @@
                            <children>
                               <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                  <children>
-                                    <ImageView fitHeight="42.0" fitWidth="65.0" layoutX="41.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="42.0" fitWidth="65.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../images/x2points.png" />
                                        </image>
                                     </ImageView>
-                                    <Text layoutX="111.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Double points">
+                                    <Text layoutX="111.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Double points" AnchorPane.leftAnchor="110.0" AnchorPane.rightAnchor="25.0">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
@@ -277,7 +277,10 @@
                               <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                            </VBox.margin>
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Disable incorrect answer" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Disable incorrect answer">
+                                 <font>
+                                    <Font size="17.0" />
+                                 </font></Text>
                            </children>
                         </StackPane>
                         <StackPane fx:id="reduceTime" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;" VBox.vgrow="ALWAYS">
@@ -285,7 +288,10 @@
                               <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                            </VBox.margin>
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Reduce time for other players" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Reduce time for other players">
+                                 <font>
+                                    <Font size="17.0" />
+                                 </font></Text>
                            </children>
                         </StackPane>
                      </children>
