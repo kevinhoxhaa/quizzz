@@ -109,6 +109,7 @@ public class MainCtrl {
     private List<Color> colors;
     private Thread timerThread;
     private int answerCount = 0;
+    private boolean isAvailableDoublePoints = true;
 
     private long soloScore = 0;
     private int currentQuestion = 0;
@@ -410,6 +411,21 @@ public class MainCtrl {
 
         primaryStage.setScene(multiplayerEstimation);
         multiplayerEstimationCtrl.startTimer();
+    }
+
+    /**
+     * A getter that returns true/false whether the Double Points joker is available to use
+     * @return isAvailableDoublePoints, which shows whether the DP joker is used
+     */
+    public boolean getIsAvailableDoublePoints(){
+        return isAvailableDoublePoints;
+    }
+
+    /**
+     * Sets the isAvailableDoublePoints to either true or false
+     */
+    public void setIsAvailableDoublePoints(boolean available){
+        isAvailableDoublePoints=available;
     }
 
     /**

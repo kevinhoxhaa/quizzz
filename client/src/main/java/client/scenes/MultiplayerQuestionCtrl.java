@@ -10,6 +10,7 @@ import commons.models.ConsumptionQuestion;
 import commons.models.Question;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Cursor;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -44,6 +45,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     private Question currentQuestion;
 
     private double startTime;
+
 
     @FXML
     private StackPane answerTop;
@@ -364,6 +366,16 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
                         new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
             }
         }
+    }
+
+    @FXML
+    public void useDoublePoints(){
+        doublePoints.setBackground(new Background(
+                new BackgroundFill(Color.BURLYWOOD, CornerRadii.EMPTY, Insets.EMPTY)));
+        doublePoints.setOpacity(0.5);
+        mainCtrl.setIsAvailableDoublePoints(false);
+        doublePoints.setOnMouseClicked(null);
+        doublePoints.setCursor(Cursor.DEFAULT);
     }
 
     /**

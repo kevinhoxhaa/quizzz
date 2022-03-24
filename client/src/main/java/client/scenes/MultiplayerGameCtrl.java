@@ -111,12 +111,21 @@ public class MultiplayerGameCtrl {
     }
 
     /**
-     * Posts an answered question to the server, updates the
+     * - Posts an answered question to the server, updates the
      * answer colours and redirects to the answer screen
+     * - Gives double points if the joker isn't available
+     * - Sets the joker as "available" after it is used,
+     * even though it won't be possible to use it again
      * @param answeredQuestion the answered question to post
      */
     public void postAnswer(Question answeredQuestion) {
-        user.points += answeredQuestion.calculatePoints();
+        if(!mainCtrl.getIsAvailableDoublePoints()){
+            user.points += 2*answeredQuestion.calculatePoints();
+            mainCtrl.setIsAvailableDoublePoints(true);
+        }
+        else{
+            user.points += answeredQuestion.calculatePoints();
+        }
         answerTimer = new Timer();
         answerTimer.schedule(
                 new TimerTask() {
