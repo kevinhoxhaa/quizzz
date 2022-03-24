@@ -9,6 +9,7 @@ import commons.models.ChoiceQuestion;
 import commons.models.ComparisonQuestion;
 import commons.models.ConsumptionQuestion;
 import commons.models.Question;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.ProgressIndicator;
@@ -402,7 +403,14 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
         if ( !answeredQuestion ) {
             user.unansweredQuestions++;
             if ( user.unansweredQuestions == KICK_AT_X_QUESTIONS ) {
-                onQuit();
+                try {
+                    server.removeMultiplayerUser(server.getURL(), user);
+                    user = null;
+                } catch(WebApplicationException e) {
+                    System.out.println("User to remove not found!");
+                }
+                mainCtrl.killThread();
+                mainCtrl.showHome();
             }
         } else {
             user.unansweredQuestions = 0;
