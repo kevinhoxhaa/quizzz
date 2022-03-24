@@ -2,12 +2,14 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.entities.MultiplayerUser;
+import commons.models.Emoji;
 import commons.models.EstimationQuestion;
 import commons.models.Question;
 import commons.utils.QuestionType;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.util.Pair;
 
@@ -92,13 +94,25 @@ public class MultiplayerGameCtrl {
         this.ranking = ranking.getValue();
     }
 
+    public MultiplayerGameCtrl(){
+
+    }
+
     /**
      * Polls the first question and initialises
      * the game loop
+     * Initiates the websocket connection with the client
+     * for receiving emojis
      */
     public void startGame() {
-         Question firstQuestion = fetchQuestion();
-         showQuestion(firstQuestion);
+        server.connect(serverUrl);
+
+        registerForEmojis(estimationQuestionCtrl);
+        registerForEmojis(answerCtrl);
+        registerForEmojis(mcQuestionCtrl);
+
+        Question firstQuestion = fetchQuestion();
+        showQuestion(firstQuestion);
     }
 
     /**
@@ -274,5 +288,35 @@ public class MultiplayerGameCtrl {
      */
     public String getServerUrl() {
         return serverUrl;
+    }
+
+    /**
+     * Returns the game index
+     * @return the game index
+     */
+    public int getGameIndex() {
+        return gameIndex;
+    }
+
+    /**
+     * Register for emojis in a particular controller
+     * @param ctrl the controller to register for emojis to
+     */
+    public void registerForEmojis(EmojiController ctrl) {
+        server.registerForMessages("/topic/emoji/" + gameIndex, Emoji.class, ctrl::displayEmoji);
+    }
+
+    /**
+     * Send an emoji to the server
+     * @param e the emoji image to send
+     */
+    public void sendEmoji(ImageView e) {
+        String[] imageComponents = e.getImage().getUrl().split("/");
+        String imageName = imageComponents[imageComponents.length - 1];
+        String username = user.username;
+        server.send(
+                "/app/emoji/" + gameIndex,
+                new Emoji(imageName, username)
+        );
     }
 }

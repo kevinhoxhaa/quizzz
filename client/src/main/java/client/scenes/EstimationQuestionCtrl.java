@@ -3,12 +3,17 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.models.Answer;
+import commons.models.Emoji;
 import commons.models.EstimationQuestion;
 import commons.models.Question;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -16,7 +21,7 @@ import javafx.scene.text.Text;
 
 import java.util.List;
 
-public class EstimationQuestionCtrl implements SceneController, QuestionNumController {
+public class EstimationQuestionCtrl implements SceneController, QuestionNumController, EmojiController {
 
     private static final double CIRCLE_BORDER_SIZE = 1.7;
     private static final double STANDARD_CIRCLE_BORDER_SIZE = 1.0;
@@ -52,6 +57,15 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     @FXML
     private TextField answerField;
 
+    @FXML
+    private GridPane emojiPane;
+
+    @FXML
+    private ImageView emojiImage;
+
+    @FXML
+    private Text emojiText;
+
     /**
      * Creates a controller for the estimation question screen,
      * with the given server and main controller
@@ -66,6 +80,44 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     }
 
     /**
+     * Send emojis to the server on emoji click
+     */
+    public void enableEmojis() {
+        emojiPane.getChildren().forEach(n -> {
+            if(n instanceof ImageView) {
+                ImageView e = (ImageView) n;
+                e.setOnMouseClicked(event -> gameCtrl.sendEmoji(e));
+                e.setCursor(Cursor.HAND);
+            }
+        });
+    }
+    /**
+     * Disable emoji clicks
+     */
+    public void disableEmojis() {
+        emojiPane.getChildren().forEach(n -> {
+            if(n instanceof ImageView) {
+                ImageView e = (ImageView) n;
+                e.setOnMouseClicked(null);
+            }
+        });
+    }
+
+    /**
+     * Visualise emoji on the screen
+     * @param emoji the emoji to visualise
+     */
+    @Override
+    public void displayEmoji(Emoji emoji) {
+        String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
+        emojiPath = emojiPath.substring(
+                "file:/".length(), emojiPath.length() - "classes/java/main/".length())
+                + "resources/main/client/images/" + emoji.getImageName();
+        emojiImage.setImage(new Image(emojiPath));
+        emojiText.setText(emoji.getUsername());
+    }
+
+    /**
      * Initiates the timer countdown and animation
      */
     public void startTimer() {
@@ -73,6 +125,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     }
 
     public void setup(EstimationQuestion question) {
+        enableEmojis();
         currentScore.setText("Score: " + gameCtrl.getUser().points);
         currentQuestion = question;
         questionDescription.setText("How much energy in Wh does " + question.getActivity().title + " use?");
@@ -118,6 +171,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
             System.out.println("Enter a number!");
         }
 
+        disableEmojis();
         answerField.setText("");
         yourAnswer.setText("Your answer: ");
         gameCtrl.postAnswer(currentQuestion);

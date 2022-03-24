@@ -15,13 +15,25 @@
  */
 package client;
 
+import client.scenes.AddQuoteCtrl;
+import client.scenes.EstimationQuestionCtrl;
+import client.scenes.HomeCtrl;
+import client.scenes.MainCtrl;
+import client.scenes.MultiplayerAnswerCtrl;
+import client.scenes.MultiplayerGameCtrl;
+import client.scenes.MultiplayerQuestionCtrl;
+import client.scenes.MultiplayerResultsCtrl;
+import client.scenes.QuoteOverviewCtrl;
+import client.scenes.RankingCtrl;
+import client.scenes.SoloAnswerCtrl;
+import client.scenes.SoloEstimationQuestionCtrl;
+import client.scenes.SoloQuestionCtrl;
+import client.scenes.SoloResultsCtrl;
+import client.scenes.WaitingCtrl;
+import client.utils.ServerUtils;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
-
-import client.scenes.AddQuoteCtrl;
-import client.scenes.MainCtrl;
-import client.scenes.QuoteOverviewCtrl;
 
 public class MyModule implements Module {
 
@@ -30,5 +42,18 @@ public class MyModule implements Module {
         binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
         binder.bind(AddQuoteCtrl.class).in(Scopes.SINGLETON);
         binder.bind(QuoteOverviewCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(EstimationQuestionCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(HomeCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(MultiplayerAnswerCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(MultiplayerGameCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(MultiplayerQuestionCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(MultiplayerResultsCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(RankingCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(SoloAnswerCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(SoloQuestionCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(SoloEstimationQuestionCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(SoloResultsCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(WaitingCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(ServerUtils.class).in(Scopes.SINGLETON);
     }
 }
