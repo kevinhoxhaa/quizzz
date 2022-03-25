@@ -19,7 +19,7 @@ public class ChoiceQuestion extends Question {
     private Activity answer;
 
     @SuppressWarnings("unused")
-    private ChoiceQuestion() {
+    public ChoiceQuestion() {
         super(QuestionType.CHOICE);
         // for object mapper
     }
@@ -52,11 +52,20 @@ public class ChoiceQuestion extends Question {
         }
     }
 
+    /**
+     * sets the answer
+     * @param answer
+     */
+
     public void setAnswer(Activity answer) {
         this.answer = answer;
     }
 
-    public List<Activity> setIncorrectActivities(List<Activity> activities){
+    /**
+     * gets the incorrect Activities in a list
+     * @return list of Activity
+     */
+    public List<Activity> getIncorrectActivities(){
         ArrayList<Activity> incorrectActivities = new ArrayList<>();
         for(Activity a: activities){
             if(!a.equals(answer)){

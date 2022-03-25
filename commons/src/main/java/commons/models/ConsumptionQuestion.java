@@ -23,7 +23,7 @@ public class ConsumptionQuestion extends Question {
     private Long secondAlternative;
 
     @SuppressWarnings("unused")
-    private ConsumptionQuestion() {
+    public ConsumptionQuestion() {
         super(QuestionType.CONSUMPTION);
         this.random = new Random();
         // for object mapper
@@ -115,7 +115,7 @@ public class ConsumptionQuestion extends Question {
 
     /**
      * Returns the list of generated incorrect answers
-     * @return the alternative (incorrect) answers
+     * @return a List of Long values of the incorrect answers
      */
     public List<Long> getIncorrectAnswers(){
         ArrayList<Long> incorrectAnswers = new ArrayList<>();

@@ -8,6 +8,7 @@ import commons.models.ChoiceQuestion;
 import commons.models.ComparisonQuestion;
 import commons.models.ConsumptionQuestion;
 import commons.models.Question;
+import commons.utils.CompareType;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.ProgressIndicator;
@@ -42,6 +43,8 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private final ConsumptionQuestion consumptionQuestion;
+    private final ComparisonQuestion comparisonQuestion;
+    private final ChoiceQuestion choiceQuestion;
 
     private MultiplayerGameCtrl gameCtrl;
     private Question currentQuestion;
@@ -110,16 +113,21 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      * Creates a controller for the multiplayer question screen, with the given server and main controller.
      * Creates the list answerButtons for iterating through all of these.
      *
+     * @param comparisonQuestion
      * @param consumptionQuestion
+     * @param choiceQuestion
      * @param server
      * @param mainCtrl
      */
     @Inject
 
-    public MultiplayerQuestionCtrl(ServerUtils server, MainCtrl mainCtrl, ConsumptionQuestion consumptionQuestion) {
+    public MultiplayerQuestionCtrl(ServerUtils server, MainCtrl mainCtrl, ConsumptionQuestion consumptionQuestion,
+                                   ComparisonQuestion comparisonQuestion, ChoiceQuestion choiceQuestion) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.consumptionQuestion = consumptionQuestion;
+        this.comparisonQuestion = comparisonQuestion;
+        this.choiceQuestion = choiceQuestion;
     }
 
     /**
@@ -475,22 +483,72 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
 
     /**
      * This method is called when the remove incorrect answer joker is clicked.
-     * It removes one of the incorrect answers in multiple choice questions.
+     * It removes a randomly selected incorrect answer from the multiple choice questions.
+     * Disables the selected incorrect answer's stackPane.
      */
     public void useRemoveIncorrect(){
         gameCtrl.setIsActiveRemoveIncorrect(true);
         gameCtrl.useJoker(removeIncorrect, minus1image);
         Question question = getCurrentQuestion();
         switch (question.getType()) {
-            case CONSUMPTION:
+            case CONSUMPTION: {
                 List<Long> incorrectAnswers = consumptionQuestion.getIncorrectAnswers();
+                if (answerTopAnswer.getLongAnswer() == incorrectAnswers.get(0)) {
+                    answerTop.setDisable(true);
+                    answerTop.setBackground(new Background(
+                            new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+                }
+                if (answerBotAnswer.getLongAnswer() == incorrectAnswers.get(0)) {
+                    answerBot.setDisable(true);
+                    answerBot.setBackground(new Background(
+                            new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+                }
+                if (answerMidAnswer.getLongAnswer() == incorrectAnswers.get(0)) {
+                    answerMid.setDisable(true);
+                    answerMid.setBackground(new Background(
+                            new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+                }
                 break;
-            case COMPARISON:
-                setupComparisonQuestion(question);
+            }
+            case COMPARISON: {
+                List<CompareType> incorrectAnswers = comparisonQuestion.incorrectAnswers();
+                if(answerTopAnswer.getCompareType() == incorrectAnswers.get(0)){
+                    answerTop.setDisable(true);
+                    answerTop.setBackground(new Background(
+                            new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+                }
+                if(answerBotAnswer.getCompareType() == incorrectAnswers.get(0)){
+                    answerBot.setDisable(true);
+                    answerBot.setBackground(new Background(
+                            new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+                }
+                if(answerMidAnswer.getCompareType() == incorrectAnswers.get(0)){
+                    answerMid.setDisable(true);
+                    answerMid.setBackground(new Background(
+                            new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+                }
                 break;
-            case CHOICE:
-                setupChoiceQuestion(question);
+            }
+            case CHOICE: {
+                List<Activity> incorrectAnswers = choiceQuestion.getIncorrectActivities();
+                if(answerTopAnswer.getActivity() == incorrectAnswers.get(0)){
+                    answerTop.setDisable(true);
+                    answerTop.setBackground(new Background(
+                            new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+                }
+                if(answerBotAnswer.getActivity() == incorrectAnswers.get(0)){
+                    answerBot.setDisable(true);
+                    answerBot.setBackground(new Background(
+                            new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+                }
+                if(answerMidAnswer.getActivity() == incorrectAnswers.get(0)){
+                    answerMid.setDisable(true);
+                    answerMid.setBackground(new Background(
+                            new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+                }
+
                 break;
+            }
         }
 
     }

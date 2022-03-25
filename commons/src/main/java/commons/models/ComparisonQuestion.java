@@ -21,7 +21,7 @@ public class ComparisonQuestion extends Question {
 
 
     @SuppressWarnings("unused")
-    private ComparisonQuestion() {
+    public ComparisonQuestion() {
         super(QuestionType.COMPARISON);
         // for object mapper
     }
@@ -87,6 +87,11 @@ public class ComparisonQuestion extends Question {
                         && firstActivity.consumption > secondActivity.consumption)
         );
     }
+
+    /**
+     * A method that returns the incorrect answers for the question in a List of CompareType entities
+     * @return a list of CompareType entities
+     */
 
     public List<CompareType> incorrectAnswers(){
         ArrayList<CompareType> incorrectAnswers = new ArrayList<>();
