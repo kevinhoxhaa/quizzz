@@ -379,17 +379,17 @@
             </Text>
             <Pane layoutX="216.0" prefHeight="52.0" prefWidth="228.0">
                <children>
-                  <ImageView fitHeight="52.0" fitWidth="62.0" layoutX="-6.0" pickOnBounds="true" preserveRatio="true" visible="false" fx:id="x2image">
+                  <ImageView fx:id="doublePointsImage" fitHeight="52.0" fitWidth="62.0" layoutX="-6.0" pickOnBounds="true" preserveRatio="true" visible="false">
                      <image>
                         <Image url="@../images/x2points.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="minus1image" fitHeight="52.0" fitWidth="62.0" layoutX="78.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                  <ImageView fx:id="removeIncorrectImage" fitHeight="52.0" fitWidth="62.0" layoutX="78.0" pickOnBounds="true" preserveRatio="true" visible="false">
                      <image>
                         <Image url="@../images/removechoice.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="shortenTimeImage" fitHeight="70.0" fitWidth="70.0" layoutX="152.0" layoutY="-11.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                  <ImageView fx:id="reduceTimeImage" fitHeight="70.0" fitWidth="70.0" layoutX="152.0" layoutY="-11.0" pickOnBounds="true" preserveRatio="true" visible="false">
                      <image>
                         <Image url="@../images/half-time.png" />
                      </image>

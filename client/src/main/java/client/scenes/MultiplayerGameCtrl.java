@@ -113,8 +113,11 @@ public class MultiplayerGameCtrl {
     /**
      * Polls the first question and initialises
      * the game loop
+     * Resets the jokers
      */
     public void startGame() {
+         resetAllJokers();
+
          Question firstQuestion = fetchQuestion();
          showQuestion(firstQuestion);
     }
@@ -351,13 +354,22 @@ public class MultiplayerGameCtrl {
     }
 
     /**
-     * Resets the disabled jokers for the next game.
+     * Enables the disabled jokers for the next game.
      * @param joker
      */
-    public void resetJoker(StackPane joker){
+    public void enableJoker(StackPane joker){
         joker.setBackground(new Background(
                 new BackgroundFill(Color.color(RGB_VALUE, RGB_VALUE, RGB_VALUE), CornerRadii.EMPTY, Insets.EMPTY)));
         joker.setOpacity(STANDARD_SIZE);
         joker.setCursor(Cursor.HAND);
+    }
+
+    /**
+     * Resets all jokers at the start of the game, so they can be used again.
+     */
+    public void resetAllJokers(){
+        mcQuestionCtrl.resetDoublePoints();
+        estimationQuestionCtrl.resetDoublePoints();
+        //TODO: Reset all the other jokers
     }
 }

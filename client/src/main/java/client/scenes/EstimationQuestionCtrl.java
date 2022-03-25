@@ -73,13 +73,13 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     private StackPane reduceTime;
 
     @FXML
-    private ImageView x2image;
+    private ImageView doublePointsImage;
 
     @FXML
-    private ImageView minus1image;
+    private ImageView removeIncorrectImage;
 
     @FXML
-    private ImageView shortenTimeImage;
+    private ImageView reduceTimeImage;
 
     @FXML
     private ImageView questionImg;
@@ -120,7 +120,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
         currentQuestion = question;
         questionDescription.setText("How much energy in Wh does " + question.getActivity().title + " use?");
 
-        x2image.setVisible(false);
+        doublePointsImage.setVisible(false);
         try {
             questionImg.setImage(server.fetchImage(mainCtrl.getServerUrl(), currentQuestion.getImagePath()));
         }
@@ -194,7 +194,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     @FXML
     public void useDoublePoints(){
         gameCtrl.setIsActiveDoublePoints(true);
-        gameCtrl.useJoker(doublePoints,x2image);
+        gameCtrl.useJoker(doublePoints,doublePointsImage);
     }
 
     /**
@@ -202,7 +202,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
      */
     public void resetDoublePoints(){
         doublePoints.setOnMouseClicked(event -> useDoublePoints());
-        gameCtrl.resetJoker(doublePoints);
+        gameCtrl.enableJoker(doublePoints);
     }
 
     /**
