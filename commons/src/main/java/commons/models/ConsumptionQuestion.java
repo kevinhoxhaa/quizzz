@@ -19,6 +19,9 @@ public class ConsumptionQuestion extends Question {
     private List<Long> answers;
     private Random random;
 
+    private Long firstAlternative;
+    private Long secondAlternative;
+
     @SuppressWarnings("unused")
     private ConsumptionQuestion() {
         super(QuestionType.CONSUMPTION);
@@ -61,10 +64,13 @@ public class ConsumptionQuestion extends Question {
         loadAnswers(activity.consumption);
     }
 
+
     /**
      * Returns a list of two numbers which are a little
      * greater or smaller than the correct answer, in order
      * to confuse the user
+     * Also returns a list of incorrect answers for the remove
+     * incorrect answer joker
      * Note: ignoring checkstyle because of too many
      * magic numbers
      * @param correctAnswer the correct answer
@@ -90,6 +96,8 @@ public class ConsumptionQuestion extends Question {
         answers.add(firstAlternative);
         answers.add(secondAlternative);
         Collections.shuffle(answers);
+        this.firstAlternative = firstAlternative;
+        this.secondAlternative = secondAlternative;
     }
     // CHECKSTYLE:ON
 
@@ -105,6 +113,17 @@ public class ConsumptionQuestion extends Question {
         return answers;
     }
 
+    /**
+     * Returns the list of generated incorrect answers
+     * @return the alternative (incorrect) answers
+     */
+    public List<Long> getIncorrectAnswers(){
+        ArrayList<Long> incorrectAnswers = new ArrayList<>();
+        incorrectAnswers.add(firstAlternative);
+        incorrectAnswers.add(secondAlternative);
+        Collections.shuffle(incorrectAnswers);
+        return incorrectAnswers;
+    }
     /**
      * Calculates the points based on whether
      * the user's answer is correct and the time

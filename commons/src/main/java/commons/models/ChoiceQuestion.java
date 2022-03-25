@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import commons.entities.Activity;
 import commons.utils.QuestionType;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -52,6 +54,17 @@ public class ChoiceQuestion extends Question {
 
     public void setAnswer(Activity answer) {
         this.answer = answer;
+    }
+
+    public List<Activity> setIncorrectActivities(List<Activity> activities){
+        ArrayList<Activity> incorrectActivities = new ArrayList<>();
+        for(Activity a: activities){
+            if(!a.equals(answer)){
+                incorrectActivities.add(a);
+            }
+        }
+        Collections.shuffle(incorrectActivities);
+        return incorrectActivities;
     }
 
     /**

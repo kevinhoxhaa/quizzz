@@ -41,11 +41,15 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private final ConsumptionQuestion consumptionQuestion;
 
     private MultiplayerGameCtrl gameCtrl;
     private Question currentQuestion;
 
     private double startTime;
+
+    private boolean isAvailableRemoveIncorrect = true;
+    private boolean isActiveRemoveIncorrect;
 
 
     @FXML
@@ -106,14 +110,16 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      * Creates a controller for the multiplayer question screen, with the given server and main controller.
      * Creates the list answerButtons for iterating through all of these.
      *
+     * @param consumptionQuestion
      * @param server
      * @param mainCtrl
      */
     @Inject
 
-    public MultiplayerQuestionCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public MultiplayerQuestionCtrl(ServerUtils server, MainCtrl mainCtrl, ConsumptionQuestion consumptionQuestion) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        this.consumptionQuestion = consumptionQuestion;
     }
 
     /**
@@ -468,6 +474,38 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     }
 
     /**
+     * This method is called when the remove incorrect answer joker is clicked.
+     * It removes one of the incorrect answers in multiple choice questions.
+     */
+    public void useRemoveIncorrect(){
+        gameCtrl.setIsActiveRemoveIncorrect(true);
+        gameCtrl.useJoker(removeIncorrect, minus1image);
+        Question question = getCurrentQuestion();
+        switch (question.getType()) {
+            case CONSUMPTION:
+                List<Long> incorrectAnswers = consumptionQuestion.getIncorrectAnswers();
+                break;
+            case COMPARISON:
+                setupComparisonQuestion(question);
+                break;
+            case CHOICE:
+                setupChoiceQuestion(question);
+                break;
+        }
+
+    }
+
+    /**
+     * This method resets the remove incorrect answer jokers so that it can be used when
+     * another game starts.
+     */
+
+    public void resetRemoveIncorrect(){
+        removeIncorrect.setOnMouseClicked((event -> useRemoveIncorrect()));
+        gameCtrl.resetJoker(removeIncorrect);
+    }
+
+    /**
      * Initiates the timer countdown and animation
      */
     public void startTimer() {
@@ -519,6 +557,10 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      */
     public Text getQuestionNum() {
         return questionNum;
+    }
+
+    public Question getCurrentQuestion(){
+        return currentQuestion;
     }
 
     /**

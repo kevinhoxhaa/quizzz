@@ -5,6 +5,9 @@ import commons.entities.Activity;
 import commons.utils.CompareType;
 import commons.utils.QuestionType;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 @JsonTypeName(value = "comparison")
@@ -15,6 +18,7 @@ public class ComparisonQuestion extends Question {
 
     private Activity firstActivity;
     private Activity secondActivity;
+
 
     @SuppressWarnings("unused")
     private ComparisonQuestion() {
@@ -82,6 +86,21 @@ public class ComparisonQuestion extends Question {
                 || (userAnswer.generateAnswer().equals(CompareType.LARGER)
                         && firstActivity.consumption > secondActivity.consumption)
         );
+    }
+
+    public List<CompareType> incorrectAnswers(){
+        ArrayList<CompareType> incorrectAnswers = new ArrayList<>();
+        if(!(firstActivity.consumption == secondActivity.consumption)){
+            incorrectAnswers.add(CompareType.EQUAL);
+        }
+        if(!(firstActivity.consumption < secondActivity.consumption)){
+            incorrectAnswers.add(CompareType.SMALLER);
+        }
+        if(!(firstActivity.consumption > secondActivity.consumption)){
+            incorrectAnswers.add(CompareType.LARGER);
+        }
+        Collections.shuffle(incorrectAnswers);
+        return incorrectAnswers;
     }
 
     /**
