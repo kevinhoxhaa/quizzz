@@ -226,15 +226,12 @@ public class MainCtrl {
         incrementStreak();
 
         if(streak<X2){
-            System.out.println(answeredQuestion.calculatePoints());
-            System.out.println(answeredQuestion.calculatePoints()^((streak+X1)/X2));
-            user.incrementScore((long) Math.pow(answeredQuestion.calculatePoints() +
-                    answeredQuestion.calculatePoints(),(float)((streak+X1)/X2)));
+            user.incrementScore(answeredQuestion.calculatePoints() +
+                    Math.round(Math.pow((double) answeredQuestion.calculatePoints(),((double)(streak+X1)/X2))));
         }
         else{
-            System.out.println(answeredQuestion.calculatePoints()^((streak+X1)/X2));
             user.incrementScore(answeredQuestion.calculatePoints() +
-                    answeredQuestion.calculatePoints() ^ ((streak+X3)/X4));
+                    Math.round(Math.pow((double) answeredQuestion.calculatePoints(),((double)(streak+X3)/X4))));
         }
     }
 
