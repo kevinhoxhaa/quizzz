@@ -44,38 +44,6 @@ public class Game {
     }
 
     /**
-     * Adds a user to the list of users that want to have a rematch.
-     * @param userId The user ID that should be added to the list of users that want to have a rematch.
-     */
-    public void addRestartUserId(Long userId) {
-        this.restartUserIds.add(userId);
-    }
-
-    /**
-     * Deletes a user from the list of users that want to have a rematch.
-     * @param userId The user ID that should be removed from the list of users that want to have a rematch.
-     */
-    public void deleteRestartUserId(Long userId) {
-        this.restartUserIds.remove(userId);
-    }
-
-    /**
-     * Adds a user to the list of users that are currently in the game.
-     * @param userId The user ID that should be added to the list of users that are currently in the game.
-     */
-    public void addUserId(Long userId) {
-        this.userIds.add(userId);
-    }
-
-    /**
-     * Deletes a user from the list of users that are currently in the game.
-     * @param userId The user ID that should be removed from the list of users that are currently in the game.
-     */
-    public void deleteUserId(Long userId) {
-        this.userIds.remove(userId);
-    }
-
-    /**
      * A setter for the questions
      * @param questions the list of questions
      */

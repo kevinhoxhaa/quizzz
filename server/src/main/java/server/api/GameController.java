@@ -232,7 +232,7 @@ public class GameController {
             return ResponseEntity.badRequest().build();
         }
 
-        game.addRestartUserId(userId);
+        game.getRestartUserIds().add(userId);
         return ResponseEntity.ok(game.getRestartUserIds());
     }
 
@@ -251,7 +251,7 @@ public class GameController {
             return ResponseEntity.badRequest().build();
         }
 
-        game.deleteUserId(userId);
+        game.getUserIds().remove(userId);
         return ResponseEntity.ok(game.getUserIds());
     }
 
@@ -270,7 +270,7 @@ public class GameController {
             return ResponseEntity.badRequest().build();
         }
 
-        game.deleteRestartUserId(userId);
+        game.getRestartUserIds().remove(userId);
         return ResponseEntity.ok(game.getRestartUserIds());
     }
 
@@ -316,7 +316,7 @@ public class GameController {
             return ResponseEntity.ok().build();
         }
 
-        game.deleteRestartUserId(userId);
+        game.getRestartUserIds().remove(userId);
 
         if(!isRestarted) {
             isRestarted = true;
