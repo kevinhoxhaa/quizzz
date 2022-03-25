@@ -76,6 +76,13 @@ public class ConsumptionQuestion extends Question {
         long firstAlternative;
         long secondAlternative;
 
+        long coefficient = 1L;
+
+        while(correctAnswer % 10 == 0){
+            correctAnswer = correctAnswer / 10;
+            coefficient *= 10;
+        }
+
         do {
              firstAlternative = (long) (correctAnswer +
                     (random.nextDouble() < 0.5 ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
@@ -86,9 +93,9 @@ public class ConsumptionQuestion extends Question {
                     (random.nextDouble() < 0.5 ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
         } while (correctAnswer == secondAlternative || firstAlternative == secondAlternative);
 
-        answers.add(correctAnswer);
-        answers.add(firstAlternative);
-        answers.add(secondAlternative);
+        answers.add(correctAnswer * coefficient);
+        answers.add(firstAlternative * coefficient);
+        answers.add(secondAlternative * coefficient);
         Collections.shuffle(answers);
     }
     // CHECKSTYLE:ON
