@@ -421,8 +421,8 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     }
 
     /**
-     * A general method for setting an answer button's background color upon the cursor enters it,
-     * according to whether it is selected.
+     * A general method for setting a joker button's background color upon the cursor enters it,
+     * according to whether it is already used.
      *
      * @param jokerBtn The joker button to be recolored.
      */
@@ -434,8 +434,8 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     }
 
     /**
-     * The method called upon loading the question scene, and when the cursor leaves either one of the answer buttons.
-     * Resets all answer boxes' background color according to whether they are selected.
+     * The method called upon loading the question scene, and when the cursor leaves either one of the joker buttons.
+     * Resets all joker buttons' background color according to whether they are already used.
      */
     @FXML
     public void resetJokerColors() {
