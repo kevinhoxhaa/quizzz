@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.entities.Activity;
+import commons.entities.User;
 import commons.models.Answer;
 import commons.models.ChoiceQuestion;
 import commons.models.ComparisonQuestion;
@@ -499,6 +500,15 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
                 + "resources/main/client/images/" + emoji.getImageName();
         emojiImage.setImage(new Image(emojiPath));
         emojiText.setText(emoji.getUsername());
+    }
+
+    /**
+     * Upon using the halfTimeJoker, the time left on the current question will be halfed
+     *
+     */
+
+    public void halfTimeJoker () {
+        mainCtrl.halfTime();
     }
 
     /**

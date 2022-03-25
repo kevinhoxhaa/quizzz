@@ -108,6 +108,7 @@ public class MainCtrl {
     private int gameIndex;
     private List<Color> colors;
     private Thread timerThread;
+    private double countdown;
     private int answerCount = 0;
 
     private long soloScore = 0;
@@ -176,6 +177,8 @@ public class MainCtrl {
 
         this.multiplayerResultsCtrl = multiplayerResults.getKey();
         this.multiplayerResults = new Scene(multiplayerResults.getValue());
+
+        countdown = START_TIME;
 
         showHome();
         primaryStage.show();
@@ -507,7 +510,7 @@ public class MainCtrl {
             timerThread.interrupt();
         }
         timerThread = new Thread(() -> {
-            double countdown = START_TIME;
+            countdown = START_TIME;
             while (countdown >= 0.0) {
                 try {
                     double finalCountdown = countdown;
@@ -535,6 +538,15 @@ public class MainCtrl {
                     });
         });
         timerThread.start();
+    }
+
+    /**
+     * Halves the remaining timer for the user.
+     *
+     */
+
+    public void halfTime () {
+        countdown = countdown / 2;
     }
 
     /**
