@@ -266,7 +266,7 @@ public class GameController {
     public ResponseEntity<List<Long>> deleteRestartUser(@PathVariable("gameIndex") int gameIndex,
                                                  @PathVariable("userId") long userId) {
         Game game = areGameAndUserValid(gameIndex, userId).getBody();
-        if (game == null) {
+        if (game == null || !game.getRestartUserIds().contains(userId)) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -281,7 +281,7 @@ public class GameController {
      * @return A response entity containing a game if the game index and the user ID are valid.
      */
     private ResponseEntity<Game> areGameAndUserValid(int gameIndex, long userId) {
-        if(gameIndex >= gameList.getGames().size()) {
+        if(gameIndex >= gameList.getGames().size() || gameIndex < 0) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -313,7 +313,7 @@ public class GameController {
         }
 
         if(!game.getRestartUserIds().contains(userId)) {
-            return ResponseEntity.ok().build();
+            return ResponseEntity.badRequest().build();
         }
 
         game.getRestartUserIds().remove(userId);
@@ -325,7 +325,9 @@ public class GameController {
                 newQuestions.add(generateQuestion());
             }
             game.setQuestions(newQuestions);
-        } else if (game.getRestartUserIds().size() == 0) {
+        }
+
+        if (game.getRestartUserIds().size() == 0) {
             isRestarted = false;
         }
 

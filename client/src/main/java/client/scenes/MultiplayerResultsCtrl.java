@@ -119,6 +119,9 @@ public class MultiplayerResultsCtrl implements QuestionNumController, SceneContr
     public void redirect() {
         if (rematch) {
             gameCtrl.resetGameCtrl();
+            rematch = false;
+            rematchButton.setBackground(new Background(
+                    new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
             String serverUrl = mainCtrl.getServerUrl();
             gameCtrl.showQuestion(server.restartGame(serverUrl, gameCtrl.getGameIndex(),
                     gameCtrl.getUser().id));
