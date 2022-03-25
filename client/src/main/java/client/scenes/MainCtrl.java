@@ -58,6 +58,12 @@ public class MainCtrl {
     private static final int TOTAL_ANSWERS = 20;
     private static final int HALFWAY_ANSWERS = 10;
 
+    //These are the variables used in the streak calculation formula
+    private static final long X1 = 1;
+    private static final long X2 = 4;
+    private static final long X3 = 7;
+    private static final long X4 = 10;
+
     private String serverUrl;
     private Timer waitingTimer;
     private Stage primaryStage;
@@ -110,7 +116,7 @@ public class MainCtrl {
     private Thread timerThread;
     private int answerCount = 0;
 
-    private long soloScore = 0;
+    private long streak = 0;
     private int currentQuestion = 0;
 
     public int getCurrentQuestion() {
@@ -206,6 +212,33 @@ public class MainCtrl {
     }
 
     /**
+     * This method resets the streak when an answer is incorrect.
+     */
+    public void resetStreak(){
+        streak=0;
+    }
+
+    public void incrementStreak(){
+        streak++;
+    }
+
+    public void addScore(User user, Question answeredQuestion){
+        incrementStreak();
+
+        if(streak<X2){
+            System.out.println(answeredQuestion.calculatePoints());
+            System.out.println(answeredQuestion.calculatePoints()^((streak+X1)/X2));
+            user.incrementScore((long) Math.pow(answeredQuestion.calculatePoints() +
+                    answeredQuestion.calculatePoints(),(float)((streak+X1)/X2)));
+        }
+        else{
+            System.out.println(answeredQuestion.calculatePoints()^((streak+X1)/X2));
+            user.incrementScore(answeredQuestion.calculatePoints() +
+                    answeredQuestion.calculatePoints() ^ ((streak+X3)/X4));
+        }
+    }
+
+    /**
      * Returns the current game index
      *
      * @return the current game index
@@ -231,13 +264,13 @@ public class MainCtrl {
         return primaryStage;
     }
 
-    /**
-     * add the score to the player's own score
-     * @param score the player score
-     */
-    public void addScore(long score) {
-        this.soloScore += score;
-    }
+//    /**
+//     * add the score to the player's own score
+//     * @param score the player score
+//     */
+//    public void addScore(long score) {
+//        this.soloScore += score;
+//    }
 
     /**
      * Returns the solo game points

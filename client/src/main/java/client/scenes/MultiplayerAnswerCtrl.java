@@ -98,6 +98,7 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
             answerPane.setBackground(new Background(
                     new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
         } else {
+            mainCtrl.resetStreak();
             this.answerResponse.setText("By making mistakes, we learn!");
             answerPane.setBackground(new Background(
                     new BackgroundFill(Color.LIGHTCORAL, CornerRadii.EMPTY, Insets.EMPTY)));

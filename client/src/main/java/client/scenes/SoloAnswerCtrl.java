@@ -78,14 +78,16 @@ public class SoloAnswerCtrl implements SceneController, QuestionNumController {
     protected void setup(SoloGame soloGame, List<Color> colors) {
         this.game = soloGame;
         Question prevQuestion = soloGame.loadCurrentQuestion();
-        mainCtrl.getUser().incrementScore(prevQuestion.calculatePoints());
+
+        mainCtrl.addScore(mainCtrl.getUser(),prevQuestion);
+
         if (prevQuestion.hasCorrectUserAnswer()) {
-            mainCtrl.addScore(prevQuestion.calculatePoints());
             currentScore.setFill(Color.GREEN);
             this.answerResponse.setText("Well done!");
             answerPane.setBackground(new Background(
                     new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
         } else {
+            mainCtrl.resetStreak();
             this.answerResponse.setText("By making mistakes, we learn!");
             currentScore.setFill(Color.DARKRED);
             answerPane.setBackground(new Background(

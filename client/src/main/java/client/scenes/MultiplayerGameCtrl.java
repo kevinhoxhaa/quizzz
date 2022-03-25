@@ -20,6 +20,7 @@ public class MultiplayerGameCtrl {
     private static final int POLLING_DELAY = 0;
     private static final int POLLING_INTERVAL = 500;
 
+
     private List<Color> colors;
 
     private Timer answerTimer;
@@ -113,10 +114,13 @@ public class MultiplayerGameCtrl {
     /**
      * Posts an answered question to the server, updates the
      * answer colours and redirects to the answer screen
+     * Introduced a streak factor to the point calculation method
+     * to make the game more interesting and competitive.
      * @param answeredQuestion the answered question to post
      */
     public void postAnswer(Question answeredQuestion) {
-        user.points += answeredQuestion.calculatePoints();
+        mainCtrl.addScore(user,answeredQuestion);
+
         answerTimer = new Timer();
         answerTimer.schedule(
                 new TimerTask() {
@@ -137,6 +141,7 @@ public class MultiplayerGameCtrl {
                     }
                 }, POLLING_DELAY, POLLING_INTERVAL);
     }
+
 
     /**
      * Returns the correct users to an answered question
