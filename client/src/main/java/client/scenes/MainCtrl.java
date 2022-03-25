@@ -24,7 +24,6 @@ import commons.models.SoloGame;
 import commons.utils.QuestionType;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -34,7 +33,6 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
@@ -431,33 +429,6 @@ public class MainCtrl {
         return server.getQuestion(serverUrl, gameIndex, answerCount);
     }
 
-    /**
-     * Deletes user from database when the close button is clicked
-     */
-    public void onClose() {
-        primaryStage.setOnHiding(new EventHandler<WindowEvent>() {
-
-            @Override
-            public void handle(WindowEvent event) {
-                Platform.runLater(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        try {
-                            server.removeMultiplayerUser(multiplayerCtrl.getServerUrl(), multiplayerCtrl.getUser());
-                            user = null;
-                        } catch (WebApplicationException e) {
-                            System.out.println("User to remove not found!");
-                        } catch (NullPointerException ex) {
-                            System.out.println("Multiplayer game to remove from not found!");
-                        } finally {
-                            System.exit(0);
-                        }
-                    }
-                });
-            }
-        });
-    }
 
     /**
 =======
@@ -676,6 +647,8 @@ public class MainCtrl {
                     try {
                         server.removeMultiplayerUser(serverUrl, user);
                         user = null;
+                        multiplayerEstimationCtrl.resetDoublePoints();
+                        multiplayerQuestionCtrl.resetDoublePoints();
                     } catch(WebApplicationException e) {
                         System.out.println("User to remove not found!");
                     } finally {

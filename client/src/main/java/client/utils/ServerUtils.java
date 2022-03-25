@@ -24,13 +24,19 @@ import commons.models.SoloGame;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
+import javafx.scene.image.Image;
 import org.glassfish.jersey.client.ClientConfig;
 
+import javax.imageio.ImageIO;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.Base64;
 import java.util.List;
+
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
@@ -200,5 +206,34 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(new GenericType<List<SoloUser>>() {});
+    }
+
+    public Image fetchImage(String serverUrl, String path) throws IOException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        try {
+            String fetched = ClientBuilder.newClient(new ClientConfig())
+                    .target(serverUrl).path("api/activities/image")
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .post(Entity.entity(path, APPLICATION_JSON), String.class);
+
+            String[] fetchedSplit = fetched.split(" ");
+
+            ImageIO.write(ImageIO.read(new ByteArrayInputStream(
+                            Base64.getDecoder().decode(fetchedSplit[0]))),
+                    fetchedSplit[1], bos);
+        }
+        catch(Exception e){
+            String defaultPathString = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
+
+            defaultPathString = defaultPathString.substring(
+                    "file:/".length(), defaultPathString.length() - "classes/java/main/".length())
+                    + "resources/main/client/images/lightning.jpg";
+
+            return new Image(defaultPathString);
+        }
+        byte[] buffer = bos.toByteArray();
+
+        return new Image(new ByteArrayInputStream(buffer));
     }
 }

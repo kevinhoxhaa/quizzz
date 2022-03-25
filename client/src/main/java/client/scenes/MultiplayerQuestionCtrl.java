@@ -21,6 +21,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -33,7 +34,8 @@ import static commons.utils.CompareType.SMALLER;
 public class MultiplayerQuestionCtrl implements SceneController, QuestionNumController {
     private static final double MILLISECONDS_PER_SECONDS = 1000.0;
     private static final double CIRCLE_BORDER_SIZE = 1.7;
-    private static final double STANDARD_CIRCLE_BORDER_SIZE = 1.0;
+    private static final double STANDARD_SIZE = 1.0;
+
     private static final int POLLING_DELAY = 0;
     private static final int POLLING_INTERVAL = 500;
 
@@ -44,6 +46,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     private Question currentQuestion;
 
     private double startTime;
+
 
     @FXML
     private StackPane answerTop;
@@ -69,6 +72,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     private Answer userAnswer;
 
     private List<String> correctPlayers;
+    private List<StackPane> jokers;
 
     @FXML
     private Text activityText;
@@ -86,11 +90,17 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     @FXML
     private StackPane doublePoints;
     @FXML
-    private StackPane disableIncorrect;
+    private StackPane removeIncorrect;
     @FXML
     private StackPane reduceTime;
     @FXML
     private Text currentScore;
+    @FXML
+    private ImageView x2image;
+    @FXML
+    private ImageView minus1image;
+    @FXML
+    private ImageView shortenTimeImage;
 
     /**
      * Creates a controller for the multiplayer question screen, with the given server and main controller.
@@ -115,6 +125,17 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      * @param question the question instance upon which the setup is based
      */
     protected void setup(Question question) {
+        jokers=new ArrayList<>();
+        jokers.add(doublePoints);
+        jokers.add(removeIncorrect);
+        jokers.add(reduceTime);
+
+        for(StackPane joker:jokers){
+            if(gameCtrl.getUsedJokers().contains(joker.idProperty().getValue())){
+                gameCtrl.disableJokerButton(joker);
+            }
+        }
+
         selectedAnswerButton = null;
         this.currentQuestion = question;
         currentScore.setText("Score: " + gameCtrl.getUser().points);
@@ -142,6 +163,12 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
         }
 
         resetAnswerColors();
+        x2image.setVisible(false);
+        try {
+            questionImg.setImage(server.fetchImage(mainCtrl.getServerUrl(), currentQuestion.getImagePath()));
+        }
+        catch (IOException e){
+        }
     }
 
     /**
@@ -333,6 +360,33 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     }
 
     /**
+     * The method called when the cursor enters the button double points.
+     * Sets double points' background color according to whether it is selected.
+     */
+    @FXML
+    protected void enterDoublePoints(){
+        enterJoker(doublePoints);
+    }
+
+    /**
+     * The method called when the cursor enters the button remove incorrect question.
+     * Sets remove incorrect question's background color according to whether it is selected.
+     */
+    @FXML
+    protected void enterRemoveIncorrect(){
+        enterJoker(removeIncorrect);
+    }
+
+    /**
+     * The method called when the cursor enters the button reduce time for others.
+     * Sets reduce time for others' background color according to whether it is selected.
+     */
+    @FXML
+    protected void enterReduceTime(){
+        enterJoker(reduceTime);
+    }
+
+    /**
      * A general method for setting an answer button's background color upon the cursor enters it,
      * according to whether it is selected.
      *
@@ -364,6 +418,53 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
                         new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
             }
         }
+    }
+
+    /**
+     * A general method for setting an answer button's background color upon the cursor enters it,
+     * according to whether it is selected.
+     *
+     * @param jokerBtn The joker button to be recolored.
+     */
+    private void enterJoker(StackPane jokerBtn) {
+        if (!gameCtrl.getUsedJokers().contains(jokerBtn.idProperty().getValue())) {
+            jokerBtn.setBackground(new Background(
+                    new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+        }
+    }
+
+    /**
+     * The method called upon loading the question scene, and when the cursor leaves either one of the answer buttons.
+     * Resets all answer boxes' background color according to whether they are selected.
+     */
+    @FXML
+    public void resetJokerColors() {
+
+        for (StackPane joker : jokers) {
+            if (!gameCtrl.getUsedJokers().contains(joker.idProperty().getValue())) {
+                joker.setBackground(new Background(
+                        new BackgroundFill(Color.color(gameCtrl.RGB_VALUE,gameCtrl.RGB_VALUE,gameCtrl.RGB_VALUE),
+                                CornerRadii.EMPTY, Insets.EMPTY)));
+            }
+        }
+    }
+
+    /**
+     * This method is called when the double points joker is clicked.
+     * It gives double points for the current question if the answer is correct.
+     */
+    @FXML
+    public void useDoublePoints(){
+        gameCtrl.setIsActiveDoublePoints(true);
+        gameCtrl.useJoker(doublePoints,x2image);
+    }
+
+    /**
+     * This method resets the double point jokers so that it can be used again when another game starts
+     */
+    public void resetDoublePoints(){
+        doublePoints.setOnMouseClicked(event -> useDoublePoints());
+        gameCtrl.resetJoker(doublePoints);
     }
 
     /**
@@ -435,7 +536,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     public void resetHighlight() {
         for (int i = 0; i < circles.getChildren().size(); i++) {
             Circle circle = (Circle) circles.getChildren().get(i);
-            circle.setStrokeWidth(STANDARD_CIRCLE_BORDER_SIZE);
+            circle.setStrokeWidth(STANDARD_SIZE);
         }
     }
 
