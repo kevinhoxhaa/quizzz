@@ -18,7 +18,6 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.entities.MultiplayerUser;
 import commons.entities.User;
-import commons.models.EstimationQuestion;
 import commons.models.Question;
 import commons.models.SoloGame;
 import commons.utils.QuestionType;
@@ -356,37 +355,6 @@ public class MainCtrl {
     }
 
     /**
-     * Sets the scene in the primary stage to the one corresponding to a multiplayer question screen.
-     * Sets the timer to an initial 10 seconds for the players to answer the question.
-     *
-     * @param question the question to visualise
-     */
-    public void showQuestion(Question question) {
-        if (question.getType() == QuestionType.ESTIMATION) {
-            showEstimationQuestion((EstimationQuestion) question);
-            return;
-        }
-
-        showMultipleChoiceQuestion(question);
-    }
-
-    public void showMultipleChoiceQuestion(Question question) {
-        multiplayerQuestionCtrl.resetCircleColor();
-        multiplayerQuestionCtrl.updateCircleColor(colors);
-        multiplayerQuestionCtrl.resetHighlight();
-        multiplayerQuestionCtrl.highlightCurrentCircle();
-        multiplayerQuestionCtrl.setup(question);
-        multiplayerQuestionCtrl.resetAnswerColors();
-        multiplayerQuestionCtrl.updateQuestionNumber();
-
-        multiplayerQuestionCtrl.enableAnswers();
-        multiplayerQuestionCtrl.startTimer();
-        multiplayerQuestionCtrl.setStartTime();
-        primaryStage.setTitle("Question screen");
-        primaryStage.setScene(multiplayerQuestion);
-    }
-
-    /**
      * Sets the scene in the primary stage to the one corresponding to a ranking screen.
      */
     public void showRanking() {
@@ -395,25 +363,6 @@ public class MainCtrl {
         primaryStage.setTitle("Ranking Screen");
         primaryStage.setScene(ranking);
         rankingCtrl.startTimer();
-    }
-
-    /**
-     * Sets the scene in the primary stage to the estimation screen
-     *
-     * @param question the estimation question to visualise
-     */
-    public void showEstimationQuestion(EstimationQuestion question) {
-        multiplayerEstimationCtrl.resetCircleColor();
-        multiplayerEstimationCtrl.updateCircleColor(colors);
-        multiplayerEstimationCtrl.resetHighlight();
-        multiplayerEstimationCtrl.highlightCurrentCircle();
-        multiplayerEstimationCtrl.setup(question);
-        multiplayerEstimationCtrl.updateQuestionNumber();
-
-        multiplayerEstimationCtrl.startTimer();
-        multiplayerEstimationCtrl.setStartTime();
-        primaryStage.setTitle("Estimation question screen");
-        primaryStage.setScene(multiplayerEstimation);
     }
 
     /**
@@ -461,38 +410,6 @@ public class MainCtrl {
                 });
             }
         });
-    }
-
-    /**
-=======
-        //TODO instead of this, return a random question fetched from the server
-        Activity activity = new Activity(
-                "testing the question models", ANSWER_TO_THE_ULTIMATE_QUESTION,
-                "it was me. I said it. haha", "client/images/xd.png");
-        return new ConsumptionQuestion(activity, new Random());
-    }
-
-    /**
->>>>>>> dev
-     * A method that redirects the User to:
-     * - The next question if the number of previous answers is less than 20 and not equal to 10
-     * - The Ranking Page if the User is halfway through the game (10 answers so far)
-     * - The Final Results Page if the User has answered all 20 questions
-     */
-    public void afterAnswerScreen() {
-        if (getAnswerCount() <= TOTAL_ANSWERS) {
-            if (getAnswerCount() == HALFWAY_ANSWERS) {
-                showRanking();
-                // The ranking page will be showed here
-            }
-            //If the User is not redirected to the ranking page, they go to the next Question
-            else {
-                multiplayerQuestionCtrl.resetAnswerColors();
-                showQuestion(getNextQuestion());
-            }
-        } else {
-            showMultiplayerResults();
-        }
     }
 
     /**
