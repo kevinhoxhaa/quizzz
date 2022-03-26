@@ -176,8 +176,14 @@ public class MultiplayerGameCtrl {
      * answered by everyone
      */
     public List<MultiplayerUser> fetchCorrectUsers(Question answeredQuestion) throws WebApplicationException {
-        return server.answerQuestion(serverUrl, gameIndex,
-                mainCtrl.getUser().id, answerCount, answeredQuestion);
+        if(isActiveDoublePoints){
+            return server.answerQuestion(serverUrl, gameIndex,
+                    mainCtrl.getUser().id, answerCount, answeredQuestion);
+        }
+        else{
+            return server.answerDoublePointsQuestion(serverUrl, gameIndex,
+                    mainCtrl.getUser().id, answerCount, answeredQuestion);
+        }
     }
 
     /**

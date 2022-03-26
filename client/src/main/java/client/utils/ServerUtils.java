@@ -180,6 +180,22 @@ public class ServerUtils {
                 .post(Entity.entity(question, APPLICATION_JSON), new GenericType<List<MultiplayerUser>>() {});
     }
 
+    public List<MultiplayerUser> answerDoublePointsQuestion(String serverUrl, int gameIndex,
+                                                long userId, int questionIndex, Question question) {
+        String path = String.format(
+                "api/games/%d/user/%d/question/%d/doublePoints",
+                gameIndex,
+                userId,
+                questionIndex
+        );
+
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path(path)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(question, APPLICATION_JSON), new GenericType<List<MultiplayerUser>>() {});
+    }
+
     /**
      * Returns a new (solo) game instance with the given number of questions
      * @param serverUrl the server url
