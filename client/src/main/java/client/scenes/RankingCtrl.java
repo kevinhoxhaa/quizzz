@@ -158,7 +158,7 @@ public class RankingCtrl implements SceneController, QuestionNumController {
 
     @Override
     public void updateCircleColor(List<Color> colors) {
-        for (int i = 0; i < mainCtrl.getAnswerCount(); i++) {
+        for (int i = 0; i < gameCtrl.getAnswerCount(); i++) {
             Circle circle = (Circle) getCircles().getChildren().get(i);
             circle.setFill(colors.get(i));
         }
