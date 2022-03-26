@@ -9,23 +9,30 @@ import commons.models.Question;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EstimationQuestionCtrl implements SceneController, QuestionNumController {
 
     private static final double CIRCLE_BORDER_SIZE = 1.7;
-    private static final double STANDARD_CIRCLE_BORDER_SIZE = 1.0;
     private static final double TIMEOUT = 8.0;
+    private static final double STANDARD_SIZE = 1.0;
     private static final int KICK_AT_X_QUESTIONS = 3;
 
     private static final double MILLISECONDS_PER_SECONDS = 1000.0;
@@ -36,6 +43,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
 
     private Question currentQuestion;
     private double startTime;
+    private List<StackPane> jokers;
 
     @FXML
     private Label yourAnswer;
@@ -57,6 +65,24 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
 
     @FXML
     private TextField answerField;
+
+    @FXML
+    private StackPane doublePoints;
+
+    @FXML
+    private StackPane removeIncorrect;
+
+    @FXML
+    private StackPane reduceTime;
+
+    @FXML
+    private ImageView doublePointsImage;
+
+    @FXML
+    private ImageView removeIncorrectImage;
+
+    @FXML
+    private ImageView reduceTimeImage;
 
     @FXML
     private ImageView questionImg;
@@ -82,9 +108,22 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     }
 
     public void setup(EstimationQuestion question) {
+        jokers=new ArrayList<>();
+        jokers.add(doublePoints);
+        jokers.add(removeIncorrect);
+        jokers.add(reduceTime);
+
+        for(StackPane joker:jokers){
+            if(gameCtrl.getUsedJokers().contains(joker.idProperty().getValue())){
+                gameCtrl.disableJokerButton(joker);
+            }
+        }
+
         currentScore.setText("Score: " + gameCtrl.getUser().points);
         currentQuestion = question;
         questionDescription.setText("How much energy in Wh does " + question.getActivity().title + " use?");
+
+        doublePointsImage.setVisible(false);
         try {
             questionImg.setImage(server.fetchImage(mainCtrl.getServerUrl(), currentQuestion.getImagePath()));
         }
@@ -183,6 +222,81 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     }
 
     /**
+     * This method is called when the double points joker is clicked.
+     * It gives double points for the current question if the answer is correct.
+     */
+    @FXML
+    public void useDoublePoints(){
+        gameCtrl.setIsActiveDoublePoints(true);
+        gameCtrl.useJoker(doublePoints,doublePointsImage);
+    }
+
+    /**
+     * This method resets the double point jokers so that it can be used again when another game starts
+     */
+    public void resetDoublePoints(){
+        doublePoints.setOnMouseClicked(event -> useDoublePoints());
+        gameCtrl.enableJoker(doublePoints);
+    }
+
+    /**
+     * The method called when the cursor enters the button double points.
+     * Sets double points' background color according to whether it is selected.
+     */
+    @FXML
+    protected void enterDoublePoints(){
+        enterJoker(doublePoints);
+    }
+
+    /**
+     * The method called when the cursor enters the button remove incorrect question.
+     * Sets remove incorrect question's background color according to whether it is selected.
+     */
+    @FXML
+    protected void enterRemoveIncorrect(){
+        enterJoker(removeIncorrect);
+    }
+
+    /**
+     * The method called when the cursor enters the button reduce time for others.
+     * Sets reduce time for others' background color according to whether it is selected.
+     */
+    @FXML
+    protected void enterReduceTime(){
+        enterJoker(reduceTime);
+    }
+
+    /**
+     * A general method for setting a joker button's background color upon the cursor enters it,
+     * according to whether it is already used.
+     *
+     * @param jokerBtn The joker button to be recolored.
+     */
+    private void enterJoker(StackPane jokerBtn) {
+        if (!gameCtrl.getUsedJokers().contains(jokerBtn.idProperty().getValue())) {
+            jokerBtn.setBackground(new Background(
+                    new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+        }
+    }
+
+    /**
+     * The method called upon loading the estimation question scene,
+     * and when the cursor leaves either one of the joker buttons.
+     * Resets all joker buttons' background color according to whether they are already used.
+     */
+    @FXML
+    public void resetJokerColors() {
+
+        for (StackPane joker : jokers) {
+            if (!gameCtrl.getUsedJokers().contains(joker.idProperty().getValue())) {
+                joker.setBackground(new Background(
+                        new BackgroundFill(Color.color(gameCtrl.RGB_VALUE,gameCtrl.RGB_VALUE,gameCtrl.RGB_VALUE),
+                                CornerRadii.EMPTY, Insets.EMPTY)));
+            }
+        }
+    }
+
+    /**
      * Getter for the circles bar
      *
      * @return circles
@@ -206,7 +320,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     public void resetHighlight() {
         for (int i = 0; i < circles.getChildren().size(); i++) {
             Circle circle = (Circle) circles.getChildren().get(i);
-            circle.setStrokeWidth(STANDARD_CIRCLE_BORDER_SIZE);
+            circle.setStrokeWidth(STANDARD_SIZE);
         }
     }
 

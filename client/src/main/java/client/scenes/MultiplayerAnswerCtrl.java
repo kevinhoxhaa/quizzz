@@ -96,10 +96,12 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
 
         if (prevQuestion.hasCorrectUserAnswer()) {
             this.answerResponse.setText("Well done!");
+            currentScore.setFill(Color.GREEN);
             answerPane.setBackground(new Background(
                     new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
         } else {
             this.answerResponse.setText("By making mistakes, we learn!");
+            currentScore.setFill(Color.DARKRED);
             answerPane.setBackground(new Background(
                     new BackgroundFill(Color.LIGHTCORAL, CornerRadii.EMPTY, Insets.EMPTY)));
         }

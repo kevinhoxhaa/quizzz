@@ -7,7 +7,14 @@ import commons.models.Question;
 import commons.utils.QuestionType;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.util.Pair;
 
@@ -19,6 +26,9 @@ import java.util.TimerTask;
 public class MultiplayerGameCtrl {
     private static final int POLLING_DELAY = 0;
     private static final int POLLING_INTERVAL = 500;
+    private static final double OPACITY = 0.5;
+    private static final double STANDARD_SIZE = 1.0;
+    public static final double RGB_VALUE = (double) 244/255;
 
     private List<Color> colors;
     private boolean answeredQuestion = false;
@@ -46,6 +56,11 @@ public class MultiplayerGameCtrl {
     private Scene ranking;
     private RankingCtrl rankingCtrl;
 
+    private boolean isAvailableDoublePoints = true;
+    private boolean isActiveDoublePoints;
+
+    private List<String> usedJokers;
+
     // TODO: add results and resultsCtrl
 
     /**
@@ -72,10 +87,13 @@ public class MultiplayerGameCtrl {
         user.unansweredQuestions = 0;
         this.colors = new ArrayList<>();
 
+        this.usedJokers=new ArrayList<>();
+
         this.answerTimer = new Timer();
 
         this.serverUrl = mainCtrl.getServerUrl();
         this.answerCount = 0;
+        isActiveDoublePoints=false;
 
         this.mcQuestionCtrl = mcQuestion.getKey();
         mcQuestionCtrl.setGameCtrl(this);
@@ -97,9 +115,12 @@ public class MultiplayerGameCtrl {
     /**
      * Polls the first question and initialises
      * the game loop
+     * Resets the jokers
      */
     public void startGame() {
+         resetAllJokers();
          user.unansweredQuestions = 0;
+
          Question firstQuestion = fetchQuestion();
          showQuestion(firstQuestion);
     }
@@ -114,12 +135,21 @@ public class MultiplayerGameCtrl {
     }
 
     /**
-     * Posts an answered question to the server, updates the
+     * - Posts an answered question to the server, updates the
      * answer colours and redirects to the answer screen
+     * - Gives double points if the joker isn't available
+     * - Sets the joker as "available" after it is used,
+     * even though it won't be possible to use it again
      * @param answeredQuestion the answered question to post
      */
     public void postAnswer(Question answeredQuestion) {
-        user.points += answeredQuestion.calculatePoints();
+        if(getIsActiveDoublePoints()){
+            user.points += 2*answeredQuestion.calculatePoints();
+            setIsActiveDoublePoints(false);
+        }
+        else{
+            user.points += answeredQuestion.calculatePoints();
+        }
         answerTimer = new Timer();
         answerTimer.schedule(
                 new TimerTask() {
@@ -156,8 +186,14 @@ public class MultiplayerGameCtrl {
      * answered by everyone
      */
     public List<MultiplayerUser> fetchCorrectUsers(Question answeredQuestion) throws WebApplicationException {
-        return server.answerQuestion(serverUrl, gameIndex,
-                mainCtrl.getUser().id, answerCount, answeredQuestion);
+        if(isActiveDoublePoints){
+            return server.answerQuestion(serverUrl, gameIndex,
+                    mainCtrl.getUser().id, answerCount, answeredQuestion);
+        }
+        else{
+            return server.answerDoublePointsQuestion(serverUrl, gameIndex,
+                    mainCtrl.getUser().id, answerCount, answeredQuestion);
+        }
     }
 
     /**
@@ -299,10 +335,77 @@ public class MultiplayerGameCtrl {
     }
 
     /**
+     * Returns the list of used jokers
+     * @return usedJokers
+     */
+    public List<String> getUsedJokers() {
+        return usedJokers;
+    }
+
+    /**
      * Returns the current server url
      * @return the game server url
      */
     public String getServerUrl() {
         return serverUrl;
+    }
+
+    /**
+     * A getter that returns true/false whether the Double Points joker is activated this round
+     * @return isActiveDoublePoints, which shows whether the DP joker is being used
+     */
+    public boolean getIsActiveDoublePoints(){
+        return isActiveDoublePoints;
+    }
+    /**
+     * Sets the isActiveDoublePoints to either true or false
+     * @param active
+     */
+    public void setIsActiveDoublePoints(boolean active){
+        isActiveDoublePoints=active;
+    }
+
+    /**
+     * This method is called when a joker is clicked.
+     * It disables the joker for further use and shows an image when the button is clicked.
+     * @param joker
+     * @param image
+     */
+    public void useJoker(StackPane joker, ImageView image){
+        image.setVisible(true);
+        disableJokerButton(joker);
+        usedJokers.add(joker.idProperty().getValue());
+    }
+
+    /**
+     * Disables the joker so it can't be used again
+     * @param joker
+     */
+    public void disableJokerButton(StackPane joker){
+        joker.setBackground(new Background(
+                new BackgroundFill(Color.BURLYWOOD, CornerRadii.EMPTY, Insets.EMPTY)));
+        joker.setOpacity(OPACITY);
+        joker.setOnMouseClicked(null);
+        joker.setCursor(Cursor.DEFAULT);
+    }
+
+    /**
+     * Enables the disabled jokers for the next game.
+     * @param joker
+     */
+    public void enableJoker(StackPane joker){
+        joker.setBackground(new Background(
+                new BackgroundFill(Color.color(RGB_VALUE, RGB_VALUE, RGB_VALUE), CornerRadii.EMPTY, Insets.EMPTY)));
+        joker.setOpacity(STANDARD_SIZE);
+        joker.setCursor(Cursor.HAND);
+    }
+
+    /**
+     * Resets all jokers at the start of the game, so they can be used again.
+     */
+    public void resetAllJokers(){
+        mcQuestionCtrl.resetDoublePoints();
+        estimationQuestionCtrl.resetDoublePoints();
+        //TODO: Reset all the other jokers
     }
 }
