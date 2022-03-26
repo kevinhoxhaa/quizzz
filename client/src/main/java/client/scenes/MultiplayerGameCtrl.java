@@ -136,6 +136,13 @@ public class MultiplayerGameCtrl {
                         } catch (WebApplicationException e) {
                             System.out.println(e.getResponse());
                             // Not all users have answered
+                        } catch(NullPointerException e) {
+                            // Handle no users issue
+                            System.out.println(e.getMessage());
+                            Platform.runLater(() -> {
+                                showAnswer(answeredQuestion, new ArrayList<>());
+                            });
+                            answerTimer.cancel();
                         }
                     }
                 }, POLLING_DELAY, POLLING_INTERVAL);
