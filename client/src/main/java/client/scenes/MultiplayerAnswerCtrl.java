@@ -206,11 +206,20 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
      * Send emojis to the server on emoji click
      */
     public void enableEmojis() {
+
         emojiPane.getChildren().forEach(n -> {
             if(n instanceof ImageView) {
                 ImageView e = (ImageView) n;
                 e.setOnMouseClicked(event -> gameCtrl.sendEmoji(e));
                 e.setCursor(Cursor.HAND);
+
+                String[] parts = e.getImage().getUrl().split("/");
+                String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
+                emojiPath = emojiPath.substring(
+                        "file:/".length(), emojiPath.length() - "classes/java/main/".length())
+                        + "resources/main/client/images/" + parts[parts.length - 1];
+
+                e.setImage(new Image(emojiPath));
             }
         });
     }
