@@ -487,6 +487,17 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     }
 
     /**
+     * This method is called when the reduceTime joker is clicked
+     * It halves the time for everyone in the lobby
+     */
+
+    @FXML
+    public void useReduceTime() {
+        mainCtrl.halfTime();
+        gameCtrl.useJoker( reduceTime, reduceTimeImage );
+    }
+
+    /**
      * This method resets the double point jokers so that it can be used again when another game starts
      */
     public void resetDoublePoints(){
@@ -633,15 +644,6 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
                 + "resources/main/client/images/" + emoji.getImageName();
         emojiImage.setImage(new Image(emojiPath));
         emojiText.setText(emoji.getUsername());
-    }
-
-    /**
-     * Upon using the halfTimeJoker, the time left on the current question will be halfed
-     *
-     */
-
-    public void halfTimeJoker () {
-        mainCtrl.halfTime();
     }
 
     /**
