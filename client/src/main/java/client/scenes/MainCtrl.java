@@ -326,7 +326,7 @@ public class MainCtrl {
      * @param prevQuestion The question that has just been asked to the players.
      */
     public void showAnswerPage(Question prevQuestion, List<MultiplayerUser> correctUsers) {
-        multiplayerAnswerCtrl.updateQuestionNumber();
+        updateQuestionCounters(multiplayerAnswerCtrl, colors);
         //Adds the color of the answer correctness to a list of answers
         if (prevQuestion.hasCorrectUserAnswer()) {
             colors.add(Color.LIGHTGREEN);
@@ -334,7 +334,6 @@ public class MainCtrl {
             colors.add(Color.INDIANRED);
         }
         answerCount++;
-        multiplayerAnswerCtrl.updateCircleColor(colors);
         multiplayerAnswerCtrl.setup(prevQuestion, correctUsers);
         primaryStage.setTitle("Answer screen");
         primaryStage.setScene(multiplayerAnswer);
@@ -358,8 +357,7 @@ public class MainCtrl {
      * Sets the scene in the primary stage to the one corresponding to a ranking screen.
      */
     public void showRanking() {
-        rankingCtrl.updateCircleColor(colors);
-        rankingCtrl.updateQuestionNumber();
+        updateQuestionCounters(rankingCtrl, colors);
         primaryStage.setTitle("Ranking Screen");
         primaryStage.setScene(ranking);
         rankingCtrl.startTimer();
@@ -500,7 +498,8 @@ public class MainCtrl {
         } else {
             colors.add(Color.INDIANRED);
         }
-        soloAnswerCtrl.setup(game, colors);
+        soloAnswerCtrl.setup(game);
+        updateQuestionCounters(soloAnswerCtrl, colors);
         primaryStage.setScene(soloAnswer);
         soloAnswerCtrl.startTimer();
     }
@@ -520,7 +519,8 @@ public class MainCtrl {
      * @param game the solo game instance
      */
     public void showSoloQuestion(SoloGame game) {
-        soloQuestionCtrl.setup(game, colors);
+        soloQuestionCtrl.setup(game);
+        updateQuestionCounters(soloQuestionCtrl, colors);
         primaryStage.setScene(soloQuestion);
         soloQuestionCtrl.startTimer();
         soloQuestionCtrl.setStartTime();
@@ -531,7 +531,8 @@ public class MainCtrl {
      * @param game the solo game instance
      */
     public void showSoloEstimationQuestion(SoloGame game) {
-        soloEstimationCtrl.setup(game, colors);
+        soloEstimationCtrl.setup(game);
+        updateQuestionCounters(soloEstimationCtrl, colors);
         primaryStage.setScene(soloEstimation);
         soloEstimationCtrl.startTimer();
         soloEstimationCtrl.setStartTime();
@@ -563,7 +564,8 @@ public class MainCtrl {
      * @param game
      */
     public void showSoloResults(SoloGame game) {
-        soloResultsCtrl.setup(game, colors);
+        soloResultsCtrl.setup(game);
+        updateQuestionCounters(soloResultsCtrl, colors);
         primaryStage.setScene(soloResults);
     }
 
@@ -571,7 +573,8 @@ public class MainCtrl {
      * Called after the last answer screen's timer is up, shows the solo results page
      */
     public void showMultiplayerResults() {
-        multiplayerResultsCtrl.setup(colors);
+        multiplayerResultsCtrl.setup();
+        updateQuestionCounters(multiplayerResultsCtrl, colors);
         primaryStage.setTitle("Multiplayer results screen");
         primaryStage.setScene(multiplayerResults);
     }
@@ -609,5 +612,23 @@ public class MainCtrl {
                 showHome();
             }
         });
+    }
+
+    /**
+     * Updates the little circles and the question counter in the given controller
+     * @param controller the controller of the scene
+     * @param colors the list of colors corresponding to answers to past questions
+     */
+    public void updateQuestionCounters(QuestionNumController controller, List<Color> colors){
+        controller.resetCircleColor();
+        controller.updateCircleColor(colors);
+        controller.updateQuestionNumber();
+        if(controller instanceof MultiplayerQuestionCtrl ||
+                controller instanceof EstimationQuestionCtrl ||
+                controller instanceof SoloQuestionCtrl ||
+                controller instanceof SoloEstimationQuestionCtrl){
+            controller.resetHighlight();
+            controller.highlightCurrentCircle();
+        }
     }
 }
