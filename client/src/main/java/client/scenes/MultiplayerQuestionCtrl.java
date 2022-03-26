@@ -493,7 +493,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      */
     public void useRemoveIncorrect(){
         gameCtrl.setIsActiveRemoveIncorrect(true);
-        gameCtrl.useJoker(removeIncorrect, minus1image);
+        gameCtrl.useJoker(removeIncorrect, removeIncorrectImage);
         Question question = getCurrentQuestion();
         switch (question.getType()) {
             case CONSUMPTION: {
@@ -562,10 +562,9 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      * This method resets the remove incorrect answer jokers so that it can be used when
      * another game starts.
      */
-
     public void resetRemoveIncorrect(){
-        removeIncorrect.setOnMouseClicked((event -> useRemoveIncorrect()));
-        gameCtrl.resetJoker(removeIncorrect);
+        removeIncorrect.setOnMouseClicked(event -> useRemoveIncorrect());
+        gameCtrl.enableJoker(removeIncorrect);
     }
 
     /**

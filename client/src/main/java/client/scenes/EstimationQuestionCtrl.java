@@ -112,6 +112,9 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
         jokers.add(doublePoints);
         jokers.add(removeIncorrect);
         jokers.add(reduceTime);
+        removeIncorrect.setDisable(true);
+        removeIncorrect.setBackground(new Background(
+                new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
 
         for(StackPane joker:jokers){
             if(gameCtrl.getUsedJokers().contains(joker.idProperty().getValue())){
@@ -288,7 +291,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     public void resetJokerColors() {
 
         for (StackPane joker : jokers) {
-            if (!gameCtrl.getUsedJokers().contains(joker.idProperty().getValue())) {
+            if (!gameCtrl.getUsedJokers().contains(joker.idProperty().getValue()) && joker != removeIncorrect) {
                 joker.setBackground(new Background(
                         new BackgroundFill(Color.color(gameCtrl.RGB_VALUE,gameCtrl.RGB_VALUE,gameCtrl.RGB_VALUE),
                                 CornerRadii.EMPTY, Insets.EMPTY)));
