@@ -138,6 +138,7 @@ public class MultiplayerGameCtrl {
                             // Not all users have answered
                         } catch(NullPointerException e) {
                             // Handle no users issue
+                            System.out.println(e.getMessage());
                             Platform.runLater(() -> {
                                 showAnswer(answeredQuestion, new ArrayList<>());
                             });
