@@ -239,15 +239,31 @@
                      </children></HBox>
                   <VBox prefHeight="149.0" prefWidth="175.0">
                      <children>
-                        <StackPane fx:id="doublePoints" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;" VBox.vgrow="ALWAYS">
+                        <StackPane fx:id="doublePoints" onMouseClicked="#useDoublePoints" onMouseEntered="#enterDoublePoints" onMouseExited="#resetJokerColors" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                            </VBox.margin>
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Double points" />
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <ImageView fitHeight="42.0" fitWidth="65.0" layoutX="5.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/x2points.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Text layoutX="123.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Double points">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </AnchorPane>
                            </children>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </StackPane>
-                        <StackPane fx:id="disableIncorrect" prefHeight="150.0" prefWidth="271.0" style="-fx-border-color: black;" VBox.vgrow="ALWAYS">
+                        <StackPane fx:id="removeIncorrect" onMouseEntered="#enterRemoveIncorrect" onMouseExited="#resetJokerColors" prefHeight="150.0" prefWidth="271.0" style="-fx-border-color: black;" VBox.vgrow="ALWAYS">
                            <opaqueInsets>
                               <Insets />
                            </opaqueInsets>
@@ -255,24 +271,56 @@
                               <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                            </VBox.margin>
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Disable incorrect answer" />
+                              <AnchorPane>
+                                 <children>
+                                    <Text layoutX="97.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Disable incorrect answer">
+                                       <font>
+                                          <Font size="17.0" />
+                                       </font>
+                                    </Text>
+                                    <ImageView fitHeight="48.0" fitWidth="48.0" layoutX="6.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/removechoice.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </AnchorPane>
                            </children>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </StackPane>
-                        <StackPane fx:id="reduceTime" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;" VBox.vgrow="ALWAYS">
+                        <StackPane fx:id="reduceTime" onMouseEntered="#enterReduceTime" onMouseExited="#resetJokerColors" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                            </VBox.margin>
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Reduce time for other players" />
+                              <AnchorPane>
+                                 <children>
+                                    <Text layoutX="67.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Reduce time for other players">
+                                       <font>
+                                          <Font size="17.0" />
+                                       </font>
+                                    </Text>
+                                    <ImageView fitHeight="58.0" fitWidth="52.0" layoutX="4.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/half-time.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </AnchorPane>
                            </children>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </StackPane>
                      </children>
                   </VBox>
                   <GridPane fx:id="emojiPane" alignment="CENTER" prefHeight="110.0" prefWidth="200.0">
                     <columnConstraints>
-                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -330,6 +378,25 @@
                   <Font size="32.0" />
                </font>
             </Text>
+            <Pane layoutX="216.0" prefHeight="52.0" prefWidth="228.0">
+               <children>
+                  <ImageView fx:id="doublePointsImage" fitHeight="52.0" fitWidth="62.0" layoutX="-6.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@../images/x2points.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="removeIncorrectImage" fitHeight="52.0" fitWidth="62.0" layoutX="78.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@../images/removechoice.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="reduceTimeImage" fitHeight="70.0" fitWidth="70.0" layoutX="152.0" layoutY="-11.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@../images/half-time.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
          </children>
       </AnchorPane>
    </children>

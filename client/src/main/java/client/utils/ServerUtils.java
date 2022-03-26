@@ -24,6 +24,7 @@ import commons.models.SoloGame;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
+import javafx.scene.image.Image;
 import org.glassfish.jersey.client.ClientConfig;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
@@ -33,11 +34,15 @@ import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
+import javax.imageio.ImageIO;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.URL;
+import java.util.Base64;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
@@ -171,10 +176,44 @@ public class ServerUtils {
                 .delete(MultiplayerUser.class);
     }
 
+    /**
+     * A method that posts the answer of the user in the repository
+     * @param serverUrl
+     * @param gameIndex
+     * @param userId
+     * @param questionIndex
+     * @param question
+     * @return list of the users who got the question right
+     */
     public List<MultiplayerUser> answerQuestion(String serverUrl, int gameIndex,
                                                 long userId, int questionIndex, Question question) {
         String path = String.format(
                 "api/games/%d/user/%d/question/%d",
+                gameIndex,
+                userId,
+                questionIndex
+        );
+
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path(path)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(question, APPLICATION_JSON), new GenericType<List<MultiplayerUser>>() {});
+    }
+
+    /**
+     * A method that posts the answer of the user in the repository when the double points joker is activated
+     * @param serverUrl
+     * @param gameIndex
+     * @param userId
+     * @param questionIndex
+     * @param question
+     * @return list of the users who got the question right
+     */
+    public List<MultiplayerUser> answerDoublePointsQuestion(String serverUrl, int gameIndex,
+                                                long userId, int questionIndex, Question question) {
+        String path = String.format(
+                "api/games/%d/user/%d/question/%d/doublePoints",
                 gameIndex,
                 userId,
                 questionIndex
@@ -276,5 +315,34 @@ public class ServerUtils {
                 consumer.accept((T) payload);
             }
         });
+    }
+
+    public Image fetchImage(String serverUrl, String path) throws IOException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        try {
+            String fetched = ClientBuilder.newClient(new ClientConfig())
+                    .target(serverUrl).path("api/activities/image")
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .post(Entity.entity(path, APPLICATION_JSON), String.class);
+
+            String[] fetchedSplit = fetched.split(" ");
+
+            ImageIO.write(ImageIO.read(new ByteArrayInputStream(
+                            Base64.getDecoder().decode(fetchedSplit[0]))),
+                    fetchedSplit[1], bos);
+        }
+        catch(Exception e){
+            String defaultPathString = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
+
+            defaultPathString = defaultPathString.substring(
+                    "file:/".length(), defaultPathString.length() - "classes/java/main/".length())
+                    + "resources/main/client/images/lightning.jpg";
+
+            return new Image(defaultPathString);
+        }
+        byte[] buffer = bos.toByteArray();
+
+        return new Image(new ByteArrayInputStream(buffer));
     }
 }
