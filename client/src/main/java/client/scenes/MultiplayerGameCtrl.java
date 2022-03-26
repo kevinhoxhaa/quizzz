@@ -31,6 +31,7 @@ public class MultiplayerGameCtrl {
     public static final double RGB_VALUE = (double) 244/255;
 
     private List<Color> colors;
+    private boolean answeredQuestion = false;
 
     private Timer answerTimer;
 
@@ -83,6 +84,7 @@ public class MultiplayerGameCtrl {
 
         this.server = server;
         this.user = (MultiplayerUser) mainCtrl.getUser();
+        user.unansweredQuestions = 0;
         this.colors = new ArrayList<>();
 
         this.usedJokers=new ArrayList<>();
@@ -117,6 +119,7 @@ public class MultiplayerGameCtrl {
      */
     public void startGame() {
          resetAllJokers();
+         user.unansweredQuestions = 0;
 
          Question firstQuestion = fetchQuestion();
          showQuestion(firstQuestion);
@@ -163,6 +166,13 @@ public class MultiplayerGameCtrl {
                         } catch (WebApplicationException e) {
                             System.out.println(e.getResponse());
                             // Not all users have answered
+                        } catch(NullPointerException e) {
+                            // Handle no users issue
+                            System.out.println(e.getMessage());
+                            Platform.runLater(() -> {
+                                showAnswer(answeredQuestion, new ArrayList<>());
+                            });
+                            answerTimer.cancel();
                         }
                     }
                 }, POLLING_DELAY, POLLING_INTERVAL);
@@ -286,6 +296,26 @@ public class MultiplayerGameCtrl {
      */
     public void showResults(List<MultiplayerUser> rankedUsers) {
         // TODO: display list of ranked users on results screen
+    }
+
+    /**
+     * Getter for the answeredQuestion flag
+     *
+     * @return boolean value for the flag
+     */
+
+    public boolean getAnsweredQuestion() {
+        return this.answeredQuestion;
+    }
+
+    /**
+     * Setter for the answeredQuestion flag
+     *
+     * @param answeredQuestion the boolean to be set to
+     */
+
+    public void setAnsweredQuestion ( boolean answeredQuestion ) {
+        this.answeredQuestion = answeredQuestion;
     }
 
     /**

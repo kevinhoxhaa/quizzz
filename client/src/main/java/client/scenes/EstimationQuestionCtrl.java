@@ -2,11 +2,13 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.entities.MultiplayerUser;
 import commons.models.Answer;
 import commons.models.EstimationQuestion;
 import commons.models.Question;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
-
+import javafx.scene.control.Alert;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
@@ -31,6 +33,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     private static final double CIRCLE_BORDER_SIZE = 1.7;
     private static final double TIMEOUT = 8.0;
     private static final double STANDARD_SIZE = 1.0;
+    private static final int KICK_AT_X_QUESTIONS = 3;
 
     private static final double MILLISECONDS_PER_SECONDS = 1000.0;
 
@@ -125,6 +128,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
             questionImg.setImage(server.fetchImage(mainCtrl.getServerUrl(), currentQuestion.getImagePath()));
         }
         catch (IOException e){
+
         }
     }
 
@@ -148,6 +152,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
 
     @FXML
     protected void onAnswerPostClick() {
+        gameCtrl.setAnsweredQuestion( true );
         try {
             long answer = Long.parseLong(answerField.getText());
             currentQuestion.setUserAnswer(new Answer(answer), getSeconds());
@@ -159,6 +164,35 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
 
     @Override
     public void redirect() {
+        MultiplayerUser user = gameCtrl.getUser();
+        if (!gameCtrl.getAnsweredQuestion()) {
+            user.unansweredQuestions++;
+            if (user.unansweredQuestions == KICK_AT_X_QUESTIONS) {
+                try {
+                    server.removeMultiplayerUser(server.getURL(), user);
+                } catch(WebApplicationException e) {
+                    System.out.println("User to remove not found!");
+                }
+
+                mainCtrl.killThread();
+                mainCtrl.showHome();
+                mainCtrl.bindUser(null);
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle ("Kicked :(");
+                alert.setHeaderText(null);
+                alert.setGraphic(null);
+                alert.setContentText("You've been kicked for not answering 3 question in a row!");
+                alert.show();
+
+                return;
+            }
+        } else {
+            user.unansweredQuestions = 0;
+        }
+
+        gameCtrl.setAnsweredQuestion(false);
+
         try {
             if (currentQuestion.getUserAnswer().getLongAnswer().equals(-1L)) {
                 long answer = Long.parseLong(answerField.getText());
