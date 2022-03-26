@@ -15,6 +15,7 @@
  */
 package client.utils;
 
+import commons.entities.Activity;
 import commons.entities.MultiplayerUser;
 import commons.entities.Quote;
 import commons.entities.SoloUser;
@@ -133,6 +134,40 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(Question.class);
+    }
+
+    /**
+     * Adds a new activity to the database
+     * @param serverUrl The server URL of the game the user is in
+     * @param gameIndex the game index
+     * @param activity the activity to be added
+     * @return an activity
+     */
+
+    public Activity addActivity ( String serverUrl, int gameIndex, Activity activity ) {
+        String path = String.format("/api/games/%d/activity", gameIndex);
+        return ClientBuilder.newClient ( new ClientConfig() )
+                .target(serverUrl).path(path)
+                .request( APPLICATION_JSON )
+                .accept ( APPLICATION_JSON )
+                .post ( Entity.entity ( activity, APPLICATION_JSON ), Activity.class );
+    }
+
+    /**
+     * Deletes an activity
+     * @param serverUrl The server URL of the game the user is in
+     * @param gameIndex the game index
+     * @param activity the activity to be removed
+     * @return an activity
+     */
+
+    public Activity deleteActivity ( String serverUrl, int gameIndex, Activity activity ) {
+        String path = String.format("/api/games/%d/activity/%s", gameIndex, activity.identifier );
+        return ClientBuilder.newClient ( new ClientConfig() )
+                .target(serverUrl).path(path)
+                .request( APPLICATION_JSON )
+                .accept ( APPLICATION_JSON )
+                .delete ( Activity.class );
     }
 
     /**
