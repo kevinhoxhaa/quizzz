@@ -13,8 +13,6 @@ import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -408,36 +406,33 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     @Override
     public void redirect() {
         MultiplayerUser user = gameCtrl.getUser();
-        if ( !gameCtrl.getAnsweredQuestion() ) {
+        if (!gameCtrl.getAnsweredQuestion()) {
             user.unansweredQuestions++;
-            if ( user.unansweredQuestions == KICK_AT_X_QUESTIONS ) {
+            if (user.unansweredQuestions == KICK_AT_X_QUESTIONS) {
                 try {
                     server.removeMultiplayerUser(server.getURL(), user);
-                    user = null;
                 } catch(WebApplicationException e) {
                     System.out.println("User to remove not found!");
                 }
+
                 mainCtrl.killThread();
                 mainCtrl.showHome();
-                mainCtrl.bindUser( null );
+                mainCtrl.bindUser(null);
+
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle ( "Kicked :(" );
+                alert.setTitle ("Kicked :(");
                 alert.setHeaderText(null);
                 alert.setGraphic(null);
                 alert.setContentText("You've been kicked for not answering 3 question in a row!");
-                ButtonType okButton = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
-                alert.getButtonTypes().setAll( okButton );
-                alert.showAndWait().ifPresent(type -> {
-                    if ( type == okButton ) {
-                        mainCtrl.killThread();
-                    }
-                });
+                alert.show();
+
+                return;
             }
         } else {
             user.unansweredQuestions = 0;
         }
 
-        gameCtrl.setAnsweredQuestion( false );
+        gameCtrl.setAnsweredQuestion(false);
         finalizeAndSend();
     }
 
