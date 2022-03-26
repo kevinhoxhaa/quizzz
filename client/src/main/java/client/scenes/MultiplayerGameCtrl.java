@@ -196,6 +196,7 @@ public class MultiplayerGameCtrl {
      * @param question the question to visualise
      */
     public void showMultipleChoiceQuestion(Question question) {
+        mcQuestionCtrl.resetCircleColor();
         mcQuestionCtrl.updateCircleColor(colors);
         mcQuestionCtrl.resetHighlight();
         mcQuestionCtrl.highlightCurrentCircle();
@@ -217,10 +218,17 @@ public class MultiplayerGameCtrl {
      * @param question the estimation question to visualise
      */
     public void showEstimationQuestion(EstimationQuestion question) {
-        mainCtrl.getPrimaryStage().setTitle("Estimation");
-        mainCtrl.getPrimaryStage().setScene(estimationQuestion);
-        estimationQuestionCtrl.startTimer();
+        estimationQuestionCtrl.resetCircleColor();
+        estimationQuestionCtrl.updateCircleColor(colors);
+        estimationQuestionCtrl.resetHighlight();
+        estimationQuestionCtrl.highlightCurrentCircle();
         estimationQuestionCtrl.setup(question);
+        estimationQuestionCtrl.updateQuestionNumber();
+
+        estimationQuestionCtrl.startTimer();
+        estimationQuestionCtrl.setStartTime();
+        mainCtrl.getPrimaryStage().setTitle("Estimation question screen");
+        mainCtrl.getPrimaryStage().setScene(estimationQuestion);
     }
 
     /**
