@@ -3,14 +3,17 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.entities.Activity;
+import commons.entities.MultiplayerUser;
 import commons.models.Answer;
 import commons.models.ChoiceQuestion;
 import commons.models.ComparisonQuestion;
 import commons.models.ConsumptionQuestion;
 import commons.models.Question;
+import jakarta.ws.rs.WebApplicationException;
 import commons.utils.CompareType;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -36,7 +39,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     private static final double MILLISECONDS_PER_SECONDS = 1000.0;
     private static final double CIRCLE_BORDER_SIZE = 1.7;
     private static final double STANDARD_SIZE = 1.0;
-
+    private static final int KICK_AT_X_QUESTIONS = 3;
     private static final int POLLING_DELAY = 0;
     private static final int POLLING_INTERVAL = 500;
 
@@ -103,11 +106,11 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     @FXML
     private Text currentScore;
     @FXML
-    private ImageView x2image;
+    private ImageView doublePointsImage;
     @FXML
-    private ImageView minus1image;
+    private ImageView removeIncorrectImage;
     @FXML
-    private ImageView shortenTimeImage;
+    private ImageView reduceTimeImage;
 
     /**
      * Creates a controller for the multiplayer question screen, with the given server and main controller.
@@ -151,6 +154,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
         }
 
         selectedAnswerButton = null;
+        gameCtrl.setAnsweredQuestion ( false );
         this.currentQuestion = question;
         currentScore.setText("Score: " + gameCtrl.getUser().points);
 
@@ -177,7 +181,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
         }
 
         resetAnswerColors();
-        x2image.setVisible(false);
+        doublePointsImage.setVisible(false);
         try {
             questionImg.setImage(server.fetchImage(mainCtrl.getServerUrl(), currentQuestion.getImagePath()));
         }
@@ -269,6 +273,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      * @param answer       The answer corresponding to the answer button.
      */
     private void onAnswerClicked(StackPane answerButton, Answer answer) {
+        gameCtrl.setAnsweredQuestion ( true );
         if (!answerButton.equals(selectedAnswerButton)) {
             currentQuestion.setUserAnswer(answer, getSeconds());
 
@@ -435,8 +440,8 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     }
 
     /**
-     * A general method for setting an answer button's background color upon the cursor enters it,
-     * according to whether it is selected.
+     * A general method for setting a joker button's background color upon the cursor enters it,
+     * according to whether it is already used.
      *
      * @param jokerBtn The joker button to be recolored.
      */
@@ -448,8 +453,8 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     }
 
     /**
-     * The method called upon loading the question scene, and when the cursor leaves either one of the answer buttons.
-     * Resets all answer boxes' background color according to whether they are selected.
+     * The method called upon loading the question scene, and when the cursor leaves either one of the joker buttons.
+     * Resets all joker buttons' background color according to whether they are already used.
      */
     @FXML
     public void resetJokerColors() {
@@ -470,7 +475,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     @FXML
     public void useDoublePoints(){
         gameCtrl.setIsActiveDoublePoints(true);
-        gameCtrl.useJoker(doublePoints,x2image);
+        gameCtrl.useJoker(doublePoints,doublePointsImage);
     }
 
     /**
@@ -478,7 +483,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      */
     public void resetDoublePoints(){
         doublePoints.setOnMouseClicked(event -> useDoublePoints());
-        gameCtrl.resetJoker(doublePoints);
+        gameCtrl.enableJoker(doublePoints);
     }
 
     /**
@@ -590,6 +595,34 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
 
     @Override
     public void redirect() {
+        MultiplayerUser user = gameCtrl.getUser();
+        if (!gameCtrl.getAnsweredQuestion()) {
+            user.unansweredQuestions++;
+            if (user.unansweredQuestions == KICK_AT_X_QUESTIONS) {
+                try {
+                    server.removeMultiplayerUser(server.getURL(), user);
+                } catch(WebApplicationException e) {
+                    System.out.println("User to remove not found!");
+                }
+
+                mainCtrl.killThread();
+                mainCtrl.showHome();
+                mainCtrl.bindUser(null);
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle ("Kicked :(");
+                alert.setHeaderText(null);
+                alert.setGraphic(null);
+                alert.setContentText("You've been kicked for not answering 3 question in a row!");
+                alert.show();
+
+                return;
+            }
+        } else {
+            user.unansweredQuestions = 0;
+        }
+
+        gameCtrl.setAnsweredQuestion(false);
         finalizeAndSend();
     }
 

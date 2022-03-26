@@ -93,6 +93,7 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
      * @param correctPlayers A list of all the players that answered the precious question correctly.
      */
     protected void setup(Question prevQuestion, List<MultiplayerUser> correctPlayers) {
+
         if (prevQuestion.hasCorrectUserAnswer()) {
             this.answerResponse.setText("Well done!");
             currentScore.setFill(Color.GREEN);
