@@ -83,6 +83,11 @@ public class ConsumptionQuestion extends Question {
             coefficient *= 10;
         }
 
+        if(coefficient == 1 && correctAnswer % 5 == 0){
+            correctAnswer = correctAnswer / 5;
+            coefficient *= 5;
+        }
+
         do {
              firstAlternative = (long) (correctAnswer +
                     (random.nextDouble() < 0.5 ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
