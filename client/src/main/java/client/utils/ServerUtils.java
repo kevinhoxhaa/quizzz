@@ -164,6 +164,15 @@ public class ServerUtils {
                 .delete(MultiplayerUser.class);
     }
 
+    /**
+     * A method that posts the answer of the user in the repository
+     * @param serverUrl
+     * @param gameIndex
+     * @param userId
+     * @param questionIndex
+     * @param question
+     * @return list of the users who got the question right
+     */
     public List<MultiplayerUser> answerQuestion(String serverUrl, int gameIndex,
                                                 long userId, int questionIndex, Question question) {
         String path = String.format(
@@ -180,6 +189,15 @@ public class ServerUtils {
                 .post(Entity.entity(question, APPLICATION_JSON), new GenericType<List<MultiplayerUser>>() {});
     }
 
+    /**
+     * A method that posts the answer of the user in the repository when the double points joker is activated
+     * @param serverUrl
+     * @param gameIndex
+     * @param userId
+     * @param questionIndex
+     * @param question
+     * @return list of the users who got the question right
+     */
     public List<MultiplayerUser> answerDoublePointsQuestion(String serverUrl, int gameIndex,
                                                 long userId, int questionIndex, Question question) {
         String path = String.format(

@@ -282,11 +282,22 @@ public class GameController {
                @PathVariable(name = "userId") long userId,
                @PathVariable(name = "questionIndex") int questionIndex,
                @RequestBody Question answeredQuestion) {
-        shared(gameIndex,userId,questionIndex,answeredQuestion);
 
+        if(!gameUserRepo.existsById(userId)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        if(gameIndex >= gameList.getGames().size()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Game game = gameList.getGames().get(gameIndex);
+
+        if(questionIndex >= game.getQuestions().size()) {
+            return ResponseEntity.badRequest().build();
+        }
 
         MultiplayerUser user = gameUserRepo.findById(userId).get();
-        Game game = gameList.getGames().get(gameIndex);
 
         if(user.totalAnswers <= questionIndex) {
             user.points += answeredQuestion.calculatePoints();
@@ -296,11 +307,11 @@ public class GameController {
             gameUserRepo.save(user);
         }
 
-        return getListResponseEntity(questionIndex, game);
+        return getRightUsers(questionIndex, game);
     }
 
     /**
-     * Adds the user answer points to the database and
+     * Adds the user answer points to the database when the double point joker is activated and
      * returns the number of users who have answered the last
      * question correctly
      * @param gameIndex the index of the game
@@ -317,52 +328,6 @@ public class GameController {
                @PathVariable(name = "questionIndex") int questionIndex,
                @RequestBody Question answeredQuestion) {
 
-        shared(gameIndex,userId,questionIndex,answeredQuestion);
-        Game game = gameList.getGames().get(gameIndex);
-
-        MultiplayerUser user = gameUserRepo.findById(userId).get();
-        if(user.totalAnswers <= questionIndex) {
-            user.points += 2*answeredQuestion.calculatePoints();
-            user.totalAnswers += 1;
-            user.correctAnswers += answeredQuestion.calculatePoints() == 0 ? 0 : 1;
-            user.lastAnswerCorrect = answeredQuestion.hasCorrectUserAnswer();
-            gameUserRepo.save(user);
-        }
-
-        return getListResponseEntity(questionIndex, game);
-    }
-
-    /**
-     * List
-     * @param questionIndex
-     * @param game
-     * @return
-     */
-    private ResponseEntity<List<MultiplayerUser>> getListResponseEntity(int questionIndex, Game game) {
-        if(!allUsersHaveAnswered(game, questionIndex + 1)) {
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
-        }
-
-        List<MultiplayerUser> rightUsers = new ArrayList<>();
-        for(long id : game.getUserIds()) {
-            MultiplayerUser u = gameUserRepo.findById(id).get();
-            if(u.lastAnswerCorrect) {
-                rightUsers.add(u);
-            }
-        }
-
-        return ResponseEntity.ok(rightUsers);
-    }
-
-    /**
-     * Shared
-     * @param gameIndex
-     * @param userId
-     * @param questionIndex
-     * @param answeredQuestoon
-     * @return
-     */
-    private ResponseEntity<Object> shared(int gameIndex, long userId, int questionIndex, Question answeredQuestoon){
         if(!gameUserRepo.existsById(userId)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -376,7 +341,41 @@ public class GameController {
         if(questionIndex >= game.getQuestions().size()) {
             return ResponseEntity.badRequest().build();
         }
-        return null;
+
+        MultiplayerUser user = gameUserRepo.findById(userId).get();
+
+        if(user.totalAnswers <= questionIndex) {
+            user.points += 2 * answeredQuestion.calculatePoints();
+            user.totalAnswers += 1;
+            user.correctAnswers += answeredQuestion.calculatePoints() == 0 ? 0 : 1;
+            user.lastAnswerCorrect = answeredQuestion.hasCorrectUserAnswer();
+            gameUserRepo.save(user);
+        }
+
+        return getRightUsers(questionIndex, game);
+    }
+
+    /**
+     * Lists all users in a game that got the answer correct
+     * @param questionIndex the question index
+     * @param game the game the users are in
+     * @return the list of users who have answered the last question
+     *      * correctly
+     */
+    private ResponseEntity<List<MultiplayerUser>> getRightUsers(int questionIndex, Game game) {
+        if(!allUsersHaveAnswered(game, questionIndex + 1)) {
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
+        }
+
+        List<MultiplayerUser> rightUsers = new ArrayList<>();
+        for(long id : game.getUserIds()) {
+            MultiplayerUser u = gameUserRepo.findById(id).get();
+            if(u.lastAnswerCorrect) {
+                rightUsers.add(u);
+            }
+        }
+
+        return ResponseEntity.ok(rightUsers);
     }
 
     /**
