@@ -126,7 +126,7 @@ public class MultiplayerResultsCtrl implements QuestionNumController, SceneContr
             gameCtrl.showQuestion(server.restartGame(serverUrl, gameCtrl.getGameIndex(),
                     gameCtrl.getUser().id));
         } else {
-            onQuit();
+            rematchButton.setOnAction(null);
         }
     }
 

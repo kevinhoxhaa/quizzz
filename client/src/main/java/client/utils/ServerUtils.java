@@ -222,6 +222,13 @@ public class ServerUtils {
                 .delete(List.class);
     }
 
+    /**
+     * Removes an ID from a player from the list of ID's of the users that want to have a rematch.
+     * @param serverUrl The URL of the server.
+     * @param gameIndex The index of the game from where the user should be removed.
+     * @param userId The ID of the user that should be removed.
+     * @return A list with all ID's of the users that want to have a rematch.
+     */
     public List<Long> removeRestartUserID(String serverUrl, int gameIndex, Long userId) {
         String path = String.format("/api/games/restart/%d/%d", gameIndex, userId);
         return ClientBuilder.newClient(new ClientConfig())
@@ -231,6 +238,13 @@ public class ServerUtils {
                 .delete(List.class);
     }
 
+    /**
+     * Adds an ID from a player to the list of ID's of the users that want to have a rematch.
+     * @param serverUrl The URL of the server.
+     * @param gameIndex The index of the game to where the user should be added.
+     * @param userId The ID of the user that should be added.
+     * @return A list with all ID's of the users that want to have a rematch.
+     */
     public List<Long> addRestartUserID(String serverUrl, int gameIndex, Long userId) {
         String path = String.format("/api/games/restart/%d/%d", gameIndex, userId);
         return ClientBuilder.newClient(new ClientConfig())
