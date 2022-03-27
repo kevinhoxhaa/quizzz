@@ -2,7 +2,6 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.entities.MultiplayerUser;
-import commons.entities.User;
 import commons.models.Emoji;
 import commons.models.EstimationQuestion;
 import commons.models.Question;
@@ -17,7 +16,6 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.StackPane;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.util.Pair;
 
@@ -383,7 +381,7 @@ public class MultiplayerGameCtrl {
     }
 
     public void registerForHalfTime ( HalfTimeController ctrl ) {
-        server.registerForMessages( "/topic/halfTime/" + gameIndex, User.class , ctrl::halfTime );
+        server.registerForMessages( "/topic/halfTime/" + gameIndex, MultiplayerUser.class , ctrl::halfTime );
     }
 
     /**

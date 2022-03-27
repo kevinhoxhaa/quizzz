@@ -415,11 +415,15 @@ public class MainCtrl {
 
     /**
      * Halves the remaining timer for the user.
+     * @param user the user that used the joker
      */
 
-    public void halfTime ( User user ) {
-        if ( user != this.user )
+    public void halfTime ( MultiplayerUser user ) {
+        System.out.println("Received message from user: ");
+        System.out.println(user);
+        if ( !user.username.equals(this.user.username) ) {
             countdown = countdown / 2;
+        }
     }
 
     /**

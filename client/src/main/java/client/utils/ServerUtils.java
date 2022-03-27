@@ -290,6 +290,7 @@ public class ServerUtils {
      */
     public void send(String dest, Object o) {
         System.out.println("Sending " + o);
+        System.out.println("to " + dest);
         session.send(dest, o);
     }
 

@@ -1,7 +1,7 @@
 package client.scenes;
 
-import commons.entities.User;
+import commons.entities.MultiplayerUser;
 
 public interface HalfTimeController {
-    void halfTime ( User user );
+    void halfTime ( MultiplayerUser user );
 }

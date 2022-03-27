@@ -4,7 +4,6 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.entities.Activity;
 import commons.entities.MultiplayerUser;
-import commons.entities.User;
 import commons.models.Answer;
 import commons.models.ChoiceQuestion;
 import commons.models.ComparisonQuestion;
@@ -14,8 +13,8 @@ import commons.models.Question;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.control.Alert;
 import javafx.scene.Cursor;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -328,7 +327,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      * Halves the remaining timer for the user.
      */
     @Override
-    public void halfTime ( User user ) {
+    public void halfTime ( MultiplayerUser user ) {
         mainCtrl.halfTime( user );
     }
 
@@ -502,7 +501,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
 
     @FXML
     public void useReduceTime() {
-        server.send ( "/app/halfTime/" + mainCtrl.getGameIndex(), mainCtrl.getUser() );
+        server.send ( "/app/halfTime/" + gameCtrl.getGameIndex(), mainCtrl.getUser() );
         gameCtrl.useJoker( reduceTime, reduceTimeImage );
     }
 

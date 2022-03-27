@@ -3,7 +3,6 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.entities.MultiplayerUser;
-import commons.entities.User;
 import commons.models.ChoiceQuestion;
 import commons.models.ComparisonQuestion;
 import commons.models.ConsumptionQuestion;
@@ -247,7 +246,7 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
      * Halves the remaining timer for the user.
      */
     @Override
-    public void halfTime ( User user ) {
+    public void halfTime ( MultiplayerUser user ) {
        mainCtrl.halfTime( user );
     }
 
