@@ -4,16 +4,20 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.entities.MultiplayerUser;
 import commons.models.Answer;
+import commons.models.Emoji;
 import commons.models.EstimationQuestion;
 import commons.models.Question;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.Cursor;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Background;
@@ -28,7 +32,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EstimationQuestionCtrl implements SceneController, QuestionNumController {
+public class EstimationQuestionCtrl implements SceneController, QuestionNumController, EmojiController {
 
     private static final double CIRCLE_BORDER_SIZE = 1.7;
     private static final double TIMEOUT = 8.0;
@@ -87,6 +91,15 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     @FXML
     private ImageView questionImg;
 
+    @FXML
+    private GridPane emojiPane;
+
+    @FXML
+    private ImageView emojiImage;
+
+    @FXML
+    private Text emojiText;
+
     /**
      * Creates a controller for the estimation question screen,
      * with the given server and main controller
@@ -101,6 +114,61 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     }
 
     /**
+     * Send emojis to the server on emoji click
+     */
+    public void enableEmojis() {
+        emojiPane.getChildren().forEach(n -> {
+            if(n instanceof ImageView) {
+                ImageView e = (ImageView) n;
+                e.setOnMouseClicked(event -> gameCtrl.sendEmoji(e));
+                e.setCursor(Cursor.HAND);
+
+                String[] parts = e.getImage().getUrl().split("/");
+                String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
+                emojiPath = emojiPath.substring(
+                        "file:/".length(), emojiPath.length() - "classes/java/main/".length())
+                        + "resources/main/client/images/" + parts[parts.length - 1];
+
+                e.setImage(new Image(emojiPath));
+            }
+        });
+    }
+    /**
+     * Disable emoji clicks
+     */
+    public void disableEmojis() {
+        emojiPane.getChildren().forEach(n -> {
+            if(n instanceof ImageView) {
+                ImageView e = (ImageView) n;
+                e.setOnMouseClicked(null);
+            }
+        });
+    }
+
+    /**
+     * Visualise emoji on the screen
+     * @param emoji the emoji to visualise
+     */
+    @Override
+    public void displayEmoji(Emoji emoji) {
+        String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
+        emojiPath = emojiPath.substring(
+                "file:/".length(), emojiPath.length() - "classes/java/main/".length())
+                + "resources/main/client/images/" + emoji.getImageName();
+        emojiImage.setImage(new Image(emojiPath));
+        emojiText.setText(emoji.getUsername());
+    }
+
+    /**
+     * Hides the emoji from the image view
+     */
+    @Override
+    public void hideEmoji() {
+        emojiImage.setImage(null);
+        emojiText.setText("");
+    }
+
+    /**
      * Initiates the timer countdown and animation
      */
     public void startTimer() {
@@ -108,7 +176,8 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     }
 
     public void setup(EstimationQuestion question) {
-        jokers=new ArrayList<>();
+        enableEmojis();
+        jokers = new ArrayList<>();
         jokers.add(doublePoints);
         jokers.add(removeIncorrect);
         jokers.add(reduceTime);
@@ -178,6 +247,12 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
                 }
 
                 mainCtrl.killThread();
+
+                if(server.getSession() != null && server.getSession().isConnected()) {
+                    gameCtrl.unregisterForEmojis();
+                    server.getSession().disconnect();
+                }
+                gameCtrl.hideEmojis();
                 mainCtrl.showHome();
                 mainCtrl.bindUser(null);
 
@@ -205,6 +280,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
             System.out.println("Enter a number!");
         }
 
+        disableEmojis();
         answerField.setText("");
         yourAnswer.setText("Your answer: ");
         gameCtrl.postAnswer(currentQuestion);
@@ -312,7 +388,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
      * Highlights current question so the user is aware which circle corresponds to his current question
      */
     public void highlightCurrentCircle() {
-        Circle circle = (Circle) circles.getChildren().get(mainCtrl.getAnswerCount());
+        Circle circle = (Circle) circles.getChildren().get(gameCtrl.getAnswerCount());
         circle.setFill(Color.DARKGRAY);
         circle.setStrokeWidth(CIRCLE_BORDER_SIZE);
     }
@@ -329,7 +405,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
 
     @Override
     public void updateCircleColor(List<Color> colors) {
-        for (int i = 0; i < mainCtrl.getAnswerCount(); i++) {
+        for (int i = 0; i < gameCtrl.getAnswerCount(); i++) {
             Circle circle = (Circle) getCirclesHBox().getChildren().get(i);
             circle.setFill(colors.get(i));
         }
@@ -345,6 +421,6 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
 
     @Override
     public void updateQuestionNumber() {
-        questionNum.setText("" + (mainCtrl.getAnswerCount() + 1));
+        questionNum.setText("" + (gameCtrl.getAnswerCount() + 1));
     }
 }

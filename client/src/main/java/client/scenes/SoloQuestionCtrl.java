@@ -105,9 +105,8 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
      * - Resets all buttons to their default colors
      *
      * @param soloGame the game instance
-     * @param colors   the list of colors corresponding to past questions
      */
-    protected void setup(SoloGame soloGame, List<Color> colors) {
+    protected void setup(SoloGame soloGame) {
         this.game = soloGame;
 
         currentScore.setText( String.format( "Score: %d", mainCtrl.getSoloScore()) );
@@ -119,10 +118,6 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
         }
         catch (IOException e){
         }
-
-        updateCircleColor(colors);
-        resetHighlight();
-        highlightCurrentCircle();
 
         selectedAnswerButton = null;
 
@@ -148,7 +143,6 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
         this.answerButtons.add(answerMid);
         this.answerButtons.add(answerBot);
 
-        updateQuestionNumber();
         resetAnswerColors();
     }
 

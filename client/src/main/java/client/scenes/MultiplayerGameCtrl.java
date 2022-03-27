@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.entities.MultiplayerUser;
+import commons.models.Emoji;
 import commons.models.EstimationQuestion;
 import commons.models.Question;
 import commons.utils.QuestionType;
@@ -17,6 +18,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.util.Pair;
+import org.springframework.messaging.simp.stomp.StompSession;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +34,7 @@ public class MultiplayerGameCtrl {
 
     private List<Color> colors;
     private boolean answeredQuestion = false;
+    private StompSession.Subscription emojiSubscription;
 
     private Timer answerTimer;
 
@@ -116,12 +119,23 @@ public class MultiplayerGameCtrl {
         this.ranking = ranking.getValue();
     }
 
+    public MultiplayerGameCtrl(){
+
+    }
+
     /**
      * Polls the first question and initialises
      * the game loop
+     * Initiates the websocket connection with the client
+     * for receiving emojis
      * Resets the jokers
      */
     public void startGame() {
+        server.connect(serverUrl);
+
+        registerForEmojis(estimationQuestionCtrl);
+        registerForEmojis(answerCtrl);
+        registerForEmojis(mcQuestionCtrl);
          resetAllJokers();
          user.unansweredQuestions = 0;
 
@@ -216,7 +230,7 @@ public class MultiplayerGameCtrl {
             colors.add(Color.INDIANRED);
         }
 
-        answerCtrl.updateCircleColor(colors);
+        mainCtrl.updateQuestionCounters(answerCtrl, colors);
         answerCtrl.setup(answeredQuestion, correctUsers);
         mainCtrl.getPrimaryStage().setTitle("Answer screen");
         mainCtrl.getPrimaryStage().setScene(answer);
@@ -228,7 +242,6 @@ public class MultiplayerGameCtrl {
      * @param question the question to visualise
      */
     public void showQuestion(Question question) {
-        System.out.println("Received question answer: " + question.getUserAnswer().generateAnswer());
         if (question.getType() == QuestionType.ESTIMATION) {
             showEstimationQuestion((EstimationQuestion) question);
             return;
@@ -243,14 +256,11 @@ public class MultiplayerGameCtrl {
      * @param question the question to visualise
      */
     public void showMultipleChoiceQuestion(Question question) {
-        mcQuestionCtrl.updateCircleColor(colors);
-        mcQuestionCtrl.resetHighlight();
-        mcQuestionCtrl.highlightCurrentCircle();
+        mainCtrl.updateQuestionCounters(mcQuestionCtrl, colors);
+
         mcQuestionCtrl.setup(question);
         mcQuestionCtrl.resetAnswerColors();
-        mcQuestionCtrl.updateQuestionNumber();
 
-        mcQuestionCtrl.resetAnswerColors();
         mcQuestionCtrl.enableAnswers();
         mcQuestionCtrl.startTimer();
         mcQuestionCtrl.setStartTime();
@@ -264,10 +274,13 @@ public class MultiplayerGameCtrl {
      * @param question the estimation question to visualise
      */
     public void showEstimationQuestion(EstimationQuestion question) {
-        mainCtrl.getPrimaryStage().setTitle("Estimation");
-        mainCtrl.getPrimaryStage().setScene(estimationQuestion);
-        estimationQuestionCtrl.startTimer();
+        mainCtrl.updateQuestionCounters(estimationQuestionCtrl, colors);
         estimationQuestionCtrl.setup(question);
+
+        estimationQuestionCtrl.startTimer();
+        estimationQuestionCtrl.setStartTime();
+        mainCtrl.getPrimaryStage().setTitle("Estimation question screen");
+        mainCtrl.getPrimaryStage().setScene(estimationQuestion);
     }
 
     /**
@@ -286,8 +299,7 @@ public class MultiplayerGameCtrl {
      */
     public void showRanking(List<MultiplayerUser> rankedUsers) {
         // TODO: handle passed multiplayer users
-        rankingCtrl.updateCircleColor(colors);
-        rankingCtrl.updateQuestionNumber();
+        mainCtrl.updateQuestionCounters(rankingCtrl, colors);
         mainCtrl.getPrimaryStage().setTitle("Ranking Screen");
         mainCtrl.getPrimaryStage().setScene(ranking);
         rankingCtrl.startTimer();
@@ -354,6 +366,40 @@ public class MultiplayerGameCtrl {
         return serverUrl;
     }
 
+    /**
+<<<<<<< HEAD
+     * Returns the game index
+     * @return the game index
+     */
+    public int getGameIndex() {
+        return gameIndex;
+    }
+
+    /**
+     * Register for emojis in a particular controller
+     * @param ctrl the controller to register for emojis to
+     */
+    public void registerForEmojis(EmojiController ctrl) {
+        emojiSubscription = server.registerForMessages(
+                "/topic/emoji/" + gameIndex,
+                Emoji.class,
+                ctrl::displayEmoji
+        );
+    }
+
+    /**
+     * Send an emoji to the server
+     * @param e the emoji image to send
+     */
+    public void sendEmoji(ImageView e) {
+        String[] imageComponents = e.getImage().getUrl().split("/");
+        String imageName = imageComponents[imageComponents.length - 1];
+        String username = user.username;
+        server.send(
+                "/app/emoji/" + gameIndex,
+                new Emoji(imageName, username)
+        );
+    }
     /**
      * A getter that returns true/false whether the Double Points joker is activated this round
      * @return isActiveDoublePoints, which shows whether the DP joker is being used
@@ -428,5 +474,24 @@ public class MultiplayerGameCtrl {
         estimationQuestionCtrl.resetDoublePoints();
         mcQuestionCtrl.resetRemoveIncorrect();
         //TODO: Reset all the other jokers
+    }
+
+    /**
+     * Hides all emojis from the game
+     */
+    public void hideEmojis() {
+        answerCtrl.hideEmoji();
+        mcQuestionCtrl.hideEmoji();
+        estimationQuestionCtrl.hideEmoji();
+    }
+
+    /**
+     * Removes the emoji subscription from the current session
+     */
+    public void unregisterForEmojis() {
+        if(server.getSession().isConnected()) {
+            emojiSubscription.unsubscribe();
+        }
+        emojiSubscription = null;
     }
 }
