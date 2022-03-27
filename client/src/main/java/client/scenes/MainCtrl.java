@@ -568,6 +568,10 @@ public class MainCtrl {
         alert.showAndWait().ifPresent(type -> {
             if (type == okButton) {
                 if(isMultiplayer) {
+                    if(multiplayerCtrl != null) {
+                        multiplayerCtrl.hideEmojis();
+                    }
+
                     try {
                         server.removeMultiplayerUser(serverUrl, user);
                         user = null;

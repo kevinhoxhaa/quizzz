@@ -254,6 +254,15 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
     }
 
     /**
+     * Removes the emoji from the image view
+     */
+    @Override
+    public void hideEmoji() {
+        emojiImage.setImage(null);
+        emojiText.setText("");
+    }
+
+    /**
      * Initiates the timer countdown and animation
      */
     public void startTimer() {

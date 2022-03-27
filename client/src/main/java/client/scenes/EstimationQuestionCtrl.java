@@ -160,6 +160,15 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     }
 
     /**
+     * Hides the emoji from the image view
+     */
+    @Override
+    public void hideEmoji() {
+        emojiImage.setImage(null);
+        emojiText.setText("");
+    }
+
+    /**
      * Initiates the timer countdown and animation
      */
     public void startTimer() {
@@ -235,6 +244,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
                 }
 
                 mainCtrl.killThread();
+                gameCtrl.hideEmojis();
                 mainCtrl.showHome();
                 mainCtrl.bindUser(null);
 

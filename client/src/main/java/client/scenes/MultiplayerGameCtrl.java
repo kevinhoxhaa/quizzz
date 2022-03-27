@@ -236,7 +236,6 @@ public class MultiplayerGameCtrl {
      * @param question the question to visualise
      */
     public void showQuestion(Question question) {
-        System.out.println("Received question answer: " + question.getUserAnswer().generateAnswer());
         if (question.getType() == QuestionType.ESTIMATION) {
             showEstimationQuestion((EstimationQuestion) question);
             return;
@@ -448,5 +447,14 @@ public class MultiplayerGameCtrl {
         mcQuestionCtrl.resetDoublePoints();
         estimationQuestionCtrl.resetDoublePoints();
         //TODO: Reset all the other jokers
+    }
+
+    /**
+     * Hides all emojis from the game
+     */
+    public void hideEmojis() {
+        answerCtrl.hideEmoji();
+        mcQuestionCtrl.hideEmoji();
+        estimationQuestionCtrl.hideEmoji();
     }
 }

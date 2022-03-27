@@ -534,6 +534,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
                 }
 
                 mainCtrl.killThread();
+                gameCtrl.hideEmojis();
                 mainCtrl.showHome();
                 mainCtrl.bindUser(null);
 
@@ -641,6 +642,15 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
                 + "resources/main/client/images/" + emoji.getImageName();
         emojiImage.setImage(new Image(emojiPath));
         emojiText.setText(emoji.getUsername());
+    }
+
+    /**
+     * Removes the emoji from the image view
+     */
+    @Override
+    public void hideEmoji() {
+        emojiImage.setImage(null);
+        emojiText.setText("");
     }
 
     /**
