@@ -417,7 +417,6 @@ public class MainCtrl {
      * Halves the remaining timer for the user.
      * @param user the user that used the joker
      */
-
     public void halfTime ( MultiplayerUser user ) {
         System.out.println("Received message from user: ");
         System.out.println(user);
@@ -434,7 +433,6 @@ public class MainCtrl {
     public int getAnswerCount() {
         return answerCount;
     }
-
 
     /**
      * Fetches a random question from the server. For now, it just returns a placeholder for testing.
