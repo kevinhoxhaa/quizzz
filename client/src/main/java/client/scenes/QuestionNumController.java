@@ -23,4 +23,14 @@ public interface QuestionNumController {
      * Updates the number of the current question (e.g 11/20)
      */
     void updateQuestionNumber();
+
+    /**
+     * Highlights the little circle corresponding to the current question
+     */
+    void highlightCurrentCircle();
+
+    /**
+     * Resets all little circles to a non-highlighted state
+     */
+    void resetHighlight();
 }
