@@ -500,7 +500,15 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
         Question question = getCurrentQuestion();
         switch (question.getType()) {
             case CONSUMPTION: {
-                List<Long> incorrectAnswers = ((ConsumptionQuestion) currentQuestion).getIncorrectAnswers();
+                List<Long> incorrectAnswers = new ArrayList<>();
+                incorrectAnswers.add(answerTopAnswer.getLongAnswer());
+                incorrectAnswers.add(answerMidAnswer.getLongAnswer());
+                incorrectAnswers.add(answerBotAnswer.getLongAnswer());
+                for(Long answer:incorrectAnswers){
+                    if(answer==((ConsumptionQuestion)currentQuestion).getUserAnswer().getLongAnswer()){
+                        incorrectAnswers.remove(answer);
+                    }
+                };
                 if (answerTopAnswer.getLongAnswer() == incorrectAnswers.get(0)) {
                     answerTop.setDisable(true);
                     answerTop.setBackground(new Background(

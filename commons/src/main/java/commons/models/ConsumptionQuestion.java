@@ -114,17 +114,6 @@ public class ConsumptionQuestion extends Question {
     }
 
     /**
-     * Returns the list of generated incorrect answers
-     * @return a List of Long values of the incorrect answers
-     */
-    public List<Long> getIncorrectAnswers(){
-        ArrayList<Long> incorrectAnswers = new ArrayList<>();
-        incorrectAnswers.add(firstAlternative);
-        incorrectAnswers.add(secondAlternative);
-        Collections.shuffle(incorrectAnswers);
-        return incorrectAnswers;
-    }
-    /**
      * Calculates the points based on whether
      * the user's answer is correct and the time
      * it took them to answer the question
