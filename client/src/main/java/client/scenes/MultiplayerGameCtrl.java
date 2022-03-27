@@ -18,6 +18,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.util.Pair;
+import org.springframework.messaging.simp.stomp.StompSession;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ public class MultiplayerGameCtrl {
 
     private List<Color> colors;
     private boolean answeredQuestion = false;
+    private StompSession.Subscription emojiSubscription;
 
     private Timer answerTimer;
 
@@ -223,7 +225,7 @@ public class MultiplayerGameCtrl {
             colors.add(Color.INDIANRED);
         }
 
-        answerCtrl.updateCircleColor(colors);
+        mainCtrl.updateQuestionCounters(answerCtrl, colors);
         answerCtrl.setup(answeredQuestion, correctUsers);
         mainCtrl.getPrimaryStage().setTitle("Answer screen");
         mainCtrl.getPrimaryStage().setScene(answer);
@@ -235,7 +237,6 @@ public class MultiplayerGameCtrl {
      * @param question the question to visualise
      */
     public void showQuestion(Question question) {
-        System.out.println("Received question answer: " + question.getUserAnswer().generateAnswer());
         if (question.getType() == QuestionType.ESTIMATION) {
             showEstimationQuestion((EstimationQuestion) question);
             return;
@@ -250,14 +251,11 @@ public class MultiplayerGameCtrl {
      * @param question the question to visualise
      */
     public void showMultipleChoiceQuestion(Question question) {
-        mcQuestionCtrl.updateCircleColor(colors);
-        mcQuestionCtrl.resetHighlight();
-        mcQuestionCtrl.highlightCurrentCircle();
+        mainCtrl.updateQuestionCounters(mcQuestionCtrl, colors);
+
         mcQuestionCtrl.setup(question);
         mcQuestionCtrl.resetAnswerColors();
-        mcQuestionCtrl.updateQuestionNumber();
 
-        mcQuestionCtrl.resetAnswerColors();
         mcQuestionCtrl.enableAnswers();
         mcQuestionCtrl.startTimer();
         mcQuestionCtrl.setStartTime();
@@ -271,10 +269,13 @@ public class MultiplayerGameCtrl {
      * @param question the estimation question to visualise
      */
     public void showEstimationQuestion(EstimationQuestion question) {
-        mainCtrl.getPrimaryStage().setTitle("Estimation");
-        mainCtrl.getPrimaryStage().setScene(estimationQuestion);
-        estimationQuestionCtrl.startTimer();
+        mainCtrl.updateQuestionCounters(estimationQuestionCtrl, colors);
         estimationQuestionCtrl.setup(question);
+
+        estimationQuestionCtrl.startTimer();
+        estimationQuestionCtrl.setStartTime();
+        mainCtrl.getPrimaryStage().setTitle("Estimation question screen");
+        mainCtrl.getPrimaryStage().setScene(estimationQuestion);
     }
 
     /**
@@ -293,8 +294,7 @@ public class MultiplayerGameCtrl {
      */
     public void showRanking(List<MultiplayerUser> rankedUsers) {
         // TODO: handle passed multiplayer users
-        rankingCtrl.updateCircleColor(colors);
-        rankingCtrl.updateQuestionNumber();
+        mainCtrl.updateQuestionCounters(rankingCtrl, colors);
         mainCtrl.getPrimaryStage().setTitle("Ranking Screen");
         mainCtrl.getPrimaryStage().setScene(ranking);
         rankingCtrl.startTimer();
@@ -362,6 +362,7 @@ public class MultiplayerGameCtrl {
     }
 
     /**
+<<<<<<< HEAD
      * Returns the game index
      * @return the game index
      */
@@ -374,7 +375,11 @@ public class MultiplayerGameCtrl {
      * @param ctrl the controller to register for emojis to
      */
     public void registerForEmojis(EmojiController ctrl) {
-        server.registerForMessages("/topic/emoji/" + gameIndex, Emoji.class, ctrl::displayEmoji);
+        emojiSubscription = server.registerForMessages(
+                "/topic/emoji/" + gameIndex,
+                Emoji.class,
+                ctrl::displayEmoji
+        );
     }
 
     public void registerForHalfTime () {
@@ -456,5 +461,24 @@ public class MultiplayerGameCtrl {
         estimationQuestionCtrl.resetDoublePoints();
         estimationQuestionCtrl.resetReduceTime();
         //TODO: Reset all the other jokers
+    }
+
+    /**
+     * Hides all emojis from the game
+     */
+    public void hideEmojis() {
+        answerCtrl.hideEmoji();
+        mcQuestionCtrl.hideEmoji();
+        estimationQuestionCtrl.hideEmoji();
+    }
+
+    /**
+     * Removes the emoji subscription from the current session
+     */
+    public void unregisterForEmojis() {
+        if(server.getSession().isConnected()) {
+            emojiSubscription.unsubscribe();
+        }
+        emojiSubscription = null;
     }
 }

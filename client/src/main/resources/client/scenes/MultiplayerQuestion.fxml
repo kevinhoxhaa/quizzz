@@ -329,9 +329,15 @@
                   </VBox>
                   <GridPane fx:id="emojiPane" alignment="CENTER" prefHeight="110.0" prefWidth="200.0">
                     <columnConstraints>
+<<<<<<< HEAD
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+=======
+                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="136.60003662109375" minWidth="10.0" prefWidth="118.19994506835937" />
+                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="131.2" minWidth="10.0" prefWidth="117.40005493164062" />
+                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+>>>>>>> dev
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />

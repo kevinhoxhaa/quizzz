@@ -165,15 +165,18 @@ public class ServerUtils {
      * A method that removes a multiplayer user from the repository
      * @param serverUrl
      * @param user
-     * @return the user that was removed
      */
-    public MultiplayerUser removeMultiplayerUser(String serverUrl, User user) {
-        MultiplayerUser mu = (MultiplayerUser) user;
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(serverUrl).path("api/users/"+mu.id)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .delete(MultiplayerUser.class);
+    public void removeMultiplayerUser(String serverUrl, User user) {
+        try {
+            MultiplayerUser mu = (MultiplayerUser) user;
+            ClientBuilder.newClient(new ClientConfig())
+                    .target(serverUrl).path("api/users/" + mu.id)
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .delete(MultiplayerUser.class);
+        } catch(NullPointerException ex) {
+            System.out.println("Cannot remove null user!");
+        }
     }
 
     /**
@@ -301,10 +304,11 @@ public class ServerUtils {
      * @param type the type of the payload to expect from the server
      * @param consumer the consumer that handles the received payload
      * @param <T> the type of the payload to expect from the server
+     * @return the created subscription
      */
-    public <T> void registerForMessages(String dest, Class<T> type, Consumer<T> consumer) {
+    public <T> StompSession.Subscription registerForMessages(String dest, Class<T> type, Consumer<T> consumer) {
         //noinspection NullableProblems
-        session.subscribe(dest, new StompFrameHandler() {
+        return session.subscribe(dest, new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
                 return type;
@@ -345,5 +349,13 @@ public class ServerUtils {
         byte[] buffer = bos.toByteArray();
 
         return new Image(new ByteArrayInputStream(buffer));
+    }
+
+    /**
+     * Returns the current session
+     * @return the current websocket session
+     */
+    public StompSession getSession() {
+        return session;
     }
 }

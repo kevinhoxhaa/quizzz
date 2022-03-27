@@ -33,6 +33,8 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
 
     private static final int HALF_QUESTIONS = 10;
     private static final int TOTAL_QUESTIONS = 20;
+    private static final double CIRCLE_BORDER_SIZE = 1.7;
+    private static final double STANDARD_CIRCLE_BORDER_SIZE = 1.0;
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -209,11 +211,20 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
      * Send emojis to the server on emoji click
      */
     public void enableEmojis() {
+
         emojiPane.getChildren().forEach(n -> {
             if(n instanceof ImageView) {
                 ImageView e = (ImageView) n;
                 e.setOnMouseClicked(event -> gameCtrl.sendEmoji(e));
                 e.setCursor(Cursor.HAND);
+
+                String[] parts = e.getImage().getUrl().split("/");
+                String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
+                emojiPath = emojiPath.substring(
+                        "file:/".length(), emojiPath.length() - "classes/java/main/".length())
+                        + "resources/main/client/images/" + parts[parts.length - 1];
+
+                e.setImage(new Image(emojiPath));
             }
         });
     }
@@ -241,6 +252,15 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
                 + "resources/main/client/images/" + emoji.getImageName();
         emojiImage.setImage(new Image(emojiPath));
         emojiText.setText(emoji.getUsername());
+    }
+
+    /**
+     * Removes the emoji from the image view
+     */
+    @Override
+    public void hideEmoji() {
+        emojiImage.setImage(null);
+        emojiText.setText("");
     }
 
     /**
@@ -319,6 +339,25 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
 
     @Override
     public void updateQuestionNumber() {
-        getQuestionNum().setText("" + (gameCtrl.getAnswerCount() + 1));
+        getQuestionNum().setText("" + (gameCtrl.getAnswerCount()));
+    }
+
+    /**
+     * Highlights current question so the user is aware which circle corresponds to his current question
+     */
+    public void highlightCurrentCircle() {
+        Circle c = (Circle) circles.getChildren().get(gameCtrl.getAnswerCount());
+        c.setFill(Color.DARKGRAY);
+        c.setStrokeWidth(CIRCLE_BORDER_SIZE);
+    }
+
+    /**
+     * Resets the highlighting of the circle borders
+     */
+    public void resetHighlight(){
+        for(int i=0;i<circles.getChildren().size();i++){
+            Circle circle = (Circle) circles.getChildren().get(i);
+            circle.setStrokeWidth(STANDARD_CIRCLE_BORDER_SIZE);
+        }
     }
 }

@@ -17,6 +17,9 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -122,6 +125,14 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
                 ImageView e = (ImageView) n;
                 e.setOnMouseClicked(event -> gameCtrl.sendEmoji(e));
                 e.setCursor(Cursor.HAND);
+
+                String[] parts = e.getImage().getUrl().split("/");
+                String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
+                emojiPath = emojiPath.substring(
+                        "file:/".length(), emojiPath.length() - "classes/java/main/".length())
+                        + "resources/main/client/images/" + parts[parts.length - 1];
+
+                e.setImage(new Image(emojiPath));
             }
         });
     }
@@ -152,6 +163,15 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     }
 
     /**
+     * Hides the emoji from the image view
+     */
+    @Override
+    public void hideEmoji() {
+        emojiImage.setImage(null);
+        emojiText.setText("");
+    }
+
+    /**
      * Initiates the timer countdown and animation
      */
     public void startTimer() {
@@ -160,7 +180,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
 
     public void setup(EstimationQuestion question) {
         enableEmojis();
-        jokers=new ArrayList<>();
+        jokers = new ArrayList<>();
         jokers.add(doublePoints);
         jokers.add(removeIncorrect);
         jokers.add(reduceTime);
@@ -228,6 +248,12 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
                 }
 
                 mainCtrl.killThread();
+
+                if(server.getSession() != null && server.getSession().isConnected()) {
+                    gameCtrl.unregisterForEmojis();
+                    server.getSession().disconnect();
+                }
+                gameCtrl.hideEmojis();
                 mainCtrl.showHome();
                 mainCtrl.bindUser(null);
 
@@ -392,7 +418,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
      * Highlights current question so the user is aware which circle corresponds to his current question
      */
     public void highlightCurrentCircle() {
-        Circle circle = (Circle) circles.getChildren().get(mainCtrl.getAnswerCount());
+        Circle circle = (Circle) circles.getChildren().get(gameCtrl.getAnswerCount());
         circle.setFill(Color.DARKGRAY);
         circle.setStrokeWidth(CIRCLE_BORDER_SIZE);
     }
@@ -409,7 +435,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
 
     @Override
     public void updateCircleColor(List<Color> colors) {
-        for (int i = 0; i < mainCtrl.getAnswerCount(); i++) {
+        for (int i = 0; i < gameCtrl.getAnswerCount(); i++) {
             Circle circle = (Circle) getCirclesHBox().getChildren().get(i);
             circle.setFill(colors.get(i));
         }
@@ -425,6 +451,6 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
 
     @Override
     public void updateQuestionNumber() {
-        questionNum.setText("" + (mainCtrl.getAnswerCount() + 1));
+        questionNum.setText("" + (gameCtrl.getAnswerCount() + 1));
     }
 }

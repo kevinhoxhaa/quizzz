@@ -299,7 +299,20 @@
    <right>
       <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <Pane prefHeight="80.0" prefWidth="225.0" />
+             <HBox alignment="CENTER_RIGHT" prefHeight="80.0" prefWidth="200.0">
+                 <children>
+                     <VBox alignment="CENTER" prefHeight="80.0" prefWidth="100.0">
+                         <children>
+                             <ImageView fx:id="emojiImage" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" />
+                             <Text fx:id="emojiText" strokeType="OUTSIDE" strokeWidth="0.0" text="Emoji">
+                                 <font>
+                                     <Font size="18.0" />
+                                 </font>
+                             </Text>
+                         </children>
+                     </VBox>
+                 </children>
+             </HBox>
             <VBox prefHeight="149.0" prefWidth="175.0">
                <children>
                   <StackPane fx:id="doublePoints" onMouseClicked="#useDoublePoints" onMouseEntered="#enterDoublePoints" onMouseExited="#resetJokerColors" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;" VBox.vgrow="ALWAYS">
@@ -379,7 +392,7 @@
                   </StackPane>
                </children>
             </VBox>
-            <GridPane fx:id="emojiBoard" alignment="CENTER" prefHeight="110.0" prefWidth="200.0">
+            <GridPane fx:id="emojiPane" alignment="CENTER" prefHeight="110.0" prefWidth="200.0">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="136.60003662109375" minWidth="10.0" prefWidth="118.19994506835937" />
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="131.2" minWidth="10.0" prefWidth="117.40005493164062" />

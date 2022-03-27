@@ -190,7 +190,9 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
         doublePointsImage.setVisible(false);
         reduceTimeImage.setVisible(false);
         try {
-            questionImg.setImage(server.fetchImage(mainCtrl.getServerUrl(), currentQuestion.getImagePath()));
+            questionImg.setImage(
+                    server.fetchImage(mainCtrl.getServerUrl(), currentQuestion.getImagePath())
+            );
         }
         catch (IOException e){
         }
@@ -552,6 +554,8 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
 
     @Override
     public void redirect() {
+        disableAnswers();
+        disableEmojis();
         MultiplayerUser user = gameCtrl.getUser();
         if (!gameCtrl.getAnsweredQuestion()) {
             user.unansweredQuestions++;
@@ -563,6 +567,12 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
                 }
 
                 mainCtrl.killThread();
+
+                if(server.getSession() != null && server.getSession().isConnected()) {
+                    gameCtrl.unregisterForEmojis();
+                    server.getSession().disconnect();
+                }
+                gameCtrl.hideEmojis();
                 mainCtrl.showHome();
                 mainCtrl.bindUser(null);
 
@@ -637,6 +647,14 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
                 ImageView e = (ImageView) n;
                 e.setOnMouseClicked(event -> gameCtrl.sendEmoji(e));
                 e.setCursor(Cursor.HAND);
+
+                String[] parts = e.getImage().getUrl().split("/");
+                String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
+                emojiPath = emojiPath.substring(
+                        "file:/".length(), emojiPath.length() - "classes/java/main/".length())
+                        + "resources/main/client/images/" + parts[parts.length - 1];
+
+                e.setImage(new Image(emojiPath));
             }
         });
     }
@@ -664,6 +682,15 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
                 + "resources/main/client/images/" + emoji.getImageName();
         emojiImage.setImage(new Image(emojiPath));
         emojiText.setText(emoji.getUsername());
+    }
+
+    /**
+     * Removes the emoji from the image view
+     */
+    @Override
+    public void hideEmoji() {
+        emojiImage.setImage(null);
+        emojiText.setText("");
     }
 
     /**
