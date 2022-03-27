@@ -130,13 +130,10 @@ public class MultiplayerGameCtrl {
         registerForEmojis(estimationQuestionCtrl);
         registerForEmojis(answerCtrl);
         registerForEmojis(mcQuestionCtrl);
-        registerForHalfTime( estimationQuestionCtrl );
-        registerForHalfTime( answerCtrl );
-        registerForHalfTime( mcQuestionCtrl );
-
+        registerForHalfTime();
         Question firstQuestion = fetchQuestion();
         showQuestion(firstQuestion);
-         resetAllJokers();
+        resetAllJokers();
     }
 
     /**
@@ -380,8 +377,10 @@ public class MultiplayerGameCtrl {
         server.registerForMessages("/topic/emoji/" + gameIndex, Emoji.class, ctrl::displayEmoji);
     }
 
-    public void registerForHalfTime ( HalfTimeController ctrl ) {
-        server.registerForMessages( "/topic/halfTime/" + gameIndex, MultiplayerUser.class , ctrl::halfTime );
+    public void registerForHalfTime () {
+        server.registerForMessages( "/topic/halfTime/" + gameIndex,
+                MultiplayerUser.class ,
+                (user) -> mainCtrl.halfTime(user) );
     }
 
     /**

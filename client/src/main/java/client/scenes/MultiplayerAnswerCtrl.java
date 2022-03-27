@@ -29,7 +29,7 @@ import javafx.scene.text.Text;
 import java.util.List;
 
 public class MultiplayerAnswerCtrl implements SceneController, QuestionNumController,
-        EmojiController, HalfTimeController {
+        EmojiController {
 
     private static final int HALF_QUESTIONS = 10;
     private static final int TOTAL_QUESTIONS = 20;
@@ -241,14 +241,6 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
                 + "resources/main/client/images/" + emoji.getImageName();
         emojiImage.setImage(new Image(emojiPath));
         emojiText.setText(emoji.getUsername());
-    }
-
-    /**
-     * Halves the remaining timer for the user.
-     */
-    @Override
-    public void halfTime ( MultiplayerUser user ) {
-       mainCtrl.halfTime( user );
     }
 
     /**

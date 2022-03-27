@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EstimationQuestionCtrl implements SceneController, QuestionNumController,
-        EmojiController, HalfTimeController {
+        EmojiController {
 
     private static final double CIRCLE_BORDER_SIZE = 1.7;
     private static final double TIMEOUT = 8.0;
@@ -297,9 +297,10 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
 
     /**
      * Halves the remaining timer for the user.
+     *
+     * @param user the user that called the joker
      */
 
-    @Override
     public void halfTime ( MultiplayerUser user ) {
         mainCtrl.halfTime( user );
     }

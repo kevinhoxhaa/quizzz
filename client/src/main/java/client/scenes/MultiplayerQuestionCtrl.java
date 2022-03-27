@@ -39,7 +39,7 @@ import static commons.utils.CompareType.SMALLER;
 
 
 public class MultiplayerQuestionCtrl implements SceneController, QuestionNumController,
-        EmojiController, HalfTimeController {
+        EmojiController {
     private static final double MILLISECONDS_PER_SECONDS = 1000.0;
     private static final double CIRCLE_BORDER_SIZE = 1.7;
     private static final double STANDARD_SIZE = 1.0;
@@ -326,8 +326,10 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
 
     /**
      * Halves the remaining timer for the user.
+     *
+     * @param user the user that called the joker
      */
-    @Override
+
     public void halfTime ( MultiplayerUser user ) {
         mainCtrl.halfTime( user );
     }
