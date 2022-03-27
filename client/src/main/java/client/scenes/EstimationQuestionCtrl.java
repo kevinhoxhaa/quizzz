@@ -71,6 +71,9 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     private TextField answerField;
 
     @FXML
+    private ImageView questionImg;
+
+    @FXML
     private GridPane emojiPane;
 
     @FXML

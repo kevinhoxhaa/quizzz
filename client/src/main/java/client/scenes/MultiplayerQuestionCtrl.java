@@ -188,6 +188,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
         resetAnswerColors();
         enableEmojis();
         doublePointsImage.setVisible(false);
+        reduceTimeImage.setVisible(false);
         try {
             questionImg.setImage(server.fetchImage(mainCtrl.getServerUrl(), currentQuestion.getImagePath()));
         }
