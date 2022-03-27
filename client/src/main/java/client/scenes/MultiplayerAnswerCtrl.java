@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.entities.MultiplayerUser;
+import commons.entities.User;
 import commons.models.ChoiceQuestion;
 import commons.models.ComparisonQuestion;
 import commons.models.ConsumptionQuestion;
@@ -28,7 +29,7 @@ import javafx.scene.text.Text;
 
 import java.util.List;
 
-public class MultiplayerAnswerCtrl implements SceneController, QuestionNumController, EmojiController {
+public class MultiplayerAnswerCtrl implements SceneController, QuestionNumController, EmojiController, HalfTimeController {
 
     private static final int HALF_QUESTIONS = 10;
     private static final int TOTAL_QUESTIONS = 20;
@@ -240,6 +241,14 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
                 + "resources/main/client/images/" + emoji.getImageName();
         emojiImage.setImage(new Image(emojiPath));
         emojiText.setText(emoji.getUsername());
+    }
+
+    /**
+     * Halves the remaining timer for the user.
+     */
+    @Override
+    public void halfTime ( User user ) {
+       mainCtrl.halfTime( user );
     }
 
     /**

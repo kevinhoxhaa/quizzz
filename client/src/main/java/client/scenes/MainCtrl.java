@@ -414,6 +414,15 @@ public class MainCtrl {
     }
 
     /**
+     * Halves the remaining timer for the user.
+     */
+
+    public void halfTime ( User user ) {
+        if ( user != this.user )
+            countdown = countdown / 2;
+    }
+
+    /**
      * A getter for the number of the current question
      *
      * @return questionCount, which is the count of the number of questions that have already been shown.
@@ -509,15 +518,6 @@ public class MainCtrl {
                     });
         });
         timerThread.start();
-    }
-
-    /**
-     * Halves the remaining timer for the user.
-     *
-     */
-
-    public void halfTime () {
-        countdown = countdown / 2;
     }
 
     /**

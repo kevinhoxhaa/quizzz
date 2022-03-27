@@ -4,6 +4,7 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.entities.Activity;
 import commons.entities.MultiplayerUser;
+import commons.entities.User;
 import commons.models.Answer;
 import commons.models.ChoiceQuestion;
 import commons.models.ComparisonQuestion;
@@ -38,7 +39,7 @@ import static commons.utils.CompareType.LARGER;
 import static commons.utils.CompareType.SMALLER;
 
 
-public class MultiplayerQuestionCtrl implements SceneController, QuestionNumController, EmojiController {
+public class MultiplayerQuestionCtrl implements SceneController, QuestionNumController, EmojiController, HalfTimeController {
     private static final double MILLISECONDS_PER_SECONDS = 1000.0;
     private static final double CIRCLE_BORDER_SIZE = 1.7;
     private static final double STANDARD_SIZE = 1.0;
@@ -323,6 +324,14 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
         gameCtrl.postAnswer(currentQuestion);
     }
 
+    /**
+     * Halves the remaining timer for the user.
+     */
+    @Override
+    public void halfTime ( User user ) {
+        mainCtrl.halfTime( user );
+    }
+
 
     /**
      * Captures the exact time the question page started showing used for measuring the time
@@ -493,7 +502,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
 
     @FXML
     public void useReduceTime() {
-        mainCtrl.halfTime();
+        server.send ( "/app/halfTime/" + mainCtrl.getGameIndex(), mainCtrl.getUser() );
         gameCtrl.useJoker( reduceTime, reduceTimeImage );
     }
 

@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.entities.MultiplayerUser;
+import commons.entities.User;
 import commons.models.Answer;
 import commons.models.Emoji;
 import commons.models.EstimationQuestion;
@@ -32,7 +33,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EstimationQuestionCtrl implements SceneController, QuestionNumController, EmojiController {
+public class EstimationQuestionCtrl implements SceneController, QuestionNumController, EmojiController, HalfTimeController {
 
     private static final double CIRCLE_BORDER_SIZE = 1.7;
     private static final double TIMEOUT = 8.0;
@@ -291,8 +292,17 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
 
     @FXML
     public void useReduceTime() {
-        mainCtrl.halfTime();
+        server.send ( "/app/halfTime/" + mainCtrl.getGameIndex(), mainCtrl.getUser() );
         gameCtrl.useJoker( reduceTime, reduceTimeImage );
+    }
+
+    /**
+     * Halves the remaining timer for the user.
+     */
+
+    @Override
+    public void halfTime ( User user ) {
+        mainCtrl.halfTime( user );
     }
 
     /**

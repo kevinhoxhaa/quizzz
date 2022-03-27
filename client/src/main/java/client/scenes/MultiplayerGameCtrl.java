@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.entities.MultiplayerUser;
+import commons.entities.User;
 import commons.models.Emoji;
 import commons.models.EstimationQuestion;
 import commons.models.Question;
@@ -131,6 +132,9 @@ public class MultiplayerGameCtrl {
         registerForEmojis(estimationQuestionCtrl);
         registerForEmojis(answerCtrl);
         registerForEmojis(mcQuestionCtrl);
+        registerForHalfTime( estimationQuestionCtrl );
+        registerForHalfTime( answerCtrl );
+        registerForHalfTime( mcQuestionCtrl );
 
         Question firstQuestion = fetchQuestion();
         showQuestion(firstQuestion);
@@ -376,6 +380,10 @@ public class MultiplayerGameCtrl {
      */
     public void registerForEmojis(EmojiController ctrl) {
         server.registerForMessages("/topic/emoji/" + gameIndex, Emoji.class, ctrl::displayEmoji);
+    }
+
+    public void registerForHalfTime ( HalfTimeController ctrl ) {
+        server.registerForMessages( "/topic/halfTime/" + gameIndex, User.class , ctrl::halfTime );
     }
 
     /**
