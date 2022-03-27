@@ -165,15 +165,18 @@ public class ServerUtils {
      * A method that removes a multiplayer user from the repository
      * @param serverUrl
      * @param user
-     * @return the user that was removed
      */
-    public MultiplayerUser removeMultiplayerUser(String serverUrl, User user) {
-        MultiplayerUser mu = (MultiplayerUser) user;
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(serverUrl).path("api/users/"+mu.id)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .delete(MultiplayerUser.class);
+    public void removeMultiplayerUser(String serverUrl, User user) {
+        try {
+            MultiplayerUser mu = (MultiplayerUser) user;
+            ClientBuilder.newClient(new ClientConfig())
+                    .target(serverUrl).path("api/users/" + mu.id)
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .delete(MultiplayerUser.class);
+        } catch(NullPointerException ex) {
+            System.out.println("Cannot remove null user!");
+        }
     }
 
     /**
