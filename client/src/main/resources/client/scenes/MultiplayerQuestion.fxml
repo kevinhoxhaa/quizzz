@@ -170,7 +170,7 @@
                      <children>
                         <VBox prefHeight="149.0" prefWidth="194.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <StackPane fx:id="answerTop" onMouseClicked="#onAnswerTopClicked" onMouseEntered="#enterAnswerTop" onMouseExited="#resetAnswerColors" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;">
+                              <StackPane fx:id="answerTop" onMouseClicked="#onAnswerTopClicked" onMouseEntered="#enterAnswerTop" onMouseExited="#exitAnswerTop" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;">
                                  <VBox.margin>
                                     <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                  </VBox.margin>
@@ -184,7 +184,7 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </StackPane>
-                              <StackPane fx:id="answerMid" onMouseClicked="#onAnswerMidClicked" onMouseEntered="#enterAnswerMid" onMouseExited="#resetAnswerColors" prefHeight="150.0" prefWidth="190.0" style="-fx-border-color: black;">
+                              <StackPane fx:id="answerMid" onMouseClicked="#onAnswerMidClicked" onMouseEntered="#enterAnswerMid" onMouseExited="#exitAnswerMid" prefHeight="150.0" prefWidth="190.0" style="-fx-border-color: black;">
                                  <opaqueInsets>
                                     <Insets />
                                  </opaqueInsets>
@@ -198,7 +198,7 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </StackPane>
-                              <StackPane fx:id="answerBot" onMouseClicked="#onAnswerBotClicked" onMouseEntered="#enterAnswerBot" onMouseExited="#resetAnswerColors" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;">
+                              <StackPane fx:id="answerBot" onMouseClicked="#onAnswerBotClicked" onMouseEntered="#enterAnswerBot" onMouseExited="#exitAnswerBot" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;">
                                  <VBox.margin>
                                     <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                  </VBox.margin>
@@ -263,7 +263,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </StackPane>
-                        <StackPane fx:id="removeIncorrect" onMouseEntered="#enterRemoveIncorrect" onMouseExited="#resetJokerColors" prefHeight="150.0" prefWidth="271.0" style="-fx-border-color: black;" VBox.vgrow="ALWAYS">
+                        <StackPane fx:id="removeIncorrect" onMouseClicked="#useRemoveIncorrect" onMouseEntered="#enterRemoveIncorrect" onMouseExited="#resetJokerColors" prefHeight="150.0" prefWidth="271.0" style="-fx-border-color: black;" VBox.vgrow="ALWAYS">
                            <opaqueInsets>
                               <Insets />
                            </opaqueInsets>
