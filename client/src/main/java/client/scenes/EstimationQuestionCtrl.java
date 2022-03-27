@@ -285,6 +285,17 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     }
 
     /**
+     * This method is called when the reduceTime joker is clicked
+     * It halves the time for everyone in the lobby
+     */
+
+    @FXML
+    public void useReduceTime() {
+        mainCtrl.halfTime();
+        gameCtrl.useJoker( reduceTime, reduceTimeImage );
+    }
+
+    /**
      * This method resets the double point jokers so that it can be used again when another game starts
      */
     public void resetDoublePoints(){
