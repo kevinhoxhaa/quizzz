@@ -314,6 +314,14 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     }
 
     /**
+     * This method resets the double point jokers so that it can be used again when another game starts
+     */
+    public void resetReduceTime(){
+        reduceTime.setOnMouseClicked(event -> useReduceTime());
+        gameCtrl.enableJoker(reduceTime);
+    }
+
+    /**
      * The method called when the cursor enters the button double points.
      * Sets double points' background color according to whether it is selected.
      */

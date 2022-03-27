@@ -517,6 +517,14 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     }
 
     /**
+     * This method resets the double point jokers so that it can be used again when another game starts
+     */
+    public void resetReduceTime(){
+        reduceTime.setOnMouseClicked(event -> useReduceTime());
+        gameCtrl.enableJoker(reduceTime);
+    }
+
+    /**
      * Initiates the timer countdown and animation
      */
     public void startTimer() {

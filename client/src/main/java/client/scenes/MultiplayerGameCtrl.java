@@ -452,7 +452,9 @@ public class MultiplayerGameCtrl {
      */
     public void resetAllJokers(){
         mcQuestionCtrl.resetDoublePoints();
+        mcQuestionCtrl.resetReduceTime();
         estimationQuestionCtrl.resetDoublePoints();
+        estimationQuestionCtrl.resetReduceTime();
         //TODO: Reset all the other jokers
     }
 }
