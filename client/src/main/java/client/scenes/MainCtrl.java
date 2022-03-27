@@ -572,6 +572,10 @@ public class MainCtrl {
                         multiplayerCtrl.hideEmojis();
                     }
 
+                    if(server.getSession() != null && server.getSession().isConnected()) {
+                        server.getSession().disconnect();
+                    }
+
                     try {
                         server.removeMultiplayerUser(serverUrl, user);
                         user = null;

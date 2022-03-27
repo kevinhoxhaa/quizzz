@@ -344,4 +344,12 @@ public class ServerUtils {
 
         return new Image(new ByteArrayInputStream(buffer));
     }
+
+    /**
+     * Returns the current session
+     * @return the current websocket session
+     */
+    public StompSession getSession() {
+        return session;
+    }
 }

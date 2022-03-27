@@ -244,6 +244,10 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
                 }
 
                 mainCtrl.killThread();
+
+                if(server.getSession() != null && server.getSession().isConnected()) {
+                    server.getSession().disconnect();
+                }
                 gameCtrl.hideEmojis();
                 mainCtrl.showHome();
                 mainCtrl.bindUser(null);
