@@ -71,18 +71,11 @@ public class SoloEstimationQuestionCtrl implements SceneController, QuestionNumC
      *  - updates the question text
      *  - resets input field to empty
      * @param soloGame the solo game instance
-     * @param colors the array of colors for the circles
      */
-    protected void setup(SoloGame soloGame, List<Color> colors){
+    protected void setup(SoloGame soloGame){
         this.game = soloGame;
         currentScore.setText(String.format( "Score: %d", mainCtrl.getSoloScore()));
         currentQuestion = (EstimationQuestion) soloGame.loadCurrentQuestion();
-
-        resetCircleColor();
-        updateCircleColor(colors);
-        resetHighlight();
-        highlightCurrentCircle();
-        updateQuestionNumber();
 
         activityText.setText(
                 String.format("How many Wh's does %s consume?", currentQuestion.getActivity().title)
