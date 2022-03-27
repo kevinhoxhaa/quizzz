@@ -18,6 +18,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.util.Pair;
+import org.springframework.messaging.simp.stomp.StompSession;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ public class MultiplayerGameCtrl {
 
     private List<Color> colors;
     private boolean answeredQuestion = false;
+    private StompSession.Subscription emojiSubscription;
 
     private Timer answerTimer;
 
@@ -374,7 +376,11 @@ public class MultiplayerGameCtrl {
      * @param ctrl the controller to register for emojis to
      */
     public void registerForEmojis(EmojiController ctrl) {
-        server.registerForMessages("/topic/emoji/" + gameIndex, Emoji.class, ctrl::displayEmoji);
+        emojiSubscription = server.registerForMessages(
+                "/topic/emoji/" + gameIndex,
+                Emoji.class,
+                ctrl::displayEmoji
+        );
     }
 
     /**
@@ -456,5 +462,15 @@ public class MultiplayerGameCtrl {
         answerCtrl.hideEmoji();
         mcQuestionCtrl.hideEmoji();
         estimationQuestionCtrl.hideEmoji();
+    }
+
+    /**
+     * Removes the emoji subscription from the current session
+     */
+    public void unregisterForEmojis() {
+        if(server.getSession().isConnected()) {
+            emojiSubscription.unsubscribe();
+        }
+        emojiSubscription = null;
     }
 }

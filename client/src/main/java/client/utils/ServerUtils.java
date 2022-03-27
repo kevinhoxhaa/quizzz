@@ -299,10 +299,11 @@ public class ServerUtils {
      * @param type the type of the payload to expect from the server
      * @param consumer the consumer that handles the received payload
      * @param <T> the type of the payload to expect from the server
+     * @return the created subscription
      */
-    public <T> void registerForMessages(String dest, Class<T> type, Consumer<T> consumer) {
+    public <T> StompSession.Subscription registerForMessages(String dest, Class<T> type, Consumer<T> consumer) {
         //noinspection NullableProblems
-        session.subscribe(dest, new StompFrameHandler() {
+        return session.subscribe(dest, new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
                 return type;
