@@ -73,8 +73,8 @@ public class ConsumptionQuestion extends Question {
     private void loadAnswers(long correctAnswer) {
         answers = new ArrayList<>();
 
-        long firstAlternative;
-        long secondAlternative;
+        long firstAlternative = 0;
+        long secondAlternative = 0;
 
         long coefficient = 1L;
 
@@ -88,19 +88,22 @@ public class ConsumptionQuestion extends Question {
             coefficient *= 5;
         }
 
-        do {
-             firstAlternative = (long) (correctAnswer +
-                    (random.nextDouble() < 0.5 ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
-        } while (correctAnswer == firstAlternative);
+        correctAnswer = correctAnswer*coefficient;
 
         do {
-            secondAlternative = (long) (correctAnswer +
-                    (random.nextDouble() < 0.5 ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
-        } while (correctAnswer == secondAlternative || firstAlternative == secondAlternative);
+            firstAlternative = (long)(correctAnswer +
+                     (random.nextBoolean() ? -1 : 1) * coefficient * random.nextDouble());
+        } while (correctAnswer == firstAlternative || firstAlternative <= 0L);
 
-        answers.add(correctAnswer * coefficient);
-        answers.add(firstAlternative * coefficient);
-        answers.add(secondAlternative * coefficient);
+        do {
+            secondAlternative = (long)(correctAnswer +
+                    (random.nextBoolean() ? -1 : 1) * coefficient * random.nextDouble());
+        } while (correctAnswer == secondAlternative
+                || firstAlternative == secondAlternative || secondAlternative <= 0L);
+
+        answers.add(correctAnswer);
+        answers.add(firstAlternative);
+        answers.add(secondAlternative);
         Collections.shuffle(answers);
     }
     // CHECKSTYLE:ON
