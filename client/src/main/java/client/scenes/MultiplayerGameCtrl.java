@@ -35,6 +35,7 @@ public class MultiplayerGameCtrl {
     private List<Color> colors;
     private boolean answeredQuestion = false;
     private StompSession.Subscription emojiSubscription;
+    private StompSession.Subscription halfTimeSubscription;
 
     private Timer answerTimer;
 
@@ -383,7 +384,7 @@ public class MultiplayerGameCtrl {
     }
 
     public void registerForHalfTime () {
-        server.registerForMessages( "/topic/halfTime/" + gameIndex,
+        halfTimeSubscription = server.registerForMessages( "/topic/halfTime/" + gameIndex,
                 MultiplayerUser.class ,
                 (user) -> mainCtrl.halfTime(user) );
     }
@@ -480,5 +481,12 @@ public class MultiplayerGameCtrl {
             emojiSubscription.unsubscribe();
         }
         emojiSubscription = null;
+    }
+
+    public void unregisterForHalfTime() {
+        if ( server.getSession().isConnected() ) {
+            halfTimeSubscription.unsubscribe();
+        }
+        halfTimeSubscription = null;
     }
 }

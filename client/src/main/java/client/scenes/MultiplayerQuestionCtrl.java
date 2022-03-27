@@ -570,6 +570,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
 
                 if(server.getSession() != null && server.getSession().isConnected()) {
                     gameCtrl.unregisterForEmojis();
+                    gameCtrl.unregisterForHalfTime();
                     server.getSession().disconnect();
                 }
                 gameCtrl.hideEmojis();

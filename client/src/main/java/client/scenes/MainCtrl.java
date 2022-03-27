@@ -18,6 +18,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.entities.MultiplayerUser;
 import commons.entities.User;
+import commons.models.EstimationQuestion;
 import commons.models.Question;
 import commons.models.SoloGame;
 import commons.utils.QuestionType;
@@ -600,6 +601,7 @@ public class MainCtrl {
                 if(isMultiplayer) {
                     if(multiplayerCtrl != null) {
                         multiplayerCtrl.unregisterForEmojis();
+                        multiplayerCtrl.unregisterForHalfTime();
                         multiplayerCtrl.hideEmojis();
                     }
 
