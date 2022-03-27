@@ -96,8 +96,8 @@ public class ConsumptionQuestion extends Question {
         do {
             secondAlternative = (long) (correctAnswer +
                     (random.nextDouble() < 0.5 ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
-        } while (secondAlternative == 0L ||
-                (correctAnswer == secondAlternative || firstAlternative == secondAlternative));
+        } while (correctAnswer == secondAlternative
+                || firstAlternative == secondAlternative || secondAlternative == 0L);
 
         answers.add(correctAnswer * coefficient);
         answers.add(firstAlternative * coefficient);
