@@ -100,9 +100,6 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     @FXML
     private ImageView reduceTimeImage;
 
-    @FXML
-    private ImageView questionImg;
-
     /**
      * Creates a controller for the estimation question screen,
      * with the given server and main controller
@@ -179,6 +176,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
         questionDescription.setText("How much energy in Wh does " + question.getActivity().title + " use?");
 
         doublePointsImage.setVisible(false);
+        reduceTimeImage.setVisible(false);
         try {
             questionImg.setImage(server.fetchImage(mainCtrl.getServerUrl(), currentQuestion.getImagePath()));
         }
