@@ -91,12 +91,12 @@ public class ConsumptionQuestion extends Question {
         do {
              firstAlternative = (long) (correctAnswer +
                     (random.nextDouble() < 0.5 ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
-        } while (correctAnswer == firstAlternative && firstAlternative == 0L);
+        } while (correctAnswer == firstAlternative || firstAlternative == 0L);
 
         do {
             secondAlternative = (long) (correctAnswer +
                     (random.nextDouble() < 0.5 ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
-        } while (secondAlternative == 0L &&
+        } while (secondAlternative == 0L ||
                 (correctAnswer == secondAlternative || firstAlternative == secondAlternative));
 
         answers.add(correctAnswer * coefficient);
