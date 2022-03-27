@@ -29,7 +29,8 @@ import javafx.scene.text.Text;
 
 import java.util.List;
 
-public class MultiplayerAnswerCtrl implements SceneController, QuestionNumController, EmojiController, HalfTimeController {
+public class MultiplayerAnswerCtrl implements SceneController, QuestionNumController,
+        EmojiController, HalfTimeController {
 
     private static final int HALF_QUESTIONS = 10;
     private static final int TOTAL_QUESTIONS = 20;

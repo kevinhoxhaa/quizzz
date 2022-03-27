@@ -39,7 +39,8 @@ import static commons.utils.CompareType.LARGER;
 import static commons.utils.CompareType.SMALLER;
 
 
-public class MultiplayerQuestionCtrl implements SceneController, QuestionNumController, EmojiController, HalfTimeController {
+public class MultiplayerQuestionCtrl implements SceneController, QuestionNumController,
+        EmojiController, HalfTimeController {
     private static final double MILLISECONDS_PER_SECONDS = 1000.0;
     private static final double CIRCLE_BORDER_SIZE = 1.7;
     private static final double STANDARD_SIZE = 1.0;

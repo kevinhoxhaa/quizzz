@@ -415,11 +415,14 @@ public class MainCtrl {
 
     /**
      * Halves the remaining timer for the user.
+     *
+     * @param user The user that called the half time
      */
 
     public void halfTime ( User user ) {
-        if ( user != this.user )
+        if ( user != this.user ) {
             countdown = countdown / 2;
+        }
     }
 
     /**
@@ -430,7 +433,6 @@ public class MainCtrl {
     public int getAnswerCount() {
         return answerCount;
     }
-
 
     /**
      * Fetches a random question from the server. For now, it just returns a placeholder for testing.

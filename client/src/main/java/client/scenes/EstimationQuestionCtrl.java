@@ -33,7 +33,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EstimationQuestionCtrl implements SceneController, QuestionNumController, EmojiController, HalfTimeController {
+public class EstimationQuestionCtrl implements SceneController, QuestionNumController,
+        EmojiController, HalfTimeController {
 
     private static final double CIRCLE_BORDER_SIZE = 1.7;
     private static final double TIMEOUT = 8.0;
