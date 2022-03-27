@@ -93,7 +93,7 @@ public class ComparisonQuestion extends Question {
      * @return a list of CompareType entities
      */
 
-    public List<CompareType> incorrectAnswers(){
+    public List<CompareType> getincorrectAnswers(){
         ArrayList<CompareType> incorrectAnswers = new ArrayList<>();
         if(!(firstActivity.consumption == secondActivity.consumption)){
             incorrectAnswers.add(CompareType.EQUAL);

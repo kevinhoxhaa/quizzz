@@ -45,9 +45,6 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
-    private final ConsumptionQuestion consumptionQuestion;
-    private final ComparisonQuestion comparisonQuestion;
-    private final ChoiceQuestion choiceQuestion;
 
     private MultiplayerGameCtrl gameCtrl;
     private Question currentQuestion;
@@ -116,21 +113,14 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      * Creates a controller for the multiplayer question screen, with the given server and main controller.
      * Creates the list answerButtons for iterating through all of these.
      *
-     * @param comparisonQuestion
-     * @param consumptionQuestion
-     * @param choiceQuestion
      * @param server
      * @param mainCtrl
      */
     @Inject
 
-    public MultiplayerQuestionCtrl(ServerUtils server, MainCtrl mainCtrl, ConsumptionQuestion consumptionQuestion,
-                                   ComparisonQuestion comparisonQuestion, ChoiceQuestion choiceQuestion) {
+    public MultiplayerQuestionCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
-        this.consumptionQuestion = consumptionQuestion;
-        this.comparisonQuestion = comparisonQuestion;
-        this.choiceQuestion = choiceQuestion;
     }
 
     /**
@@ -181,6 +171,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
         }
 
         resetAnswerColors();
+        resetAnswerClickability();
         doublePointsImage.setVisible(false);
         try {
             questionImg.setImage(server.fetchImage(mainCtrl.getServerUrl(), currentQuestion.getImagePath()));
@@ -440,6 +431,18 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     }
 
     /**
+     * The method is called upon loading the question scene, to make sure each answer button is clickable.
+     * Else an answer is disabled after a user uses the Remove Incorrect Answer Joker.
+     */
+    @FXML
+    public void resetAnswerClickability(){
+
+        for(StackPane answerBtn : answerButtons){
+            answerBtn.setDisable(false);
+        }
+    }
+
+    /**
      * A general method for setting a joker button's background color upon the cursor enters it,
      * according to whether it is already used.
      *
@@ -497,59 +500,59 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
         Question question = getCurrentQuestion();
         switch (question.getType()) {
             case CONSUMPTION: {
-                List<Long> incorrectAnswers = consumptionQuestion.getIncorrectAnswers();
+                List<Long> incorrectAnswers = ((ConsumptionQuestion) currentQuestion).getIncorrectAnswers();
                 if (answerTopAnswer.getLongAnswer() == incorrectAnswers.get(0)) {
                     answerTop.setDisable(true);
                     answerTop.setBackground(new Background(
-                            new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+                            new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
                 }
                 if (answerBotAnswer.getLongAnswer() == incorrectAnswers.get(0)) {
                     answerBot.setDisable(true);
                     answerBot.setBackground(new Background(
-                            new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+                            new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
                 }
                 if (answerMidAnswer.getLongAnswer() == incorrectAnswers.get(0)) {
                     answerMid.setDisable(true);
                     answerMid.setBackground(new Background(
-                            new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+                            new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
                 }
                 break;
             }
             case COMPARISON: {
-                List<CompareType> incorrectAnswers = comparisonQuestion.incorrectAnswers();
+                List<CompareType> incorrectAnswers = ((ComparisonQuestion) currentQuestion).getincorrectAnswers();
                 if(answerTopAnswer.getCompareType() == incorrectAnswers.get(0)){
                     answerTop.setDisable(true);
                     answerTop.setBackground(new Background(
-                            new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+                            new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
                 }
                 if(answerBotAnswer.getCompareType() == incorrectAnswers.get(0)){
                     answerBot.setDisable(true);
                     answerBot.setBackground(new Background(
-                            new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+                            new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
                 }
                 if(answerMidAnswer.getCompareType() == incorrectAnswers.get(0)){
                     answerMid.setDisable(true);
                     answerMid.setBackground(new Background(
-                            new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+                            new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
                 }
                 break;
             }
             case CHOICE: {
-                List<Activity> incorrectAnswers = choiceQuestion.getIncorrectActivities();
+                List<Activity> incorrectAnswers = ((ChoiceQuestion) currentQuestion).getIncorrectActivities();
                 if(answerTopAnswer.getActivity() == incorrectAnswers.get(0)){
                     answerTop.setDisable(true);
                     answerTop.setBackground(new Background(
-                            new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+                            new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
                 }
                 if(answerBotAnswer.getActivity() == incorrectAnswers.get(0)){
                     answerBot.setDisable(true);
                     answerBot.setBackground(new Background(
-                            new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+                            new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
                 }
                 if(answerMidAnswer.getActivity() == incorrectAnswers.get(0)){
                     answerMid.setDisable(true);
                     answerMid.setBackground(new Background(
-                            new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+                            new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
                 }
 
                 break;

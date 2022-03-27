@@ -68,7 +68,7 @@ public class ChoiceQuestion extends Question {
     public List<Activity> getIncorrectActivities(){
         ArrayList<Activity> incorrectActivities = new ArrayList<>();
         for(Activity a: activities){
-            if(!a.equals(answer)){
+            if(!a.equals(answer) && !a.equals(comparedActivity)){
                 incorrectActivities.add(a);
             }
         }
