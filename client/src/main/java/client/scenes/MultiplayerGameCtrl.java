@@ -212,7 +212,7 @@ public class MultiplayerGameCtrl {
             colors.add(Color.INDIANRED);
         }
 
-        answerCtrl.updateCircleColor(colors);
+        mainCtrl.updateQuestionCounters(answerCtrl, colors);
         answerCtrl.setup(answeredQuestion, correctUsers);
         mainCtrl.getPrimaryStage().setTitle("Answer screen");
         mainCtrl.getPrimaryStage().setScene(answer);
@@ -239,14 +239,11 @@ public class MultiplayerGameCtrl {
      * @param question the question to visualise
      */
     public void showMultipleChoiceQuestion(Question question) {
-        mcQuestionCtrl.updateCircleColor(colors);
-        mcQuestionCtrl.resetHighlight();
-        mcQuestionCtrl.highlightCurrentCircle();
+        mainCtrl.updateQuestionCounters(mcQuestionCtrl, colors);
+
         mcQuestionCtrl.setup(question);
         mcQuestionCtrl.resetAnswerColors();
-        mcQuestionCtrl.updateQuestionNumber();
 
-        mcQuestionCtrl.resetAnswerColors();
         mcQuestionCtrl.enableAnswers();
         mcQuestionCtrl.startTimer();
         mcQuestionCtrl.setStartTime();
@@ -260,10 +257,13 @@ public class MultiplayerGameCtrl {
      * @param question the estimation question to visualise
      */
     public void showEstimationQuestion(EstimationQuestion question) {
-        mainCtrl.getPrimaryStage().setTitle("Estimation");
-        mainCtrl.getPrimaryStage().setScene(estimationQuestion);
-        estimationQuestionCtrl.startTimer();
+        mainCtrl.updateQuestionCounters(estimationQuestionCtrl, colors);
         estimationQuestionCtrl.setup(question);
+
+        estimationQuestionCtrl.startTimer();
+        estimationQuestionCtrl.setStartTime();
+        mainCtrl.getPrimaryStage().setTitle("Estimation question screen");
+        mainCtrl.getPrimaryStage().setScene(estimationQuestion);
     }
 
     /**
@@ -282,8 +282,7 @@ public class MultiplayerGameCtrl {
      */
     public void showRanking(List<MultiplayerUser> rankedUsers) {
         // TODO: handle passed multiplayer users
-        rankingCtrl.updateCircleColor(colors);
-        rankingCtrl.updateQuestionNumber();
+        mainCtrl.updateQuestionCounters(rankingCtrl, colors);
         mainCtrl.getPrimaryStage().setTitle("Ranking Screen");
         mainCtrl.getPrimaryStage().setScene(ranking);
         rankingCtrl.startTimer();

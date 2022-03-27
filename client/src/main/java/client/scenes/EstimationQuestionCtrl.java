@@ -309,7 +309,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
      * Highlights current question so the user is aware which circle corresponds to his current question
      */
     public void highlightCurrentCircle() {
-        Circle circle = (Circle) circles.getChildren().get(mainCtrl.getAnswerCount());
+        Circle circle = (Circle) circles.getChildren().get(gameCtrl.getAnswerCount());
         circle.setFill(Color.DARKGRAY);
         circle.setStrokeWidth(CIRCLE_BORDER_SIZE);
     }
@@ -326,7 +326,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
 
     @Override
     public void updateCircleColor(List<Color> colors) {
-        for (int i = 0; i < mainCtrl.getAnswerCount(); i++) {
+        for (int i = 0; i < gameCtrl.getAnswerCount(); i++) {
             Circle circle = (Circle) getCirclesHBox().getChildren().get(i);
             circle.setFill(colors.get(i));
         }
@@ -342,6 +342,6 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
 
     @Override
     public void updateQuestionNumber() {
-        questionNum.setText("" + (mainCtrl.getAnswerCount() + 1));
+        questionNum.setText("" + (gameCtrl.getAnswerCount() + 1));
     }
 }
