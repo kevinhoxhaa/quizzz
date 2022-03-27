@@ -32,6 +32,8 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
 
     private static final int HALF_QUESTIONS = 10;
     private static final int TOTAL_QUESTIONS = 20;
+    private static final double CIRCLE_BORDER_SIZE = 1.7;
+    private static final double STANDARD_CIRCLE_BORDER_SIZE = 1.0;
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -100,10 +102,12 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
 
         if (prevQuestion.hasCorrectUserAnswer()) {
             this.answerResponse.setText("Well done!");
+            currentScore.setFill(Color.GREEN);
             answerPane.setBackground(new Background(
                     new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
         } else {
             this.answerResponse.setText("By making mistakes, we learn!");
+            currentScore.setFill(Color.DARKRED);
             answerPane.setBackground(new Background(
                     new BackgroundFill(Color.LIGHTCORAL, CornerRadii.EMPTY, Insets.EMPTY)));
         }
@@ -325,6 +329,25 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
 
     @Override
     public void updateQuestionNumber() {
-        getQuestionNum().setText("" + (gameCtrl.getAnswerCount() + 1));
+        getQuestionNum().setText("" + (gameCtrl.getAnswerCount()));
+    }
+
+    /**
+     * Highlights current question so the user is aware which circle corresponds to his current question
+     */
+    public void highlightCurrentCircle() {
+        Circle c = (Circle) circles.getChildren().get(gameCtrl.getAnswerCount());
+        c.setFill(Color.DARKGRAY);
+        c.setStrokeWidth(CIRCLE_BORDER_SIZE);
+    }
+
+    /**
+     * Resets the highlighting of the circle borders
+     */
+    public void resetHighlight(){
+        for(int i=0;i<circles.getChildren().size();i++){
+            Circle circle = (Circle) circles.getChildren().get(i);
+            circle.setStrokeWidth(STANDARD_CIRCLE_BORDER_SIZE);
+        }
     }
 }
