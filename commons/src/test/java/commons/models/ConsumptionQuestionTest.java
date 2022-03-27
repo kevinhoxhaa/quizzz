@@ -4,8 +4,7 @@ import commons.entities.Activity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Collections;
+
 import java.util.List;
 import java.util.Random;
 
@@ -98,30 +97,7 @@ public class ConsumptionQuestionTest {
         List<Long> answers = question.getAnswers();
 
         assertTrue(answers.contains(POSITIVE));
-        long coefficient = 1L;
-        long correctAnswer = POSITIVE;
-
-        while(correctAnswer % 10 == 0){
-            correctAnswer = correctAnswer / 10;
-            coefficient *= 10;
-        }
-
-        // CHECKSTYLE:OFF
-        long expectedAlternativeFirst = (long) 
-                (correctAnswer + (THREE_QUARTERS < 0.5 ? -1 : 1) * correctAnswer * 0.6 * ONE_QUARTER);
-        long expectedAlternativeSecond = (long)
-                (correctAnswer + (TWO_FIFTHS < 0.5 ? -1 : 1) * correctAnswer * 0.6 * THREE_QUARTERS);
-        // CHECKSTYLE:ON
-
-        List<Long> expectedAnswers = new ArrayList<>();
-        expectedAnswers.add(expectedAlternativeFirst * coefficient);
-        expectedAnswers.add(expectedAlternativeSecond * coefficient);
-        expectedAnswers.add(correctAnswer * coefficient);
-
-        Collections.sort(expectedAnswers);
-        Collections.sort(answers);
-
-        assertEquals(expectedAnswers, answers);
+        assertEquals(3,answers.size());
     }
 
     @Test
