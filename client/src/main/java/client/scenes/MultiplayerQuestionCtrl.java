@@ -54,6 +54,10 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     private boolean isAvailableRemoveIncorrect = true;
     private boolean isActiveRemoveIncorrect;
 
+    private boolean answerTopDisable = false;
+    private boolean answerMidDisable = false;
+    private boolean answerBotDisable = false;
+
 
     @FXML
     private StackPane answerTop;
@@ -169,9 +173,9 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
             answerBtnLoop.setStyle("-fx-border-width: 1; -fx-border-color: black");
             answerBtnLoop.getChildren().get(0).setStyle("-fx-font-weight: normal");
         }
-
         resetAnswerColors();
         resetAnswerClickability();
+        resetAnswerOnMouseEnter();
         doublePointsImage.setVisible(false);
         try {
             questionImg.setImage(server.fetchImage(mainCtrl.getServerUrl(), currentQuestion.getImagePath()));
@@ -343,30 +347,69 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     }
 
     /**
-     * The method called when the cursor enters the button answerTop.
+     * The method called when the cursor enters the button answerTop. Checks if the answer is disabled by the joker.
      * Sets answerTop's background color according to whether it is selected.
      */
     @FXML
     protected void enterAnswerTop() {
-        enterAnswer(answerTop);
+        if(!answerTopDisable) {
+            enterAnswer(answerTop);
+        }
     }
 
     /**
-     * The method called when the cursor enters the button answerMid.
+     * The method called when the cursor enters the button answerMid. Checks if the answer is disabled by the joker.
      * Sets answerMid's background color according to whether it is selected.
      */
     @FXML
     protected void enterAnswerMid() {
-        enterAnswer(answerMid);
+        if(!answerMidDisable) {
+            enterAnswer(answerMid);
+        }
     }
 
     /**
-     * The method called when the cursor enters the button answerBot.
+     * The method called when the cursor enters the button answerBot. Checks if the answer is disabled by the joker.
      * Sets answerBot's background color according to whether it is selected.
      */
     @FXML
     protected void enterAnswerBot() {
-        enterAnswer(answerBot);
+        if(!answerBotDisable) {
+            enterAnswer(answerBot);
+        }
+    }
+
+    /**
+     * The method called when the cursor exits the button answerTop. Checks if the answer is disabled by the joker.
+     * Sets answerTop's background color according to whether it is selected.
+     */
+    @FXML
+    protected void exitAnswerTop() {
+        if(!answerTopDisable) {
+            resetAnswerColors(answerTop);
+        }
+    }
+
+    /**
+     * The method called when the cursor exits the button answerMid. Checks if the button is disabled by the joker.
+     * Sets answerMid's background color according to whether it is selected.
+     */
+    @FXML
+    protected void exitAnswerMid() {
+        if(!answerMidDisable) {
+            resetAnswerColors(answerMid);
+        }
+    }
+
+    /**
+     * The method called when the cursor exits the button answerBot. Checks if the answer is disabled by the joker.
+     * Sets answerBot's background color according to whether it is selected.
+     */
+    @FXML
+    protected void exitAnswerBot() {
+        if(!answerBotDisable) {
+            resetAnswerColors(answerBot);
+        }
     }
 
     /**
@@ -413,13 +456,28 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     }
 
     /**
-     * The method called upon loading the question scene, and when the cursor leaves either one of the answer buttons.
+     * The method called upon loading the question scene, and when the cursor leaves the given answer button .
+     * Resets the given answer box's background color according to whether they are selected.
+     * @param answerBtn The answer button to be recolor.
+     */
+    @FXML
+    public void resetAnswerColors(StackPane answerBtn) {
+                if (answerBtn.equals(selectedAnswerButton)) {
+                    answerBtn.setBackground(new Background(
+                            new BackgroundFill(Color.LIGHTSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+                } else {
+                    answerBtn.setBackground(new Background(
+                            new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+                }
+    }
+
+    /**
+     * The method called upon loading the question scene, and when the cursor leaves any of the answer buttons.
      * Resets all answer boxes' background color according to whether they are selected.
      */
     @FXML
     public void resetAnswerColors() {
-
-        for (StackPane answerBtn : answerButtons) {
+        for(StackPane answerBtn: answerButtons) {
             if (answerBtn.equals(selectedAnswerButton)) {
                 answerBtn.setBackground(new Background(
                         new BackgroundFill(Color.LIGHTSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -440,6 +498,12 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
         for(StackPane answerBtn : answerButtons){
             answerBtn.setDisable(false);
         }
+    }
+
+    public void resetAnswerOnMouseEnter(){
+        answerTopDisable = false;
+        answerMidDisable = false;
+        answerBotDisable = false;
     }
 
     /**
@@ -513,16 +577,21 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
                     answerTop.setDisable(true);
                     answerTop.setBackground(new Background(
                             new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+                    answerTopDisable = true;
+
                 }
                 if (answerBotAnswer.getLongAnswer() == incorrectAnswers.get(0)) {
                     answerBot.setDisable(true);
                     answerBot.setBackground(new Background(
                             new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+                    answerBotDisable = true;
                 }
                 if (answerMidAnswer.getLongAnswer() == incorrectAnswers.get(0)) {
                     answerMid.setDisable(true);
                     answerMid.setBackground(new Background(
                             new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+                    answerMidDisable = true;
+
                 }
                 break;
             }
@@ -532,16 +601,19 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
                     answerTop.setDisable(true);
                     answerTop.setBackground(new Background(
                             new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+                    answerTopDisable = true;
                 }
                 if(answerBotAnswer.getCompareType() == incorrectAnswers.get(0)){
                     answerBot.setDisable(true);
                     answerBot.setBackground(new Background(
                             new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+                    answerBotDisable = true;
                 }
                 if(answerMidAnswer.getCompareType() == incorrectAnswers.get(0)){
                     answerMid.setDisable(true);
                     answerMid.setBackground(new Background(
                             new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+                    answerMidDisable = true;
                 }
                 break;
             }
@@ -551,16 +623,19 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
                     answerTop.setDisable(true);
                     answerTop.setBackground(new Background(
                             new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+                    answerTopDisable = true;
                 }
                 if(answerBotAnswer.getActivity() == incorrectAnswers.get(0)){
                     answerBot.setDisable(true);
                     answerBot.setBackground(new Background(
                             new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+                    answerBotDisable = true;
                 }
                 if(answerMidAnswer.getActivity() == incorrectAnswers.get(0)){
                     answerMid.setDisable(true);
                     answerMid.setBackground(new Background(
                             new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+                    answerMidDisable = true;
                 }
 
                 break;
