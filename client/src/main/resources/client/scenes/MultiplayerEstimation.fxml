@@ -176,7 +176,7 @@
                             <children>
                                 <AnchorPane>
                                     <children>
-                                        <Text layoutX="67.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Reduce time for other players" AnchorPane.leftAnchor="67.0" AnchorPane.rightAnchor="33.19482421875">
+                                        <Text layoutX="67.0" layoutY="30.0" onMouseClicked="#useReduceTime" strokeType="OUTSIDE" strokeWidth="0.0" text="Reduce time for other players" AnchorPane.leftAnchor="67.0" AnchorPane.rightAnchor="33.19482421875">
                                             <font>
                                                 <Font size="17.0" />
                                             </font>
