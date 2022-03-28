@@ -63,6 +63,9 @@ public class MultiplayerGameCtrl {
     private boolean isAvailableDoublePoints = true;
     private boolean isActiveDoublePoints;
 
+    private boolean isAvailableRemoveIncorrect = true;
+    private boolean isActiveRemoveIncorrect;
+
     private List<String> usedJokers;
 
     // TODO: add results and resultsCtrl
@@ -97,7 +100,8 @@ public class MultiplayerGameCtrl {
 
         this.serverUrl = mainCtrl.getServerUrl();
         this.answerCount = 0;
-        isActiveDoublePoints=false;
+        isActiveDoublePoints = false;
+        isActiveRemoveIncorrect = false;
 
         this.mcQuestionCtrl = mcQuestion.getKey();
         mcQuestionCtrl.setGameCtrl(this);
@@ -415,7 +419,23 @@ public class MultiplayerGameCtrl {
      * @param active
      */
     public void setIsActiveDoublePoints(boolean active){
-        isActiveDoublePoints=active;
+        isActiveDoublePoints = active;
+    }
+
+    /**
+     * A getter that returns true/false whether the Remove Incorrect Answer joker is activated this round
+     * @return isActiveRemoveIncorrect, which shows whether the RIA joker is being used
+     */
+    public boolean getIsActiveRemoveIncorrect(){
+        return isActiveRemoveIncorrect;
+    }
+
+    /**
+     * Sets the isActiveRemoveIncorrect to either true or false
+     * @param active
+     */
+    public void setIsActiveRemoveIncorrect(boolean active){
+        isActiveRemoveIncorrect = active;
     }
 
     /**
@@ -461,6 +481,7 @@ public class MultiplayerGameCtrl {
         mcQuestionCtrl.resetReduceTime();
         estimationQuestionCtrl.resetDoublePoints();
         estimationQuestionCtrl.resetReduceTime();
+        mcQuestionCtrl.resetRemoveIncorrect();
         //TODO: Reset all the other jokers
     }
 

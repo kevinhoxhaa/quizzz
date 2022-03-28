@@ -19,8 +19,11 @@ public class ConsumptionQuestion extends Question {
     private List<Long> answers;
     private Random random;
 
+    private Long firstAlternative;
+    private Long secondAlternative;
+
     @SuppressWarnings("unused")
-    private ConsumptionQuestion() {
+    public ConsumptionQuestion() {
         super(QuestionType.CONSUMPTION);
         this.random = new Random();
         // for object mapper
@@ -61,10 +64,13 @@ public class ConsumptionQuestion extends Question {
         loadAnswers(activity.consumption);
     }
 
+
     /**
      * Returns a list of two numbers which are a little
      * greater or smaller than the correct answer, in order
      * to confuse the user
+     * Also returns a list of incorrect answers for the remove
+     * incorrect answer joker
      * Note: ignoring checkstyle because of too many
      * magic numbers
      * @param correctAnswer the correct answer
@@ -90,6 +96,8 @@ public class ConsumptionQuestion extends Question {
         answers.add(firstAlternative);
         answers.add(secondAlternative);
         Collections.shuffle(answers);
+        this.firstAlternative = firstAlternative;
+        this.secondAlternative = secondAlternative;
     }
     // CHECKSTYLE:ON
 
