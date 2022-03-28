@@ -699,5 +699,6 @@ public class MainCtrl {
         multiplayerResultsCtrl.resetCircleColor();
         this.colors = new ArrayList<>();
         this.answerCount = 0;
+        this.user.resetScore();
     }
 }

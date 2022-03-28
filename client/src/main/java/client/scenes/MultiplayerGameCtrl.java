@@ -301,5 +301,6 @@ public class MultiplayerGameCtrl {
         mainCtrl.resetMainCtrl();
         this.answerCount = 0;
         this.colors = new ArrayList<>();
+        this.user.resetScore();
     }
 }
