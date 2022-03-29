@@ -2,6 +2,8 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -69,9 +71,9 @@ public class MultiplayerResultsCtrl implements QuestionNumController, SceneContr
      */
 
     protected void setup() {
-
+        enableRematchButton();
         scoreTableUserName.setText( String.format( "%s", mainCtrl.getUser().username) );
-        // scoreTableUserScore.setText( String.format( "%d", mainCtrl.getSoloScore()) );
+        scoreTableUserScore.setText( String.format( "%d", mainCtrl.getSoloScore()) );
         //TODO: Show all players in the leaderboard.
     }
 
@@ -132,6 +134,16 @@ public class MultiplayerResultsCtrl implements QuestionNumController, SceneContr
     public void disableRematchButton() {
         rematchButton.setOnAction(null);
         rematchButton.setDisable(true);
+    }
+
+    public void enableRematchButton() {
+        rematchButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                onRematchButton();
+            }
+        });
+        rematchButton.setDisable(false);
     }
 
     /**
