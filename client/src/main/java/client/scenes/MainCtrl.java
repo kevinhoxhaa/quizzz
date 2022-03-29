@@ -477,6 +477,7 @@ public class MainCtrl {
 
         soloQuestionCtrl.resetCircleColor();
         soloAnswerCtrl.resetCircleColor();
+        resetStreak();
 
         SoloGame soloGame = server.getSoloGame(server.getURL(), QUESTIONS_PER_GAME);
         primaryStage.setTitle("Solo game");

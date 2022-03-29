@@ -138,6 +138,7 @@ public class MultiplayerGameCtrl {
         registerForEmojis(answerCtrl);
         registerForEmojis(mcQuestionCtrl);
          resetAllJokers();
+         mainCtrl.resetStreak();
          user.unansweredQuestions = 0;
 
          Question firstQuestion = fetchQuestion();
