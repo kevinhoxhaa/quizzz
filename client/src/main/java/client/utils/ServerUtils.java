@@ -195,6 +195,7 @@ public class ServerUtils {
      * A method that removes a multiplayer user from the repository
      * @param serverUrl
      * @param user
+     * @return The user that has been deleted.
      */
     public MultiplayerUser removeMultiplayerUser(String serverUrl, MultiplayerUser user) {
         if (user.gameID != null) {
