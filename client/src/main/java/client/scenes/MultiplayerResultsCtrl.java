@@ -131,11 +131,17 @@ public class MultiplayerResultsCtrl implements QuestionNumController, SceneContr
         }
     }
 
+    /**
+     * Disables the rematch button.
+     */
     public void disableRematchButton() {
         rematchButton.setOnAction(null);
         rematchButton.setDisable(true);
     }
 
+    /**
+     * Enables the rematch button.
+     */
     public void enableRematchButton() {
         rematchButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
