@@ -298,9 +298,7 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
 
     @Override
     public void onQuit() {
-        server.removeMultiplayerUser(server.getURL(), gameCtrl.getUser());
         mainCtrl.quitGame(false, true);
-        mainCtrl.bindUser(null);
     }
 
     /**

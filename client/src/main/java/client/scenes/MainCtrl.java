@@ -581,7 +581,7 @@ public class MainCtrl {
 
                     try {
                         server.removeMultiplayerUser(serverUrl, (MultiplayerUser) user);
-                        user = null;
+                        bindUser(null);
                         multiplayerEstimationCtrl.resetDoublePoints();
                         multiplayerQuestionCtrl.resetDoublePoints();
                         multiplayerQuestionCtrl.resetRemoveIncorrect();

@@ -107,9 +107,7 @@ public class MultiplayerResultsCtrl implements QuestionNumController, SceneContr
     @Override
     @FXML
     public void onQuit(){
-        server.removeMultiplayerUser(server.getURL(), gameCtrl.getUser());
         mainCtrl.quitGame(false, true);
-        mainCtrl.bindUser(null);
     }
 
     /**

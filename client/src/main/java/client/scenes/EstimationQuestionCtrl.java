@@ -297,7 +297,6 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     @Override
     public void onQuit() {
         mainCtrl.quitGame(false, true);
-        mainCtrl.bindUser(null);
     }
 
     /**
