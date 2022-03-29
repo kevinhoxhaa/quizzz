@@ -88,18 +88,30 @@ public class ConsumptionQuestion extends Question {
             coefficient *= 5;
         }
 
-        correctAnswer = correctAnswer*coefficient;
+        int tries = 0;
 
         do {
+            tries++;
             firstAlternative = (long)(correctAnswer +
-                     (random.nextBoolean() ? -1 : 1) * coefficient * random.nextDouble());
-        } while (correctAnswer == firstAlternative || firstAlternative <= 0L);
+                     (random.nextBoolean() ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
+        } while ((correctAnswer == firstAlternative || firstAlternative <= 0L ) && tries < 30);
 
         do {
+            tries++;
             secondAlternative = (long)(correctAnswer +
-                    (random.nextBoolean() ? -1 : 1) * coefficient * random.nextDouble());
-        } while (correctAnswer == secondAlternative
-                || firstAlternative == secondAlternative || secondAlternative <= 0L);
+                    (random.nextBoolean() ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
+        } while ((correctAnswer == secondAlternative
+                || firstAlternative == secondAlternative || secondAlternative <= 0L) && tries < 30);
+
+        correctAnswer *= coefficient;
+        firstAlternative *= coefficient;
+        secondAlternative *= coefficient;
+
+        if(tries >= 30){
+            firstAlternative = correctAnswer + 5;
+            secondAlternative = correctAnswer - 5;
+        }
+
 
         answers.add(correctAnswer);
         answers.add(firstAlternative);
