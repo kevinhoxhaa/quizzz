@@ -373,4 +373,51 @@ public class GameControllerTest {
                 new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random));
         assertEquals(HttpStatus.EXPECTATION_FAILED, actual.getStatusCode());
     }
+
+    @Test
+    public void postDoublePointsAnswerReturnsValidResponse() {
+        sut.startGame((int) NUMBER);
+        assertNotNull(sut.postDoublePointsAnswer(0, 0, 0,
+                new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random)));
+    }
+
+    @Test
+    public void postDoublePointsAnswerReturnsErrorOnInvalidGame() {
+        sut.startGame((int) NUMBER);
+        ResponseEntity<List<MultiplayerUser>> actual =
+                (ResponseEntity<List<MultiplayerUser>>) sut.postDoublePointsAnswer(
+                (int) NUMBER, 0, 0,
+                new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random));
+        assertTrue(actual.getStatusCode().is4xxClientError());
+    }
+
+    @Test
+    public void postDoublePointsAnswerReturnsErrorOnInvalidUser() {
+        sut.startGame((int) NUMBER);
+        ResponseEntity<List<MultiplayerUser>> actual =
+                (ResponseEntity<List<MultiplayerUser>>) sut.postDoublePointsAnswer(
+                0, NUMBER, 0,
+                new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random));
+        assertTrue(actual.getStatusCode().is4xxClientError());
+    }
+
+    @Test
+    public void postDoublePointsAnswerReturnsErrorOnInvalidQuestion() {
+        sut.startGame((int) NUMBER);
+        ResponseEntity<List<MultiplayerUser>> actual =
+                (ResponseEntity<List<MultiplayerUser>>) sut.postDoublePointsAnswer(
+                0, 0, (int) NUMBER,
+                new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random));
+        assertTrue(actual.getStatusCode().is4xxClientError());
+    }
+
+    @Test
+    public void postDoublePointsAnswerReturnsExpectationFailedIfNotAllUsersHaveAnswered() {
+        sut.startGame((int) NUMBER);
+        ResponseEntity<List<MultiplayerUser>> actual =
+                (ResponseEntity<List<MultiplayerUser>>) sut.postDoublePointsAnswer(
+                0, 0, 1,
+                new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random));
+        assertEquals(HttpStatus.EXPECTATION_FAILED, actual.getStatusCode());
+    }
 }

@@ -86,7 +86,8 @@ public class Main implements CommandLineRunner {
                 JsonObject o = e.getAsJsonObject();
                 String id = String.valueOf(o.get("id"));
 
-                String imagePath = String.valueOf(o.get("image_path"));
+                String imagePath = String.valueOf(o.get("image_path")).replaceAll("\"", "");
+                System.out.println(imagePath);
                 String title = String.valueOf(o.get("title"));
                 long consumption = Long.parseLong(String.valueOf(o.get("consumption_in_wh")));
                 String source = String.valueOf(o.get("source"));

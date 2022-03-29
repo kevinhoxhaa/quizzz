@@ -25,6 +25,9 @@ public class MultiplayerResultsCtrl implements QuestionNumController, SceneContr
     private final MainCtrl mainCtrl;
     private MultiplayerGameCtrl gameCtrl;
 
+    private static final double CIRCLE_BORDER_SIZE = 1.7;
+    private static final double STANDARD_CIRCLE_BORDER_SIZE = 1.0;
+
     private boolean rematch;
 
     @FXML
@@ -63,13 +66,9 @@ public class MultiplayerResultsCtrl implements QuestionNumController, SceneContr
 
     /**
      * Setups the page quit button that redirects to the main page, and fills in the score and personal best
-     * @param colors
      */
 
-    protected void setup(List<Color> colors) {
-
-        updateQuestionNumber();
-        updateCircleColor(colors);
+    protected void setup() {
 
         scoreTableUserName.setText( String.format( "%s", mainCtrl.getUser().username) );
         // scoreTableUserScore.setText( String.format( "%d", mainCtrl.getSoloScore()) );
@@ -189,5 +188,24 @@ public class MultiplayerResultsCtrl implements QuestionNumController, SceneContr
     @Override
     public void updateQuestionNumber() {
         getQuestionNum().setText("" + gameCtrl.getAnswerCount());
+    }
+
+    /**
+     * Highlights current question so the user is aware which circle corresponds to his current question
+     */
+    public void highlightCurrentCircle() {
+        Circle c = (Circle) circles.getChildren().get(gameCtrl.getAnswerCount());
+        c.setFill(Color.DARKGRAY);
+        c.setStrokeWidth(CIRCLE_BORDER_SIZE);
+    }
+
+    /**
+     * Resets the highlighting of the circle borders
+     */
+    public void resetHighlight(){
+        for(int i=0;i<circles.getChildren().size();i++){
+            Circle circle = (Circle) circles.getChildren().get(i);
+            circle.setStrokeWidth(STANDARD_CIRCLE_BORDER_SIZE);
+        }
     }
 }

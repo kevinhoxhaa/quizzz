@@ -22,6 +22,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,11 +32,13 @@ import static commons.utils.CompareType.SMALLER;
 
 
 public class SoloQuestionCtrl implements SceneController, QuestionNumController {
+    private final ServerUtils server;
+    private final MainCtrl mainCtrl;
+
     private static final double MILLISECONDS_PER_SECONDS = 1000.0;
     private static final double CIRCLE_BORDER_SIZE = 1.7;
     private static final double STANDARD_CIRCLE_BORDER_SIZE = 1.0;
-    private final ServerUtils server;
-    private final MainCtrl mainCtrl;
+
     private Question currentQuestion;
 
     private double startTime;
@@ -102,20 +105,19 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
      * - Resets all buttons to their default colors
      *
      * @param soloGame the game instance
-     * @param colors   the list of colors corresponding to past questions
      */
-    protected void setup(SoloGame soloGame, List<Color> colors) {
+    protected void setup(SoloGame soloGame) {
         this.game = soloGame;
 
         currentScore.setText( String.format( "Score: %d", mainCtrl.getSoloScore()) );
         Question question = soloGame.loadCurrentQuestion();
 
         this.currentQuestion = question;
-        //questionImg.setImage(new Image(currentQuestion.getImagePath()));
-
-        updateCircleColor(colors);
-        resetHighlight();
-        highlightCurrentCircle();
+        try {
+            questionImg.setImage(server.fetchImage(mainCtrl.getServerUrl(), currentQuestion.getImagePath()));
+        }
+        catch (IOException e){
+        }
 
         selectedAnswerButton = null;
 
@@ -141,7 +143,6 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
         this.answerButtons.add(answerMid);
         this.answerButtons.add(answerBot);
 
-        updateQuestionNumber();
         resetAnswerColors();
     }
 

@@ -7,6 +7,8 @@ dependencies {
 	implementation 'com.fasterxml.jackson.core:jackson-annotations:2.12.2'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'commons-io:commons-io:2.6'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	runtimeOnly 'com.h2database:h2'
 	implementation 'com.google.code.gson:gson:2.7'

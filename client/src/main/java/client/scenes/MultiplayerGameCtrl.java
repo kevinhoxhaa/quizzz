@@ -2,14 +2,23 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.entities.MultiplayerUser;
+import commons.models.Emoji;
 import commons.models.EstimationQuestion;
 import commons.models.Question;
 import commons.utils.QuestionType;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.util.Pair;
+import org.springframework.messaging.simp.stomp.StompSession;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +28,13 @@ import java.util.TimerTask;
 public class MultiplayerGameCtrl {
     private static final int POLLING_DELAY = 0;
     private static final int POLLING_INTERVAL = 500;
+    private static final double OPACITY = 0.5;
+    private static final double STANDARD_SIZE = 1.0;
+    public static final double RGB_VALUE = (double) 244/255;
 
     private List<Color> colors;
+    private boolean answeredQuestion = false;
+    private StompSession.Subscription emojiSubscription;
 
     private Timer answerTimer;
 
@@ -45,8 +59,15 @@ public class MultiplayerGameCtrl {
     private Scene ranking;
     private RankingCtrl rankingCtrl;
 
-    private Scene results;
-    private MultiplayerResultsCtrl resultsCtrl;
+    private boolean isAvailableDoublePoints = true;
+    private boolean isActiveDoublePoints;
+
+    private boolean isAvailableRemoveIncorrect = true;
+    private boolean isActiveRemoveIncorrect;
+
+    private List<String> usedJokers;
+
+    // TODO: add results and resultsCtrl
 
     /**
      * Constructs a multiplayer game controller with the given
@@ -71,12 +92,17 @@ public class MultiplayerGameCtrl {
 
         this.server = server;
         this.user = (MultiplayerUser) mainCtrl.getUser();
+        user.unansweredQuestions = 0;
         this.colors = new ArrayList<>();
+
+        this.usedJokers=new ArrayList<>();
 
         this.answerTimer = new Timer();
 
         this.serverUrl = mainCtrl.getServerUrl();
         this.answerCount = 0;
+        isActiveDoublePoints = false;
+        isActiveRemoveIncorrect = false;
 
         this.mcQuestionCtrl = mcQuestion.getKey();
         mcQuestionCtrl.setGameCtrl(this);
@@ -99,12 +125,26 @@ public class MultiplayerGameCtrl {
         this.results = results.getValue();
     }
 
+    public MultiplayerGameCtrl(){
+
+    }
+
     /**
      * Polls the first question and initialises
      * the game loop
+     * Initiates the websocket connection with the client
+     * for receiving emojis
+     * Resets the jokers
      */
     public void startGame() {
-         user.gameID = (long) gameIndex;
+        server.connect(serverUrl);
+
+        registerForEmojis(estimationQuestionCtrl);
+        registerForEmojis(answerCtrl);
+        registerForEmojis(mcQuestionCtrl);
+         resetAllJokers();
+         user.unansweredQuestions = 0;
+
          Question firstQuestion = fetchQuestion();
          showQuestion(firstQuestion);
     }
@@ -119,12 +159,21 @@ public class MultiplayerGameCtrl {
     }
 
     /**
-     * Posts an answered question to the server, updates the
+     * - Posts an answered question to the server, updates the
      * answer colours and redirects to the answer screen
+     * - Gives double points if the joker isn't available
+     * - Sets the joker as "available" after it is used,
+     * even though it won't be possible to use it again
      * @param answeredQuestion the answered question to post
      */
     public void postAnswer(Question answeredQuestion) {
-        user.points += answeredQuestion.calculatePoints();
+        if(getIsActiveDoublePoints()){
+            user.points += 2*answeredQuestion.calculatePoints();
+            setIsActiveDoublePoints(false);
+        }
+        else{
+            user.points += answeredQuestion.calculatePoints();
+        }
         answerTimer = new Timer();
         answerTimer.schedule(
                 new TimerTask() {
@@ -141,6 +190,13 @@ public class MultiplayerGameCtrl {
                         } catch (WebApplicationException e) {
                             System.out.println(e.getResponse());
                             // Not all users have answered
+                        } catch(NullPointerException e) {
+                            // Handle no users issue
+                            System.out.println(e.getMessage());
+                            Platform.runLater(() -> {
+                                showAnswer(answeredQuestion, new ArrayList<>());
+                            });
+                            answerTimer.cancel();
                         }
                     }
                 }, POLLING_DELAY, POLLING_INTERVAL);
@@ -154,8 +210,14 @@ public class MultiplayerGameCtrl {
      * answered by everyone
      */
     public List<MultiplayerUser> fetchCorrectUsers(Question answeredQuestion) throws WebApplicationException {
-        return server.answerQuestion(serverUrl, gameIndex,
-                mainCtrl.getUser().id, answerCount, answeredQuestion);
+        if(isActiveDoublePoints){
+            return server.answerQuestion(serverUrl, gameIndex,
+                    mainCtrl.getUser().id, answerCount, answeredQuestion);
+        }
+        else{
+            return server.answerDoublePointsQuestion(serverUrl, gameIndex,
+                    mainCtrl.getUser().id, answerCount, answeredQuestion);
+        }
     }
 
     /**
@@ -174,7 +236,7 @@ public class MultiplayerGameCtrl {
             colors.add(Color.INDIANRED);
         }
 
-        answerCtrl.updateCircleColor(colors);
+        mainCtrl.updateQuestionCounters(answerCtrl, colors);
         answerCtrl.setup(answeredQuestion, correctUsers);
         mainCtrl.getPrimaryStage().setTitle("Answer screen");
         mainCtrl.getPrimaryStage().setScene(answer);
@@ -186,7 +248,6 @@ public class MultiplayerGameCtrl {
      * @param question the question to visualise
      */
     public void showQuestion(Question question) {
-        System.out.println("Received question answer: " + question.getUserAnswer().generateAnswer());
         if (question.getType() == QuestionType.ESTIMATION) {
             showEstimationQuestion((EstimationQuestion) question);
             return;
@@ -201,14 +262,11 @@ public class MultiplayerGameCtrl {
      * @param question the question to visualise
      */
     public void showMultipleChoiceQuestion(Question question) {
-        mcQuestionCtrl.updateCircleColor(colors);
-        mcQuestionCtrl.resetHighlight();
-        mcQuestionCtrl.highlightCurrentCircle();
+        mainCtrl.updateQuestionCounters(mcQuestionCtrl, colors);
+
         mcQuestionCtrl.setup(question);
         mcQuestionCtrl.resetAnswerColors();
-        mcQuestionCtrl.updateQuestionNumber();
 
-        mcQuestionCtrl.resetAnswerColors();
         mcQuestionCtrl.enableAnswers();
         mcQuestionCtrl.startTimer();
         mcQuestionCtrl.setStartTime();
@@ -222,10 +280,13 @@ public class MultiplayerGameCtrl {
      * @param question the estimation question to visualise
      */
     public void showEstimationQuestion(EstimationQuestion question) {
-        mainCtrl.getPrimaryStage().setTitle("Estimation");
-        mainCtrl.getPrimaryStage().setScene(estimationQuestion);
-        estimationQuestionCtrl.startTimer();
+        mainCtrl.updateQuestionCounters(estimationQuestionCtrl, colors);
         estimationQuestionCtrl.setup(question);
+
+        estimationQuestionCtrl.startTimer();
+        estimationQuestionCtrl.setStartTime();
+        mainCtrl.getPrimaryStage().setTitle("Estimation question screen");
+        mainCtrl.getPrimaryStage().setScene(estimationQuestion);
     }
 
     /**
@@ -244,8 +305,7 @@ public class MultiplayerGameCtrl {
      */
     public void showRanking(List<MultiplayerUser> rankedUsers) {
         // TODO: handle passed multiplayer users
-        rankingCtrl.updateCircleColor(colors);
-        rankingCtrl.updateQuestionNumber();
+        mainCtrl.updateQuestionCounters(rankingCtrl, colors);
         mainCtrl.getPrimaryStage().setTitle("Ranking Screen");
         mainCtrl.getPrimaryStage().setScene(ranking);
         rankingCtrl.startTimer();
@@ -266,6 +326,26 @@ public class MultiplayerGameCtrl {
     }
 
     /**
+     * Getter for the answeredQuestion flag
+     *
+     * @return boolean value for the flag
+     */
+
+    public boolean getAnsweredQuestion() {
+        return this.answeredQuestion;
+    }
+
+    /**
+     * Setter for the answeredQuestion flag
+     *
+     * @param answeredQuestion the boolean to be set to
+     */
+
+    public void setAnsweredQuestion ( boolean answeredQuestion ) {
+        this.answeredQuestion = answeredQuestion;
+    }
+
+    /**
      * Returns the current answer count
      * @return the current answer count
      */
@@ -282,6 +362,14 @@ public class MultiplayerGameCtrl {
     }
 
     /**
+     * Returns the list of used jokers
+     * @return usedJokers
+     */
+    public List<String> getUsedJokers() {
+        return usedJokers;
+    }
+
+    /**
      * Returns the current server url
      * @return the game server url
      */
@@ -290,11 +378,132 @@ public class MultiplayerGameCtrl {
     }
 
     /**
-     * Returns the index of the current game.
-     * @return The current game index.
+<<<<<<< HEAD
+     * Returns the game index
+     * @return the game index
      */
     public int getGameIndex() {
         return gameIndex;
+    }
+
+    /**
+     * Register for emojis in a particular controller
+     * @param ctrl the controller to register for emojis to
+     */
+    public void registerForEmojis(EmojiController ctrl) {
+        emojiSubscription = server.registerForMessages(
+                "/topic/emoji/" + gameIndex,
+                Emoji.class,
+                ctrl::displayEmoji
+        );
+    }
+
+    /**
+     * Send an emoji to the server
+     * @param e the emoji image to send
+     */
+    public void sendEmoji(ImageView e) {
+        String[] imageComponents = e.getImage().getUrl().split("/");
+        String imageName = imageComponents[imageComponents.length - 1];
+        String username = user.username;
+        server.send(
+                "/app/emoji/" + gameIndex,
+                new Emoji(imageName, username)
+        );
+    }
+    /**
+     * A getter that returns true/false whether the Double Points joker is activated this round
+     * @return isActiveDoublePoints, which shows whether the DP joker is being used
+     */
+    public boolean getIsActiveDoublePoints(){
+        return isActiveDoublePoints;
+    }
+    /**
+     * Sets the isActiveDoublePoints to either true or false
+     * @param active
+     */
+    public void setIsActiveDoublePoints(boolean active){
+        isActiveDoublePoints = active;
+    }
+
+    /**
+     * A getter that returns true/false whether the Remove Incorrect Answer joker is activated this round
+     * @return isActiveRemoveIncorrect, which shows whether the RIA joker is being used
+     */
+    public boolean getIsActiveRemoveIncorrect(){
+        return isActiveRemoveIncorrect;
+    }
+
+    /**
+     * Sets the isActiveRemoveIncorrect to either true or false
+     * @param active
+     */
+    public void setIsActiveRemoveIncorrect(boolean active){
+        isActiveRemoveIncorrect = active;
+    }
+
+    /**
+     * This method is called when a joker is clicked.
+     * It disables the joker for further use and shows an image when the button is clicked.
+     * @param joker
+     * @param image
+     */
+    public void useJoker(StackPane joker, ImageView image){
+        image.setVisible(true);
+        disableJokerButton(joker);
+        usedJokers.add(joker.idProperty().getValue());
+    }
+
+    /**
+     * Disables the joker so it can't be used again
+     * @param joker
+     */
+    public void disableJokerButton(StackPane joker){
+        joker.setBackground(new Background(
+                new BackgroundFill(Color.BURLYWOOD, CornerRadii.EMPTY, Insets.EMPTY)));
+        joker.setOpacity(OPACITY);
+        joker.setOnMouseClicked(null);
+        joker.setCursor(Cursor.DEFAULT);
+    }
+
+    /**
+     * Enables the disabled jokers for the next game.
+     * @param joker
+     */
+    public void enableJoker(StackPane joker){
+        joker.setBackground(new Background(
+                new BackgroundFill(Color.color(RGB_VALUE, RGB_VALUE, RGB_VALUE), CornerRadii.EMPTY, Insets.EMPTY)));
+        joker.setOpacity(STANDARD_SIZE);
+        joker.setCursor(Cursor.HAND);
+    }
+
+    /**
+     * Resets all jokers at the start of the game, so they can be used again.
+     */
+    public void resetAllJokers(){
+        mcQuestionCtrl.resetDoublePoints();
+        estimationQuestionCtrl.resetDoublePoints();
+        mcQuestionCtrl.resetRemoveIncorrect();
+        //TODO: Reset all the other jokers
+    }
+
+    /**
+     * Hides all emojis from the game
+     */
+    public void hideEmojis() {
+        answerCtrl.hideEmoji();
+        mcQuestionCtrl.hideEmoji();
+        estimationQuestionCtrl.hideEmoji();
+    }
+
+    /**
+     * Removes the emoji subscription from the current session
+     */
+    public void unregisterForEmojis() {
+        if(server.getSession().isConnected()) {
+            emojiSubscription.unsubscribe();
+        }
+        emojiSubscription = null;
     }
 
     public void resetGameCtrl() {
