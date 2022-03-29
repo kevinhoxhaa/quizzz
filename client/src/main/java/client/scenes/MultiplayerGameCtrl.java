@@ -59,6 +59,9 @@ public class MultiplayerGameCtrl {
     private Scene ranking;
     private RankingCtrl rankingCtrl;
 
+    private Scene results;
+    private MultiplayerResultsCtrl resultsCtrl;
+
     private boolean isAvailableDoublePoints = true;
     private boolean isActiveDoublePoints;
 
