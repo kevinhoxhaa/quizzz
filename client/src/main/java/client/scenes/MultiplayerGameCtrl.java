@@ -60,10 +60,7 @@ public class MultiplayerGameCtrl {
     private Scene ranking;
     private RankingCtrl rankingCtrl;
 
-    private boolean isAvailableDoublePoints = true;
     private boolean isActiveDoublePoints;
-
-    private boolean isAvailableRemoveIncorrect = true;
     private boolean isActiveRemoveIncorrect;
 
     private List<String> usedJokers;

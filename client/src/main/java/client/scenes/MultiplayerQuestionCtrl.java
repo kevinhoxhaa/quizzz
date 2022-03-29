@@ -55,8 +55,6 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
 
     private double startTime;
 
-    private boolean isAvailableRemoveIncorrect = true;
-    private boolean isActiveRemoveIncorrect;
 
     private boolean answerTopDisable = false;
     private boolean answerMidDisable = false;
@@ -196,6 +194,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
         resetAnswerOnMouseEnter();
         enableEmojis();
         doublePointsImage.setVisible(false);
+        removeIncorrectImage.setVisible(false);
 
         try {
             questionImg.setImage(
