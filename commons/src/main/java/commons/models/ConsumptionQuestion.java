@@ -62,6 +62,47 @@ public class ConsumptionQuestion extends Question {
     }
 
     /**
+     * Generates two alternative answers.
+     * @param correctAnswer The correct answer (after being divided by the coefficient)
+     * @param coefficient The coefficient
+     * @return A list with 3 items:
+     *  - Index 0: the correct answer
+     *  - Index 1: the first alternative
+     *  - Index 2: the second alternative
+     */
+    // CHECKSTYLE:OFF
+    private List<Long> generateAlternatives(long correctAnswer, long coefficient){
+
+        int tries = 0;
+
+        long firstAlternative = 0;
+        long secondAlternative = 0;
+
+        do {
+            tries++;
+            firstAlternative = (long) (correctAnswer +
+                    (random.nextBoolean() ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
+        } while ((correctAnswer == firstAlternative || firstAlternative <= 0L) && tries < 30);
+
+        do {
+            tries++;
+            secondAlternative = (long) (correctAnswer +
+                    (random.nextBoolean() ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
+        } while ((correctAnswer == secondAlternative
+                || firstAlternative == secondAlternative || secondAlternative <= 0L) && tries < 30);
+
+        if(tries >= 30){
+            return null;
+        }
+
+        List<Long> out = new ArrayList<>();
+        out.add(correctAnswer);
+        out.add(firstAlternative);
+        out.add(secondAlternative);
+        return out;
+    }
+
+    /**
      * Returns a list of two numbers which are a little
      * greater or smaller than the correct answer, in order
      * to confuse the user
@@ -69,12 +110,9 @@ public class ConsumptionQuestion extends Question {
      * magic numbers
      * @param correctAnswer the correct answer
      */
-    // CHECKSTYLE:OFF
+
     private void loadAnswers(long correctAnswer) {
         answers = new ArrayList<>();
-
-        long firstAlternative = 0;
-        long secondAlternative = 0;
 
         long coefficient = 1L;
 
@@ -88,30 +126,30 @@ public class ConsumptionQuestion extends Question {
             coefficient *= 5;
         }
 
-        int tries = 0;
+        List<Long> alternatives = generateAlternatives(correctAnswer, coefficient);
 
-        do {
-            tries++;
-            firstAlternative = (long)(correctAnswer +
-                     (random.nextBoolean() ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
-        } while ((correctAnswer == firstAlternative || firstAlternative <= 0L ) && tries < 30);
+        while(alternatives == null){
+            if(coefficient == 1){
+                answers.add(correctAnswer);
+                answers.add(correctAnswer + 1);
+                answers.add(correctAnswer + 2);
+                Collections.shuffle(answers);
+                return;
+            }
+            if(coefficient % 5 == 0){
+                coefficient /= 5;
+                correctAnswer *= 5;
+                generateAlternatives(correctAnswer, coefficient);
+            }
+        }
 
-        do {
-            tries++;
-            secondAlternative = (long)(correctAnswer +
-                    (random.nextBoolean() ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
-        } while ((correctAnswer == secondAlternative
-                || firstAlternative == secondAlternative || secondAlternative <= 0L) && tries < 30);
+        correctAnswer = alternatives.get(0);
+        long firstAlternative = alternatives.get(1);
+        long secondAlternative = alternatives.get(2);
 
         correctAnswer *= coefficient;
         firstAlternative *= coefficient;
         secondAlternative *= coefficient;
-
-        if(tries >= 30){
-            firstAlternative = correctAnswer + 5;
-            secondAlternative = correctAnswer - 5;
-        }
-
 
         answers.add(correctAnswer);
         answers.add(firstAlternative);
