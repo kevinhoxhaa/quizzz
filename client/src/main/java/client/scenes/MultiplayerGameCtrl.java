@@ -165,11 +165,11 @@ public class MultiplayerGameCtrl {
      */
     public void postAnswer(Question answeredQuestion) {
         if(getIsActiveDoublePoints()){
-            user.points += 2*answeredQuestion.calculatePoints();
+            mainCtrl.addScore(user,answeredQuestion);
             setIsActiveDoublePoints(false);
         }
         else{
-            user.points += answeredQuestion.calculatePoints();
+            mainCtrl.addScore(user,answeredQuestion);
         }
         answerTimer = new Timer();
         answerTimer.schedule(
