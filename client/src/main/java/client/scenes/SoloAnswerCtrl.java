@@ -28,6 +28,8 @@ import java.util.List;
 public class SoloAnswerCtrl implements SceneController, QuestionNumController {
 
     private static final int QUESTIONS_PER_GAME = 20;
+    private static final double CIRCLE_BORDER_SIZE = 1.7;
+    private static final double STANDARD_CIRCLE_BORDER_SIZE = 1.0;
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     @FXML
@@ -73,9 +75,8 @@ public class SoloAnswerCtrl implements SceneController, QuestionNumController {
      * - Fills in the question and correct answer in their corresponding text boxes. <br>
      *
      * @param soloGame The solo game instance
-     * @param colors   The list of colors associated with the past questions
      */
-    protected void setup(SoloGame soloGame, List<Color> colors) {
+    protected void setup(SoloGame soloGame) {
         this.game = soloGame;
         Question prevQuestion = soloGame.loadCurrentQuestion();
 
@@ -110,9 +111,6 @@ public class SoloAnswerCtrl implements SceneController, QuestionNumController {
                 setupEstimationAnswer(prevQuestion);
                 break;
         }
-
-        updateQuestionNumber();
-        updateCircleColor(colors);
     }
 
     /**
@@ -261,6 +259,25 @@ public class SoloAnswerCtrl implements SceneController, QuestionNumController {
     @Override
     public void updateQuestionNumber() {
         getQuestionNum().setText("" + (game.getCurrentQuestionNum() + 1));
+    }
+
+    /**
+     * Highlights current question so the user is aware which circle corresponds to his current question
+     */
+    public void highlightCurrentCircle() {
+        Circle c = (Circle) circles.getChildren().get(game.getCurrentQuestionNum());
+        c.setFill(Color.DARKGRAY);
+        c.setStrokeWidth(CIRCLE_BORDER_SIZE);
+    }
+
+    /**
+     * Resets the highlighting of the circle borders
+     */
+    public void resetHighlight(){
+        for(int i=0;i<circles.getChildren().size();i++){
+            Circle circle = (Circle) circles.getChildren().get(i);
+            circle.setStrokeWidth(STANDARD_CIRCLE_BORDER_SIZE);
+        }
     }
 
     /**

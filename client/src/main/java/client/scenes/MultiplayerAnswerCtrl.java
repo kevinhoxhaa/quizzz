@@ -6,16 +6,20 @@ import commons.entities.MultiplayerUser;
 import commons.models.ChoiceQuestion;
 import commons.models.ComparisonQuestion;
 import commons.models.ConsumptionQuestion;
+import commons.models.Emoji;
 import commons.models.EstimationQuestion;
 import commons.models.Question;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Cursor;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -24,10 +28,12 @@ import javafx.scene.text.Text;
 
 import java.util.List;
 
-public class MultiplayerAnswerCtrl implements SceneController, QuestionNumController {
+public class MultiplayerAnswerCtrl implements SceneController, QuestionNumController, EmojiController {
 
     private static final int HALF_QUESTIONS = 10;
     private static final int TOTAL_QUESTIONS = 20;
+    private static final double CIRCLE_BORDER_SIZE = 1.7;
+    private static final double STANDARD_CIRCLE_BORDER_SIZE = 1.0;
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -35,14 +41,21 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
 
     @FXML
     private VBox answerPane;
+
     @FXML
     private Text activity;
+
     @FXML
     private Text answer;
+
     @FXML
     private Text answerResponse;
+
     @FXML
     private Text questionNum;
+
+    @FXML
+    private GridPane emojiPane;
 
     @FXML
     private ProgressIndicator countdownCircle;
@@ -57,17 +70,10 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
     private Text currentScore;
 
     @FXML
-    private ImageView thumbsup;
+    private ImageView emojiImage;
+
     @FXML
-    private ImageView thumbsdown;
-    @FXML
-    private ImageView sad;
-    @FXML
-    private ImageView heart;
-    @FXML
-    private ImageView xd;
-    @FXML
-    private ImageView angry;
+    private Text emojiText;
 
 
     /**
@@ -93,13 +99,16 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
      * @param correctPlayers A list of all the players that answered the precious question correctly.
      */
     protected void setup(Question prevQuestion, List<MultiplayerUser> correctPlayers) {
+
         if (prevQuestion.hasCorrectUserAnswer()) {
             this.answerResponse.setText("Well done!");
+            currentScore.setFill(Color.GREEN);
             answerPane.setBackground(new Background(
                     new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
         } else {
             mainCtrl.resetStreak();
             this.answerResponse.setText("By making mistakes, we learn!");
+            currentScore.setFill(Color.DARKRED);
             answerPane.setBackground(new Background(
                     new BackgroundFill(Color.LIGHTCORAL, CornerRadii.EMPTY, Insets.EMPTY)));
         }
@@ -122,6 +131,7 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
         }
 
         startTimer();
+        enableEmojis();
         this.correctPlayers.getItems().clear();
         correctPlayers.forEach(u -> this.correctPlayers.getItems().add(u.username));
     }
@@ -198,6 +208,62 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
     }
 
     /**
+     * Send emojis to the server on emoji click
+     */
+    public void enableEmojis() {
+
+        emojiPane.getChildren().forEach(n -> {
+            if(n instanceof ImageView) {
+                ImageView e = (ImageView) n;
+                e.setOnMouseClicked(event -> gameCtrl.sendEmoji(e));
+                e.setCursor(Cursor.HAND);
+
+                String[] parts = e.getImage().getUrl().split("/");
+                String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
+                emojiPath = emojiPath.substring(
+                        "file:/".length(), emojiPath.length() - "classes/java/main/".length())
+                        + "resources/main/client/images/" + parts[parts.length - 1];
+
+                e.setImage(new Image(emojiPath));
+            }
+        });
+    }
+    /**
+     * Disable emoji clicks
+     */
+    public void disableEmojis() {
+        emojiPane.getChildren().forEach(n -> {
+            if(n instanceof ImageView) {
+                ImageView e = (ImageView) n;
+                e.setOnMouseClicked(null);
+            }
+        });
+    }
+
+    /**
+     * Visualise emoji on the screen
+     * @param emoji the emoji to visualise
+     */
+    @Override
+    public void displayEmoji(Emoji emoji) {
+        String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
+        emojiPath = emojiPath.substring(
+                "file:/".length(), emojiPath.length() - "classes/java/main/".length())
+                + "resources/main/client/images/" + emoji.getImageName();
+        emojiImage.setImage(new Image(emojiPath));
+        emojiText.setText(emoji.getUsername());
+    }
+
+    /**
+     * Removes the emoji from the image view
+     */
+    @Override
+    public void hideEmoji() {
+        emojiImage.setImage(null);
+        emojiText.setText("");
+    }
+
+    /**
      * Initiates the timer countdown and animation
      */
     public void startTimer() {
@@ -214,6 +280,7 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
 
     @Override
     public void redirect() {
+        disableEmojis();
         if(gameCtrl.getAnswerCount() == HALF_QUESTIONS) {
             List<MultiplayerUser> rankedUsers = gameCtrl.fetchRanking();
             gameCtrl.showRanking(rankedUsers);
@@ -272,6 +339,25 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
 
     @Override
     public void updateQuestionNumber() {
-        getQuestionNum().setText("" + (gameCtrl.getAnswerCount() + 1));
+        getQuestionNum().setText("" + (gameCtrl.getAnswerCount()));
+    }
+
+    /**
+     * Highlights current question so the user is aware which circle corresponds to his current question
+     */
+    public void highlightCurrentCircle() {
+        Circle c = (Circle) circles.getChildren().get(gameCtrl.getAnswerCount());
+        c.setFill(Color.DARKGRAY);
+        c.setStrokeWidth(CIRCLE_BORDER_SIZE);
+    }
+
+    /**
+     * Resets the highlighting of the circle borders
+     */
+    public void resetHighlight(){
+        for(int i=0;i<circles.getChildren().size();i++){
+            Circle circle = (Circle) circles.getChildren().get(i);
+            circle.setStrokeWidth(STANDARD_CIRCLE_BORDER_SIZE);
+        }
     }
 }
