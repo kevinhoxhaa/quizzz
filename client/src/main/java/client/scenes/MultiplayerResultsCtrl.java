@@ -1,6 +1,5 @@
 package client.scenes;
 
-import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -11,10 +10,8 @@ import javafx.scene.text.Text;
 
 import java.util.List;
 
-public class MultiplayerResultsCtrl implements QuestionNumController{
+public class MultiplayerResultsCtrl extends QuestionNumController{
 
-    private final ServerUtils server;
-    private final MainCtrl mainCtrl;
     private MultiplayerGameCtrl gameCtrl;
 
     private static final double CIRCLE_BORDER_SIZE = 1.7;
@@ -42,13 +39,11 @@ public class MultiplayerResultsCtrl implements QuestionNumController{
 
     /**
      * Creates a controller for the multiplayer results page screen, with the given server and mainCtrl parameters.
-     * @param server
      * @param mainCtrl
      */
     @Inject
-    public MultiplayerResultsCtrl(ServerUtils server, MainCtrl mainCtrl) {
-        this.server = server;
-        this.mainCtrl = mainCtrl;
+    public MultiplayerResultsCtrl(MainCtrl mainCtrl) {
+        super(mainCtrl);
     }
 
     /**

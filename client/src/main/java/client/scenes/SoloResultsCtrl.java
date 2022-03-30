@@ -19,10 +19,9 @@ import javafx.scene.text.Text;
 
 import java.util.List;
 
-public class SoloResultsCtrl implements QuestionNumController {
+public class SoloResultsCtrl extends QuestionNumController {
 
     private final ServerUtils server;
-    private final MainCtrl mainCtrl;
     private ObservableList<SoloUser> users;
 
     private static final double CIRCLE_BORDER_SIZE = 1.7;
@@ -67,8 +66,8 @@ public class SoloResultsCtrl implements QuestionNumController {
      */
     @Inject
     public SoloResultsCtrl(ServerUtils server, MainCtrl mainCtrl) {
+        super(mainCtrl);
         this.server = server;
-        this.mainCtrl = mainCtrl;
     }
 
 

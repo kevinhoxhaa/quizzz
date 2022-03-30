@@ -30,9 +30,8 @@ import static commons.utils.CompareType.EQUAL;
 import static commons.utils.CompareType.LARGER;
 import static commons.utils.CompareType.SMALLER;
 
-public abstract class AbstractMultichoiceQuestionCtrl implements SceneController, QuestionNumController {
+public abstract class AbstractMultichoiceQuestionCtrl extends QuestionNumController implements SceneController{
     protected final ServerUtils server;
-    protected final MainCtrl mainCtrl;
 
     protected Question currentQuestion;
     protected double startTime;
@@ -86,8 +85,8 @@ public abstract class AbstractMultichoiceQuestionCtrl implements SceneController
      */
     @Inject
     protected AbstractMultichoiceQuestionCtrl(ServerUtils server, MainCtrl mainCtrl) {
+        super(mainCtrl);
         this.server = server;
-        this.mainCtrl = mainCtrl;
     }
 
     /**

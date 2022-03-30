@@ -472,7 +472,6 @@ public class MainCtrl {
         soloAnswerCtrl.setup(game);
         updateQuestionCounters(soloAnswerCtrl, colors);
         primaryStage.setScene(soloAnswer);
-        soloAnswerCtrl.startTimer();
     }
 
     /**

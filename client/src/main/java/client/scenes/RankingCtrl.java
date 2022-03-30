@@ -20,11 +20,9 @@ import javafx.stage.Modality;
 import java.util.List;
 
 
-public class RankingCtrl implements SceneController, QuestionNumController {
-
-
+public class RankingCtrl extends QuestionNumController implements SceneController {
     private final ServerUtils server;
-    private final MainCtrl mainCtrl;
+
     private MultiplayerGameCtrl gameCtrl;
 
     private static final double CIRCLE_BORDER_SIZE = 1.7;
@@ -58,8 +56,8 @@ public class RankingCtrl implements SceneController, QuestionNumController {
      */
     @Inject
     public RankingCtrl(ServerUtils server, MainCtrl mainCtrl) {
+        super(mainCtrl);
         this.server = server;
-        this.mainCtrl = mainCtrl;
     }
 
     /**
