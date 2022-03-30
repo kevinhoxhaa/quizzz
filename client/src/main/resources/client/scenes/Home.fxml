@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="492.0" minWidth="748.0" prefHeight="492.0" prefWidth="748.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.HomeCtrl">
+<BorderPane maxHeight="694.0" maxWidth="1014.0" minHeight="694.0" minWidth="1014.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.HomeCtrl">
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
    </padding>
@@ -25,7 +25,7 @@
                          </Text>
                          <ImageView fx:id="bulbView" fitWidth="96.0" pickOnBounds="true" preserveRatio="true" rotate="24.0">
                              <image>
-                                 <Image url="/client/icons/bulb.png" />
+                                 <Image url="@../icons/bulb.png" />
                              </image>
                          </ImageView>
                      </HBox>
@@ -36,7 +36,7 @@
                              <Insets bottom="10.0" left="20.0" right="20.0" />
                          </padding>
                          <children>
-                             <Button onAction="#onSoloButtonClick" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Solo" textAlignment="CENTER">
+                             <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onSoloButtonClick" text="Solo" textAlignment="CENTER">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
@@ -44,7 +44,7 @@
                         <Font size="18.0" />
                      </font>
                         </Button>
-                             <Button onAction="#onMultiplayerButtonClick" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Multiplayer" textAlignment="CENTER">
+                             <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onMultiplayerButtonClick" text="Multiplayer" textAlignment="CENTER">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
@@ -54,16 +54,17 @@
                         </Button>
                          </children>
                      </VBox>
-            <VBox alignment="BOTTOM_LEFT" minHeight="108.0" prefHeight="108.0" prefWidth="748.0">
+                     <Region VBox.vgrow="ALWAYS" />
+            <VBox alignment="BOTTOM_LEFT" minHeight="108.0" prefHeight="108.0" prefWidth="929.0">
                <padding>
                   <Insets top="16.0" />
                </padding>
                <children>
-                  <Button onAction="#onHelpButtonClick" mnemonicParsing="false" style="-fx-background-color: transparent;">
+                  <Button mnemonicParsing="false" onAction="#onHelpButtonClick" style="-fx-background-color: transparent;">
                       <graphic>
                           <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
                               <image>
-                                  <Image url="/client/icons/help.png" />
+                                  <Image url="@../icons/help.png" />
                               </image>
                           </ImageView>
                       </graphic>
