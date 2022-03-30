@@ -22,24 +22,16 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
-import static commons.utils.CompareType.EQUAL;
-import static commons.utils.CompareType.LARGER;
-import static commons.utils.CompareType.SMALLER;
 
 
 public class MultiplayerQuestionCtrl extends AbstractQuestionCtrl
-        implements SceneController, QuestionNumController, EmojiController {
+        implements EmojiController {
     private static final int KICK_AT_X_QUESTIONS = 3;
 
     private MultiplayerGameCtrl gameCtrl;
@@ -91,7 +83,7 @@ public class MultiplayerQuestionCtrl extends AbstractQuestionCtrl
      *
      * @param question the question instance upon which the setup is based
      */
-    protected void setup(Question question) {
+    public void setup(Question question) {
         jokers=new ArrayList<>();
         jokers.add(doublePoints);
         jokers.add(removeIncorrect);
@@ -103,122 +95,18 @@ public class MultiplayerQuestionCtrl extends AbstractQuestionCtrl
             }
         }
 
-        selectedAnswerButton = null;
         gameCtrl.setAnsweredQuestion ( false );
-        this.currentQuestion = question;
-        currentScore.setText("Score: " + gameCtrl.getUser().points);
 
-        switch (question.getType()) {
-            case CONSUMPTION:
-                setupConsumptionQuestion(question);
-                break;
-            case COMPARISON:
-                setupComparisonQuestion(question);
-                break;
-            case CHOICE:
-                setupChoiceQuestion(question);
-                break;
-        }
+        super.setup(question, gameCtrl.getUser().points);
 
-        this.answerButtons = new ArrayList<>();
-        this.answerButtons.add(answerTop);
-        this.answerButtons.add(answerMid);
-        this.answerButtons.add(answerBot);
-
-        for (StackPane answerBtnLoop : answerButtons) {
-            answerBtnLoop.setStyle("-fx-border-width: 1; -fx-border-color: black");
-            answerBtnLoop.getChildren().get(0).setStyle("-fx-font-weight: normal");
-        }
-        resetAnswerColors();
         resetAnswerClickability();
-        resetAnswerOnMouseEnter();
+        answerTopDisable = false;
+        answerMidDisable = false;
+        answerBotDisable = false;
         enableEmojis();
         doublePointsImage.setVisible(false);
 
-        try {
-            questionImg.setImage(
-                    server.fetchImage(mainCtrl.getServerUrl(), currentQuestion.getImagePath())
-            );
-        }
-        catch (IOException e){
-        }
     }
-
-    /**
-     * Sets up the questions and answers on the page for the given comparison question
-     *
-     * @param generalQuestion the given question
-     */
-    private void setupComparisonQuestion(Question generalQuestion) {
-        ComparisonQuestion question = (ComparisonQuestion) generalQuestion;
-
-        activityText.setText(
-                String.format("Does %s use more, less, or the same amount of energy as %s?",
-                        question.getFirstActivity().title, question.getSecondActivity().title)
-        );
-        answerTopText.setText("MORE");
-        answerMidText.setText("EQUAL");
-        answerBotText.setText("LESS");
-
-        answerTopAnswer = new Answer(LARGER);
-        answerMidAnswer = new Answer(EQUAL);
-        answerBotAnswer = new Answer(SMALLER);
-    }
-
-    /**
-     * Sets up the questions and answers on the page for the given consumption question
-     *
-     * @param generalQuestion the given question
-     */
-    private void setupConsumptionQuestion(Question generalQuestion) {
-        ConsumptionQuestion question = (ConsumptionQuestion) generalQuestion;
-
-        activityText.setText(
-                String.format("How much energy does %s cost?",
-                        question.getActivity().title)
-        );
-
-        List<Long> answers = question.getAnswers();
-
-        answerTopText.setText(answers.get(0).toString());
-        answerMidText.setText(answers.get(1).toString());
-        answerBotText.setText(answers.get(2).toString());
-
-        answerTopAnswer = new Answer(answers.get(0));
-        answerMidAnswer = new Answer(answers.get(1));
-        answerBotAnswer = new Answer(answers.get(2));
-    }
-
-    /**
-     * Sets up the questions and answers on the page for the given choice question
-     *
-     * @param generalQuestion the given question
-     */
-    private void setupChoiceQuestion(Question generalQuestion) {
-        ChoiceQuestion question = (ChoiceQuestion) generalQuestion;
-
-        activityText.setText(
-                String.format("What could you do instead of %s to consume less energy?",
-                        question.getComparedActivity().title)
-        );
-
-        List<Activity> answers = new ArrayList<>();
-        for (Activity activity : question.getActivities()) {
-            if (!activity.equals(question.getComparedActivity())) {
-                answers.add(activity);
-            }
-        }
-        Collections.shuffle(answers);
-
-        answerTopText.setText(answers.get(0).title);
-        answerMidText.setText(answers.get(1).title);
-        answerBotText.setText(answers.get(2).title);
-
-        answerTopAnswer = new Answer(answers.get(0));
-        answerMidAnswer = new Answer(answers.get(1));
-        answerBotAnswer = new Answer(answers.get(2));
-    }
-
 
     /**
      * Saves the answer selected last by the user, as well as the amount of time it took.
@@ -227,83 +115,9 @@ public class MultiplayerQuestionCtrl extends AbstractQuestionCtrl
      * @param answerButton The answer button pressed.
      * @param answer       The answer corresponding to the answer button.
      */
-    private void onAnswerClicked(StackPane answerButton, Answer answer) {
-        gameCtrl.setAnsweredQuestion ( true );
-        if (!answerButton.equals(selectedAnswerButton)) {
-            currentQuestion.setUserAnswer(answer, getSeconds());
-
-            selectedAnswerButton = answerButton;
-            resetAnswerColors();
-            answerButton.setBackground(new Background(
-                    new BackgroundFill(Color.DARKCYAN, CornerRadii.EMPTY, Insets.EMPTY)));
-
-            for (StackPane answerBtnLoop : answerButtons) {
-                answerBtnLoop.setStyle("-fx-border-width: 1; -fx-border-color: black");
-                answerBtnLoop.getChildren().get(0).setStyle("-fx-font-weight: normal");
-            }
-            answerButton.getChildren().get(0).setStyle("-fx-font-weight: bold");
-            answerButton.setStyle("-fx-border-width: 2; -fx-border-color: black");
-        }
-
-    }
-
-    /**
-     * Returns the time since the timer started, in seconds.
-     * For now, a placeholder method.
-     *
-     * @return the time since the timer started, in seconds.
-     */
-    private double getSeconds() {
-        return (System.currentTimeMillis() - startTime) / MILLISECONDS_PER_SECONDS;
-    }
-
-    /**
-     * Called when the timer is up.
-     * Responsible for:
-     * - Disabling inputs
-     * - Sending the question instance back to the server
-     * - Waiting for the list of people who got it right
-     * - Making sure the answer page has all the necessary information
-     * - Redirecting to the answer page
-     */
-    public void finalizeAndSend() {
-        gameCtrl.postAnswer(currentQuestion);
-    }
-
-
-    /**
-     * Captures the exact time the question page started showing used for measuring the time
-     * players needed for answering the question.
-     */
-    protected void setStartTime() {
-        startTime = System.currentTimeMillis();
-    }
-
-    /**
-     * The method called when the button answerTop is clicked.
-     * Calls the generic method for clicking an answer, specifying that it was the top button.
-     */
-    @FXML
-    protected void onAnswerTopClicked() {
-        onAnswerClicked(answerTop, answerTopAnswer);
-    }
-
-    /**
-     * The method called when the button answerMid is clicked.
-     * Calls the generic method for clicking an answer, specifying that it was the middle button.
-     */
-    @FXML
-    protected void onAnswerMidClicked() {
-        onAnswerClicked(answerMid, answerMidAnswer);
-    }
-
-    /**
-     * The method called when the button answerBot is clicked.
-     * Calls the generic method for clicking an answer, specifying that it was the bottom button.
-     */
-    @FXML
-    protected void onAnswerBotClicked() {
-        onAnswerClicked(answerBot, answerBotAnswer);
+    protected void onAnswerClicked(StackPane answerButton, Answer answer) {
+        gameCtrl.setAnsweredQuestion (true);
+        super.onAnswerClicked(answerButton, answer);
     }
 
     /**
@@ -399,71 +213,16 @@ public class MultiplayerQuestionCtrl extends AbstractQuestionCtrl
         enterJoker(reduceTime);
     }
 
-    /**
-     * A general method for setting an answer button's background color upon the cursor enters it,
-     * according to whether it is selected.
-     *
-     * @param answerBtn The answer button to be recolor.
-     */
-    private void enterAnswer(StackPane answerBtn) {
-        if (answerBtn.equals(selectedAnswerButton)) {
-            answerBtn.setBackground(new Background(
-                    new BackgroundFill(Color.DARKCYAN, CornerRadii.EMPTY, Insets.EMPTY)));
-        } else {
-            answerBtn.setBackground(new Background(
-                    new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
-        }
-    }
 
-    /**
-     * The method called upon loading the question scene, and when the cursor leaves the given answer button .
-     * Resets the given answer box's background color according to whether they are selected.
-     * @param answerBtn The answer button to be recolor.
-     */
-    @FXML
-    public void resetAnswerColors(StackPane answerBtn) {
-                if (answerBtn.equals(selectedAnswerButton)) {
-                    answerBtn.setBackground(new Background(
-                            new BackgroundFill(Color.LIGHTSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
-                } else {
-                    answerBtn.setBackground(new Background(
-                            new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
-                }
-    }
-
-    /**
-     * The method called upon loading the question scene, and when the cursor leaves any of the answer buttons.
-     * Resets all answer boxes' background color according to whether they are selected.
-     */
-    @FXML
-    public void resetAnswerColors() {
-        for(StackPane answerBtn: answerButtons) {
-            if (answerBtn.equals(selectedAnswerButton)) {
-                answerBtn.setBackground(new Background(
-                        new BackgroundFill(Color.LIGHTSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
-            } else {
-                answerBtn.setBackground(new Background(
-                        new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
-            }
-        }
-    }
 
     /**
      * The method is called upon loading the question scene, to make sure each answer button is clickable.
      * Else an answer is disabled after a user uses the Remove Incorrect Answer Joker.
      */
-    @FXML
-    public void resetAnswerClickability(){
-
+    private void resetAnswerClickability(){
         for(StackPane answerBtn : answerButtons){
             answerBtn.setDisable(false);
         }
-    }
-
-    public void resetAnswerOnMouseEnter(){
-        answerTopDisable = false;
-        answerMidDisable = false;
-        answerBotDisable = false;
     }
 
     /**
@@ -485,7 +244,6 @@ public class MultiplayerQuestionCtrl extends AbstractQuestionCtrl
      */
     @FXML
     public void resetJokerColors() {
-
         for (StackPane joker : jokers) {
             if (!gameCtrl.getUsedJokers().contains(joker.idProperty().getValue())) {
                 joker.setBackground(new Background(
@@ -521,8 +279,7 @@ public class MultiplayerQuestionCtrl extends AbstractQuestionCtrl
     public void useRemoveIncorrect(){
         gameCtrl.setIsActiveRemoveIncorrect(true);
         gameCtrl.useJoker(removeIncorrect, removeIncorrectImage);
-        Question question = getCurrentQuestion();
-        switch (question.getType()) {
+        switch (currentQuestion.getType()) {
             case CONSUMPTION: {
                 List<Long> incorrectAnswers = new ArrayList<>();
                 incorrectAnswers.add(answerTopAnswer.getLongAnswer());
@@ -676,7 +433,7 @@ public class MultiplayerQuestionCtrl extends AbstractQuestionCtrl
         }
 
         gameCtrl.setAnsweredQuestion(false);
-        finalizeAndSend();
+        gameCtrl.postAnswer(currentQuestion);
     }
 
     @Override
@@ -686,45 +443,20 @@ public class MultiplayerQuestionCtrl extends AbstractQuestionCtrl
     }
 
     /**
-     * Getter for the circles bar
-     *
-     * @return circles
-     */
-    public HBox getCirclesHBox() {
-        return circles;
-    }
-
-    /**
-     * Getter for the text node containing the current question number
-     *
-     * @return questionNum
-     */
-    public Text getQuestionNum() {
-        return questionNum;
-    }
-
-    public Question getCurrentQuestion(){
-        return currentQuestion;
-    }
-
-    /**
      * Highlights current question so the user is aware which circle corresponds to his current question
      */
     public void highlightCurrentCircle() {
-        Circle circle = (Circle) circles.getChildren().get(gameCtrl.getAnswerCount());
-        circle.setFill(Color.DARKGRAY);
-        circle.setStrokeWidth(THICK_CIRCLE_BORDER_SIZE);
+        super.highlightCurrentCircle(gameCtrl.getAnswerCount());
     }
 
     /**
-     * Resets the highlighting of the circle borders
+     * Updates the question number on the top of the screen.
      */
-    public void resetHighlight() {
-        for (int i = 0; i < circles.getChildren().size(); i++) {
-            Circle circle = (Circle) circles.getChildren().get(i);
-            circle.setStrokeWidth(STANDARD_CIRCLE_BORDER_SIZE);
-        }
+    @Override
+    public void updateQuestionNumber() {
+        questionNum.setText("" + (gameCtrl.getAnswerCount() + 1));
     }
+
 
     /**
      * Send emojis to the server on emoji click
@@ -789,24 +521,4 @@ public class MultiplayerQuestionCtrl extends AbstractQuestionCtrl
         this.gameCtrl = gameCtrl;
     }
 
-    @Override
-    public void updateCircleColor(List<Color> colors) {
-        for (int i = 0; i < gameCtrl.getAnswerCount(); i++) {
-            Circle circle = (Circle) getCirclesHBox().getChildren().get(i);
-            circle.setFill(colors.get(i));
-        }
     }
-
-    @Override
-    public void resetCircleColor() {
-        for (int i = 0; i < mainCtrl.getQuestionsPerGame(); i++) {
-            Circle circle = (Circle) getCirclesHBox().getChildren().get(i);
-            circle.setFill(Color.LIGHTGRAY);
-        }
-    }
-
-    @Override
-    public void updateQuestionNumber() {
-        getQuestionNum().setText("" + (gameCtrl.getAnswerCount() + 1));
-    }
-}

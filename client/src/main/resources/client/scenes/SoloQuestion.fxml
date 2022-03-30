@@ -243,11 +243,20 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Text fx:id="currentScore" layoutX="43.0" layoutY="46.0" text="Score: 0" wrappingWidth="187.242919921875">
-               <font>
-                  <Font size="32.0" />
-               </font>
-            </Text>
+            <TextFlow layoutX="14.0" layoutY="6.0" prefHeight="50.0" prefWidth="200.0">
+               <children>
+                  <Text text="Score: " wrappingWidth="187.242919921875">
+                     <font>
+                        <Font size="32.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="currentScore" layoutX="10.0" layoutY="10.0" text="0" wrappingWidth="187.242919921875">
+                     <font>
+                        <Font size="32.0" />
+                     </font>
+                  </Text>
+               </children>
+            </TextFlow>
          </children>
       </AnchorPane>
    </children>
