@@ -10,13 +10,12 @@ import commons.models.ComparisonQuestion;
 import commons.models.ConsumptionQuestion;
 import commons.models.Emoji;
 import commons.models.Question;
-import jakarta.ws.rs.WebApplicationException;
 import commons.utils.CompareType;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -39,82 +38,24 @@ import static commons.utils.CompareType.LARGER;
 import static commons.utils.CompareType.SMALLER;
 
 
-public class MultiplayerQuestionCtrl implements SceneController, QuestionNumController, EmojiController {
-    private static final double MILLISECONDS_PER_SECONDS = 1000.0;
-    private static final double CIRCLE_BORDER_SIZE = 1.7;
-    private static final double STANDARD_SIZE = 1.0;
+public class MultiplayerQuestionCtrl extends AbstractQuestionCtrl
+        implements SceneController, QuestionNumController, EmojiController {
     private static final int KICK_AT_X_QUESTIONS = 3;
-    private static final int POLLING_DELAY = 0;
-    private static final int POLLING_INTERVAL = 500;
-
-    private final ServerUtils server;
-    private final MainCtrl mainCtrl;
 
     private MultiplayerGameCtrl gameCtrl;
-    private Question currentQuestion;
-
-    private double startTime;
-
-    private boolean isAvailableRemoveIncorrect = true;
-    private boolean isActiveRemoveIncorrect;
 
     private boolean answerTopDisable = false;
     private boolean answerMidDisable = false;
     private boolean answerBotDisable = false;
 
-
-    @FXML
-    private StackPane answerTop;
-
-    @FXML
-    private StackPane answerMid;
-
-    @FXML
-    private StackPane answerBot;
-
-    @FXML
-    private Text answerTopText;
-
-    @FXML
-    private Text answerMidText;
-
-    @FXML
-    private Text answerBotText;
-
     @FXML
     private GridPane emojiPane;
-
     @FXML
     private ImageView emojiImage;
-
     @FXML
     private Text emojiText;
 
-    private Answer answerTopAnswer;
-    private Answer answerMidAnswer;
-    private Answer answerBotAnswer;
-
-    private List<StackPane> answerButtons;
-    private StackPane selectedAnswerButton;
-
-    private double secondsTaken;
-    private Answer userAnswer;
-
-    private List<String> correctPlayers;
     private List<StackPane> jokers;
-
-    @FXML
-    private Text activityText;
-    @FXML
-    private Text questionNum;
-    @FXML
-    private ImageView questionImg;
-
-    @FXML
-    private ProgressIndicator countdownCircle;
-
-    @FXML
-    private HBox circles;
 
     @FXML
     private StackPane doublePoints;
@@ -122,8 +63,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     private StackPane removeIncorrect;
     @FXML
     private StackPane reduceTime;
-    @FXML
-    private Text currentScore;
+
     @FXML
     private ImageView doublePointsImage;
     @FXML
@@ -139,10 +79,8 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      * @param mainCtrl
      */
     @Inject
-
     public MultiplayerQuestionCtrl(ServerUtils server, MainCtrl mainCtrl) {
-        this.server = server;
-        this.mainCtrl = mainCtrl;
+        super(server, mainCtrl);
     }
 
     /**
@@ -775,7 +713,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     public void highlightCurrentCircle() {
         Circle circle = (Circle) circles.getChildren().get(gameCtrl.getAnswerCount());
         circle.setFill(Color.DARKGRAY);
-        circle.setStrokeWidth(CIRCLE_BORDER_SIZE);
+        circle.setStrokeWidth(THICK_CIRCLE_BORDER_SIZE);
     }
 
     /**
@@ -784,7 +722,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     public void resetHighlight() {
         for (int i = 0; i < circles.getChildren().size(); i++) {
             Circle circle = (Circle) circles.getChildren().get(i);
-            circle.setStrokeWidth(STANDARD_SIZE);
+            circle.setStrokeWidth(STANDARD_CIRCLE_BORDER_SIZE);
         }
     }
 

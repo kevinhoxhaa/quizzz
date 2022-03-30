@@ -11,8 +11,6 @@ import commons.models.Question;
 import commons.models.SoloGame;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -31,57 +29,8 @@ import static commons.utils.CompareType.LARGER;
 import static commons.utils.CompareType.SMALLER;
 
 
-public class SoloQuestionCtrl implements SceneController, QuestionNumController {
-    private final ServerUtils server;
-    private final MainCtrl mainCtrl;
-
-    private static final double MILLISECONDS_PER_SECONDS = 1000.0;
-    private static final double CIRCLE_BORDER_SIZE = 1.7;
-    private static final double STANDARD_CIRCLE_BORDER_SIZE = 1.0;
-
-    private Question currentQuestion;
-
-    private double startTime;
-
-    @FXML
-    private StackPane answerTop;
-    @FXML
-    private StackPane answerMid;
-    @FXML
-    private StackPane answerBot;
-    @FXML
-    private Text answerTopText;
-    @FXML
-    private Text answerMidText;
-    @FXML
-    private Text answerBotText;
-    @FXML
-    private Text currentScore;
-
-    private Answer answerTopAnswer;
-    private Answer answerMidAnswer;
-    private Answer answerBotAnswer;
-
-    private List<StackPane> answerButtons;
-    private StackPane selectedAnswerButton;
-
-    private double secondsTaken;
-    private Answer userAnswer;
-
-    private List<String> correctPlayers;
-
-    @FXML
-    private Text activityText;
-    @FXML
-    private Text questionNum;
-    @FXML
-    private ImageView questionImg;
-
-    @FXML
-    private ProgressIndicator countdownCircle;
-
-    @FXML
-    private HBox circles;
+public class SoloQuestionCtrl extends AbstractQuestionCtrl
+        implements SceneController, QuestionNumController {
     private SoloGame game;
 
     /**
@@ -92,10 +41,8 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
      * @param mainCtrl
      */
     @Inject
-
     public SoloQuestionCtrl(ServerUtils server, MainCtrl mainCtrl) {
-        this.server = server;
-        this.mainCtrl = mainCtrl;
+        super(server, mainCtrl);
     }
 
     /**
@@ -428,7 +375,7 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
     public void highlightCurrentCircle() {
         Circle c = (Circle) circles.getChildren().get(game.getCurrentQuestionNum());
         c.setFill(Color.DARKGRAY);
-        c.setStrokeWidth(CIRCLE_BORDER_SIZE);
+        c.setStrokeWidth(THICK_CIRCLE_BORDER_SIZE);
     }
 
     /**
