@@ -41,8 +41,8 @@ import java.util.TimerTask;
 
 public class MainCtrl {
 
-    public static final double MIN_WIDTH = 768.0;
-    public static final double MIN_HEIGHT = 512.0;
+    public static final double WIDTH = 1024.0;
+    public static final double HEIGHT = 704.0;
     private static final double TIMEOUT = 8.0;
     private static final double START_TIME = 7.95;
     private static final double INTERVAL = 0.05;
@@ -130,8 +130,11 @@ public class MainCtrl {
                            Pair<MultiplayerResultsCtrl, Parent> multiplayerResults
                            ) {
         this.primaryStage = primaryStage;
-        primaryStage.setMinHeight(MIN_HEIGHT);
-        primaryStage.setMinWidth(MIN_WIDTH);
+        primaryStage.setMinHeight(HEIGHT);
+        primaryStage.setMinWidth(WIDTH);
+        primaryStage.setMaxHeight(HEIGHT);
+        primaryStage.setMaxWidth(WIDTH);
+        primaryStage.setResizable(false);
 
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
