@@ -312,6 +312,7 @@
                         </Pane>
                     </children>
                 </HBox>
+                <Region VBox.vgrow="ALWAYS" />
                 <AnchorPane prefHeight="10.0" prefWidth="708.0">
                     <children>
                         <Button fx:id="quitButton" layoutX="595.0" layoutY="14.0" mnemonicParsing="false"

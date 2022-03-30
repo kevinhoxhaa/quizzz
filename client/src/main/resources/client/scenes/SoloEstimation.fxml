@@ -22,13 +22,13 @@
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
     <center>
-        <VBox alignment="CENTER" fillWidth="false" prefHeight="200.0" prefWidth="200.0" spacing="16.0">
+        <VBox alignment="CENTER" fillWidth="false" maxHeight="694.0" maxWidth="1014.0" minHeight="694.0" minWidth="1014.0" spacing="16.0">
             <padding>
                 <Insets top="32.0" />
             </padding>
 
             <children>
-                <HBox alignment="CENTER" layoutX="23.0" layoutY="34.0" prefHeight="32.0" prefWidth="512.0" spacing="4.0" VBox.vgrow="NEVER">
+                <HBox alignment="CENTER" layoutX="23.0" layoutY="34.0" prefHeight="32.0" prefWidth="1014.0" spacing="4.0" VBox.vgrow="NEVER">
                     <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Questions" HBox.hgrow="ALWAYS">
                             <font>

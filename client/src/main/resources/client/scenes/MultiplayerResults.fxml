@@ -17,6 +17,7 @@
 <?import javafx.scene.text.TextFlow?>
 
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Region?>
 <BorderPane maxHeight="694.0" maxWidth="1014.0" minHeight="694.0" minWidth="1014.0"
             xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="client.scenes.MultiplayerResultsCtrl">
@@ -237,6 +238,7 @@
                                 </VBox>
                             </children>
                         </HBox>
+                        <Region VBox.vgrow="ALWAYS" />
                         <HBox prefHeight="105.0" prefWidth="708.0">
                             <children>
                                 <Pane prefHeight="92.0" prefWidth="398.0">
