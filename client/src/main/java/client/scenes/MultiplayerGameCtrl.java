@@ -17,6 +17,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.util.Pair;
 import org.springframework.messaging.simp.stomp.StompSession;
 
@@ -35,6 +36,7 @@ public class MultiplayerGameCtrl {
     private List<Color> colors;
     private boolean answeredQuestion = false;
     private StompSession.Subscription emojiSubscription;
+    private StompSession.Subscription dialogSubscription;
 
     private Timer answerTimer;
 
@@ -135,6 +137,7 @@ public class MultiplayerGameCtrl {
         registerForEmojis(estimationQuestionCtrl);
         registerForEmojis(answerCtrl);
         registerForEmojis(mcQuestionCtrl);
+        registerForDialog ( mcQuestionCtrl );
          resetAllJokers();
          user.unansweredQuestions = 0;
 
@@ -387,6 +390,20 @@ public class MultiplayerGameCtrl {
     }
 
     /**
+     * Register for the dialog in a particular controller
+     *
+     * @param ctrl the controller to register the dialog to
+     */
+
+    public void registerForDialog ( DialogController ctrl ) {
+        dialogSubscription = server.registerForMessages(
+                "/topic/dialog/" + gameIndex,
+                String.class,
+                ctrl::sendMessage
+        );
+    }
+
+    /**
      * Send an emoji to the server
      * @param e the emoji image to send
      */
@@ -476,6 +493,17 @@ public class MultiplayerGameCtrl {
     }
 
     /**
+     * Sends a dialog to the selected pane, with the selected text
+     *
+     * @param pane the StackPane to send the information to
+     * @param text the text to set the StackPane to
+     */
+
+    public void sendDialog ( StackPane pane, Text text ) {
+        pane.getChildren().setAll( text );
+    }
+
+    /**
      * Hides all emojis from the game
      */
     public void hideEmojis() {
@@ -492,5 +520,12 @@ public class MultiplayerGameCtrl {
             emojiSubscription.unsubscribe();
         }
         emojiSubscription = null;
+    }
+
+    public void unregisterForDialog () {
+        if ( server.getSession().isConnected()) {
+            dialogSubscription.unsubscribe();
+        }
+        dialogSubscription = null;
     }
 }

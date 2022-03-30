@@ -39,7 +39,8 @@ import static commons.utils.CompareType.LARGER;
 import static commons.utils.CompareType.SMALLER;
 
 
-public class MultiplayerQuestionCtrl implements SceneController, QuestionNumController, EmojiController {
+public class MultiplayerQuestionCtrl implements SceneController, QuestionNumController,
+        EmojiController, DialogController {
     private static final double MILLISECONDS_PER_SECONDS = 1000.0;
     private static final double CIRCLE_BORDER_SIZE = 1.7;
     private static final double STANDARD_SIZE = 1.0;
@@ -130,6 +131,10 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     private ImageView removeIncorrectImage;
     @FXML
     private ImageView reduceTimeImage;
+    @FXML
+    private StackPane dialogPane;
+    @FXML
+    private Text dialogText;
 
     /**
      * Creates a controller for the multiplayer question screen, with the given server and main controller.
@@ -195,6 +200,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
         resetAnswerClickability();
         resetAnswerOnMouseEnter();
         enableEmojis();
+        dialogText.setText("");
         doublePointsImage.setVisible(false);
 
         try {
@@ -565,6 +571,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     public void useDoublePoints(){
         gameCtrl.setIsActiveDoublePoints(true);
         gameCtrl.useJoker(doublePoints,doublePointsImage);
+        sendMessage( String.format ( "User %s used double points joker!", gameCtrl.getUser().username ) );
     }
 
     /**
@@ -718,6 +725,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
 
                 if(server.getSession() != null && server.getSession().isConnected()) {
                     gameCtrl.unregisterForEmojis();
+                    gameCtrl.unregisterForDialog();
                     server.getSession().disconnect();
                 }
                 gameCtrl.hideEmojis();
@@ -870,5 +878,11 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     @Override
     public void updateQuestionNumber() {
         getQuestionNum().setText("" + (gameCtrl.getAnswerCount() + 1));
+    }
+
+    @Override
+    public void sendMessage ( String message ) {
+        dialogText.setText( message );
+        gameCtrl.sendDialog( dialogPane, dialogText );
     }
 }

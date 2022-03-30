@@ -250,6 +250,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
 
                 if(server.getSession() != null && server.getSession().isConnected()) {
                     gameCtrl.unregisterForEmojis();
+                    gameCtrl.unregisterForDialog();
                     server.getSession().disconnect();
                 }
                 gameCtrl.hideEmojis();

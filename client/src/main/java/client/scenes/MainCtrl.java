@@ -573,6 +573,7 @@ public class MainCtrl {
                 if(isMultiplayer) {
                     if(multiplayerCtrl != null) {
                         multiplayerCtrl.unregisterForEmojis();
+                        multiplayerCtrl.unregisterForDialog();
                         multiplayerCtrl.hideEmojis();
                     }
 

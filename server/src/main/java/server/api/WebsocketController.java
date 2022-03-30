@@ -15,4 +15,8 @@ public class WebsocketController {
         return emoji;
     }
 
+    @MessageMapping("/dialog/{gameId}")
+    @SendTo("/topic/dialog/{gameId}")
+    public String addDialog ( String message, @DestinationVariable String gameId) { return message; }
+
 }
