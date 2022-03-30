@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MultiplayerQuestionCtrl extends AbstractQuestionCtrl
+public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
         implements EmojiController {
     private static final int KICK_AT_X_QUESTIONS = 3;
 

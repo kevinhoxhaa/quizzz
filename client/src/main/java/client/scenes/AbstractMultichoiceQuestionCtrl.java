@@ -30,7 +30,7 @@ import static commons.utils.CompareType.EQUAL;
 import static commons.utils.CompareType.LARGER;
 import static commons.utils.CompareType.SMALLER;
 
-public abstract class AbstractQuestionCtrl implements SceneController, QuestionNumController {
+public abstract class AbstractMultichoiceQuestionCtrl implements SceneController, QuestionNumController {
     protected final ServerUtils server;
     protected final MainCtrl mainCtrl;
 
@@ -85,7 +85,7 @@ public abstract class AbstractQuestionCtrl implements SceneController, QuestionN
      * @param mainCtrl
      */
     @Inject
-    protected AbstractQuestionCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    protected AbstractMultichoiceQuestionCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }

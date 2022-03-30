@@ -51,7 +51,7 @@ public class MultiplayerGameCtrl {
     private MultiplayerQuestionCtrl mcQuestionCtrl;
 
     private Scene estimationQuestion;
-    private EstimationQuestionCtrl estimationQuestionCtrl;
+    private MultiplayerEstimationQuestionCtrl multiplayerEstimationQuestionCtrl;
 
     private Scene answer;
     private MultiplayerAnswerCtrl answerCtrl;
@@ -82,7 +82,7 @@ public class MultiplayerGameCtrl {
      */
     public MultiplayerGameCtrl(int gameIndex, MainCtrl mainCtrl, ServerUtils server,
                                Pair<MultiplayerQuestionCtrl, Scene> mcQuestion,
-                               Pair<EstimationQuestionCtrl, Scene> estimationQuestion,
+                               Pair<MultiplayerEstimationQuestionCtrl, Scene> estimationQuestion,
                                Pair<MultiplayerAnswerCtrl, Scene> answer,
                                Pair<RankingCtrl, Scene> ranking) {
         this.gameIndex = gameIndex;
@@ -106,8 +106,8 @@ public class MultiplayerGameCtrl {
         mcQuestionCtrl.setGameCtrl(this);
         this.mcQuestion = mcQuestion.getValue();
 
-        this.estimationQuestionCtrl = estimationQuestion.getKey();
-        estimationQuestionCtrl.setGameCtrl(this);
+        this.multiplayerEstimationQuestionCtrl = estimationQuestion.getKey();
+        multiplayerEstimationQuestionCtrl.setGameCtrl(this);
         this.estimationQuestion = estimationQuestion.getValue();
 
         this.answerCtrl = answer.getKey();
@@ -133,7 +133,7 @@ public class MultiplayerGameCtrl {
     public void startGame() {
         server.connect(serverUrl);
 
-        registerForEmojis(estimationQuestionCtrl);
+        registerForEmojis(multiplayerEstimationQuestionCtrl);
         registerForEmojis(answerCtrl);
         registerForEmojis(mcQuestionCtrl);
          resetAllJokers();
@@ -274,11 +274,11 @@ public class MultiplayerGameCtrl {
      * @param question the estimation question to visualise
      */
     public void showEstimationQuestion(EstimationQuestion question) {
-        mainCtrl.updateQuestionCounters(estimationQuestionCtrl, colors);
-        estimationQuestionCtrl.setup(question);
+        mainCtrl.updateQuestionCounters(multiplayerEstimationQuestionCtrl, colors);
+        multiplayerEstimationQuestionCtrl.setup(question);
 
-        estimationQuestionCtrl.startTimer();
-        estimationQuestionCtrl.setStartTime();
+        multiplayerEstimationQuestionCtrl.startTimer();
+        multiplayerEstimationQuestionCtrl.setStartTime();
         mainCtrl.getPrimaryStage().setTitle("Estimation question screen");
         mainCtrl.getPrimaryStage().setScene(estimationQuestion);
     }
@@ -471,7 +471,7 @@ public class MultiplayerGameCtrl {
      */
     public void resetAllJokers(){
         mcQuestionCtrl.resetDoublePoints();
-        estimationQuestionCtrl.resetDoublePoints();
+        multiplayerEstimationQuestionCtrl.resetDoublePoints();
         mcQuestionCtrl.resetRemoveIncorrect();
         //TODO: Reset all the other jokers
     }
@@ -482,7 +482,7 @@ public class MultiplayerGameCtrl {
     public void hideEmojis() {
         answerCtrl.hideEmoji();
         mcQuestionCtrl.hideEmoji();
-        estimationQuestionCtrl.hideEmoji();
+        multiplayerEstimationQuestionCtrl.hideEmoji();
     }
 
     /**

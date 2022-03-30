@@ -7,7 +7,7 @@ import commons.models.SoloGame;
 import javafx.fxml.FXML;
 
 
-public class SoloQuestionCtrl extends AbstractQuestionCtrl {
+public class SoloQuestionCtrl extends AbstractMultichoiceQuestionCtrl {
     private SoloGame game;
 
     /**
