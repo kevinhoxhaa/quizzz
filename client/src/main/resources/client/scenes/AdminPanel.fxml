@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="client.scenes.AdminPanel"
-            prefHeight="400.0" prefWidth="600.0">
 
+<AnchorPane onMouseClicked="#onAddActivityButton" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminPanel">
+   <children>
+      <Button layoutX="136.0" layoutY="116.0" mnemonicParsing="false" prefHeight="71.0" prefWidth="116.0" text="Show Activities" />
+      <TextField alignment="CENTER" layoutX="214.0" layoutY="30.0" prefHeight="39.0" prefWidth="150.0" text="Admin Panel" />
+      <Button fx:id="addActivity" layoutX="344.0" layoutY="116.0" mnemonicParsing="false" onMouseClicked="#addActivity" prefHeight="71.0" prefWidth="110.0" text="Add Activity" />
+      <Button layoutX="138.0" layoutY="235.0" mnemonicParsing="false" prefHeight="71.0" prefWidth="116.0" text="Delete Activity" />
+   </children>
 </AnchorPane>
