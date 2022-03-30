@@ -146,12 +146,12 @@
                             <children>
                                 <Text fx:id="questionNum" strokeType="OUTSIDE" strokeWidth="0.0" text="1">
                                     <font>
-                                        <Font name="JetBrains Mono" size="14.0" />
+                                        <Font name="Monospaced Regular" size="14.0" />
                                     </font>
                                 </Text>
                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="/20">
                                     <font>
-                                        <Font name="JetBrains Mono" size="14.0" />
+                                        <Font name="Monospaced Regular" size="14.0" />
                                     </font>
                                 </Text>
                             </children>
