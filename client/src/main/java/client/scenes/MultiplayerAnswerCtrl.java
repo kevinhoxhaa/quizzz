@@ -220,7 +220,7 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
                 String[] parts = e.getImage().getUrl().split("/");
                 String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
                 emojiPath = emojiPath.substring(
-                        "file:/".length(), emojiPath.length() - "classes/java/main/".length())
+                        0, emojiPath.length() - "classes/java/main/".length())
                         + "resources/main/client/images/" + parts[parts.length - 1];
 
                 e.setImage(new Image(emojiPath));
@@ -247,7 +247,7 @@ public class MultiplayerAnswerCtrl implements SceneController, QuestionNumContro
     public void displayEmoji(Emoji emoji) {
         String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
         emojiPath = emojiPath.substring(
-                "file:/".length(), emojiPath.length() - "classes/java/main/".length())
+                0, emojiPath.length() - "classes/java/main/".length())
                 + "resources/main/client/images/" + emoji.getImageName();
         emojiImage.setImage(new Image(emojiPath));
         emojiText.setText(emoji.getUsername());
