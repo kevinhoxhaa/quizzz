@@ -59,7 +59,6 @@ public class MultiplayerGameCtrl {
     private Scene ranking;
     private RankingCtrl rankingCtrl;
 
-    private boolean isAvailableDoublePoints = true;
     private boolean isActiveDoublePoints;
 
     private boolean isAvailableRemoveIncorrect = true;
@@ -170,7 +169,6 @@ public class MultiplayerGameCtrl {
     public void postAnswer(Question answeredQuestion) {
         if(getIsActiveDoublePoints()){
             user.points += 2*answeredQuestion.calculatePoints();
-            setIsActiveDoublePoints(false);
         }
         else{
             user.points += answeredQuestion.calculatePoints();
@@ -212,11 +210,12 @@ public class MultiplayerGameCtrl {
      */
     public List<MultiplayerUser> fetchCorrectUsers(Question answeredQuestion) throws WebApplicationException {
         if(isActiveDoublePoints){
-            return server.answerQuestion(serverUrl, gameIndex,
+            setIsActiveDoublePoints(false);
+            return server.answerDoublePointsQuestion(serverUrl, gameIndex,
                     mainCtrl.getUser().id, answerCount, answeredQuestion);
         }
         else{
-            return server.answerDoublePointsQuestion(serverUrl, gameIndex,
+            return server.answerQuestion(serverUrl, gameIndex,
                     mainCtrl.getUser().id, answerCount, answeredQuestion);
         }
     }
