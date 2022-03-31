@@ -106,9 +106,9 @@ public abstract class AbstractMultichoiceQuestionCtrl extends AbstractQuestionCt
     private void setupComparisonQuestion(Question generalQuestion) {
         ComparisonQuestion question = (ComparisonQuestion) generalQuestion;
 
-        answerTopText.setText("MORE");
+        answerTopText.setText(question.getFirstActivity().title);
         answerMidText.setText("EQUAL");
-        answerBotText.setText("LESS");
+        answerBotText.setText(question.getSecondActivity().title);
 
         answerTopAnswer = new Answer(LARGER);
         answerMidAnswer = new Answer(EQUAL);
