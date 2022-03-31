@@ -200,7 +200,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
         resetAnswerClickability();
         resetAnswerOnMouseEnter();
         enableEmojis();
-        dialogText.setText("");
+        sendMessage( "\n" );
         doublePointsImage.setVisible(false);
 
         try {
@@ -883,6 +883,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     @Override
     public void sendMessage ( String message ) {
         dialogText.setText( message );
-        gameCtrl.sendDialog( dialogPane, dialogText );
+        server.send ( "/topic/dialog/" + gameCtrl.getGameIndex(), dialogText.getText() );
+        //gameCtrl.sendDialog( dialogPane, dialogText );
     }
 }
