@@ -31,6 +31,8 @@ public class HomeCtrl {
 
     private Stage dialog;
 
+    private Stage adminPanel;
+
     @FXML
     private ImageView bulbView;
 
@@ -120,6 +122,33 @@ public class HomeCtrl {
      */
     protected String getServerUrl() {
         return urlField.getText();
+    }
+
+    /**
+     * Opens the adminPanel
+     *
+     * @throws IOException
+     */
+
+    @FXML
+    public void onAdminPanelClick() throws IOException {
+        if ( adminPanel != null ) {
+            adminPanel.show();
+            return ;
+        }
+
+        adminPanel = new Stage();
+        adminPanel.initModality(Modality.APPLICATION_MODAL);
+        adminPanel.setResizable(false);
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/client/scenes/AdminPanel.fxml"));
+        loader.setController(this);
+
+        ScrollPane adminPanelPane = loader.load();
+        Scene adminPanelScene = new Scene(adminPanelPane);
+        adminPanel.setScene(adminPanelScene);
+        adminPanel.show();
     }
 
     /**
