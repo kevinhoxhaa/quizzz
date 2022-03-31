@@ -35,6 +35,7 @@ public class MultiplayerGameCtrl {
     private List<Color> colors;
     private boolean answeredQuestion = false;
     private StompSession.Subscription emojiSubscription;
+    private StompSession.Subscription halfTimeSubscription;
 
     private Timer answerTimer;
 
@@ -135,11 +136,10 @@ public class MultiplayerGameCtrl {
         registerForEmojis(estimationQuestionCtrl);
         registerForEmojis(answerCtrl);
         registerForEmojis(mcQuestionCtrl);
-         resetAllJokers();
-         user.unansweredQuestions = 0;
-
-         Question firstQuestion = fetchQuestion();
-         showQuestion(firstQuestion);
+        registerForHalfTime();
+        Question firstQuestion = fetchQuestion();
+        showQuestion(firstQuestion);
+        resetAllJokers();
     }
 
     /**
@@ -386,6 +386,12 @@ public class MultiplayerGameCtrl {
         );
     }
 
+    public void registerForHalfTime () {
+        halfTimeSubscription = server.registerForMessages( "/topic/halfTime/" + gameIndex,
+                MultiplayerUser.class ,
+                (user) -> mainCtrl.halfTime(user) );
+    }
+
     /**
      * Send an emoji to the server
      * @param e the emoji image to send
@@ -399,6 +405,7 @@ public class MultiplayerGameCtrl {
                 new Emoji(imageName, username)
         );
     }
+
     /**
      * A getter that returns true/false whether the Double Points joker is activated this round
      * @return isActiveDoublePoints, which shows whether the DP joker is being used
@@ -470,7 +477,9 @@ public class MultiplayerGameCtrl {
      */
     public void resetAllJokers(){
         mcQuestionCtrl.resetDoublePoints();
+        mcQuestionCtrl.resetReduceTime();
         estimationQuestionCtrl.resetDoublePoints();
+        estimationQuestionCtrl.resetReduceTime();
         mcQuestionCtrl.resetRemoveIncorrect();
         //TODO: Reset all the other jokers
     }
@@ -492,5 +501,12 @@ public class MultiplayerGameCtrl {
             emojiSubscription.unsubscribe();
         }
         emojiSubscription = null;
+    }
+
+    public void unregisterForHalfTime() {
+        if ( server.getSession().isConnected() ) {
+            halfTimeSubscription.unsubscribe();
+        }
+        halfTimeSubscription = null;
     }
 }

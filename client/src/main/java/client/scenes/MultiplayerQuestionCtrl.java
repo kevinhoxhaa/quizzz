@@ -40,7 +40,8 @@ import static commons.utils.CompareType.LARGER;
 import static commons.utils.CompareType.SMALLER;
 
 
-public class MultiplayerQuestionCtrl implements SceneController, QuestionNumController, EmojiController {
+public class MultiplayerQuestionCtrl implements SceneController, QuestionNumController,
+        EmojiController {
     private static final double MILLISECONDS_PER_SECONDS = 1000.0;
     private static final double CIRCLE_BORDER_SIZE = 1.7;
     private static final double STANDARD_SIZE = 1.0;
@@ -197,7 +198,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
         resetAnswerOnMouseEnter();
         enableEmojis();
         doublePointsImage.setVisible(false);
-
+        reduceTimeImage.setVisible(false);
         try {
             questionImg.setImage(
                     server.fetchImage(mainCtrl.getServerUrl(), currentQuestion.getImagePath())
@@ -291,6 +292,9 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      * @param answer       The answer corresponding to the answer button.
      */
     private void onAnswerClicked(StackPane answerButton, Answer answer) {
+
+        server.send("/app/emoji/" + gameCtrl.getGameIndex(),
+                new Emoji("image", String.valueOf(gameCtrl.getGameIndex())));
         gameCtrl.setAnsweredQuestion ( true );
         if (!answerButton.equals(selectedAnswerButton)) {
             currentQuestion.setUserAnswer(answer, getSeconds());
@@ -331,6 +335,16 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      */
     public void finalizeAndSend() {
         gameCtrl.postAnswer(currentQuestion);
+    }
+
+    /**
+     * Halves the remaining timer for the user.
+     *
+     * @param user the user that called the joker
+     */
+
+    public void halfTime ( MultiplayerUser user ) {
+        mainCtrl.halfTime( user );
     }
 
 
@@ -569,11 +583,30 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     }
 
     /**
+     * This method is called when the reduceTime joker is clicked
+     * It halves the time for everyone in the lobby
+     */
+
+    @FXML
+    public void useReduceTime() {
+        server.send ( "/app/halfTime/" + gameCtrl.getGameIndex(), mainCtrl.getUser() );
+        gameCtrl.useJoker( reduceTime, reduceTimeImage );
+    }
+
+    /**
      * This method resets the double point jokers so that it can be used again when another game starts
      */
     public void resetDoublePoints(){
         doublePoints.setOnMouseClicked(event -> useDoublePoints());
         gameCtrl.enableJoker(doublePoints);
+    }
+
+    /**
+     * This method resets the double point jokers so that it can be used again when another game starts
+     */
+    public void resetReduceTime(){
+        reduceTime.setOnMouseClicked(event -> useReduceTime());
+        gameCtrl.enableJoker(reduceTime);
     }
 
     /**
@@ -719,6 +752,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
 
                 if(server.getSession() != null && server.getSession().isConnected()) {
                     gameCtrl.unregisterForEmojis();
+                    gameCtrl.unregisterForHalfTime();
                     server.getSession().disconnect();
                 }
                 gameCtrl.hideEmojis();
@@ -739,6 +773,8 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
         }
 
         gameCtrl.setAnsweredQuestion(false);
+        disableAnswers();
+        disableEmojis();
         finalizeAndSend();
     }
 

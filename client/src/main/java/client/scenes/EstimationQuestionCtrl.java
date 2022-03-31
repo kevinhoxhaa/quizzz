@@ -9,9 +9,9 @@ import commons.models.EstimationQuestion;
 import commons.models.Question;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.Cursor;
 import javafx.geometry.Insets;
+import javafx.scene.Cursor;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
@@ -23,7 +23,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
-
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -32,7 +34,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EstimationQuestionCtrl implements SceneController, QuestionNumController, EmojiController {
+public class EstimationQuestionCtrl implements SceneController, QuestionNumController,
+        EmojiController {
 
     private static final double CIRCLE_BORDER_SIZE = 1.7;
     private static final double TIMEOUT = 8.0;
@@ -71,6 +74,18 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     private TextField answerField;
 
     @FXML
+    private ImageView questionImg;
+
+    @FXML
+    private GridPane emojiPane;
+
+    @FXML
+    private ImageView emojiImage;
+
+    @FXML
+    private Text emojiText;
+
+    @FXML
     private StackPane doublePoints;
 
     @FXML
@@ -87,18 +102,6 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
 
     @FXML
     private ImageView reduceTimeImage;
-
-    @FXML
-    private ImageView questionImg;
-
-    @FXML
-    private GridPane emojiPane;
-
-    @FXML
-    private ImageView emojiImage;
-
-    @FXML
-    private Text emojiText;
 
     /**
      * Creates a controller for the estimation question screen,
@@ -196,6 +199,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
         questionDescription.setText("How much energy in Wh does " + question.getActivity().title + " use?");
 
         doublePointsImage.setVisible(false);
+        reduceTimeImage.setVisible(false);
         try {
             questionImg.setImage(server.fetchImage(mainCtrl.getServerUrl(), currentQuestion.getImagePath()));
         }
@@ -250,6 +254,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
 
                 if(server.getSession() != null && server.getSession().isConnected()) {
                     gameCtrl.unregisterForEmojis();
+                    gameCtrl.unregisterForHalfTime();
                     server.getSession().disconnect();
                 }
                 gameCtrl.hideEmojis();
@@ -311,11 +316,40 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     }
 
     /**
+     * This method is called when the reduceTime joker is clicked
+     * It halves the time for everyone in the lobby
+     */
+
+    @FXML
+    public void useReduceTime() {
+        server.send ( "/app/halfTime/" + gameCtrl.getGameIndex(), mainCtrl.getUser() );
+        gameCtrl.useJoker( reduceTime, reduceTimeImage );
+    }
+
+    /**
+     * Halves the remaining timer for the user.
+     *
+     * @param user the user that called the joker
+     */
+
+    public void halfTime ( MultiplayerUser user ) {
+        mainCtrl.halfTime( user );
+    }
+
+    /**
      * This method resets the double point jokers so that it can be used again when another game starts
      */
     public void resetDoublePoints(){
         doublePoints.setOnMouseClicked(event -> useDoublePoints());
         gameCtrl.enableJoker(doublePoints);
+    }
+
+    /**
+     * This method resets the double point jokers so that it can be used again when another game starts
+     */
+    public void resetReduceTime(){
+        reduceTime.setOnMouseClicked(event -> useReduceTime());
+        gameCtrl.enableJoker(reduceTime);
     }
 
     /**

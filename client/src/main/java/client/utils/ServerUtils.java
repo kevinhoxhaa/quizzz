@@ -292,6 +292,8 @@ public class ServerUtils {
      * @param o the object to send
      */
     public void send(String dest, Object o) {
+        System.out.println("Sending " + o);
+        System.out.println("to " + dest);
         session.send(dest, o);
     }
 
