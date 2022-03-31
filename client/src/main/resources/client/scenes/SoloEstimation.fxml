@@ -168,7 +168,7 @@
                         </ImageView>
                         <TextFlow maxHeight="92.0" maxWidth="361.0" minHeight="64.0" minWidth="192.0" prefHeight="92.0" prefWidth="361.0">
                            <children>
-                              <Text fx:id="activityText" strokeType="OUTSIDE" strokeWidth="0.0" text="Question text here?">
+                              <Text fx:id="questionText" strokeType="OUTSIDE" strokeWidth="0.0" text="Question text here?">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>

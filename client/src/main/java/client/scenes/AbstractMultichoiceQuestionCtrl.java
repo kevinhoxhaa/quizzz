@@ -10,18 +10,13 @@ import commons.models.ConsumptionQuestion;
 import commons.models.Question;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,11 +25,8 @@ import static commons.utils.CompareType.EQUAL;
 import static commons.utils.CompareType.LARGER;
 import static commons.utils.CompareType.SMALLER;
 
-public abstract class AbstractMultichoiceQuestionCtrl extends QuestionNumController implements SceneController{
-    protected final ServerUtils server;
-
+public abstract class AbstractMultichoiceQuestionCtrl extends AbstractQuestionCtrl{
     protected Question currentQuestion;
-    protected double startTime;
 
     protected Answer answerTopAnswer;
     protected Answer answerMidAnswer;
@@ -56,27 +48,6 @@ public abstract class AbstractMultichoiceQuestionCtrl extends QuestionNumControl
     @FXML
     protected Text answerBotText;
 
-    @FXML
-    protected Text currentScore;
-
-    @FXML
-    protected Text activityText;
-    @FXML
-    protected Text questionNum;
-    @FXML
-    protected ImageView questionImg;
-
-    @FXML
-    protected ProgressIndicator countdownCircle;
-
-    @FXML
-    protected HBox circles;
-
-    protected static final double MILLISECONDS_PER_SECONDS = 1000.0;
-    protected static final double THICK_CIRCLE_BORDER_SIZE = 1.7;
-    protected static final double STANDARD_CIRCLE_BORDER_SIZE = 1.0;
-
-
     /**
      * Creates a controller for the question screen, with the given server and main controller.
      *
@@ -85,8 +56,7 @@ public abstract class AbstractMultichoiceQuestionCtrl extends QuestionNumControl
      */
     @Inject
     protected AbstractMultichoiceQuestionCtrl(ServerUtils server, MainCtrl mainCtrl) {
-        super(mainCtrl);
-        this.server = server;
+        super(server, mainCtrl);
     }
 
     /**
@@ -101,13 +71,8 @@ public abstract class AbstractMultichoiceQuestionCtrl extends QuestionNumControl
     protected void setup(Question question, long points) {
         this.currentQuestion = question;
         this.selectedAnswerButton = null;
-        currentScore.setText(String.valueOf(points));
 
-        try {
-            questionImg.setImage(server.fetchImage(mainCtrl.getServerUrl(), currentQuestion.getImagePath()));
-        }
-        catch (IOException e){
-        }
+        super.setup(question, points);
 
         switch (question.getType()) {
             case CONSUMPTION:
@@ -138,13 +103,9 @@ public abstract class AbstractMultichoiceQuestionCtrl extends QuestionNumControl
      *
      * @param generalQuestion the given question
      */
-    protected void setupComparisonQuestion(Question generalQuestion) {
+    private void setupComparisonQuestion(Question generalQuestion) {
         ComparisonQuestion question = (ComparisonQuestion) generalQuestion;
 
-        activityText.setText(
-                String.format("Does %s use more, less, or the same amount of energy as %s?",
-                        question.getFirstActivity().title, question.getSecondActivity().title)
-        );
         answerTopText.setText("MORE");
         answerMidText.setText("EQUAL");
         answerBotText.setText("LESS");
@@ -161,11 +122,6 @@ public abstract class AbstractMultichoiceQuestionCtrl extends QuestionNumControl
      */
     private void setupConsumptionQuestion(Question generalQuestion) {
         ConsumptionQuestion question = (ConsumptionQuestion) generalQuestion;
-
-        activityText.setText(
-                String.format("How much energy does %s cost?",
-                        question.getActivity().title)
-        );
 
         List<Long> answers = question.getAnswers();
 
@@ -185,11 +141,6 @@ public abstract class AbstractMultichoiceQuestionCtrl extends QuestionNumControl
      */
     private void setupChoiceQuestion(Question generalQuestion) {
         ChoiceQuestion question = (ChoiceQuestion) generalQuestion;
-
-        activityText.setText(
-                String.format("What could you do instead of %s to consume less energy?",
-                        question.getComparedActivity().title)
-        );
 
         List<Activity> answers = question.getActivities();
         answers.remove(question.getComparedActivity());
@@ -283,25 +234,6 @@ public abstract class AbstractMultichoiceQuestionCtrl extends QuestionNumControl
         enterAnswer(answerBot);
     }
 
-
-    /**
-     * Returns the time since the timer started, in seconds.
-     * For now, a placeholder method.
-     *
-     * @return the time since the timer started, in seconds.
-     */
-    private double getSeconds() {
-        return (System.currentTimeMillis() - startTime) / MILLISECONDS_PER_SECONDS;
-    }
-
-    /**
-     * Captures the exact time the question page started showing used for measuring the time
-     * players needed for answering the question.
-     */
-    protected void setStartTime() {
-        startTime = System.currentTimeMillis();
-    }
-
     /**
      * A general method for setting an answer button's background color upon the cursor enters it,
      * according to whether it is selected.
@@ -335,7 +267,7 @@ public abstract class AbstractMultichoiceQuestionCtrl extends QuestionNumControl
      * @param answerBtn The answer button to be recolored.
      */
     @FXML
-    public void resetAnswerColors(StackPane answerBtn) {
+    protected void resetAnswerColors(StackPane answerBtn) {
         if (answerBtn.equals(selectedAnswerButton)) {
             answerBtn.setBackground(new Background(
                     new BackgroundFill(Color.LIGHTSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -346,58 +278,4 @@ public abstract class AbstractMultichoiceQuestionCtrl extends QuestionNumControl
             answerBtn.getChildren().get(0).setStyle("-fx-font-weight: normal");
         }
     }
-
-    /**
-     * Getter for the circles bar
-     *
-     * @return circles
-     */
-    public HBox getCirclesHBox() {
-        return circles;
-    }
-
-    /**
-     * Highlights current question so the user is aware which circle corresponds to his current question
-     * @param questionNum the number of the current question
-     */
-    protected void highlightCurrentCircle(int questionNum) {
-        Circle c = (Circle) circles.getChildren().get(questionNum);
-        c.setFill(Color.DARKGRAY);
-        c.setStrokeWidth(THICK_CIRCLE_BORDER_SIZE);
-    }
-
-    /**
-     * Resets the highlighting of the circle borders
-     */
-    public void resetHighlight() {
-        for (int i = 0; i < circles.getChildren().size(); i++) {
-            Circle circle = (Circle) circles.getChildren().get(i);
-            circle.setStrokeWidth(STANDARD_CIRCLE_BORDER_SIZE);
-        }
-    }
-
-    /**
-     * Updates the colors of the little circles based on the array given
-     *
-     * @param colors Is the list of colors of previous answers(green/red depending on their correctness)
-     */
-    @Override
-    public void updateCircleColor(List<Color> colors) {
-        for (int i = 0; i < colors.size(); i++) {
-            Circle c = (Circle) getCirclesHBox().getChildren().get(i);
-            c.setFill(colors.get(i));
-        }
-    }
-
-    /**
-     * Resets the colors of the little circles to gray.
-     */
-    @Override
-    public void resetCircleColor() {
-        for (int i = 0; i < mainCtrl.getQuestionsPerGame(); i++) {
-            Circle circle = (Circle) getCirclesHBox().getChildren().get(i);
-            circle.setFill(Color.LIGHTGRAY);
-        }
-    }
-
 }

@@ -9,9 +9,7 @@ import commons.models.EstimationQuestion;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -50,7 +48,6 @@ public class MultiplayerEstimationQuestionCtrl extends AbstractEstimationQuestio
     private Text emojiText;
 
     private static final double TIMEOUT = 8.0;
-    private static final int KICK_AT_X_QUESTIONS = 3;
 
     /**
      * Creates a controller for the estimation question screen,
@@ -64,8 +61,12 @@ public class MultiplayerEstimationQuestionCtrl extends AbstractEstimationQuestio
         super(server, mainCtrl);
     }
 
+    /**
+     * Sets up the multiplayer estimation question page for showing.
+     * @param question the question that the screen will be based upon
+     */
     public void setup(EstimationQuestion question) {
-        enableEmojis();
+        gameCtrl.enableEmojis(emojiPane);
         jokers = new ArrayList<>();
         jokers.add(doublePoints);
         jokers.add(removeIncorrect);
@@ -93,12 +94,21 @@ public class MultiplayerEstimationQuestionCtrl extends AbstractEstimationQuestio
         mainCtrl.startTimer(countdownCircle, this);
     }
 
+    /**
+     * Called when the player clicks the button next to the input field
+     * Saves the user input and updates the screen accordingly
+     */
     @FXML
     protected void onSubmit() {
         gameCtrl.setAnsweredQuestion( true );
         super.onSubmit();
     }
 
+    /**
+     * Redirects the player to the corresponding answer page.
+     * If the player was inactive for 3 questions, kicks them.
+     * Called when the timer is up.
+     */
     @Override
     public void redirect() {
         MultiplayerUser user = gameCtrl.getUser();
@@ -145,7 +155,7 @@ public class MultiplayerEstimationQuestionCtrl extends AbstractEstimationQuestio
             System.out.println("Enter a number!");
         }
 
-        disableEmojis();
+        gameCtrl.disableEmojis(emojiPane);
         gameCtrl.postAnswer(currentQuestion);
     }
 
@@ -157,6 +167,9 @@ public class MultiplayerEstimationQuestionCtrl extends AbstractEstimationQuestio
         this.gameCtrl = gameCtrl;
     }
 
+    /**
+     * Quits the game. Called when clicking 'quit'.
+     */
     @Override
     public void onQuit() {
         mainCtrl.quitGame(false, true);
@@ -245,42 +258,12 @@ public class MultiplayerEstimationQuestionCtrl extends AbstractEstimationQuestio
         super.highlightCurrentCircle(gameCtrl.getAnswerCount());
     }
 
-
+    /**
+     * Updates the question number shown on screen
+     */
     @Override
     public void updateQuestionNumber() {
         questionNum.setText("" + (gameCtrl.getAnswerCount() + 1));
-    }
-
-    /**
-     * Send emojis to the server on emoji click
-     */
-    public void enableEmojis() {
-        emojiPane.getChildren().forEach(n -> {
-            if(n instanceof ImageView) {
-                ImageView e = (ImageView) n;
-                e.setOnMouseClicked(event -> gameCtrl.sendEmoji(e));
-                e.setCursor(Cursor.HAND);
-
-                String[] parts = e.getImage().getUrl().split("/");
-                String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
-                emojiPath = emojiPath.substring(
-                        "file:/".length(), emojiPath.length() - "classes/java/main/".length())
-                        + "resources/main/client/images/" + parts[parts.length - 1];
-
-                e.setImage(new Image(emojiPath));
-            }
-        });
-    }
-    /**
-     * Disable emoji clicks
-     */
-    public void disableEmojis() {
-        emojiPane.getChildren().forEach(n -> {
-            if(n instanceof ImageView) {
-                ImageView e = (ImageView) n;
-                e.setOnMouseClicked(null);
-            }
-        });
     }
 
     /**
@@ -289,18 +272,12 @@ public class MultiplayerEstimationQuestionCtrl extends AbstractEstimationQuestio
      */
     @Override
     public void displayEmoji(Emoji emoji) {
-        String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
-        emojiPath = emojiPath.substring(
-                "file:/".length(), emojiPath.length() - "classes/java/main/".length())
-                + "resources/main/client/images/" + emoji.getImageName();
-        emojiImage.setImage(new Image(emojiPath));
-        emojiText.setText(emoji.getUsername());
+        gameCtrl.displayEmoji(emoji, emojiImage, emojiText);
     }
 
     /**
      * Hides the emoji from the image view
      */
-    @Override
     public void hideEmoji() {
         emojiImage.setImage(null);
         emojiText.setText("");

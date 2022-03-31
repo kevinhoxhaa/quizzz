@@ -175,4 +175,14 @@ public class ConsumptionQuestion extends Question {
     public int hashCode() {
         return Objects.hash(super.hashCode(), activity, userAnswer, seconds, answers);
     }
+
+    /**
+     * Returns the text representation of the question
+     * @return the text representation of the question
+     */
+    @Override
+    public String generateQuestionText(){
+        return String.format("How much energy does %s consume?",
+                getActivity().title);
+    }
 }

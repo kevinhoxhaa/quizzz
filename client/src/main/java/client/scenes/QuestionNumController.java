@@ -8,7 +8,7 @@ import javafx.scene.text.Text;
 
 import java.util.List;
 
-public abstract class QuestionNumController {
+public abstract class QuestionNumController extends SceneController{
     protected final MainCtrl mainCtrl;
 
     protected QuestionNumController(MainCtrl mainCtrl){
@@ -74,14 +74,5 @@ public abstract class QuestionNumController {
             Circle circle = (Circle) circles.getChildren().get(i);
             circle.setStrokeWidth(STANDARD_CIRCLE_BORDER_SIZE);
         }
-    }
-
-    /**
-     * Getter for the circles bar
-     *
-     * @return circles
-     */
-    public HBox getCircles() {
-        return circles;
     }
 }

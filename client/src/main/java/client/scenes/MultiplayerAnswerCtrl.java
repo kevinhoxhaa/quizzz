@@ -1,21 +1,18 @@
 package client.scenes;
 
-import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.entities.MultiplayerUser;
 import commons.models.Emoji;
 import commons.models.Question;
 import javafx.fxml.FXML;
-import javafx.scene.Cursor;
 import javafx.scene.control.ListView;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 
 import java.util.List;
 
-public class MultiplayerAnswerCtrl extends AbstractAnswerCtrl implements SceneController, EmojiController {
+public class MultiplayerAnswerCtrl extends AbstractAnswerCtrl implements EmojiController {
 
     private MultiplayerGameCtrl gameCtrl;
 
@@ -50,48 +47,13 @@ public class MultiplayerAnswerCtrl extends AbstractAnswerCtrl implements SceneCo
      * @param prevQuestion   The question that has just been asked to the players.
      * @param correctPlayers A list of all the players that answered the precious question correctly.
      */
-    protected void setup(Question prevQuestion, List<MultiplayerUser> correctPlayers) {
+    public void setup(Question prevQuestion, List<MultiplayerUser> correctPlayers) {
 
         super.setup(prevQuestion, gameCtrl.getUser().points);
 
-        enableEmojis();
+        gameCtrl.enableEmojis(emojiPane);
         this.correctPlayers.getItems().clear();
         correctPlayers.forEach(u -> this.correctPlayers.getItems().add(u.username));
-    }
-
-
-    /**
-     * Send emojis to the server on emoji click
-     */
-    public void enableEmojis() {
-
-        emojiPane.getChildren().forEach(n -> {
-            if(n instanceof ImageView) {
-                ImageView e = (ImageView) n;
-                e.setOnMouseClicked(event -> gameCtrl.sendEmoji(e));
-                e.setCursor(Cursor.HAND);
-
-                String[] parts = e.getImage().getUrl().split("/");
-                String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
-                emojiPath = emojiPath.substring(
-                        "file:/".length(), emojiPath.length() - "classes/java/main/".length())
-                        + "resources/main/client/images/" + parts[parts.length - 1];
-
-                e.setImage(new Image(emojiPath));
-            }
-        });
-    }
-
-    /**
-     * Disable emoji clicks
-     */
-    public void disableEmojis() {
-        emojiPane.getChildren().forEach(n -> {
-            if(n instanceof ImageView) {
-                ImageView e = (ImageView) n;
-                e.setOnMouseClicked(null);
-            }
-        });
     }
 
     /**
@@ -100,18 +62,12 @@ public class MultiplayerAnswerCtrl extends AbstractAnswerCtrl implements SceneCo
      */
     @Override
     public void displayEmoji(Emoji emoji) {
-        String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
-        emojiPath = emojiPath.substring(
-                "file:/".length(), emojiPath.length() - "classes/java/main/".length())
-                + "resources/main/client/images/" + emoji.getImageName();
-        emojiImage.setImage(new Image(emojiPath));
-        emojiText.setText(emoji.getUsername());
+        gameCtrl.displayEmoji(emoji, emojiImage, emojiText);
     }
 
     /**
      * Removes the emoji from the image view
      */
-    @Override
     public void hideEmoji() {
         emojiImage.setImage(null);
         emojiText.setText("");
@@ -120,6 +76,7 @@ public class MultiplayerAnswerCtrl extends AbstractAnswerCtrl implements SceneCo
     /**
      * Initiates the timer countdown and animation
      */
+    @Override
     public void startTimer() {
         mainCtrl.startTimer(countdownCircle, this);
     }
@@ -132,9 +89,14 @@ public class MultiplayerAnswerCtrl extends AbstractAnswerCtrl implements SceneCo
         this.gameCtrl = gameCtrl;
     }
 
+    /**
+     * Called when the timer is up.
+     * Redirects the player to the appropriate one of the following: next question,
+     * ranking page, results page.
+     */
     @Override
     public void redirect() {
-        disableEmojis();
+        gameCtrl.disableEmojis(emojiPane);
         if(gameCtrl.getAnswerCount() == mainCtrl.getQuestionsPerGame()/2) {
             List<MultiplayerUser> rankedUsers = gameCtrl.fetchRanking();
             gameCtrl.showRanking(rankedUsers);
@@ -151,12 +113,18 @@ public class MultiplayerAnswerCtrl extends AbstractAnswerCtrl implements SceneCo
         gameCtrl.showQuestion(nextQuestion);
     }
 
+    /**
+     * Called when the quit button is pressed
+     */
     @Override
     public void onQuit() {
         mainCtrl.quitGame(false, true);
         mainCtrl.bindUser(null);
     }
 
+    /**
+     * Updates the question number on screen
+     */
     @Override
     public void updateQuestionNumber() {
         questionNum.setText("" + (gameCtrl.getAnswerCount()));

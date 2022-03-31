@@ -14,9 +14,7 @@ import commons.utils.CompareType;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -32,7 +30,6 @@ import java.util.List;
 
 public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
         implements EmojiController {
-    private static final int KICK_AT_X_QUESTIONS = 3;
 
     private MultiplayerGameCtrl gameCtrl;
 
@@ -40,14 +37,14 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
     private boolean answerMidDisable = false;
     private boolean answerBotDisable = false;
 
+    private List<StackPane> jokers;
+
     @FXML
     private GridPane emojiPane;
     @FXML
     private ImageView emojiImage;
     @FXML
     private Text emojiText;
-
-    private List<StackPane> jokers;
 
     @FXML
     private StackPane doublePoints;
@@ -103,7 +100,7 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
         answerTopDisable = false;
         answerMidDisable = false;
         answerBotDisable = false;
-        enableEmojis();
+        gameCtrl.enableEmojis(emojiPane);
         doublePointsImage.setVisible(false);
 
     }
@@ -125,6 +122,7 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
      * Sets answerTop's background color according to whether it is selected.
      */
     @FXML
+    @Override
     protected void enterAnswerTop() {
         if(!answerTopDisable) {
             enterAnswer(answerTop);
@@ -136,6 +134,7 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
      * Sets answerMid's background color according to whether it is selected.
      */
     @FXML
+    @Override
     protected void enterAnswerMid() {
         if(!answerMidDisable) {
             enterAnswer(answerMid);
@@ -147,6 +146,7 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
      * Sets answerBot's background color according to whether it is selected.
      */
     @FXML
+    @Override
     protected void enterAnswerBot() {
         if(!answerBotDisable) {
             enterAnswer(answerBot);
@@ -212,8 +212,6 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
     protected void enterReduceTime(){
         enterJoker(reduceTime);
     }
-
-
 
     /**
      * The method is called upon loading the question scene, to make sure each answer button is clickable.
@@ -389,16 +387,24 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
         answerBot.setOnMouseClicked(null);
     }
 
+    /**
+     * Enables interaction with the answer buttons.
+     */
     public void enableAnswers() {
         answerTop.setOnMouseClicked(event -> onAnswerTopClicked());
         answerMid.setOnMouseClicked(event -> onAnswerMidClicked());
         answerBot.setOnMouseClicked(event -> onAnswerBotClicked());
     }
 
+    /**
+     * Redirects the player to the corresponding answer page.
+     * If the player was inactive for 3 questions, kicks them.
+     * Called when the timer is up.
+     */
     @Override
     public void redirect() {
         disableAnswers();
-        disableEmojis();
+        gameCtrl.disableEmojis(emojiPane);
         MultiplayerUser user = gameCtrl.getUser();
         if (!gameCtrl.getAnsweredQuestion()) {
             user.unansweredQuestions++;
@@ -436,6 +442,9 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
         gameCtrl.postAnswer(currentQuestion);
     }
 
+    /**
+     * Quits the game. Called when clicking 'quit'.
+     */
     @Override
     public void onQuit() {
         mainCtrl.quitGame(false, true);
@@ -445,8 +454,9 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
     /**
      * Highlights current question so the user is aware which circle corresponds to his current question
      */
+    @Override
     public void highlightCurrentCircle() {
-        super.highlightCurrentCircle(gameCtrl.getAnswerCount());
+        highlightCurrentCircle(gameCtrl.getAnswerCount());
     }
 
     /**
@@ -457,57 +467,18 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
         questionNum.setText("" + (gameCtrl.getAnswerCount() + 1));
     }
 
-
-    /**
-     * Send emojis to the server on emoji click
-     */
-    public void enableEmojis() {
-        emojiPane.getChildren().forEach(n -> {
-            if(n instanceof ImageView) {
-                ImageView e = (ImageView) n;
-                e.setOnMouseClicked(event -> gameCtrl.sendEmoji(e));
-                e.setCursor(Cursor.HAND);
-
-                String[] parts = e.getImage().getUrl().split("/");
-                String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
-                emojiPath = emojiPath.substring(
-                        "file:/".length(), emojiPath.length() - "classes/java/main/".length())
-                        + "resources/main/client/images/" + parts[parts.length - 1];
-
-                e.setImage(new Image(emojiPath));
-            }
-        });
-    }
-    /**
-     * Disable emoji clicks
-     */
-    public void disableEmojis() {
-        emojiPane.getChildren().forEach(n -> {
-            if(n instanceof ImageView) {
-                ImageView e = (ImageView) n;
-                e.setOnMouseClicked(null);
-            }
-        });
-    }
-
     /**
      * Visualise emoji on the screen
      * @param emoji the emoji to visualise
      */
     @Override
     public void displayEmoji(Emoji emoji) {
-        String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
-        emojiPath = emojiPath.substring(
-                "file:/".length(), emojiPath.length() - "classes/java/main/".length())
-                + "resources/main/client/images/" + emoji.getImageName();
-        emojiImage.setImage(new Image(emojiPath));
-        emojiText.setText(emoji.getUsername());
+        gameCtrl.displayEmoji(emoji, emojiImage, emojiText);
     }
 
     /**
      * Removes the emoji from the image view
      */
-    @Override
     public void hideEmoji() {
         emojiImage.setImage(null);
         emojiText.setText("");
@@ -521,4 +492,4 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
         this.gameCtrl = gameCtrl;
     }
 
-    }
+}

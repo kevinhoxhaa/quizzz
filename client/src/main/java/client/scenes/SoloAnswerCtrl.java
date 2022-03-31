@@ -7,7 +7,7 @@ import commons.utils.QuestionType;
 import javafx.fxml.FXML;
 
 
-public class SoloAnswerCtrl extends AbstractAnswerCtrl implements SceneController {
+public class SoloAnswerCtrl extends AbstractAnswerCtrl{
     private SoloGame game;
 
     /**
@@ -28,7 +28,7 @@ public class SoloAnswerCtrl extends AbstractAnswerCtrl implements SceneControlle
      *
      * @param soloGame The solo game instance
      */
-    protected void setup(SoloGame soloGame) {
+    public void setup(SoloGame soloGame) {
         this.game = soloGame;
         Question prevQuestion = soloGame.loadCurrentQuestion();
         mainCtrl.getUser().incrementScore(prevQuestion.calculatePoints());
@@ -48,7 +48,7 @@ public class SoloAnswerCtrl extends AbstractAnswerCtrl implements SceneControlle
     }
 
     /**
-     * redirects to:
+     * Redirects to:
      * - either the next question
      * - or the results page
      */

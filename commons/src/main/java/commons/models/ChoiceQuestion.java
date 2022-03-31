@@ -203,4 +203,14 @@ public class ChoiceQuestion extends Question {
     public int hashCode() {
         return Objects.hash(super.hashCode(), comparedActivity, activities, answer);
     }
+
+    /**
+     * Returns the text representation of the question
+     * @return the text representation of the question
+     */
+    @Override
+    public String generateQuestionText(){
+         return String.format("What could you do instead of %s to consume less energy?",
+                getComparedActivity().title);
+    }
 }

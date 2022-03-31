@@ -55,12 +55,13 @@ public class SoloQuestionCtrl extends AbstractMultichoiceQuestionCtrl {
     /**
      * Highlights current question so the user is aware which circle corresponds to his current question
      */
+    @Override
     public void highlightCurrentCircle() {
         super.highlightCurrentCircle(game.getCurrentQuestionNum());
     }
 
     /**
-     * Updates the question number on the top of the screen.
+     * Updates the question number at the top of the screen.
      */
     @Override
     public void updateQuestionNumber() {

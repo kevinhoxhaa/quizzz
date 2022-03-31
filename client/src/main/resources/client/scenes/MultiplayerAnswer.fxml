@@ -172,7 +172,7 @@
                             <children>
                                 <Pane prefHeight="57.0" prefWidth="708.0">
                                     <children>
-                                        <Text fx:id="activityText" layoutX="138.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="What is the answer to this activity?" wrappingWidth="444.0">
+                                        <Text fx:id="questionText" layoutX="138.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="What is the answer to this activity?" wrappingWidth="444.0">
                                             <font>
                                                 <Font size="20.0" />
                                             </font>

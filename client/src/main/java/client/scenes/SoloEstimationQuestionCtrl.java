@@ -27,7 +27,7 @@ public class SoloEstimationQuestionCtrl extends AbstractEstimationQuestionCtrl{
      *  - resets input field to empty
      * @param soloGame the solo game instance
      */
-    protected void setup(SoloGame soloGame){
+    public void setup(SoloGame soloGame){
         this.game = soloGame;
         currentQuestion = (EstimationQuestion) soloGame.loadCurrentQuestion();
 
@@ -54,12 +54,13 @@ public class SoloEstimationQuestionCtrl extends AbstractEstimationQuestionCtrl{
     /**
      * Highlights current question so the user is aware which circle corresponds to his current question
      */
+    @Override
     public void highlightCurrentCircle() {
         super.highlightCurrentCircle(game.getCurrentQuestionNum());
     }
 
     /**
-     * Updates the question number on the top of the screen.
+     * Updates the question number at the top of the screen.
      */
     @Override
     public void updateQuestionNumber(){

@@ -4,43 +4,16 @@ import client.utils.ServerUtils;
 import commons.models.Answer;
 import commons.models.EstimationQuestion;
 import javafx.fxml.FXML;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
-import java.io.IOException;
-
-public abstract class AbstractEstimationQuestionCtrl extends QuestionNumController implements SceneController{
-    protected final ServerUtils server;
-
+public abstract class AbstractEstimationQuestionCtrl extends AbstractQuestionCtrl{
     protected EstimationQuestion currentQuestion;
-    protected double startTime;
-
-    @FXML
-    protected Text activityText;
-    @FXML
-    protected Text questionNum;
-    @FXML
-    protected ImageView questionImg;
-
-    @FXML
-    protected Text currentScore;
-
-
-    @FXML
-    protected ProgressIndicator countdownCircle;
 
     @FXML
     protected TextField userInput;
     @FXML
     protected Text yourAnswer;
-
-    protected static final double MILLISECONDS_PER_SECONDS = 1000.0;
-
-
 
     /**
      * Creates a controller for the estimation question screen,
@@ -50,25 +23,22 @@ public abstract class AbstractEstimationQuestionCtrl extends QuestionNumControll
      * @param mainCtrl
      */
     protected AbstractEstimationQuestionCtrl(ServerUtils server, MainCtrl mainCtrl) {
-        super(mainCtrl);
-        this.server = server;
+        super(server, mainCtrl);
     }
 
+    /**
+     * Sets up the estimation scene: <br>
+     *  - Sets the number of points <br>
+     *  - Sets the question text <br>
+     *  - Resets the user input field and the "your answer" text <br>
+     *  - Sets the question image
+     * @param points the player's points
+     */
     protected void setup(long points){
-        currentScore.setText(String.valueOf(points));
-        activityText.setText(
-                String.format("How many Wh's does %s consume?", currentQuestion.getActivity().title)
-        );
-
         yourAnswer.setText("");
         userInput.setText("");
 
-        try {
-            questionImg.setImage(server.fetchImage(mainCtrl.getServerUrl(), currentQuestion.getImagePath()));
-        }
-        catch (IOException e){
-            e.printStackTrace();
-        }
+        super.setup(currentQuestion, points);
     }
 
     /**
@@ -85,35 +55,6 @@ public abstract class AbstractEstimationQuestionCtrl extends QuestionNumControll
         }
     }
 
-    /**
-     * Returns the time since the timer started, in seconds.
-     * For now, a placeholder method.
-     *
-     * @return the time since the timer started, in seconds.
-     */
-    protected double getSeconds() {
-        return (System.currentTimeMillis() - startTime) / MILLISECONDS_PER_SECONDS;
-    }
 
-    /**
-     * Captures the exact time the question page started showing used for measuring the time
-     * players needed for answering the question.
-     */
-    protected void setStartTime() {
-        startTime = System.currentTimeMillis();
-    }
-
-
-
-    /**
-     * Resets the colors of the little circles to gray.
-     */
-    @Override
-    public void resetCircleColor() {
-        for(int i=0; i<mainCtrl.getQuestionsPerGame();i++){
-            Circle circle = (Circle) circles.getChildren().get(i);
-            circle.setFill(Color.LIGHTGRAY);
-        }
-    }
 
 }

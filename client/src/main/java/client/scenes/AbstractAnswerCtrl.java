@@ -1,5 +1,6 @@
 package client.scenes;
 
+import commons.entities.Activity;
 import commons.models.ChoiceQuestion;
 import commons.models.ComparisonQuestion;
 import commons.models.ConsumptionQuestion;
@@ -19,7 +20,7 @@ public abstract class AbstractAnswerCtrl extends QuestionNumController{
     @FXML
     protected VBox answerPane;
     @FXML
-    protected Text activityText;
+    protected Text questionText;
     @FXML
     protected Text answer;
     @FXML
@@ -29,10 +30,30 @@ public abstract class AbstractAnswerCtrl extends QuestionNumController{
     @FXML
     protected ProgressIndicator countdownCircle;
 
+    /**
+     * A constructor for this class
+     * @param mainCtrl
+     */
     protected AbstractAnswerCtrl(MainCtrl mainCtrl) {
         super(mainCtrl);
     }
 
+    /**
+     * Sets up the answer scene:<br>
+     *  - Sets the background color and the color of the score to red/green<br>
+     *  - Sets the response text appropriately<br>
+     *  - Sets the question text<br>
+     *  - Updates the points displayed<br>
+     *  - Calls the appropriate one from the following:<br>
+     *      - {@link #setupChoiceAnswer(Question)}<br>
+     *      - {@link #setupComparisonAnswer(Question)}<br>
+     *      - {@link #setupChoiceAnswer(Question)}<br>
+     *      - {@link #setupEstimationAnswer(Question)}<br>
+     *  - Starts the timer circle
+     *
+     * @param prevQuestion the corresponding question object
+     * @param points the number of points the user has
+     */
     protected void setup(Question prevQuestion, long points){
         if (prevQuestion.hasCorrectUserAnswer()) {
             currentScore.setFill(Color.GREEN);
@@ -45,6 +66,8 @@ public abstract class AbstractAnswerCtrl extends QuestionNumController{
             answerPane.setBackground(new Background(
                     new BackgroundFill(Color.LIGHTCORAL, CornerRadii.EMPTY, Insets.EMPTY)));
         }
+
+        questionText.setText(prevQuestion.generateQuestionText());
 
         currentScore.setText(String.valueOf(points));
 
@@ -71,13 +94,8 @@ public abstract class AbstractAnswerCtrl extends QuestionNumController{
      *
      * @param prevQuestion The question that has just been asked to the players.
      */
-    public void setupConsumptionAnswer(Question prevQuestion) {
+    private void setupConsumptionAnswer(Question prevQuestion) {
         ConsumptionQuestion prevConsQuestion = (ConsumptionQuestion) prevQuestion;
-
-        this.activityText.setText(
-                String.format("How much energy does %s cost?",
-                        prevConsQuestion.getActivity().title)
-        );
 
         this.answer.setText(Long.toString(prevConsQuestion.getActivity().consumption));
     }
@@ -87,21 +105,20 @@ public abstract class AbstractAnswerCtrl extends QuestionNumController{
      *
      * @param prevQuestion The question that has just been asked to the players.
      */
-    public void setupComparisonAnswer(Question prevQuestion) {
+    private void setupComparisonAnswer(Question prevQuestion) {
         ComparisonQuestion prevCompQuestion = (ComparisonQuestion) prevQuestion;
+        Activity firstActivity = prevCompQuestion.getFirstActivity();
+        Activity secondActivity = prevCompQuestion.getSecondActivity();
 
-        this.activityText.setText(
-                String.format("Does %s use more, less, or the same amount of energy as %s?",
-                        prevCompQuestion.getFirstActivity().title,
-                        prevCompQuestion.getSecondActivity().title)
-        );
+        questionText.setText(String.format("Which one consumes more energy? %s or %s?",
+                firstActivity.title, secondActivity.title));
 
-        if (prevCompQuestion.getFirstActivity().consumption > prevCompQuestion.getSecondActivity().consumption) {
-            this.answer.setText("MORE");
-        } else if (prevCompQuestion.getFirstActivity().consumption < prevCompQuestion.getSecondActivity().consumption) {
-            this.answer.setText("LESS");
+        if (firstActivity.consumption > secondActivity.consumption) {
+            this.answer.setText(firstActivity.title);
+        } else if (firstActivity.consumption < secondActivity.consumption) {
+            this.answer.setText(secondActivity.title);
         } else {
-            this.answer.setText("EQUAL");
+            this.answer.setText("They consume equal amounts of energy.");
         }
     }
 
@@ -110,13 +127,8 @@ public abstract class AbstractAnswerCtrl extends QuestionNumController{
      *
      * @param prevQuestion The question that has just been asked to the players.
      */
-    public void setupChoiceAnswer(Question prevQuestion) {
+    private void setupChoiceAnswer(Question prevQuestion) {
         ChoiceQuestion prevChoiceQuestion = (ChoiceQuestion) prevQuestion;
-
-        this.activityText.setText(
-                String.format("What could you do instead of %s to consume less energy?",
-                        prevChoiceQuestion.getComparedActivity().title)
-        );
 
         this.answer.setText(prevChoiceQuestion.getAnswer().title);
     }
@@ -126,16 +138,14 @@ public abstract class AbstractAnswerCtrl extends QuestionNumController{
      *
      * @param prevQuestion The question that has just been asked to the players.
      */
-    public void setupEstimationAnswer(Question prevQuestion) {
+    private void setupEstimationAnswer(Question prevQuestion) {
         EstimationQuestion prevEstimQuestion = (EstimationQuestion) prevQuestion;
-
-        this.activityText.setText(
-                String.format("How much energy do you think that %s consumes?",
-                        prevEstimQuestion.getActivity().title)
-        );
 
         this.answer.setText(Long.toString(prevEstimQuestion.getActivity().consumption));
     }
 
+    /**
+     * Starts the timer circle
+     */
     protected abstract void startTimer();
 }

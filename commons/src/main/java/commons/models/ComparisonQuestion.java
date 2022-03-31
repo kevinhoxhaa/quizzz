@@ -182,4 +182,13 @@ public class ComparisonQuestion extends Question {
     public int hashCode() {
         return Objects.hash(super.hashCode(), firstActivity, secondActivity, userAnswer, seconds);
     }
+
+    /**
+     * Returns the text representation of the question
+     * @return the text representation of the question
+     */
+    @Override
+    public String generateQuestionText(){
+        return "Which one consumes more energy?";
+    }
 }

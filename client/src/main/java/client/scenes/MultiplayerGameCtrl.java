@@ -11,12 +11,15 @@ import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.util.Pair;
 import org.springframework.messaging.simp.stomp.StompSession;
 
@@ -367,7 +370,6 @@ public class MultiplayerGameCtrl {
     }
 
     /**
-<<<<<<< HEAD
      * Returns the game index
      * @return the game index
      */
@@ -493,5 +495,55 @@ public class MultiplayerGameCtrl {
             emojiSubscription.unsubscribe();
         }
         emojiSubscription = null;
+    }
+
+    /**
+     * Send emojis to the server on emoji click.
+     * @param emojiPane the emoji pane to enable
+     */
+    public void enableEmojis(GridPane emojiPane){
+        emojiPane.getChildren().forEach(n -> {
+            if(n instanceof ImageView) {
+                ImageView e = (ImageView) n;
+                e.setOnMouseClicked(event -> sendEmoji(e));
+                e.setCursor(Cursor.HAND);
+
+                String[] parts = e.getImage().getUrl().split("/");
+                String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
+                emojiPath = emojiPath.substring(
+                        "file:/".length(), emojiPath.length() - "classes/java/main/".length())
+                        + "resources/main/client/images/" + parts[parts.length - 1];
+
+                e.setImage(new Image(emojiPath));
+            }
+        });
+    }
+
+    /**
+     * Disable emoji clicks
+     * @param emojiPane the emoji pane to disable
+     */
+    public void disableEmojis(GridPane emojiPane) {
+        emojiPane.getChildren().forEach(n -> {
+            if(n instanceof ImageView) {
+                ImageView e = (ImageView) n;
+                e.setOnMouseClicked(null);
+            }
+        });
+    }
+
+    /**
+     * Visualise emoji on the screen
+     * @param emoji the emoji to visualise
+     * @param emojiImage the image to change
+     * @param emojiText the text to change
+     */
+    public void displayEmoji(Emoji emoji, ImageView emojiImage, Text emojiText) {
+        String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
+        emojiPath = emojiPath.substring(
+                "file:/".length(), emojiPath.length() - "classes/java/main/".length())
+                + "resources/main/client/images/" + emoji.getImageName();
+        emojiImage.setImage(new Image(emojiPath));
+        emojiText.setText(emoji.getUsername());
     }
 }

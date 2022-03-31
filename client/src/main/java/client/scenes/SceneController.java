@@ -1,7 +1,9 @@
 package client.scenes;
 
-public interface SceneController {
-    void redirect();
+public abstract class SceneController {
+    protected static final double MILLISECONDS_PER_SECONDS = 1000.0;
 
-    void onQuit();
+    public void redirect(){}
+
+    public void onQuit(){}
 }
