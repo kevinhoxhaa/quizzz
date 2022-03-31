@@ -11,6 +11,7 @@ import commons.models.Question;
 import commons.models.SoloGame;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -50,11 +51,11 @@ public class SoloQuestionCtrl implements SceneController, QuestionNumController 
     @FXML
     private StackPane answerBot;
     @FXML
-    private Text answerTopText;
+    private Label answerTopText;
     @FXML
-    private Text answerMidText;
+    private Label answerMidText;
     @FXML
-    private Text answerBotText;
+    private Label answerBotText;
     @FXML
     private Text currentScore;
 

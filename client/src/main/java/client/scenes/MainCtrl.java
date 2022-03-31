@@ -18,6 +18,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.entities.MultiplayerUser;
 import commons.entities.User;
+import commons.models.EstimationQuestion;
 import commons.models.Question;
 import commons.models.SoloGame;
 import commons.utils.QuestionType;
@@ -112,6 +113,7 @@ public class MainCtrl {
     private int gameIndex;
     private List<Color> colors;
     private Thread timerThread;
+    private double countdown;
     private int answerCount = 0;
 
     private long streak = 0;
@@ -183,6 +185,8 @@ public class MainCtrl {
 
         this.multiplayerResultsCtrl = multiplayerResults.getKey();
         this.multiplayerResults = new Scene(multiplayerResults.getValue());
+
+        countdown = START_TIME;
 
         showHome();
         primaryStage.show();
@@ -399,6 +403,34 @@ public class MainCtrl {
     }
 
     /**
+     * Sets the scene in the primary stage to the estimation screen
+     *
+     * @param question the estimation question to visualise
+     */
+    public void showEstimationQuestion(EstimationQuestion question) {
+        primaryStage.setTitle("Estimation");
+        primaryStage.setScene(multiplayerEstimation);
+
+        multiplayerEstimationCtrl.startTimer();
+        multiplayerEstimationCtrl.setup(question);
+
+        primaryStage.setScene(multiplayerEstimation);
+        multiplayerEstimationCtrl.startTimer();
+    }
+
+    /**
+     * Halves the remaining timer for the user.
+     * @param user the user that used the joker
+     */
+    public void halfTime ( MultiplayerUser user ) {
+        System.out.println("Received message from user: ");
+        System.out.println(user);
+        if ( !user.username.equals(this.user.username) ) {
+            countdown = countdown / 2;
+        }
+    }
+
+    /**
      * A getter for the number of the current question
      *
      * @return questionCount, which is the count of the number of questions that have already been shown.
@@ -406,7 +438,6 @@ public class MainCtrl {
     public int getAnswerCount() {
         return answerCount;
     }
-
 
     /**
      * Fetches a random question from the server. For now, it just returns a placeholder for testing.
@@ -434,7 +465,7 @@ public class MainCtrl {
             timerThread.interrupt();
         }
         timerThread = new Thread(() -> {
-            double countdown = START_TIME;
+            countdown = START_TIME;
             while (countdown >= 0.0) {
                 try {
                     double finalCountdown = countdown;
@@ -608,6 +639,7 @@ public class MainCtrl {
                 if(isMultiplayer) {
                     if(multiplayerCtrl != null) {
                         multiplayerCtrl.unregisterForEmojis();
+                        multiplayerCtrl.unregisterForHalfTime();
                         multiplayerCtrl.hideEmojis();
                     }
 
