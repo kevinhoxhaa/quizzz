@@ -169,7 +169,7 @@
                                 </StackPane>
                                 <StackPane prefHeight="100.0" prefWidth="602.0">
                                     <children>
-                                        <Text fx:id="activityText" strokeType="OUTSIDE" strokeWidth="0.0" text="What is the answer to this activity?" wrappingWidth="583.6000075340271">
+                                        <Text fx:id="questionText" strokeType="OUTSIDE" strokeWidth="0.0" text="What is the answer to this activity?" wrappingWidth="583.6000075340271">
                                             <font>
                                                 <Font name="Monospaced Regular" size="15.0" />
                                             </font>
@@ -247,16 +247,16 @@
                                             </cursor>
                                         </StackPane>
                                     </children>
-                           <padding>
-                              <Insets bottom="36.0" left="36.0" right="36.0" top="36.0" />
-                           </padding>
+                                    <padding>
+                                        <Insets bottom="36.0" left="36.0" right="36.0" top="36.0" />
+                                    </padding>
                                 </VBox>
                             </children>
                         </HBox>
                     </children>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
                 </VBox>
                 <AnchorPane prefHeight="49.0" prefWidth="708.0">
                     <children>
@@ -268,11 +268,20 @@
                                 <Cursor fx:constant="HAND" />
                             </cursor>
                         </Button>
-                        <Text fx:id="currentScore" layoutX="43.0" layoutY="46.0" text="Score: 0" wrappingWidth="187.242919921875">
-                            <font>
-                                <Font name="Monospaced Regular" size="32.0" />
-                            </font>
-                        </Text>
+                        <TextFlow layoutX="14.0" layoutY="31.0" prefHeight="71.0" prefWidth="200.0">
+                            <children>
+                                <Text text="Score: " wrappingWidth="187.242919921875">
+                                    <font>
+                                        <Font name="Monospaced Regular" size="32.0" />
+                                    </font>
+                                </Text>
+                                <Text fx:id="currentScore" text="0" wrappingWidth="187.242919921875">
+                                    <font>
+                                        <Font name="Monospaced Regular" size="32.0" />
+                                    </font>
+                                </Text>
+                            </children>
+                        </TextFlow>
                     </children>
                 </AnchorPane>
             </children>

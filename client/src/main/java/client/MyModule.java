@@ -16,7 +16,7 @@
 package client;
 
 import client.scenes.AddQuoteCtrl;
-import client.scenes.EstimationQuestionCtrl;
+import client.scenes.MultiplayerEstimationQuestionCtrl;
 import client.scenes.HomeCtrl;
 import client.scenes.MainCtrl;
 import client.scenes.MultiplayerAnswerCtrl;
@@ -42,7 +42,7 @@ public class MyModule implements Module {
         binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
         binder.bind(AddQuoteCtrl.class).in(Scopes.SINGLETON);
         binder.bind(QuoteOverviewCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(EstimationQuestionCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(MultiplayerEstimationQuestionCtrl.class).in(Scopes.SINGLETON);
         binder.bind(HomeCtrl.class).in(Scopes.SINGLETON);
         binder.bind(MultiplayerAnswerCtrl.class).in(Scopes.SINGLETON);
         binder.bind(MultiplayerGameCtrl.class).in(Scopes.SINGLETON);
