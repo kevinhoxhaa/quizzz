@@ -321,6 +321,7 @@ public class MultiplayerGameCtrl {
      */
     public void showResults(List<MultiplayerUser> rankedUsers) {
         // TODO: display list of ranked users on results screen
+        resultsCtrl.setup();
         resultsCtrl.updateCircleColor(colors);
         resultsCtrl.updateQuestionNumber();
         mainCtrl.getPrimaryStage().setTitle("Results Screen");
@@ -484,6 +485,7 @@ public class MultiplayerGameCtrl {
      * Resets all jokers at the start of the game, so they can be used again.
      */
     public void resetAllJokers(){
+        this.usedJokers = new ArrayList<>();
         mcQuestionCtrl.resetDoublePoints();
         estimationQuestionCtrl.resetDoublePoints();
         mcQuestionCtrl.resetRemoveIncorrect();
@@ -511,6 +513,7 @@ public class MultiplayerGameCtrl {
 
     public void resetGameCtrl() {
         mainCtrl.resetMainCtrl();
+        resetAllJokers();
         this.answerCount = 0;
         this.colors = new ArrayList<>();
         this.user.resetScore();
