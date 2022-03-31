@@ -170,7 +170,7 @@
                                 </ImageView>
                                 <TextFlow maxHeight="92.0" maxWidth="770.0" minHeight="64.0" minWidth="192.0" prefHeight="92.0" prefWidth="770.0">
                                     <children>
-                                        <Text fx:id="activityText" strokeType="OUTSIDE" strokeWidth="0.0" text="Question text here?">
+                                        <Text fx:id="questionText" strokeType="OUTSIDE" strokeWidth="0.0" text="Question text here?">
                                             <font>
                                                 <Font name="Monospaced Regular" size="30.0" />
                                             </font>
@@ -183,11 +183,20 @@
                             <children>
                                 <VBox alignment="CENTER_LEFT" prefHeight="85.0" prefWidth="312.0">
                                     <children>
-                                        <Label fx:id="yourAnswer" text="Your answer:">
-                                            <font>
-                                                <Font name="Monospaced Regular" size="18.0" />
-                                            </font>
-                                        </Label>
+                                        <TextFlow prefHeight="200.0" prefWidth="200.0">
+                                            <children>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Your answer: " wrappingWidth="113.91015625">
+                                                    <font>
+                                                        <Font name="Monospaced Regular" size="20.0" />
+                                                    </font>
+                                                </Text>
+                                                <Text fx:id="yourAnswer" strokeType="OUTSIDE" strokeWidth="0.0" text="xy" wrappingWidth="141.857421875">
+                                                    <font>
+                                                        <Font name="Monospaced Regular" size="20.0" />
+                                                    </font>
+                                                </Text>
+                                            </children>
+                                        </TextFlow>
                                         <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="296.0">
                                             <children>
                                                 <TextField fx:id="userInput" prefWidth="256.0" />
@@ -230,11 +239,20 @@
                                 <Font name="Monospaced Bold" size="20.0" />
                             </font>
                         </Button>
-                        <Text fx:id="currentScore" layoutX="14.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Score: 0" wrappingWidth="176.13671875">
-                            <font>
-                                <Font name="Monospaced Regular" size="32.0" />
-                            </font>
-                        </Text>
+                        <TextFlow layoutX="14.0" layoutY="31.0" prefHeight="71.0" prefWidth="200.0">
+                            <children>
+                                <Text text="Score: " wrappingWidth="187.242919921875">
+                                    <font>
+                                        <Font name="Monospaced Regular" size="32.0" />
+                                    </font>
+                                </Text>
+                                <Text fx:id="currentScore" text="0" wrappingWidth="187.242919921875">
+                                    <font>
+                                        <Font name="Monospaced Regular" size="32.0" />
+                                    </font>
+                                </Text>
+                            </children>
+                        </TextFlow>
                     </children>
                 </AnchorPane>
             </children>

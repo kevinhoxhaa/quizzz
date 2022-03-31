@@ -11,12 +11,16 @@ import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.util.Pair;
 import org.springframework.messaging.simp.stomp.StompSession;
 
@@ -26,15 +30,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MultiplayerGameCtrl {
-    private static final int POLLING_DELAY = 0;
-    private static final int POLLING_INTERVAL = 500;
-    private static final double OPACITY = 0.5;
-    private static final double STANDARD_SIZE = 1.0;
-    public static final double RGB_VALUE = (double) 244/255;
 
     private List<Color> colors;
+
     private boolean answeredQuestion = false;
     private StompSession.Subscription emojiSubscription;
+    private StompSession.Subscription halfTimeSubscription;
 
     private Timer answerTimer;
 
@@ -51,7 +52,7 @@ public class MultiplayerGameCtrl {
     private MultiplayerQuestionCtrl mcQuestionCtrl;
 
     private Scene estimationQuestion;
-    private EstimationQuestionCtrl estimationQuestionCtrl;
+    private MultiplayerEstimationQuestionCtrl multiplayerEstimationQuestionCtrl;
 
     private Scene answer;
     private MultiplayerAnswerCtrl answerCtrl;
@@ -69,6 +70,13 @@ public class MultiplayerGameCtrl {
 
     private List<String> usedJokers;
 
+    private static final int POLLING_DELAY = 0;
+    private static final int POLLING_INTERVAL = 500;
+    private static final double OPACITY = 0.5;
+    private static final double STANDARD_SIZE = 1.0;
+    public static final double RGB_VALUE = (double) 244/255;
+    protected static final int KICK_AT_X_QUESTIONS = 3;
+
     // TODO: add results and resultsCtrl
 
     /**
@@ -85,7 +93,7 @@ public class MultiplayerGameCtrl {
      */
     public MultiplayerGameCtrl(int gameIndex, MainCtrl mainCtrl, ServerUtils server,
                                Pair<MultiplayerQuestionCtrl, Scene> mcQuestion,
-                               Pair<EstimationQuestionCtrl, Scene> estimationQuestion,
+                               Pair<MultiplayerEstimationQuestionCtrl, Scene> estimationQuestion,
                                Pair<MultiplayerAnswerCtrl, Scene> answer,
                                Pair<RankingCtrl, Scene> ranking,
                                Pair<MultiplayerResultsCtrl, Scene> results) {
@@ -110,8 +118,8 @@ public class MultiplayerGameCtrl {
         mcQuestionCtrl.setGameCtrl(this);
         this.mcQuestion = mcQuestion.getValue();
 
-        this.estimationQuestionCtrl = estimationQuestion.getKey();
-        estimationQuestionCtrl.setGameCtrl(this);
+        this.multiplayerEstimationQuestionCtrl = estimationQuestion.getKey();
+        multiplayerEstimationQuestionCtrl.setGameCtrl(this);
         this.estimationQuestion = estimationQuestion.getValue();
 
         this.answerCtrl = answer.getKey();
@@ -141,14 +149,13 @@ public class MultiplayerGameCtrl {
     public void startGame() {
         server.connect(serverUrl);
 
-        registerForEmojis(estimationQuestionCtrl);
+        registerForEmojis(multiplayerEstimationQuestionCtrl);
         registerForEmojis(answerCtrl);
         registerForEmojis(mcQuestionCtrl);
-         resetAllJokers();
-         user.unansweredQuestions = 0;
-
-         Question firstQuestion = fetchQuestion();
-         showQuestion(firstQuestion);
+        registerForHalfTime();
+        Question firstQuestion = fetchQuestion();
+        showQuestion(firstQuestion);
+        resetAllJokers();
     }
 
     /**
@@ -282,11 +289,11 @@ public class MultiplayerGameCtrl {
      * @param question the estimation question to visualise
      */
     public void showEstimationQuestion(EstimationQuestion question) {
-        mainCtrl.updateQuestionCounters(estimationQuestionCtrl, colors);
-        estimationQuestionCtrl.setup(question);
+        mainCtrl.updateQuestionCounters(multiplayerEstimationQuestionCtrl, colors);
+        multiplayerEstimationQuestionCtrl.setup(question);
 
-        estimationQuestionCtrl.startTimer();
-        estimationQuestionCtrl.setStartTime();
+        multiplayerEstimationQuestionCtrl.startTimer();
+        multiplayerEstimationQuestionCtrl.setStartTime();
         mainCtrl.getPrimaryStage().setTitle("Estimation question screen");
         mainCtrl.getPrimaryStage().setScene(estimationQuestion);
     }
@@ -321,8 +328,7 @@ public class MultiplayerGameCtrl {
     public void showResults(List<MultiplayerUser> rankedUsers) {
         // TODO: display list of ranked users on results screen
         resultsCtrl.setup();
-        resultsCtrl.updateCircleColor(colors);
-        resultsCtrl.updateQuestionNumber();
+        mainCtrl.updateQuestionCounters(resultsCtrl, colors);
         mainCtrl.getPrimaryStage().setTitle("Results Screen");
         mainCtrl.getPrimaryStage().setScene(results);
         resultsCtrl.startTimer();
@@ -381,7 +387,6 @@ public class MultiplayerGameCtrl {
     }
 
     /**
-<<<<<<< HEAD
      * Returns the game index
      * @return the game index
      */
@@ -401,6 +406,12 @@ public class MultiplayerGameCtrl {
         );
     }
 
+    public void registerForHalfTime () {
+        halfTimeSubscription = server.registerForMessages( "/topic/halfTime/" + gameIndex,
+                MultiplayerUser.class ,
+                (user) -> mainCtrl.halfTime(user) );
+    }
+
     /**
      * Send an emoji to the server
      * @param e the emoji image to send
@@ -414,6 +425,7 @@ public class MultiplayerGameCtrl {
                 new Emoji(imageName, username)
         );
     }
+
     /**
      * A getter that returns true/false whether the Double Points joker is activated this round
      * @return isActiveDoublePoints, which shows whether the DP joker is being used
@@ -486,7 +498,9 @@ public class MultiplayerGameCtrl {
     public void resetAllJokers(){
         this.usedJokers = new ArrayList<>();
         mcQuestionCtrl.resetDoublePoints();
-        estimationQuestionCtrl.resetDoublePoints();
+        mcQuestionCtrl.resetReduceTime();
+        multiplayerEstimationQuestionCtrl.resetDoublePoints();
+        multiplayerEstimationQuestionCtrl.resetReduceTime();
         mcQuestionCtrl.resetRemoveIncorrect();
         //TODO: Reset all the other jokers
     }
@@ -497,7 +511,7 @@ public class MultiplayerGameCtrl {
     public void hideEmojis() {
         answerCtrl.hideEmoji();
         mcQuestionCtrl.hideEmoji();
-        estimationQuestionCtrl.hideEmoji();
+        multiplayerEstimationQuestionCtrl.hideEmoji();
     }
 
     /**
@@ -508,6 +522,100 @@ public class MultiplayerGameCtrl {
             emojiSubscription.unsubscribe();
         }
         emojiSubscription = null;
+    }
+
+    /**
+     * Send emojis to the server on emoji click.
+     * @param emojiPane the emoji pane to enable
+     */
+    public void enableEmojis(GridPane emojiPane){
+        emojiPane.getChildren().forEach(n -> {
+            if(n instanceof ImageView) {
+                ImageView e = (ImageView) n;
+                e.setOnMouseClicked(event -> sendEmoji(e));
+                e.setCursor(Cursor.HAND);
+
+                String[] parts = e.getImage().getUrl().split("/");
+                String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
+                emojiPath = emojiPath.substring(
+                        0, emojiPath.length() - "classes/java/main/".length())
+                        + "resources/main/client/images/" + parts[parts.length - 1];
+
+                e.setImage(new Image(emojiPath));
+            }
+        });
+    }
+
+    /**
+     * Disable emoji clicks
+     * @param emojiPane the emoji pane to disable
+     */
+    public void disableEmojis(GridPane emojiPane) {
+        emojiPane.getChildren().forEach(n -> {
+            if(n instanceof ImageView) {
+                ImageView e = (ImageView) n;
+                e.setOnMouseClicked(null);
+            }
+        });
+    }
+
+    /**
+     * Visualise emoji on the screen
+     * @param emoji the emoji to visualise
+     * @param emojiImage the image to change
+     * @param emojiText the text to change
+     */
+    public void displayEmoji(Emoji emoji, ImageView emojiImage, Text emojiText) {
+        String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
+        emojiPath = emojiPath.substring(
+                0, emojiPath.length() - "classes/java/main/".length())
+                + "resources/main/client/images/" + emoji.getImageName();
+        emojiImage.setImage(new Image(emojiPath));
+        emojiText.setText(emoji.getUsername());
+    }
+
+    public void redirectFromQuestion(){
+        MultiplayerUser user = getUser();
+        if (!getAnsweredQuestion()) {
+            user.unansweredQuestions++;
+            if (user.unansweredQuestions == KICK_AT_X_QUESTIONS) {
+                try {
+                    server.removeMultiplayerUser(server.getURL(), user);
+                } catch(WebApplicationException e) {
+                    System.out.println("User to remove not found!");
+                }
+
+                mainCtrl.killThread();
+
+                if(server.getSession() != null && server.getSession().isConnected()) {
+                    unregisterForEmojis();
+                    server.getSession().disconnect();
+                }
+                hideEmojis();
+                mainCtrl.showHome();
+                mainCtrl.bindUser(null);
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle ("Kicked :(");
+                alert.setHeaderText(null);
+                alert.setGraphic(null);
+                alert.setContentText("You've been kicked for not answering 3 question in a row!");
+                alert.show();
+
+                return;
+            }
+        } else {
+            user.unansweredQuestions = 0;
+        }
+
+        setAnsweredQuestion(false);
+    }
+
+    public void unregisterForHalfTime() {
+        if ( server.getSession().isConnected() ) {
+            halfTimeSubscription.unsubscribe();
+        }
+        halfTimeSubscription = null;
     }
 
     public void resetGameCtrl() {

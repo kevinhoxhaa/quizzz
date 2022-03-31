@@ -197,6 +197,9 @@ public class HomeCtrl {
         mainCtrl.showWaiting();
     }
 
+    /**
+     * Alerts the user about the invalid URL
+     */
     private void invalidURL() {
         var alert = new Alert(Alert.AlertType.ERROR);
         alert.initModality(Modality.APPLICATION_MODAL);
@@ -205,6 +208,11 @@ public class HomeCtrl {
         return;
     }
 
+    /**
+     * Checks if the given user object has a valid username
+     * @param user the user in question
+     * @return a boolean representation of the username's validity
+     */
     private boolean isValidUsername(User user) {
         if (user.username.contains(" ") || user.username.length() > USERNAME_LENGTH) {
             var alert = new Alert(Alert.AlertType.ERROR);

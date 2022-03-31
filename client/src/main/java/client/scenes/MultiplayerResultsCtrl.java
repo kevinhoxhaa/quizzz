@@ -11,47 +11,14 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.text.Text;
 
-import java.util.List;
-
-public class MultiplayerResultsCtrl implements QuestionNumController, SceneController {
-
-    private static final int POLLING_DELAY = 0;
-    private static final int POLLING_INTERVAL = 500;
-
-    private final ServerUtils server;
-    private final MainCtrl mainCtrl;
-    private MultiplayerGameCtrl gameCtrl;
-
-    private static final double CIRCLE_BORDER_SIZE = 1.7;
-    private static final double STANDARD_CIRCLE_BORDER_SIZE = 1.0;
+public class MultiplayerResultsCtrl extends AbstractRankingCtrl{
 
     private boolean rematch;
 
     @FXML
-    private Text scoreTableUserName;
-    @FXML
-    private Text scoreTableUserScore;
-
-    @FXML
-    private Text personalBest;
-
-    @FXML
-    private Button quitButton;
-
-    @FXML
     private Button rematchButton;
-
-    @FXML
-    private Text questionNum;
-
-    @FXML
-    private HBox circles;
-
     @FXML
     private ProgressIndicator countdownCircle;
 
@@ -62,15 +29,14 @@ public class MultiplayerResultsCtrl implements QuestionNumController, SceneContr
      */
     @Inject
     public MultiplayerResultsCtrl(ServerUtils server, MainCtrl mainCtrl) {
-        this.server = server;
-        this.mainCtrl = mainCtrl;
+        super(server, mainCtrl);
     }
 
     /**
      * Setups the page quit button that redirects to the main page, and fills in the score and personal best
      */
+    public void setup() {
 
-    protected void setup() {
         enableRematchButton();
         scoreTableUserName.setText( String.format( "%s", mainCtrl.getUser().username) );
         scoreTableUserScore.setText( String.format( "%d", mainCtrl.getSoloScore()) );
@@ -107,6 +73,12 @@ public class MultiplayerResultsCtrl implements QuestionNumController, SceneContr
     @Override
     @FXML
     public void onQuit(){
+        if (rematch) {
+            rematch = false;
+            server.removeRestartUserID(server.getURL(), gameCtrl.getGameIndex(), gameCtrl.getUser().id);
+            rematchButton.setBackground(new Background(
+                    new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+        }
         mainCtrl.quitGame(false, true);
     }
 
@@ -158,70 +130,18 @@ public class MultiplayerResultsCtrl implements QuestionNumController, SceneContr
     }
 
     /**
-     * Getter for the current question number
-     * @return questionNum
-     */
-    public Text getQuestionNum(){
-        return questionNum;
-    }
-
-    /**
-     * Getter for the circles bar
-     * @return circles
-     */
-    public HBox getCirclesHBox(){
-        return circles;
-    }
-
-    /**
-     * Updates the color of the past questions' circles on the circle bar
-     * (green/red depending on the correctness of the answer)
-     *
-     * @param colors Is the list of colors of previous answers(green/red depending on their correctness)
-     */
-    @Override
-    public void updateCircleColor(List<Color> colors) {
-        for (int i = 0; i < colors.size(); i++) {
-            Circle c = (Circle) getCirclesHBox().getChildren().get(i);
-            c.setFill(colors.get(i));
-        }
-    }
-
-    /**
-     * Resets the circles colors every time the game starts
-     */
-    @Override
-    public void resetCircleColor() {
-        for(int i=0; i<mainCtrl.getQuestionsPerGame();i++){
-            Circle circle = (Circle) getCirclesHBox().getChildren().get(i);
-            circle.setFill(Color.LIGHTGRAY);
-        }
-    }
-
-    /**
      * Updates the number of the current question
      */
     @Override
     public void updateQuestionNumber() {
-        getQuestionNum().setText("" + gameCtrl.getAnswerCount());
+        questionNum.setText("" + gameCtrl.getAnswerCount());
     }
 
     /**
      * Highlights current question so the user is aware which circle corresponds to his current question
      */
+    @Override
     public void highlightCurrentCircle() {
-        Circle c = (Circle) circles.getChildren().get(gameCtrl.getAnswerCount());
-        c.setFill(Color.DARKGRAY);
-        c.setStrokeWidth(CIRCLE_BORDER_SIZE);
-    }
-
-    /**
-     * Resets the highlighting of the circle borders
-     */
-    public void resetHighlight(){
-        for(int i=0;i<circles.getChildren().size();i++){
-            Circle circle = (Circle) circles.getChildren().get(i);
-            circle.setStrokeWidth(STANDARD_CIRCLE_BORDER_SIZE);
-        }
+        highlightCurrentCircle(gameCtrl.getAnswerCount());
     }
 }
