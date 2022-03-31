@@ -317,6 +317,9 @@ public class GameController {
         }
 
         game.getRestartUserIds().remove(userId);
+        MultiplayerUser rematchUser = gameUserRepo.findById(userId).get();
+        rematchUser.resetScore();
+        gameUserRepo.save(rematchUser);
 
         if(!isRestarted) {
             isRestarted = true;

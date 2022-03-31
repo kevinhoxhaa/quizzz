@@ -203,25 +203,25 @@
                                             <VBox.margin>
                                                 <Insets left="15.0" />
                                             </VBox.margin>
-                                 <font>
-                                    <Font name="Monospaced Regular" size="14.0" />
-                                 </font>
+                                            <font>
+                                                <Font name="Monospaced Regular" size="14.0" />
+                                            </font>
                                         </Text>
                                         <Text fx:id="ranking2ndPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="2nd player" wrappingWidth="226.866903424263">
                                             <VBox.margin>
                                                 <Insets left="75.0" />
                                             </VBox.margin>
-                                 <font>
-                                    <Font name="Monospaced Regular" size="14.0" />
-                                 </font>
+                                            <font>
+                                                <Font name="Monospaced Regular" size="14.0" />
+                                            </font>
                                         </Text>
                                         <Text fx:id="ranking3rdPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="3rd player" wrappingWidth="101.87011528015137">
                                             <VBox.margin>
                                                 <Insets left="200.0" />
                                             </VBox.margin>
-                                 <font>
-                                    <Font name="Monospaced Regular" size="14.0" />
-                                 </font>
+                                            <font>
+                                                <Font name="Monospaced Regular" size="14.0" />
+                                            </font>
                                         </Text>
                                         <ImageView fitHeight="201.0" fitWidth="260.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
@@ -255,9 +255,9 @@
                                         <Pane prefHeight="22.0" prefWidth="112.0">
                                             <children>
                                                 <Text layoutX="13.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Time remaining:">
-                                       <font>
-                                          <Font name="Monospaced Regular" size="14.0" />
-                                       </font></Text>
+                                                    <font>
+                                                        <Font name="Monospaced Regular" size="14.0" />
+                                                    </font></Text>
                                             </children>
                                         </Pane>
                                         <Pane prefHeight="73.0" prefWidth="112.0">
@@ -269,7 +269,7 @@
                                 </VBox>
                                 <Pane prefHeight="92.0" prefWidth="402.0">
                                     <children>
-                                        <Button id="quit" fx:id="quitButton" layoutX="76.0" layoutY="13.0" mnemonicParsing="false" onAction="#onQuitButton" prefHeight="67.0" prefWidth="211.0" text="Quit">
+                                        <Button id="quit" fx:id="quitButton" layoutX="76.0" layoutY="13.0" mnemonicParsing="false" onAction="#onQuit" prefHeight="67.0" prefWidth="211.0" text="Quit">
                                             <font>
                                                 <Font name="Monospaced Bold" size="20.0" />
                                             </font>
@@ -280,19 +280,7 @@
                                     </children>
                                 </Pane>
                             </children>
-                        </VBox>
-                        <Pane prefHeight="92.0" prefWidth="402.0">
-                            <children>
-                                <Button id="quit" fx:id="quitButton" layoutX="76.0" layoutY="13.0" mnemonicParsing="false" onAction="#onQuit" prefHeight="67.0" prefWidth="211.0" text="Quit">
-                                    <font>
-                                        <Font size="20.0" />
-                                    </font>
-                                    <cursor>
-                                        <Cursor fx:constant="HAND" />
-                                    </cursor>
-                                </Button>
-                            </children>
-                        </Pane>
+                        </HBox>
                     </children>
                 </VBox>
             </children>
