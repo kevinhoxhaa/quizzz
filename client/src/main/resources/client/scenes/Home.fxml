@@ -21,7 +21,7 @@
                      <Insets top="32.0" />
                  </padding>
                  <children>
-            <Button fx:id="adminPanel" alignment="CENTER" centerShape="false" mnemonicParsing="false" onAction="#onAdminPanelClick" prefHeight="24.0" prefWidth="89.0" text="Admin Panel" />
+            <Button fx:id="adminPanelButton" alignment="CENTER" centerShape="false" mnemonicParsing="false" onAction="#onAdminPanelClick" prefHeight="24.0" prefWidth="89.0" text="Admin Panel" />
                      <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0">
                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Quizzzz" HBox.hgrow="ALWAYS">
                              <font>

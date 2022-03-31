@@ -4,7 +4,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane onMouseClicked="#onAddActivityButton" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminPanel">
+<AnchorPane onMouseClicked="#onAddActivityButton" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminPanelCtrl">
    <children>
       <Button layoutX="136.0" layoutY="116.0" mnemonicParsing="false" prefHeight="71.0" prefWidth="116.0" text="Show Activities" />
       <TextField alignment="CENTER" layoutX="214.0" layoutY="30.0" prefHeight="39.0" prefWidth="150.0" text="Admin Panel" />

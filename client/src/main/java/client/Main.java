@@ -20,6 +20,7 @@ import static com.google.inject.Guice.createInjector;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import client.scenes.AdminPanelCtrl;
 import client.scenes.QuoteOverviewCtrl;
 import client.scenes.AddQuoteCtrl;
 import client.scenes.MultiplayerAnswerCtrl;
@@ -53,6 +54,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+
+        var adminPanel = FXML.load(
+                AdminPanelCtrl.class, "client", "scenes", "AdminPanel.fxml");
 
         var overview = FXML.load(
                 QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
@@ -93,5 +97,8 @@ public class Main extends Application {
         mainCtrl.initialize(primaryStage, overview, add, home, waiting, multiplayerQuestion,
                 multiplayerAnswer, ranking, multiplayerEstimation, soloEstimation, soloQuestion,
                 soloAnswer, soloResults, multiplayerResults);
+
+        var homeCtrl = INJECTOR.getInstance ( HomeCtrl.class );
+        homeCtrl.initialize ( adminPanel );
     }
 }

@@ -8,6 +8,7 @@ import commons.entities.User;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ScrollPane;
@@ -15,6 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 import java.io.IOException;
 
@@ -32,6 +34,9 @@ public class HomeCtrl {
     private Stage dialog;
 
     private Stage adminPanel;
+
+    private AdminPanelCtrl adminPanelCtrl;
+    private Scene adminPanelScene;
 
     @FXML
     private ImageView bulbView;
@@ -54,6 +59,12 @@ public class HomeCtrl {
     public HomeCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+    }
+
+    public void initialize( Pair<AdminPanelCtrl, Parent> adminPanel ) {
+        this.adminPanelCtrl = adminPanel.getKey();
+        this.adminPanelScene = new Scene ( adminPanel.getValue() );
+        this.adminPanel = new Stage();
     }
 
     /**
@@ -126,28 +137,11 @@ public class HomeCtrl {
 
     /**
      * Opens the adminPanel
-     *
-     * @throws IOException
      */
 
     @FXML
-    public void onAdminPanelClick() throws IOException {
-        if ( adminPanel != null ) {
-            adminPanel.show();
-            return ;
-        }
-
-        adminPanel = new Stage();
-        adminPanel.initModality(Modality.APPLICATION_MODAL);
-        adminPanel.setResizable(false);
-
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/client/scenes/AdminPanel.fxml"));
-        loader.setController(this);
-
-        ScrollPane adminPanelPane = loader.load();
-        Scene adminPanelScene = new Scene(adminPanelPane);
-        adminPanel.setScene(adminPanelScene);
+    public void onAdminPanelClick() {
+        adminPanel.setScene( adminPanelScene );
         adminPanel.show();
     }
 
