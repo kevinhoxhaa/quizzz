@@ -59,8 +59,10 @@ public class MultiplayerGameCtrl {
     private Scene ranking;
     private RankingCtrl rankingCtrl;
 
-    private boolean isAvailableDoublePoints = true;
     private boolean isActiveDoublePoints;
+
+    private boolean isAvailableRemoveIncorrect = true;
+    private boolean isActiveRemoveIncorrect;
 
     private List<String> usedJokers;
 
@@ -96,7 +98,8 @@ public class MultiplayerGameCtrl {
 
         this.serverUrl = mainCtrl.getServerUrl();
         this.answerCount = 0;
-        isActiveDoublePoints=false;
+        isActiveDoublePoints = false;
+        isActiveRemoveIncorrect = false;
 
         this.mcQuestionCtrl = mcQuestion.getKey();
         mcQuestionCtrl.setGameCtrl(this);
@@ -159,7 +162,6 @@ public class MultiplayerGameCtrl {
     public void postAnswer(Question answeredQuestion) {
         if(getIsActiveDoublePoints()){
             user.points += 2*answeredQuestion.calculatePoints();
-            setIsActiveDoublePoints(false);
         }
         else{
             user.points += answeredQuestion.calculatePoints();
@@ -201,11 +203,12 @@ public class MultiplayerGameCtrl {
      */
     public List<MultiplayerUser> fetchCorrectUsers(Question answeredQuestion) throws WebApplicationException {
         if(isActiveDoublePoints){
-            return server.answerQuestion(serverUrl, gameIndex,
+            setIsActiveDoublePoints(false);
+            return server.answerDoublePointsQuestion(serverUrl, gameIndex,
                     mainCtrl.getUser().id, answerCount, answeredQuestion);
         }
         else{
-            return server.answerDoublePointsQuestion(serverUrl, gameIndex,
+            return server.answerQuestion(serverUrl, gameIndex,
                     mainCtrl.getUser().id, answerCount, answeredQuestion);
         }
     }
@@ -408,7 +411,23 @@ public class MultiplayerGameCtrl {
      * @param active
      */
     public void setIsActiveDoublePoints(boolean active){
-        isActiveDoublePoints=active;
+        isActiveDoublePoints = active;
+    }
+
+    /**
+     * A getter that returns true/false whether the Remove Incorrect Answer joker is activated this round
+     * @return isActiveRemoveIncorrect, which shows whether the RIA joker is being used
+     */
+    public boolean getIsActiveRemoveIncorrect(){
+        return isActiveRemoveIncorrect;
+    }
+
+    /**
+     * Sets the isActiveRemoveIncorrect to either true or false
+     * @param active
+     */
+    public void setIsActiveRemoveIncorrect(boolean active){
+        isActiveRemoveIncorrect = active;
     }
 
     /**
@@ -452,6 +471,7 @@ public class MultiplayerGameCtrl {
     public void resetAllJokers(){
         mcQuestionCtrl.resetDoublePoints();
         estimationQuestionCtrl.resetDoublePoints();
+        mcQuestionCtrl.resetRemoveIncorrect();
         //TODO: Reset all the other jokers
     }
 

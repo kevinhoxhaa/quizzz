@@ -126,7 +126,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
                 String[] parts = e.getImage().getUrl().split("/");
                 String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
                 emojiPath = emojiPath.substring(
-                        "file:/".length(), emojiPath.length() - "classes/java/main/".length())
+                        0, emojiPath.length() - "classes/java/main/".length())
                         + "resources/main/client/images/" + parts[parts.length - 1];
 
                 e.setImage(new Image(emojiPath));
@@ -153,7 +153,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     public void displayEmoji(Emoji emoji) {
         String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
         emojiPath = emojiPath.substring(
-                "file:/".length(), emojiPath.length() - "classes/java/main/".length())
+                0, emojiPath.length() - "classes/java/main/".length())
                 + "resources/main/client/images/" + emoji.getImageName();
         emojiImage.setImage(new Image(emojiPath));
         emojiText.setText(emoji.getUsername());
@@ -181,6 +181,9 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
         jokers.add(doublePoints);
         jokers.add(removeIncorrect);
         jokers.add(reduceTime);
+        removeIncorrect.setDisable(true);
+        removeIncorrect.setBackground(new Background(
+                new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
 
         for(StackPane joker:jokers){
             if(gameCtrl.getUsedJokers().contains(joker.idProperty().getValue())){
@@ -364,7 +367,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
     public void resetJokerColors() {
 
         for (StackPane joker : jokers) {
-            if (!gameCtrl.getUsedJokers().contains(joker.idProperty().getValue())) {
+            if (!gameCtrl.getUsedJokers().contains(joker.idProperty().getValue()) && joker != removeIncorrect) {
                 joker.setBackground(new Background(
                         new BackgroundFill(Color.color(gameCtrl.RGB_VALUE,gameCtrl.RGB_VALUE,gameCtrl.RGB_VALUE),
                                 CornerRadii.EMPTY, Insets.EMPTY)));

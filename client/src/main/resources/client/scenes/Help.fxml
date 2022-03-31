@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 
-<ScrollPane prefHeight="384.0" prefWidth="512.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<ScrollPane prefHeight="384.0" prefWidth="512.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <content>
       <VBox fillWidth="false" prefHeight="364.0" prefWidth="492.0" spacing="5.0">
          <opaqueInsets>
@@ -16,7 +18,7 @@
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to Quizzzz! &#13;Raise your energy consumption awareness by playing a fast-paced quiz game. &#13;Enter your username and the server URL. &#13;Start a solo game and answer questions consecutively. &#13;Start a multiplayer game, join a waiting room and compete with your friends! &#13;Be quick to answer though, points are based on correctness and time. &#13;Pick one of the three jokers to boost your gameplay: &#13;- Remove one wrong answer &#13;- Double your points for that activity &#13;- Shorten the time for everyone else &#13;Show your emotions to other players by using our list of emojis. &#13;What are you waiting for? Fun is one click away!">
                      <font>
-                        <Font size="16.0" />
+                        <Font name="Monospaced Regular" size="16.0" />
                      </font></Text>
                </children>
                <padding>
