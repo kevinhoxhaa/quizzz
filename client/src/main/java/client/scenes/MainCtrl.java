@@ -60,6 +60,7 @@ public class MainCtrl {
     private static final long X2 = 4;
     private static final long X3 = 7;
     private static final long X4 = 10;
+    private static final long FACTOR = 300;
 
     private String serverUrl;
     private Timer waitingTimer;
@@ -226,11 +227,11 @@ public class MainCtrl {
         if(streak<X2){
 
             user.incrementScore(multiplyingFactor * (answeredQuestion.calculatePoints() +
-                    Math.round(Math.pow((double) answeredQuestion.calculatePoints(),((double)(streak+X1)/X2)))));
+                    Math.round(Math.pow(FACTOR,((double)(streak+X1)/X2)))));
         }
         else{
             user.incrementScore(multiplyingFactor * (answeredQuestion.calculatePoints() +
-                    Math.round(Math.pow((double) answeredQuestion.calculatePoints(),((double)(streak+X3)/X4)))));
+                    Math.round(Math.pow(FACTOR,((double)(streak+X3)/X4)))));
         }
     }
 
