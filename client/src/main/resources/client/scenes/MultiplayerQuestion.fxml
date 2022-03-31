@@ -260,7 +260,7 @@
                                                 <ImageView fx:id="emojiImage" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" />
                                                 <Text fx:id="emojiText" strokeType="OUTSIDE" strokeWidth="0.0" text="Emoji">
                                                     <font>
-                                                        <Font size="18.0" />
+                                                        <Font name="Monospaced Regular" size="18.0" />
                                                     </font>
                                                 </Text>
                                             </children>
