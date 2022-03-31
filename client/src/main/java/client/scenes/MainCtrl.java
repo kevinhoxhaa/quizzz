@@ -226,15 +226,16 @@ public class MainCtrl {
     public void addScore(User user, Question answeredQuestion){
         incrementStreak();
         int multiplyingFactor = (multiplayerCtrl!=null && multiplayerCtrl.getIsActiveDoublePoints()) ? 2 : 1;
+        int correctFactor = answeredQuestion.hasCorrectUserAnswer() ? 1 : 0;
 
         if(streak<X2){
 
             user.incrementScore(multiplyingFactor * (answeredQuestion.calculatePoints() +
-                    Math.round(Math.pow(FACTOR,((double)(streak+X1)/X2)))));
+                    correctFactor * Math.round(Math.pow(FACTOR,((double)(streak+X1)/X2)))));
         }
         else{
             user.incrementScore(multiplyingFactor * (answeredQuestion.calculatePoints() +
-                    Math.round(Math.pow(FACTOR,((double)(streak+X3)/X4)))));
+                    correctFactor * Math.round(Math.pow(FACTOR,((double)(streak+X3)/X4)))));
         }
     }
 
