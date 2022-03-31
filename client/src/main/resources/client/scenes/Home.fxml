@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="492.0" minWidth="748.0" prefHeight="492.0" prefWidth="748.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.HomeCtrl">
+<BorderPane maxHeight="694.0" maxWidth="1014.0" minHeight="694.0" minWidth="1014.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.HomeCtrl">
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
    </padding>
@@ -25,45 +31,52 @@
                          </Text>
                          <ImageView fx:id="bulbView" fitWidth="96.0" pickOnBounds="true" preserveRatio="true" rotate="24.0">
                              <image>
-                                 <Image url="/client/icons/bulb.png" />
+                                 <Image url="@../icons/bulb.png" />
                              </image>
                          </ImageView>
                      </HBox>
-                     <TextField fx:id="usernameField" prefWidth="256.0" promptText="Username" style="-fx-font-size: 1.4em; -fx-pref-width: 28em;" />
-                     <TextField fx:id="urlField" prefWidth="256.0" promptText="Server URL" style="-fx-font-size: 1.4em; -fx-pref-width: 28em;" />
-                     <VBox alignment="CENTER" prefHeight="200.0" prefWidth="128.0" spacing="8.0" style="-fx-pref-width: 14em;">
+                     <TextField fx:id="usernameField" prefWidth="256.0" promptText="Username" style="-fx-font-size: 1.5em; -fx-font-family: Monospaced; -fx-pref-width: 28em;">
+               <font>
+                  <Font name="Monospaced Regular" size="12.0" />
+               </font></TextField>
+                     <TextField fx:id="urlField" prefWidth="256.0" promptText="Server URL" style="-fx-font-size: 1.5em; -fx-font-family: Monospaced; -fx-pref-width: 28em;">
+               <font>
+                  <Font name="Monospaced Regular" size="12.0" />
+               </font></TextField>
+                     <VBox alignment="CENTER" minWidth="248.0" prefHeight="200.0" prefWidth="222.0" spacing="8.0" style="-fx-pref-width: 14em;">
                          <padding>
                              <Insets bottom="10.0" left="20.0" right="20.0" />
                          </padding>
                          <children>
-                             <Button onAction="#onSoloButtonClick" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Solo" textAlignment="CENTER">
+                             <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onSoloButtonClick" text="Solo" textAlignment="CENTER">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
                      <font>
-                        <Font size="18.0" />
+                        <Font name="Monospaced Bold" size="24.0" />
                      </font>
                         </Button>
-                             <Button onAction="#onMultiplayerButtonClick" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Multiplayer" textAlignment="CENTER">
+                             <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onMultiplayerButtonClick" text="Multiplayer" textAlignment="CENTER">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
                      <font>
-                        <Font size="18.0" />
+                        <Font name="Monospaced Bold" size="24.0" />
                      </font>
                         </Button>
                          </children>
                      </VBox>
-            <VBox alignment="BOTTOM_LEFT" minHeight="108.0" prefHeight="108.0" prefWidth="748.0">
+                     <Region VBox.vgrow="ALWAYS" />
+            <VBox alignment="BOTTOM_LEFT" minHeight="108.0" prefHeight="108.0" prefWidth="929.0">
                <padding>
                   <Insets top="16.0" />
                </padding>
                <children>
-                  <Button onAction="#onHelpButtonClick" mnemonicParsing="false" style="-fx-background-color: transparent;">
+                  <Button mnemonicParsing="false" onAction="#onHelpButtonClick" style="-fx-background-color: transparent;">
                       <graphic>
                           <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
                               <image>
-                                  <Image url="/client/icons/help.png" />
+                                  <Image url="@../icons/help.png" />
                               </image>
                           </ImageView>
                       </graphic>

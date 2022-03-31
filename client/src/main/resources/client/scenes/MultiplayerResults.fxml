@@ -8,240 +8,275 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<VBox fx:id="userSelf" minHeight="492.0" minWidth="748.0" prefHeight="492.0" prefWidth="748.0" spacing="20.0" HBox.hgrow="ALWAYS" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.MultiplayerResultsCtrl">
-    <children>
-        <HBox alignment="CENTER" layoutX="23.0" layoutY="34.0" prefHeight="19.0" prefWidth="725.0" spacing="4.0" VBox.vgrow="NEVER">
+<BorderPane maxHeight="694.0" maxWidth="1014.0" minHeight="694.0" minWidth="1014.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.MultiplayerResultsCtrl">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+    <center>
+        <VBox fx:id="userSelf" maxHeight="694.0" maxWidth="1014.0" minHeight="694.0" minWidth="1014.0" spacing="20.0" HBox.hgrow="ALWAYS">
             <children>
-                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Questions" HBox.hgrow="ALWAYS">
-                    <font>
-                        <Font size="14.0" />
-                    </font>
-                </Text>
-                <HBox fx:id="circles" alignment="CENTER" prefHeight="52.0" prefWidth="249.0" HBox.hgrow="ALWAYS">
+                <HBox alignment="CENTER" layoutX="23.0" layoutY="34.0" prefHeight="19.0" prefWidth="725.0" spacing="4.0" VBox.vgrow="NEVER">
                     <children>
-                        <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
-                            <HBox.margin>
-                                <Insets right="2.0" />
-                            </HBox.margin>
-                        </Circle>
-                        <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
-                            <HBox.margin>
-                                <Insets right="2.0" />
-                            </HBox.margin>
-                        </Circle>
-                        <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
-                            <HBox.margin>
-                                <Insets right="2.0" />
-                            </HBox.margin>
-                        </Circle>
-                        <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
-                            <HBox.margin>
-                                <Insets right="2.0" />
-                            </HBox.margin>
-                        </Circle>
-                        <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
-                            <HBox.margin>
-                                <Insets right="2.0" />
-                            </HBox.margin>
-                        </Circle>
-                        <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
-                            <HBox.margin>
-                                <Insets right="2.0" />
-                            </HBox.margin>
-                        </Circle>
-                        <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
-                            <HBox.margin>
-                                <Insets right="2.0" />
-                            </HBox.margin>
-                        </Circle>
-                        <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
-                            <HBox.margin>
-                                <Insets right="2.0" />
-                            </HBox.margin>
-                        </Circle>
-                        <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
-                            <HBox.margin>
-                                <Insets right="2.0" />
-                            </HBox.margin>
-                        </Circle>
-                        <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
-                            <HBox.margin>
-                                <Insets right="2.0" />
-                            </HBox.margin>
-                        </Circle>
-                        <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
-                            <HBox.margin>
-                                <Insets right="2.0" />
-                            </HBox.margin>
-                        </Circle>
-                        <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
-                            <HBox.margin>
-                                <Insets right="2.0" />
-                            </HBox.margin>
-                        </Circle>
-                        <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
-                            <HBox.margin>
-                                <Insets right="2.0" />
-                            </HBox.margin>
-                        </Circle>
-                        <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
-                            <HBox.margin>
-                                <Insets right="2.0" />
-                            </HBox.margin>
-                        </Circle>
-                        <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
-                            <HBox.margin>
-                                <Insets right="2.0" />
-                            </HBox.margin>
-                        </Circle>
-                        <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
-                            <HBox.margin>
-                                <Insets right="2.0" />
-                            </HBox.margin>
-                        </Circle>
-                        <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
-                            <HBox.margin>
-                                <Insets right="2.0" />
-                            </HBox.margin>
-                        </Circle>
-                        <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
-                            <HBox.margin>
-                                <Insets right="2.0" />
-                            </HBox.margin>
-                        </Circle>
-                        <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
-                            <HBox.margin>
-                                <Insets right="2.0" />
-                            </HBox.margin>
-                        </Circle>
-                        <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
-                            <HBox.margin>
-                                <Insets right="2.0" />
-                            </HBox.margin>
-                        </Circle>
-                    </children>
-                    <opaqueInsets>
-                        <Insets />
-                    </opaqueInsets>
-                </HBox>
-                <TextFlow prefHeight="0.0" prefWidth="42.0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
-                    <children>
-                        <Text fx:id="questionNum" strokeType="OUTSIDE" strokeWidth="0.0" text="20">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Questions" HBox.hgrow="ALWAYS">
                             <font>
-                                <Font size="14.0" />
+                                <Font name="Monospaced Regular" size="14.0" />
                             </font>
                         </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="/20">
-                            <font>
-                                <Font size="14.0" />
-                            </font>
-                        </Text>
-                    </children>
-                </TextFlow>
-            </children>
-        </HBox>
-        <VBox prefHeight="637.0" prefWidth="708.0">
-            <children>
-                <HBox prefHeight="335.0" prefWidth="708.0">
-                    <children>
-                        <VBox prefHeight="305.0" prefWidth="373.0">
+                        <HBox fx:id="circles" alignment="CENTER" prefHeight="52.0" prefWidth="249.0" HBox.hgrow="ALWAYS">
                             <children>
-                                <TableView fx:id="scoreTable" prefHeight="277.0" prefWidth="167.0">
-                                    <columns>
-                                        <TableColumn prefWidth="240.66664123535156" text="Users" />
-                                        <TableColumn prefWidth="132.00006866455078" text="Score" />
-                                    </columns>
-                                </TableView>
-                                <HBox prefHeight="59.0" prefWidth="373.0">
+                                <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
+                                    <HBox.margin>
+                                        <Insets right="2.0" />
+                                    </HBox.margin>
+                                </Circle>
+                                <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
+                                    <HBox.margin>
+                                        <Insets right="2.0" />
+                                    </HBox.margin>
+                                </Circle>
+                                <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
+                                    <HBox.margin>
+                                        <Insets right="2.0" />
+                                    </HBox.margin>
+                                </Circle>
+                                <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
+                                    <HBox.margin>
+                                        <Insets right="2.0" />
+                                    </HBox.margin>
+                                </Circle>
+                                <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
+                                    <HBox.margin>
+                                        <Insets right="2.0" />
+                                    </HBox.margin>
+                                </Circle>
+                                <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
+                                    <HBox.margin>
+                                        <Insets right="2.0" />
+                                    </HBox.margin>
+                                </Circle>
+                                <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
+                                    <HBox.margin>
+                                        <Insets right="2.0" />
+                                    </HBox.margin>
+                                </Circle>
+                                <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
+                                    <HBox.margin>
+                                        <Insets right="2.0" />
+                                    </HBox.margin>
+                                </Circle>
+                                <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
+                                    <HBox.margin>
+                                        <Insets right="2.0" />
+                                    </HBox.margin>
+                                </Circle>
+                                <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
+                                    <HBox.margin>
+                                        <Insets right="2.0" />
+                                    </HBox.margin>
+                                </Circle>
+                                <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
+                                    <HBox.margin>
+                                        <Insets right="2.0" />
+                                    </HBox.margin>
+                                </Circle>
+                                <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
+                                    <HBox.margin>
+                                        <Insets right="2.0" />
+                                    </HBox.margin>
+                                </Circle>
+                                <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
+                                    <HBox.margin>
+                                        <Insets right="2.0" />
+                                    </HBox.margin>
+                                </Circle>
+                                <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
+                                    <HBox.margin>
+                                        <Insets right="2.0" />
+                                    </HBox.margin>
+                                </Circle>
+                                <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
+                                    <HBox.margin>
+                                        <Insets right="2.0" />
+                                    </HBox.margin>
+                                </Circle>
+                                <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
+                                    <HBox.margin>
+                                        <Insets right="2.0" />
+                                    </HBox.margin>
+                                </Circle>
+                                <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
+                                    <HBox.margin>
+                                        <Insets right="2.0" />
+                                    </HBox.margin>
+                                </Circle>
+                                <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
+                                    <HBox.margin>
+                                        <Insets right="2.0" />
+                                    </HBox.margin>
+                                </Circle>
+                                <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
+                                    <HBox.margin>
+                                        <Insets right="2.0" />
+                                    </HBox.margin>
+                                </Circle>
+                                <Circle fill="#c6c6c6" radius="5.0" stroke="BLACK" strokeType="INSIDE">
+                                    <HBox.margin>
+                                        <Insets right="2.0" />
+                                    </HBox.margin>
+                                </Circle>
+                            </children>
+                            <opaqueInsets>
+                                <Insets />
+                            </opaqueInsets>
+                        </HBox>
+                        <TextFlow prefHeight="0.0" prefWidth="42.0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Text fx:id="questionNum" strokeType="OUTSIDE" strokeWidth="0.0" text="20">
+                                    <font>
+                                        <Font name="Monospaced Regular" size="14.0" />
+                                    </font>
+                                </Text>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="/20">
+                                    <font>
+                                        <Font name="Monospaced Regular" size="14.0" />
+                                    </font>
+                                </Text>
+                            </children>
+                        </TextFlow>
+                    </children>
+                </HBox>
+                <VBox prefHeight="637.0" prefWidth="708.0">
+                    <children>
+                        <HBox prefHeight="335.0" prefWidth="708.0">
+                            <children>
+                                <VBox prefHeight="305.0" prefWidth="373.0">
                                     <children>
-                                        <Text fx:id="scoreTableUserName" strokeType="OUTSIDE" strokeWidth="0.0" text="You">
-                                            <font>
-                                                <Font size="20.0" />
-                                            </font>
-                                            <HBox.margin>
-                                                <Insets left="110.0" top="10.0" />
-                                            </HBox.margin>
-                                        </Text>
-                                        <Text fx:id="scoreTableUserScore" strokeType="OUTSIDE" strokeWidth="0.0" text="Score">
-                                            <font>
-                                                <Font size="20.0" />
-                                            </font>
-                                            <HBox.margin>
-                                                <Insets left="120.0" top="10.0" />
-                                            </HBox.margin>
-                                        </Text>
+                                        <TableView fx:id="scoreTable" prefHeight="277.0" prefWidth="167.0">
+                                            <columns>
+                                                <TableColumn prefWidth="240.66664123535156" text="Users" />
+                                                <TableColumn prefWidth="132.00006866455078" text="Score" />
+                                            </columns>
+                                        </TableView>
+                                        <HBox prefHeight="59.0" prefWidth="373.0">
+                                            <children>
+                                                <Text fx:id="scoreTableUserName" strokeType="OUTSIDE" strokeWidth="0.0" text="You">
+                                                    <font>
+                                                        <Font name="Monospaced Regular" size="20.0" />
+                                                    </font>
+                                                    <HBox.margin>
+                                                        <Insets left="110.0" top="10.0" />
+                                                    </HBox.margin>
+                                                </Text>
+                                                <Text fx:id="scoreTableUserScore" strokeType="OUTSIDE" strokeWidth="0.0" text="Score">
+                                                    <font>
+                                                        <Font name="Monospaced Regular" size="20.0" />
+                                                    </font>
+                                                    <HBox.margin>
+                                                        <Insets left="120.0" top="10.0" />
+                                                    </HBox.margin>
+                                                </Text>
+                                            </children>
+                                        </HBox>
                                     </children>
-                                </HBox>
-                            </children>
-                        </VBox>
-                        <VBox prefHeight="241.0" prefWidth="229.0">
-                            <children>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Leaderboard">
-                                    <font>
-                                        <Font size="40.0" />
-                                    </font>
-                                    <VBox.margin>
-                                        <Insets left="50.0" />
-                                    </VBox.margin></Text>
-                                <Text fx:id="ranking1stPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="1st player" textAlignment="CENTER" wrappingWidth="296.56768226623535">
-                                    <VBox.margin>
-                                        <Insets left="15.0" />
-                                    </VBox.margin>
-                                </Text>
-                                <Text fx:id="ranking2ndPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="2nd player" wrappingWidth="201.26686716079712">
-                                    <VBox.margin>
-                                        <Insets left="75.0" />
-                                    </VBox.margin>
-                                </Text>
-                                <Text fx:id="ranking3rdPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="3rd player" wrappingWidth="71.47009086608887">
-                                    <VBox.margin>
-                                        <Insets left="200.0" />
-                                    </VBox.margin>
-                                </Text>
-                                <ImageView fitHeight="201.0" fitWidth="260.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../images/leaderboard.png" />
-                                    </image>
-                                    <VBox.margin>
-                                        <Insets left="45.0" />
-                                    </VBox.margin>
-                                </ImageView>
-                            </children>
-                        </VBox>
-                    </children>
-                </HBox>
-                <HBox prefHeight="105.0" prefWidth="708.0">
-                    <children>
-                        <Pane prefHeight="92.0" prefWidth="398.0">
-                            <children>
-                                <Button id="restart" fx:id="rematchButton" layoutX="14.0" layoutY="12.0" mnemonicParsing="false" onAction="#onRematchButton" prefHeight="67.0" prefWidth="211.0" text="Rematch">
-                                    <font>
-                                        <Font size="20.0" />
-                                    </font>
-                                    <cursor>
-                                        <Cursor fx:constant="HAND" />
-                                    </cursor>
-                                </Button>
-                            </children>
-                        </Pane>
-                        <VBox prefHeight="92.0" prefWidth="213.0">
-                            <children>
-                                <Pane prefHeight="22.0" prefWidth="112.0">
+                                </VBox>
+                                <VBox alignment="TOP_CENTER" prefHeight="241.0" prefWidth="229.0">
                                     <children>
-                                        <Text layoutX="13.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Time remaining:" />
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Leaderboard">
+                                            <font>
+                                                <Font name="Monospaced Bold" size="40.0" />
+                                            </font>
+                                            <VBox.margin>
+                                                <Insets />
+                                            </VBox.margin>
+                                        </Text>
+                                        <Text fx:id="ranking1stPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="1st player" textAlignment="CENTER" wrappingWidth="296.56768226623535">
+                                            <VBox.margin>
+                                                <Insets left="15.0" />
+                                            </VBox.margin>
+                                 <font>
+                                    <Font name="Monospaced Regular" size="14.0" />
+                                 </font>
+                                        </Text>
+                                        <Text fx:id="ranking2ndPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="2nd player" wrappingWidth="226.866903424263">
+                                            <VBox.margin>
+                                                <Insets left="75.0" />
+                                            </VBox.margin>
+                                 <font>
+                                    <Font name="Monospaced Regular" size="14.0" />
+                                 </font>
+                                        </Text>
+                                        <Text fx:id="ranking3rdPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="3rd player" wrappingWidth="101.87011528015137">
+                                            <VBox.margin>
+                                                <Insets left="200.0" />
+                                            </VBox.margin>
+                                 <font>
+                                    <Font name="Monospaced Regular" size="14.0" />
+                                 </font>
+                                        </Text>
+                                        <ImageView fitHeight="201.0" fitWidth="260.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../images/leaderboard.png" />
+                                            </image>
+                                            <VBox.margin>
+                                                <Insets left="45.0" />
+                                            </VBox.margin>
+                                        </ImageView>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+                        <Region VBox.vgrow="ALWAYS" />
+                        <HBox prefHeight="105.0" prefWidth="708.0">
+                            <children>
+                                <Pane prefHeight="92.0" prefWidth="398.0">
+                                    <children>
+                                        <Button id="restart" fx:id="rematchButton" layoutX="14.0" layoutY="12.0" mnemonicParsing="false" onAction="#onRematchButton" prefHeight="67.0" prefWidth="211.0" text="Rematch">
+                                            <font>
+                                                <Font name="Monospaced Bold" size="20.0" />
+                                            </font>
+                                            <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                            </cursor>
+                                        </Button>
                                     </children>
                                 </Pane>
-                                <Pane prefHeight="73.0" prefWidth="112.0">
+                                <VBox prefHeight="92.0" prefWidth="213.0">
                                     <children>
-                                        <ProgressIndicator fx:id="countdownCircle" layoutX="21.0" layoutY="1.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="70.0" progress="0.0" />
+                                        <Pane prefHeight="22.0" prefWidth="112.0">
+                                            <children>
+                                                <Text layoutX="13.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Time remaining:">
+                                       <font>
+                                          <Font name="Monospaced Regular" size="14.0" />
+                                       </font></Text>
+                                            </children>
+                                        </Pane>
+                                        <Pane prefHeight="73.0" prefWidth="112.0">
+                                            <children>
+                                                <ProgressIndicator fx:id="countdownCircle" layoutX="21.0" layoutY="1.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="70.0" progress="0.0" />
+                                            </children>
+                                        </Pane>
+                                    </children>
+                                </VBox>
+                                <Pane prefHeight="92.0" prefWidth="402.0">
+                                    <children>
+                                        <Button id="quit" fx:id="quitButton" layoutX="76.0" layoutY="13.0" mnemonicParsing="false" onAction="#onQuitButton" prefHeight="67.0" prefWidth="211.0" text="Quit">
+                                            <font>
+                                                <Font name="Monospaced Bold" size="20.0" />
+                                            </font>
+                                            <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                            </cursor>
+                                        </Button>
                                     </children>
                                 </Pane>
                             </children>
@@ -259,11 +294,11 @@
                             </children>
                         </Pane>
                     </children>
-                </HBox>
+                </VBox>
             </children>
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
         </VBox>
-    </children>
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-    </padding>
-</VBox>
+    </center>
+</BorderPane>
