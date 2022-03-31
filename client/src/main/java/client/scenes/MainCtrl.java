@@ -58,8 +58,8 @@ public class MainCtrl {
     //These are the variables used in the streak calculation formula
     private static final long X1 = 1;
     private static final long X2 = 4;
-    private static final long X3 = 7;
-    private static final long X4 = 10;
+    private static final long X3 = 17;
+    private static final long X4 = 20;
     private static final long FACTOR = 300;
 
     private String serverUrl;
