@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 
 
 public class SoloQuestionCtrl extends AbstractMultichoiceQuestionCtrl {
+
     private SoloGame game;
 
     /**

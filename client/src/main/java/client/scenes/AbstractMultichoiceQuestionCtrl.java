@@ -10,12 +10,12 @@ import commons.models.ConsumptionQuestion;
 import commons.models.Question;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
@@ -45,11 +45,11 @@ public abstract class AbstractMultichoiceQuestionCtrl extends AbstractQuestionCt
     @FXML
     protected StackPane answerBot;
     @FXML
-    protected Text answerTopText;
+    protected Label answerTopText;
     @FXML
-    protected Text answerMidText;
+    protected Label answerMidText;
     @FXML
-    protected Text answerBotText;
+    protected Label answerBotText;
 
     /**
      * Creates a controller for the question screen, with the given server and main controller.

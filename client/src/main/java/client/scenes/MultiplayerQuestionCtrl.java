@@ -90,7 +90,7 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
         disabledAnswer = null;
         gameCtrl.enableEmojis(emojiPane);
         doublePointsImage.setVisible(false);
-
+        reduceTimeImage.setVisible(false);
     }
 
     /**
@@ -101,7 +101,7 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
      * @param answer       The answer corresponding to the answer button.
      */
     protected void onAnswerClicked(StackPane answerButton, Answer answer) {
-        gameCtrl.setAnsweredQuestion (true);
+        gameCtrl.setAnsweredQuestion(true);
         super.onAnswerClicked(answerButton, answer);
     }
 
@@ -238,11 +238,30 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
     }
 
     /**
+     * This method is called when the reduceTime joker is clicked
+     * It halves the time for everyone in the lobby
+     */
+
+    @FXML
+    public void useReduceTime() {
+        server.send ( "/app/halfTime/" + gameCtrl.getGameIndex(), mainCtrl.getUser() );
+        gameCtrl.useJoker( reduceTime, reduceTimeImage );
+    }
+
+    /**
      * This method resets the double point jokers so that it can be used again when another game starts
      */
     public void resetDoublePoints(){
         doublePoints.setOnMouseClicked(event -> useDoublePoints());
         gameCtrl.enableJoker(doublePoints);
+    }
+
+    /**
+     * This method resets the double point jokers so that it can be used again when another game starts
+     */
+    public void resetReduceTime(){
+        reduceTime.setOnMouseClicked(event -> useReduceTime());
+        gameCtrl.enableJoker(reduceTime);
     }
 
     /**

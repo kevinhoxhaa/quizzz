@@ -246,4 +246,24 @@ public class MultiplayerEstimationQuestionCtrl extends AbstractEstimationQuestio
         emojiImage.setImage(null);
         emojiText.setText("");
     }
+
+    /**
+     * This method is called when the reduceTime joker is clicked
+     * It halves the time for everyone in the lobby
+     */
+
+    @FXML
+    public void useReduceTime() {
+        server.send ( "/app/halfTime/" + gameCtrl.getGameIndex(), mainCtrl.getUser() );
+        gameCtrl.useJoker( reduceTime, reduceTimeImage );
+    }
+
+    /**
+     * This method resets the double point jokers so that it can be used again when another game starts
+     */
+    public void resetReduceTime(){
+        reduceTime.setOnMouseClicked(event -> useReduceTime());
+        gameCtrl.enableJoker(reduceTime);
+    }
+
 }

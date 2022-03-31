@@ -117,7 +117,11 @@
                                 <ImageView fx:id="emojiImage" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" />
                                 <Text fx:id="emojiText" strokeType="OUTSIDE" strokeWidth="0.0" text="Emoji">
                                     <font>
+<<<<<<< HEAD
                                         <Font name="Monospaced Regular" size="18.0" />
+=======
+                                        <Font size="18.0" />
+>>>>>>> dev
                                     </font>
                                 </Text>
                             </children>
@@ -133,14 +137,22 @@
                             <children>
                                 <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                     <children>
+<<<<<<< HEAD
                                         <ImageView fx:id="doublePointsImage" fitHeight="42.0" fitWidth="65.0" layoutX="5.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+=======
+                                        <ImageView fitHeight="42.0" fitWidth="65.0" layoutX="5.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+>>>>>>> dev
                                             <image>
                                                 <Image url="@../images/x2points.png" />
                                             </image>
                                         </ImageView>
                                         <Text layoutX="120.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Double points" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="89.9482421875">
                                             <font>
+<<<<<<< HEAD
                                                 <Font name="Monospaced Regular" size="20.0" />
+=======
+                                                <Font size="18.0" />
+>>>>>>> dev
                                             </font>
                                         </Text>
                                     </children>
@@ -162,10 +174,17 @@
                                     <children>
                                         <Text layoutX="83.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Disable incorrect answer" AnchorPane.leftAnchor="83.0" AnchorPane.rightAnchor="56.34130859375">
                                             <font>
+<<<<<<< HEAD
                                                 <Font name="Monospaced Regular" size="20.0" />
                                             </font>
                                         </Text>
                                         <ImageView fx:id="removeIncorrectImage" fitHeight="48.0" fitWidth="48.0" layoutX="6.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+=======
+                                                <Font size="17.0" />
+                                            </font>
+                                        </Text>
+                                        <ImageView fitHeight="48.0" fitWidth="48.0" layoutX="6.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+>>>>>>> dev
                                             <image>
                                                 <Image url="@../images/removechoice.png" />
                                             </image>
@@ -186,10 +205,17 @@
                                     <children>
                                         <Text layoutX="67.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Reduce time for other players" AnchorPane.leftAnchor="67.0" AnchorPane.rightAnchor="33.19482421875">
                                             <font>
+<<<<<<< HEAD
                                                 <Font name="Monospaced Regular" size="20.0" />
                                             </font>
                                         </Text>
                                         <ImageView fx:id="reduceTimeImage" fitHeight="58.0" fitWidth="52.0" layoutX="4.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true">
+=======
+                                                <Font size="17.0" />
+                                            </font>
+                                        </Text>
+                                        <ImageView fitHeight="58.0" fitWidth="52.0" layoutX="4.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true">
+>>>>>>> dev
                                             <image>
                                                 <Image url="@../images/half-time.png" />
                                             </image>
@@ -203,7 +229,10 @@
                         </StackPane>
                     </children>
                 </VBox>
+<<<<<<< HEAD
                 <Region prefHeight="92.0" prefWidth="200.0" />
+=======
+>>>>>>> dev
                 <GridPane fx:id="emojiPane" alignment="CENTER" prefHeight="110.0" prefWidth="200.0">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="136.60003662109375" minWidth="10.0" prefWidth="118.19994506835937" />
@@ -250,12 +279,57 @@
             </children>
         </VBox>
     </right>
+<<<<<<< HEAD
+=======
+    <bottom>
+        <AnchorPane prefHeight="79.0" prefWidth="708.0" BorderPane.alignment="CENTER">
+            <children>
+                <Text fx:id="currentScore" layoutX="14.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Score: 0" wrappingWidth="120.13671875">
+                    <font>
+                        <Font size="32.0" />
+                    </font>
+                </Text>
+                <Button fx:id="quitButton" layoutX="869.0" layoutY="18.0" mnemonicParsing="false" onAction="#onQuit" prefHeight="40.0" prefWidth="90.0" text="Quit">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+                <Pane layoutX="240.0" layoutY="14.0" prefHeight="52.0" prefWidth="228.0">
+                    <children>
+                        <ImageView fx:id="doublePointsImage" fitHeight="52.0" fitWidth="62.0" layoutX="-6.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                            <image>
+                                <Image url="@../images/x2points.png" />
+                            </image>
+                        </ImageView>
+                        <ImageView fx:id="removeIncorrectImage" fitHeight="52.0" fitWidth="62.0" layoutX="78.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                            <image>
+                                <Image url="@../images/removechoice.png" />
+                            </image>
+                        </ImageView>
+                        <ImageView fx:id="reduceTimeImage" fitHeight="70.0" fitWidth="70.0" layoutX="152.0" layoutY="-11.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                            <image>
+                                <Image url="@../images/half-time.png" />
+                            </image>
+                        </ImageView>
+                    </children>
+                </Pane>
+            </children>
+        </AnchorPane>
+    </bottom>
+>>>>>>> dev
     <top>
         <HBox alignment="CENTER" prefHeight="32.0" prefWidth="512.0" spacing="4.0" BorderPane.alignment="CENTER">
             <children>
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Questions" HBox.hgrow="ALWAYS">
                     <font>
+<<<<<<< HEAD
                         <Font name="Monospaced Regular" size="14.0" />
+=======
+                        <Font size="14.0" />
+>>>>>>> dev
                     </font>
                 </Text>
                 <HBox fx:id="circles" alignment="CENTER" prefHeight="52.0" prefWidth="249.0" HBox.hgrow="ALWAYS">
@@ -369,12 +443,20 @@
                     <children>
                         <Text fx:id="questionNum" strokeType="OUTSIDE" strokeWidth="0.0" text="1">
                             <font>
+<<<<<<< HEAD
                                 <Font name="Monospaced Regular" size="14.0" />
+=======
+                                <Font size="14.0" />
+>>>>>>> dev
                             </font>
                         </Text>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="/20">
                             <font>
+<<<<<<< HEAD
                                 <Font name="Monospaced Regular" size="14.0" />
+=======
+                                <Font size="14.0" />
+>>>>>>> dev
                             </font>
                         </Text>
                     </children>
@@ -382,6 +464,7 @@
             </children>
         </HBox>
     </top>
+<<<<<<< HEAD
    <bottom>
       <AnchorPane maxHeight="156.0" minHeight="0.0" prefHeight="101.0" prefWidth="974.0" BorderPane.alignment="CENTER">
          <children>
@@ -410,4 +493,6 @@
          </children>
       </AnchorPane>
    </bottom>
+=======
+>>>>>>> dev
 </BorderPane>
