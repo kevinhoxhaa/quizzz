@@ -145,7 +145,7 @@ public class ConsumptionQuestion extends Question {
             if(coefficient % 5 == 0){
                 coefficient /= 5;
                 correctAnswer *= 5;
-                generateAlternatives(correctAnswer, coefficient);
+                alternatives = generateAlternatives(correctAnswer, coefficient);
             }
         }
 
