@@ -164,7 +164,6 @@ public class MultiplayerGameCtrl {
     public void postAnswer(Question answeredQuestion) {
         if(getIsActiveDoublePoints()){
             mainCtrl.addScore(user,answeredQuestion);
-            setIsActiveDoublePoints(false);
         }
         else{
             mainCtrl.addScore(user,answeredQuestion);
@@ -207,11 +206,12 @@ public class MultiplayerGameCtrl {
      */
     public List<MultiplayerUser> fetchCorrectUsers(Question answeredQuestion) throws WebApplicationException {
         if(isActiveDoublePoints){
-            return server.answerQuestion(serverUrl, gameIndex,
+            setIsActiveDoublePoints(false);
+            return server.answerDoublePointsQuestion(serverUrl, gameIndex,
                     mainCtrl.getUser().id, answerCount, answeredQuestion);
         }
         else{
-            return server.answerDoublePointsQuestion(serverUrl, gameIndex,
+            return server.answerQuestion(serverUrl, gameIndex,
                     mainCtrl.getUser().id, answerCount, answeredQuestion);
         }
     }
