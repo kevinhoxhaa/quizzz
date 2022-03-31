@@ -2,14 +2,11 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.entities.MultiplayerUser;
 import commons.models.Answer;
 import commons.models.Emoji;
 import commons.models.EstimationQuestion;
-import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.control.Alert;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -111,40 +108,7 @@ public class MultiplayerEstimationQuestionCtrl extends AbstractEstimationQuestio
      */
     @Override
     public void redirect() {
-        MultiplayerUser user = gameCtrl.getUser();
-        if (!gameCtrl.getAnsweredQuestion()) {
-            user.unansweredQuestions++;
-            if (user.unansweredQuestions == KICK_AT_X_QUESTIONS) {
-                try {
-                    server.removeMultiplayerUser(server.getURL(), user);
-                } catch(WebApplicationException e) {
-                    System.out.println("User to remove not found!");
-                }
-
-                mainCtrl.killThread();
-
-                if(server.getSession() != null && server.getSession().isConnected()) {
-                    gameCtrl.unregisterForEmojis();
-                    server.getSession().disconnect();
-                }
-                gameCtrl.hideEmojis();
-                mainCtrl.showHome();
-                mainCtrl.bindUser(null);
-
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle ("Kicked :(");
-                alert.setHeaderText(null);
-                alert.setGraphic(null);
-                alert.setContentText("You've been kicked for not answering 3 question in a row!");
-                alert.show();
-
-                return;
-            }
-        } else {
-            user.unansweredQuestions = 0;
-        }
-
-        gameCtrl.setAnsweredQuestion(false);
+        gameCtrl.redirectFromQuestion();
 
         try {
             if (currentQuestion.getUserAnswer().getLongAnswer().equals(-1L)) {

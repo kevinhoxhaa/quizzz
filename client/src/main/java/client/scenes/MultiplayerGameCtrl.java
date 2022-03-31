@@ -11,6 +11,7 @@ import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -29,13 +30,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MultiplayerGameCtrl {
-    private static final int POLLING_DELAY = 0;
-    private static final int POLLING_INTERVAL = 500;
-    private static final double OPACITY = 0.5;
-    private static final double STANDARD_SIZE = 1.0;
-    public static final double RGB_VALUE = (double) 244/255;
 
     private List<Color> colors;
+
     private boolean answeredQuestion = false;
     private StompSession.Subscription emojiSubscription;
 
@@ -69,6 +66,13 @@ public class MultiplayerGameCtrl {
     private boolean isActiveRemoveIncorrect;
 
     private List<String> usedJokers;
+
+    private static final int POLLING_DELAY = 0;
+    private static final int POLLING_INTERVAL = 500;
+    private static final double OPACITY = 0.5;
+    private static final double STANDARD_SIZE = 1.0;
+    public static final double RGB_VALUE = (double) 244/255;
+    protected static final int KICK_AT_X_QUESTIONS = 3;
 
     // TODO: add results and resultsCtrl
 
@@ -545,5 +549,42 @@ public class MultiplayerGameCtrl {
                 + "resources/main/client/images/" + emoji.getImageName();
         emojiImage.setImage(new Image(emojiPath));
         emojiText.setText(emoji.getUsername());
+    }
+
+    public void redirectFromQuestion(){
+        MultiplayerUser user = getUser();
+        if (!getAnsweredQuestion()) {
+            user.unansweredQuestions++;
+            if (user.unansweredQuestions == KICK_AT_X_QUESTIONS) {
+                try {
+                    server.removeMultiplayerUser(server.getURL(), user);
+                } catch(WebApplicationException e) {
+                    System.out.println("User to remove not found!");
+                }
+
+                mainCtrl.killThread();
+
+                if(server.getSession() != null && server.getSession().isConnected()) {
+                    unregisterForEmojis();
+                    server.getSession().disconnect();
+                }
+                hideEmojis();
+                mainCtrl.showHome();
+                mainCtrl.bindUser(null);
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle ("Kicked :(");
+                alert.setHeaderText(null);
+                alert.setGraphic(null);
+                alert.setContentText("You've been kicked for not answering 3 question in a row!");
+                alert.show();
+
+                return;
+            }
+        } else {
+            user.unansweredQuestions = 0;
+        }
+
+        setAnsweredQuestion(false);
     }
 }

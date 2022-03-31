@@ -27,8 +27,6 @@ public abstract class AbstractQuestionCtrl extends QuestionNumController {
     @FXML
     protected ImageView questionImg;
 
-    protected static final int KICK_AT_X_QUESTIONS = 3;
-
     /**
      * A constructor for question controllers
      * @param mainCtrl
