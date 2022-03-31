@@ -8,7 +8,7 @@ import javafx.scene.text.Text;
 
 import java.util.List;
 
-public abstract class QuestionNumController extends SceneController{
+public abstract class QuestionNumController{
     protected final MainCtrl mainCtrl;
 
     protected QuestionNumController(MainCtrl mainCtrl){
@@ -22,6 +22,7 @@ public abstract class QuestionNumController extends SceneController{
 
     protected static final double STANDARD_CIRCLE_BORDER_SIZE = 1.0;
     protected static final double THICK_CIRCLE_BORDER_SIZE = 1.7;
+    protected static final double MILLISECONDS_PER_SECONDS = 1000.0;
 
     /**
      * Updates the color of the past questions' circles on the circle bar
@@ -75,4 +76,8 @@ public abstract class QuestionNumController extends SceneController{
             circle.setStrokeWidth(STANDARD_CIRCLE_BORDER_SIZE);
         }
     }
+
+    public void redirect(){}
+
+    public void onQuit(){}
 }

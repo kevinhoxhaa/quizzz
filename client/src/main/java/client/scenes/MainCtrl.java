@@ -393,7 +393,7 @@ public class MainCtrl {
      * @param sceneController the scene controller instance that will redirect to the next scene,
      *                        once the timer is up
      */
-    public void startTimer(ProgressIndicator countdownCircle, SceneController sceneController) {
+    public void startTimer(ProgressIndicator countdownCircle, QuestionNumController sceneController) {
         countdownCircle.applyCss();
         Text text = (Text) countdownCircle.lookup(".text.percentage");
         if (timerThread != null && timerThread.isAlive()) {
