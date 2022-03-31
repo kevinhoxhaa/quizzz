@@ -322,7 +322,7 @@ public class EstimationQuestionCtrl implements SceneController, QuestionNumContr
 
     @FXML
     public void useReduceTime() {
-        server.send ( "/app/halfTime/" + mainCtrl.getGameIndex(), mainCtrl.getUser() );
+        server.send ( "/app/halfTime/" + gameCtrl.getGameIndex(), mainCtrl.getUser() );
         gameCtrl.useJoker( reduceTime, reduceTimeImage );
     }
 
