@@ -99,10 +99,7 @@ public abstract class AbstractMultichoiceQuestionCtrl extends AbstractQuestionCt
         answerButtonPairs.add(new Pair(answerMid, answerMidAnswer));
         answerButtonPairs.add(new Pair(answerBot, answerBotAnswer));
 
-        for (StackPane answerBtnLoop : answerButtons) {
-            answerBtnLoop.setStyle("-fx-border-width: 1; -fx-border-color: black");
-            answerBtnLoop.getChildren().get(0).setStyle("-fx-font-weight: normal");
-        }
+        resetAnswerButtonHighlights();
         resetAnswerColors();
     }
 
@@ -179,10 +176,7 @@ public abstract class AbstractMultichoiceQuestionCtrl extends AbstractQuestionCt
             answerButton.setBackground(new Background(
                     new BackgroundFill(Color.DARKCYAN, CornerRadii.EMPTY, Insets.EMPTY)));
 
-            for (StackPane answerBtnLoop : answerButtons) {
-                answerBtnLoop.setStyle("-fx-border-width: 1; -fx-border-color: black");
-                answerBtnLoop.getChildren().get(0).setStyle("-fx-font-weight: normal");
-            }
+            resetAnswerButtonHighlights();
             answerButton.getChildren().get(0).setStyle("-fx-font-weight: bold");
             answerButton.setStyle("-fx-border-width: 2; -fx-border-color: black");
         }
@@ -288,6 +282,17 @@ public abstract class AbstractMultichoiceQuestionCtrl extends AbstractQuestionCt
         } else {
             answerBtn.setBackground(new Background(
                     new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+            answerBtn.setStyle("-fx-border-width: 1; -fx-border-color: black");
+            answerBtn.getChildren().get(0).setStyle("-fx-font-weight: normal");
+        }
+    }
+
+    /**
+     * Resets all answer buttons such that they have "regular" border thickness
+     * and the text inside is also regular (instead of being bold).
+     */
+    private void resetAnswerButtonHighlights() {
+        for (StackPane answerBtn : answerButtons) {
             answerBtn.setStyle("-fx-border-width: 1; -fx-border-color: black");
             answerBtn.getChildren().get(0).setStyle("-fx-font-weight: normal");
         }
