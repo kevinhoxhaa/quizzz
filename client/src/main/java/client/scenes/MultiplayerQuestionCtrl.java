@@ -16,6 +16,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -73,13 +74,13 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     private StackPane answerBot;
 
     @FXML
-    private Text answerTopText;
+    private Label answerTopText;
 
     @FXML
-    private Text answerMidText;
+    private Label answerMidText;
 
     @FXML
-    private Text answerBotText;
+    private Label answerBotText;
 
     @FXML
     private GridPane emojiPane;
