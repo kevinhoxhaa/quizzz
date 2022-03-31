@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 
-<BorderPane maxHeight="694.0" maxWidth="1014.0" minHeight="694.0" minWidth="1014.0" prefWidth="748.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EstimationQuestionCtrl">
+<BorderPane maxHeight="694.0" maxWidth="1014.0" minHeight="694.0" minWidth="1014.0" prefWidth="748.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EstimationQuestionCtrl">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -19,20 +34,20 @@
             </padding>
 
             <children>
-                <VBox prefHeight="283.0" prefWidth="372.0" spacing="48.0">
+                <VBox prefHeight="283.0" prefWidth="620.0" spacing="48.0">
                     <children>
-                        <HBox alignment="CENTER_LEFT" prefHeight="150.0" prefWidth="373.0" spacing="32.0">
+                        <HBox prefHeight="150.0" prefWidth="373.0" spacing="32.0">
                             <children>
-                                <ImageView fx:id="questionImg" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                                <ImageView fx:id="questionImg" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
                                         <Image url="@../images/heart.png" />
                                     </image>
                                 </ImageView>
-                                <TextFlow maxHeight="92.0" maxWidth="361.0" minHeight="64.0" minWidth="192.0" prefHeight="92.0" prefWidth="361.0">
+                                <TextFlow maxHeight="154.0" maxWidth="490.0" minHeight="64.0" minWidth="192.0" prefHeight="154.0" prefWidth="490.0">
                                     <children>
                                         <Text fx:id="questionDescription" strokeType="OUTSIDE" strokeWidth="0.0" text="Question text here?">
                                             <font>
-                                                <Font name="System Bold" size="18.0" />
+                                                <Font name="Monospaced Regular" size="30.0" />
                                             </font>
                                         </Text>
                                     </children>
@@ -45,7 +60,7 @@
                                     <children>
                                         <Label fx:id="yourAnswer" text="Your answer:">
                                             <font>
-                                                <Font size="18.0" />
+                                                <Font name="Monospaced Regular" size="18.0" />
                                             </font>
                                         </Label>
                                         <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="296.0">

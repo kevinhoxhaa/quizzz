@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 
-<BorderPane maxHeight="694.0" maxWidth="1014.0" minHeight="694.0" minWidth="1014.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SoloEstimationQuestionCtrl">
+<BorderPane maxHeight="694.0" maxWidth="1014.0" minHeight="694.0" minWidth="1014.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SoloEstimationQuestionCtrl">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -23,7 +33,7 @@
                     <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Questions" HBox.hgrow="ALWAYS">
                             <font>
-                                <Font size="14.0" />
+                                <Font name="Monospaced Regular" size="14.0" />
                             </font>
                         </Text>
                         <HBox fx:id="circles" alignment="CENTER" prefHeight="52.0" prefWidth="249.0" HBox.hgrow="ALWAYS">
@@ -137,12 +147,12 @@
                             <children>
                                 <Text fx:id="questionNum" strokeType="OUTSIDE" strokeWidth="0.0" text="1">
                                     <font>
-                                        <Font size="14.0" />
+                                        <Font name="Monospaced Regular" size="14.0" />
                                     </font>
                                 </Text>
                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="/20">
                                     <font>
-                                        <Font size="14.0" />
+                                        <Font name="Monospaced Regular" size="14.0" />
                                     </font>
                                 </Text>
                             </children>
@@ -158,11 +168,11 @@
                                         <Image url="@../images/heart.png" />
                                     </image>
                                 </ImageView>
-                                <TextFlow maxHeight="92.0" maxWidth="361.0" minHeight="64.0" minWidth="192.0" prefHeight="92.0" prefWidth="361.0">
+                                <TextFlow maxHeight="92.0" maxWidth="770.0" minHeight="64.0" minWidth="192.0" prefHeight="92.0" prefWidth="770.0">
                                     <children>
                                         <Text fx:id="activityText" strokeType="OUTSIDE" strokeWidth="0.0" text="Question text here?">
                                             <font>
-                                                <Font name="System Bold" size="18.0" />
+                                                <Font name="Monospaced Regular" size="30.0" />
                                             </font>
                                         </Text>
                                     </children>
@@ -175,7 +185,7 @@
                                     <children>
                                         <Label fx:id="yourAnswer" text="Your answer:">
                                             <font>
-                                                <Font size="18.0" />
+                                                <Font name="Monospaced Regular" size="18.0" />
                                             </font>
                                         </Label>
                                         <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="296.0">
@@ -215,14 +225,14 @@
                 <Region VBox.vgrow="ALWAYS" />
                 <AnchorPane prefHeight="120.0" prefWidth="1014.0">
                     <children>
-                        <Button fx:id="quitButton" layoutX="876.0" layoutY="33.0" mnemonicParsing="false" onAction="#onQuit" prefHeight="53.0" prefWidth="83.0" text="Quit">
+                        <Button fx:id="quitButton" layoutX="876.0" layoutY="32.0" mnemonicParsing="false" onAction="#onQuit" prefHeight="53.0" prefWidth="83.0" text="Quit">
                             <font>
-                                <Font size="20.0" />
+                                <Font name="Monospaced Bold" size="20.0" />
                             </font>
                         </Button>
-                        <Text fx:id="currentScore" layoutX="14.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Score: 0" wrappingWidth="120.13671875">
+                        <Text fx:id="currentScore" layoutX="14.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Score: 0" wrappingWidth="176.13671875">
                             <font>
-                                <Font size="32.0" />
+                                <Font name="Monospaced Regular" size="32.0" />
                             </font>
                         </Text>
                     </children>

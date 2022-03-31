@@ -341,7 +341,7 @@ public class ServerUtils {
             String defaultPathString = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
 
             defaultPathString = defaultPathString.substring(
-                    "file:/".length(), defaultPathString.length() - "classes/java/main/".length())
+                    0, defaultPathString.length() - "classes/java/main/".length())
                     + "resources/main/client/images/lightning.jpg";
 
             return new Image(defaultPathString);
