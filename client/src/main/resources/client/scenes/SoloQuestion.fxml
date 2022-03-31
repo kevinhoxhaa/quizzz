@@ -200,18 +200,11 @@
                                                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                             </VBox.margin>
                                             <children>
-<<<<<<< HEAD
-                                                <Text fx:id="answerTopText" strokeType="OUTSIDE" strokeWidth="0.0" text="Answer 1">
-                                                    <font>
-                                                        <Font name="Monospaced Regular" size="18.0" />
-                                                    </font></Text>
-=======
                                                 <Label fx:id="answerTopText" alignment="CENTER" maxWidth="768.0" minWidth="768.0" prefHeight="23.0" prefWidth="768.0" text="Answer 1" textAlignment="CENTER" wrapText="true">
                                                     <font>
                                                         <Font name="Monospaced Regular" size="18.0" />
                                                     </font>
                                                 </Label>
->>>>>>> dev
                                             </children>
                                             <opaqueInsets>
                                                 <Insets />
@@ -228,18 +221,11 @@
                                                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                             </VBox.margin>
                                             <children>
-<<<<<<< HEAD
-                                                <Text fx:id="answerMidText" strokeType="OUTSIDE" strokeWidth="0.0" text="Answer 2">
-                                                    <font>
-                                                        <Font name="Monospaced Regular" size="18.0" />
-                                                    </font></Text>
-=======
                                                 <Label fx:id="answerMidText" alignment="CENTER" maxWidth="768.0" minWidth="768.0" prefWidth="768.0" text="Answer 1" textAlignment="CENTER" wrapText="true">
                                                     <font>
                                                         <Font name="Monospaced Regular" size="18.0" />
                                                     </font>
                                                 </Label>
->>>>>>> dev
                                             </children>
                                             <cursor>
                                                 <Cursor fx:constant="HAND" />
@@ -250,18 +236,11 @@
                                                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                             </VBox.margin>
                                             <children>
-<<<<<<< HEAD
-                                                <Text fx:id="answerBotText" strokeType="OUTSIDE" strokeWidth="0.0" text="Answer 3">
-                                                    <font>
-                                                        <Font name="Monospaced Regular" size="18.0" />
-                                                    </font></Text>
-=======
                                                 <Label fx:id="answerBotText" alignment="CENTER" maxWidth="768.0" minWidth="768.0" prefWidth="768.0" text="Answer 1" textAlignment="CENTER" wrapText="true">
                                                     <font>
                                                         <Font name="Monospaced Regular" size="18.0" />
                                                     </font>
                                                 </Label>
->>>>>>> dev
                                             </children>
                                             <cursor>
                                                 <Cursor fx:constant="HAND" />
