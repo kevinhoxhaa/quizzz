@@ -185,4 +185,13 @@ public class ConsumptionQuestion extends Question {
         return String.format("How much energy does %s consume?",
                 getActivity().title);
     }
+
+    /**
+     * Returns an answer object corresponding to the correct answer to this question
+     * @return an answer object corresponding to the correct answer to this question
+     */
+    @Override
+    public Answer generateCorrectAnswer(){
+        return new Answer(activity.consumption);
+    }
 }

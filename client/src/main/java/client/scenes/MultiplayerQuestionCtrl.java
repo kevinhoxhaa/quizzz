@@ -2,14 +2,9 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.entities.Activity;
 import commons.models.Answer;
-import commons.models.ChoiceQuestion;
-import commons.models.ComparisonQuestion;
-import commons.models.ConsumptionQuestion;
 import commons.models.Emoji;
 import commons.models.Question;
-import commons.utils.CompareType;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.image.ImageView;
@@ -20,8 +15,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.util.Pair;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -29,10 +26,6 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
         implements EmojiController {
 
     private MultiplayerGameCtrl gameCtrl;
-
-    private boolean answerTopDisable = false;
-    private boolean answerMidDisable = false;
-    private boolean answerBotDisable = false;
 
     private List<StackPane> jokers;
 
@@ -94,9 +87,7 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
         super.setup(question, gameCtrl.getUser().points);
 
         resetAnswerClickability();
-        answerTopDisable = false;
-        answerMidDisable = false;
-        answerBotDisable = false;
+        disabledAnswer = null;
         gameCtrl.enableEmojis(emojiPane);
         doublePointsImage.setVisible(false);
 
@@ -121,9 +112,7 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
     @FXML
     @Override
     protected void enterAnswerTop() {
-        if(!answerTopDisable) {
-            enterAnswer(answerTop);
-        }
+        enterAnswer(answerTop);
     }
 
     /**
@@ -133,9 +122,7 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
     @FXML
     @Override
     protected void enterAnswerMid() {
-        if(!answerMidDisable) {
-            enterAnswer(answerMid);
-        }
+        enterAnswer(answerMid);
     }
 
     /**
@@ -145,9 +132,7 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
     @FXML
     @Override
     protected void enterAnswerBot() {
-        if(!answerBotDisable) {
-            enterAnswer(answerBot);
-        }
+        enterAnswer(answerBot);
     }
 
     /**
@@ -156,9 +141,7 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
      */
     @FXML
     protected void exitAnswerTop() {
-        if(!answerTopDisable) {
-            resetAnswerColors(answerTop);
-        }
+        resetAnswerColors(answerTop);
     }
 
     /**
@@ -167,9 +150,7 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
      */
     @FXML
     protected void exitAnswerMid() {
-        if(!answerMidDisable) {
-            resetAnswerColors(answerMid);
-        }
+        resetAnswerColors(answerMid);
     }
 
     /**
@@ -178,9 +159,7 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
      */
     @FXML
     protected void exitAnswerBot() {
-        if(!answerBotDisable) {
-            resetAnswerColors(answerBot);
-        }
+        resetAnswerColors(answerBot);
     }
 
     /**
@@ -274,86 +253,27 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
     public void useRemoveIncorrect(){
         gameCtrl.setIsActiveRemoveIncorrect(true);
         gameCtrl.useJoker(removeIncorrect, removeIncorrectImage);
-        switch (currentQuestion.getType()) {
-            case CONSUMPTION: {
-                List<Long> incorrectAnswers = new ArrayList<>();
-                incorrectAnswers.add(answerTopAnswer.getLongAnswer());
-                incorrectAnswers.add(answerMidAnswer.getLongAnswer());
-                incorrectAnswers.add(answerBotAnswer.getLongAnswer());
-                for(Long answer:incorrectAnswers){
-                    if(answer==((ConsumptionQuestion)currentQuestion).getUserAnswer().getLongAnswer()){
-                        incorrectAnswers.remove(answer);
-                    }
-                };
-                if (answerTopAnswer.getLongAnswer() == incorrectAnswers.get(0)) {
-                    answerTop.setDisable(true);
-                    answerTop.setBackground(new Background(
-                            new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
-                    answerTopDisable = true;
 
-                }
-                if (answerBotAnswer.getLongAnswer() == incorrectAnswers.get(0)) {
-                    answerBot.setDisable(true);
-                    answerBot.setBackground(new Background(
-                            new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
-                    answerBotDisable = true;
-                }
-                if (answerMidAnswer.getLongAnswer() == incorrectAnswers.get(0)) {
-                    answerMid.setDisable(true);
-                    answerMid.setBackground(new Background(
-                            new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
-                    answerMidDisable = true;
+        List<Answer> incorrectAnswers = new ArrayList<>();
 
-                }
-                break;
-            }
-            case COMPARISON: {
-                List<CompareType> incorrectAnswers = ((ComparisonQuestion) currentQuestion).getincorrectAnswers();
-                if(answerTopAnswer.getCompareType() == incorrectAnswers.get(0)){
-                    answerTop.setDisable(true);
-                    answerTop.setBackground(new Background(
-                            new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
-                    answerTopDisable = true;
-                }
-                if(answerBotAnswer.getCompareType() == incorrectAnswers.get(0)){
-                    answerBot.setDisable(true);
-                    answerBot.setBackground(new Background(
-                            new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
-                    answerBotDisable = true;
-                }
-                if(answerMidAnswer.getCompareType() == incorrectAnswers.get(0)){
-                    answerMid.setDisable(true);
-                    answerMid.setBackground(new Background(
-                            new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
-                    answerMidDisable = true;
-                }
-                break;
-            }
-            case CHOICE: {
-                List<Activity> incorrectAnswers = ((ChoiceQuestion) currentQuestion).getIncorrectActivities();
-                if(answerTopAnswer.getActivity() == incorrectAnswers.get(0)){
-                    answerTop.setDisable(true);
-                    answerTop.setBackground(new Background(
-                            new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
-                    answerTopDisable = true;
-                }
-                if(answerBotAnswer.getActivity() == incorrectAnswers.get(0)){
-                    answerBot.setDisable(true);
-                    answerBot.setBackground(new Background(
-                            new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
-                    answerBotDisable = true;
-                }
-                if(answerMidAnswer.getActivity() == incorrectAnswers.get(0)){
-                    answerMid.setDisable(true);
-                    answerMid.setBackground(new Background(
-                            new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
-                    answerMidDisable = true;
-                }
+        incorrectAnswers.add(answerTopAnswer);
+        incorrectAnswers.add(answerMidAnswer);
+        incorrectAnswers.add(answerBotAnswer);
+        incorrectAnswers.remove(currentQuestion.getUserAnswer());
+        incorrectAnswers.remove(currentQuestion.generateCorrectAnswer());
+        Collections.shuffle(incorrectAnswers);
+        Answer answerToRemove = incorrectAnswers.get(0);
 
-                break;
+        for(Pair pair : answerButtonPairs){
+            StackPane button = (StackPane) pair.getKey();
+            Answer answer = (Answer) pair.getValue();
+            if(answer.equals(answerToRemove)){
+                button.setDisable(true);
+                button.setBackground(new Background(
+                        new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+                disabledAnswer = button;
             }
         }
-
     }
 
     /**

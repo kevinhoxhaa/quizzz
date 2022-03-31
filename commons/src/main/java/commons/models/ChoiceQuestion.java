@@ -213,4 +213,13 @@ public class ChoiceQuestion extends Question {
          return String.format("What could you do instead of %s to consume less energy?",
                 getComparedActivity().title);
     }
+
+    /**
+     * Returns an answer object corresponding to the correct answer to this question
+     * @return an answer object corresponding to the correct answer to this question
+     */
+    @Override
+    public Answer generateCorrectAnswer(){
+        return new Answer(answer);
+    }
 }

@@ -134,4 +134,13 @@ public class EstimationQuestion extends Question {
         return String.format("How much energy do you think %s consumes?",
                 getActivity().title);
     }
+
+    /**
+     * Returns an answer object corresponding to the correct answer to this question
+     * @return an answer object corresponding to the correct answer to this question
+     */
+    @Override
+    public Answer generateCorrectAnswer(){
+        return new Answer(activity.consumption);
+    }
 }

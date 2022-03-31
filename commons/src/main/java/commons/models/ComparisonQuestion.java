@@ -191,4 +191,21 @@ public class ComparisonQuestion extends Question {
     public String generateQuestionText(){
         return "Which one consumes more energy?";
     }
+
+    /**
+     * Returns an answer object corresponding to the correct answer to this question
+     * @return an answer object corresponding to the correct answer to this question
+     */
+    @Override
+    public Answer generateCorrectAnswer(){
+        CompareType compareType = null;
+        if (firstActivity.consumption < secondActivity.consumption){
+            compareType = CompareType.SMALLER;
+        } else if (firstActivity.consumption > secondActivity.consumption){
+            compareType = CompareType.LARGER;
+        } else {
+            compareType = CompareType.EQUAL;
+        }
+        return new Answer(compareType);
+    }
 }

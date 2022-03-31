@@ -16,6 +16,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,6 +35,8 @@ public abstract class AbstractMultichoiceQuestionCtrl extends AbstractQuestionCt
 
     protected List<StackPane> answerButtons;
     protected StackPane selectedAnswerButton;
+    protected List<Pair<StackPane, Answer>> answerButtonPairs;
+    protected StackPane disabledAnswer;
 
     @FXML
     protected StackPane answerTop;
@@ -87,9 +90,14 @@ public abstract class AbstractMultichoiceQuestionCtrl extends AbstractQuestionCt
         }
 
         this.answerButtons = new ArrayList<>();
-        this.answerButtons.add(answerTop);
-        this.answerButtons.add(answerMid);
-        this.answerButtons.add(answerBot);
+        answerButtons.add(answerTop);
+        answerButtons.add(answerMid);
+        answerButtons.add(answerBot);
+
+        this.answerButtonPairs = new ArrayList<>();
+        answerButtonPairs.add(new Pair(answerTop, answerTopAnswer));
+        answerButtonPairs.add(new Pair(answerMid, answerMidAnswer));
+        answerButtonPairs.add(new Pair(answerBot, answerBotAnswer));
 
         for (StackPane answerBtnLoop : answerButtons) {
             answerBtnLoop.setStyle("-fx-border-width: 1; -fx-border-color: black");
@@ -244,6 +252,9 @@ public abstract class AbstractMultichoiceQuestionCtrl extends AbstractQuestionCt
         if (answerBtn.equals(selectedAnswerButton)) {
             answerBtn.setBackground(new Background(
                     new BackgroundFill(Color.DARKCYAN, CornerRadii.EMPTY, Insets.EMPTY)));
+        } else if (answerBtn.equals(disabledAnswer)) {
+            answerBtn.setBackground(new Background(
+                    new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
         } else {
             answerBtn.setBackground(new Background(
                     new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -271,6 +282,9 @@ public abstract class AbstractMultichoiceQuestionCtrl extends AbstractQuestionCt
         if (answerBtn.equals(selectedAnswerButton)) {
             answerBtn.setBackground(new Background(
                     new BackgroundFill(Color.LIGHTSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+        } else if (answerBtn.equals(disabledAnswer)) {
+            answerBtn.setBackground(new Background(
+                    new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
         } else {
             answerBtn.setBackground(new Background(
                     new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
