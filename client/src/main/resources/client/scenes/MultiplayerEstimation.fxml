@@ -3,7 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -44,7 +43,7 @@
                                 </ImageView>
                                 <TextFlow maxHeight="154.0" maxWidth="490.0" minHeight="64.0" minWidth="192.0" prefHeight="154.0" prefWidth="490.0">
                                     <children>
-                                        <Text fx:id="questionDescription" strokeType="OUTSIDE" strokeWidth="0.0" text="Question text here?">
+                                        <Text fx:id="questionText" strokeType="OUTSIDE" strokeWidth="0.0" text="Question text here?">
                                             <font>
                                                 <Font name="Monospaced Regular" size="30.0" />
                                             </font>
@@ -73,7 +72,7 @@
                                         </TextFlow>
                                         <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="296.0">
                                             <children>
-                                                <TextField fx:id="answerField" prefWidth="192.0" />
+                                                <TextField fx:id="userInput" prefWidth="192.0" />
                                                 <Button mnemonicParsing="false" onAction="#onSubmit">
                                                     <graphic>
                                                         <ImageView fx:id="submitButton" fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
@@ -134,7 +133,7 @@
                             <children>
                                 <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                     <children>
-                                        <ImageView fitHeight="42.0" fitWidth="65.0" layoutX="5.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+                                        <ImageView fx:id="doublePointsImage" fitHeight="42.0" fitWidth="65.0" layoutX="5.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
                                                 <Image url="@../images/x2points.png" />
                                             </image>
@@ -166,7 +165,7 @@
                                                 <Font name="Monospaced Regular" size="20.0" />
                                             </font>
                                         </Text>
-                                        <ImageView fitHeight="48.0" fitWidth="48.0" layoutX="6.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+                                        <ImageView fx:id="removeIncorrectImage" fitHeight="48.0" fitWidth="48.0" layoutX="6.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
                                                 <Image url="@../images/removechoice.png" />
                                             </image>
@@ -190,7 +189,7 @@
                                                 <Font name="Monospaced Regular" size="20.0" />
                                             </font>
                                         </Text>
-                                        <ImageView fitHeight="58.0" fitWidth="52.0" layoutX="4.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true">
+                                        <ImageView fx:id="reduceTimeImage" fitHeight="58.0" fitWidth="52.0" layoutX="4.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
                                                 <Image url="@../images/half-time.png" />
                                             </image>
@@ -394,7 +393,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <TextFlow layoutX="14.0" layoutY="31.0" prefHeight="71.0" prefWidth="200.0">
+            <TextFlow layoutX="14.0" layoutY="31.0" prefHeight="71.0" prefWidth="423.0">
                <children>
                   <Text text="Score: " wrappingWidth="187.242919921875">
                      <font>

@@ -174,7 +174,7 @@
                                         </StackPane>
                                         <StackPane prefHeight="110.0" prefWidth="214.0">
                                             <children>
-                                                <Text fx:id="activityText" strokeType="OUTSIDE" strokeWidth="0.0" text="What is the answer to this activity?" wrappingWidth="321.20001220703125">
+                                                <Text fx:id="questionText" strokeType="OUTSIDE" strokeWidth="0.0" text="What is the answer to this activity?" wrappingWidth="321.20001220703125">
                                                     <font>
                                                         <Font name="Monospaced Bold" size="18.0" />
                                                     </font>
@@ -409,7 +409,7 @@
                                 <Cursor fx:constant="HAND" />
                             </cursor>
                         </Button>
-                        <TextFlow layoutX="14.0" layoutY="31.0" prefHeight="71.0" prefWidth="200.0">
+                        <TextFlow layoutX="14.0" layoutY="31.0" prefHeight="71.0" prefWidth="391.0">
                             <children>
                                 <Text text="Score: " wrappingWidth="187.242919921875">
                                     <font>

@@ -160,7 +160,7 @@
                                 </StackPane>
                                 <StackPane prefHeight="100.0" prefWidth="602.0">
                                     <children>
-                                        <Text fx:id="activityText" strokeType="OUTSIDE" strokeWidth="0.0" text="What is the answer to this activity?" wrappingWidth="583.6000075340271">
+                                        <Text fx:id="questionText" strokeType="OUTSIDE" strokeWidth="0.0" text="What is the answer to this activity?" wrappingWidth="583.6000075340271">
                                             <font>
                                                 <Font name="Monospaced Regular" size="15.0" />
                                             </font>

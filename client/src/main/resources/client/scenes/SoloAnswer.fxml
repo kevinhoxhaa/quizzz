@@ -171,7 +171,7 @@
                             <children>
                                 <Pane prefHeight="57.0" prefWidth="708.0">
                                     <children>
-                                        <Text fx:id="activity" layoutX="154.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="What is the answer to this activity?" wrappingWidth="564.0000587463378">
+                                        <Text fx:id="questionText" layoutX="154.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="What is the answer to this activity?" wrappingWidth="564.0000587463378">
                                             <font>
                                                 <Font name="Monospaced Regular" size="20.0" />
                                             </font>
@@ -216,7 +216,7 @@
                                 <Cursor fx:constant="HAND" />
                             </cursor>
                         </Button>
-                        <TextFlow layoutX="14.0" layoutY="31.0" prefHeight="71.0" prefWidth="200.0">
+                        <TextFlow layoutX="14.0" layoutY="31.0" prefHeight="71.0" prefWidth="260.0">
                             <children>
                                 <Text text="Score: " wrappingWidth="187.242919921875">
                                     <font>
@@ -230,7 +230,7 @@
                                 </Text>
                             </children>
                         </TextFlow>
-                        <HBox alignment="CENTER" layoutX="240.0" layoutY="7.0" prefHeight="125.0" prefWidth="292.0">
+                        <HBox alignment="CENTER" layoutX="341.0" layoutY="3.0" prefHeight="125.0" prefWidth="292.0">
                             <children>
                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Next activity in:" wrappingWidth="181.94046097993845">
                                     <font>
