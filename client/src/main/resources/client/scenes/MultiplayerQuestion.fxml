@@ -193,7 +193,7 @@
                                                         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                                     </VBox.margin>
                                                     <children>
-                                                            <Label fx:id="answerTopText" maxWidth="304.0" minWidth="304.0" text="Answer 1" textAlignment="CENTER" wrapText="true">
+                                                            <Label fx:id="answerTopText" alignment="CENTER" maxWidth="304.0" minWidth="304.0" text="Answer 1" textAlignment="CENTER" wrapText="true">
                                                                 <font>
                                                                     <Font name="Monospaced Regular" size="18.0" />
                                                                 </font>
@@ -217,7 +217,7 @@
                                                         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                                     </VBox.margin>
                                                     <children>
-                                                        <Label fx:id="answerMidText" maxWidth="304.0" minWidth="304.0" text="Answer 1" textAlignment="CENTER" wrapText="true">
+                                                        <Label fx:id="answerMidText" alignment="CENTER" maxWidth="304.0" minWidth="304.0" text="Answer 1" textAlignment="CENTER" wrapText="true">
                                                             <font>
                                                                 <Font name="Monospaced Regular" size="18.0" />
                                                             </font>
@@ -235,7 +235,7 @@
                                                         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                                     </VBox.margin>
                                                     <children>
-                                                        <Label fx:id="answerBotText" maxWidth="304.0" minWidth="304.0" text="Answer 1" textAlignment="CENTER" wrapText="true">
+                                                        <Label fx:id="answerBotText" alignment="CENTER" maxWidth="304.0" minWidth="304.0" text="Answer 1" textAlignment="CENTER" wrapText="true">
                                                             <font>
                                                                 <Font name="Monospaced Regular" size="18.0" />
                                                             </font>
