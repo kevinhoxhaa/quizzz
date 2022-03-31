@@ -514,6 +514,7 @@ public class MultiplayerGameCtrl {
     public void resetGameCtrl() {
         mainCtrl.resetMainCtrl();
         resetAllJokers();
+        hideEmojis();
         this.answerCount = 0;
         this.colors = new ArrayList<>();
         this.user.resetScore();
