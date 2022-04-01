@@ -256,11 +256,11 @@ public class GameController {
     @GetMapping(path =  "/{gameIndex}/question/{questionIndex}")
     public ResponseEntity<Question> getQuestion(@PathVariable(name = "gameIndex") int gameIndex,
                                 @PathVariable(name = "questionIndex") int questionIndex) {
-        if(!gameList.getGames().containsKey(gameIndex)) {
+        if(!gameList.getGames().containsKey((long) gameIndex)) {
             return ResponseEntity.badRequest().build();
         }
 
-        Game game = gameList.getGames().get(gameIndex);
+        Game game = gameList.getGames().get((long) gameIndex);
 
         if(questionIndex >= game.getQuestions().size()) {
             return ResponseEntity.badRequest().build();
@@ -291,11 +291,11 @@ public class GameController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        if(!gameList.getGames().containsKey(gameIndex)) {
+        if(!gameList.getGames().containsKey((long) gameIndex)) {
             return ResponseEntity.badRequest().build();
         }
 
-        Game game = gameList.getGames().get(gameIndex);
+        Game game = gameList.getGames().get((long) gameIndex);
 
         if(questionIndex >= game.getQuestions().size()) {
             return ResponseEntity.badRequest().build();
@@ -336,11 +336,11 @@ public class GameController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        if(!gameList.getGames().containsKey(gameIndex)) {
+        if(!gameList.getGames().containsKey((long) gameIndex)) {
             return ResponseEntity.badRequest().build();
         }
 
-        Game game = gameList.getGames().get(gameIndex);
+        Game game = gameList.getGames().get((long) gameIndex);
 
         if(questionIndex >= game.getQuestions().size()) {
             return ResponseEntity.badRequest().build();

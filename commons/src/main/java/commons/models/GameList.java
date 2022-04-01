@@ -74,10 +74,10 @@ public class GameList {
 
     /**
      * Removes the game at the given index from the list
-     * @param index the index of the game in the list
+     * @param key the index of the game in the list
      * @return whether the list has been changed
      */
-    public Game remove(long index){
-        return games.remove(Long.valueOf(index));
+    public Game remove(long key){
+        return games.remove(Long.valueOf(key));
     }
 }
