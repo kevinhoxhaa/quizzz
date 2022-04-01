@@ -29,10 +29,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
@@ -55,6 +58,8 @@ public class MainCtrl {
     private static final int QUESTIONS_PER_GAME = 20;
     private static final int TOTAL_ANSWERS = 20;
     private static final int HALFWAY_ANSWERS = 10;
+    private static final double ALERT_POSITION_Y = 250;
+    private static final double ALERT_POSITION_X = 387;
 
     private String serverUrl;
     private Timer waitingTimer;
@@ -102,6 +107,11 @@ public class MainCtrl {
     private MultiplayerResultsCtrl multiplayerResultsCtrl;
     private Scene multiplayerResults;
 
+    private HelpCtrl helpCtrl;
+    private Scene help;
+
+    private DialogPane dialogPane;
+
     private User user;
     private int gameIndex;
     private List<Color> colors;
@@ -129,7 +139,8 @@ public class MainCtrl {
                            Pair<SoloQuestionCtrl, Parent> soloQuestion,
                            Pair<SoloAnswerCtrl, Parent> soloAnswer,
                            Pair<SoloResultsCtrl, Parent> soloResults,
-                           Pair<MultiplayerResultsCtrl, Parent> multiplayerResults
+                           Pair<MultiplayerResultsCtrl, Parent> multiplayerResults,
+                           Pair<HelpCtrl, Parent> help
                            ) {
         this.primaryStage = primaryStage;
         primaryStage.setMinHeight(HEIGHT);
@@ -178,6 +189,9 @@ public class MainCtrl {
 
         this.multiplayerResultsCtrl = multiplayerResults.getKey();
         this.multiplayerResults = new Scene(multiplayerResults.getValue());
+
+        this.helpCtrl = help.getKey();
+        this.help = new Scene(help.getValue());
 
         countdown = START_TIME;
 
@@ -508,6 +522,14 @@ public class MainCtrl {
         primaryStage.setScene(soloAnswer);
     }
 
+    public void showHelp(){
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.setScene(help);
+        stage.show();
+    }
+
     /**
      * Getter for the number of questions per game
      *
@@ -593,6 +615,7 @@ public class MainCtrl {
      */
     public void quitGame(boolean quitApp, boolean isMultiplayer){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert = setAlertStyle(alert);
         alert.setTitle("Quit solo game");
         alert.setContentText("Are you sure you want to quit?");
         ButtonType okButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
@@ -648,5 +671,23 @@ public class MainCtrl {
             controller.resetHighlight();
             controller.highlightCurrentCircle();
         }
+    }
+
+    /**
+     * Sets the given alert's style in the way described in the Dialog.css file.
+     * @param alert
+     * @return alert with style
+     */
+
+    public Alert setAlertStyle(Alert alert){
+        alert.initStyle(StageStyle.UNDECORATED);
+        dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().add(
+                getClass().getResource("/client/Stylesheets/Dialog.css").toExternalForm());
+        dialogPane.getStyleClass().add("dialog");
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setY(ALERT_POSITION_Y);
+        alert.setX(ALERT_POSITION_X);
+        return alert;
     }
 }

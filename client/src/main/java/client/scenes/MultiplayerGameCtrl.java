@@ -581,6 +581,7 @@ public class MultiplayerGameCtrl {
                 mainCtrl.bindUser(null);
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert = mainCtrl.setAlertStyle(alert);
                 alert.setTitle ("Kicked :(");
                 alert.setHeaderText(null);
                 alert.setGraphic(null);
