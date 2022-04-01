@@ -17,6 +17,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Locale;
 
 public class HomeCtrl {
 
@@ -170,7 +171,7 @@ public class HomeCtrl {
             if (!isValidUsername(user)) {
                 return;
             }
-            mainCtrl.setServerUrl(serverUrl);
+            mainCtrl.setServerUrl(serverUrl.toLowerCase(Locale.ROOT));
             mainCtrl.bindUser(server.addUserMultiplayer(serverUrl, user));
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);

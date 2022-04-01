@@ -60,6 +60,9 @@ public class MultiplayerGameCtrl {
     private Scene ranking;
     private RankingCtrl rankingCtrl;
 
+    private Scene results;
+    private MultiplayerResultsCtrl resultsCtrl;
+
     private boolean isActiveDoublePoints;
 
     private boolean isAvailableRemoveIncorrect = true;
@@ -86,12 +89,14 @@ public class MultiplayerGameCtrl {
      * @param answer the answer controller-scene pair
      * @param ranking the ranking controller-scene pair
      * @param gameIndex the index of the multiplayer game
+     * @param results The results controller-scene pair.
      */
     public MultiplayerGameCtrl(int gameIndex, MainCtrl mainCtrl, ServerUtils server,
                                Pair<MultiplayerQuestionCtrl, Scene> mcQuestion,
                                Pair<MultiplayerEstimationQuestionCtrl, Scene> estimationQuestion,
                                Pair<MultiplayerAnswerCtrl, Scene> answer,
-                               Pair<RankingCtrl, Scene> ranking) {
+                               Pair<RankingCtrl, Scene> ranking,
+                               Pair<MultiplayerResultsCtrl, Scene> results) {
         this.gameIndex = gameIndex;
         this.mainCtrl = mainCtrl;
 
@@ -124,6 +129,10 @@ public class MultiplayerGameCtrl {
         this.rankingCtrl = ranking.getKey();
         rankingCtrl.setGameCtrl(this);
         this.ranking = ranking.getValue();
+
+        this.resultsCtrl = results.getKey();
+        resultsCtrl.setGameCtrl(this);
+        this.results = results.getValue();
     }
 
     public MultiplayerGameCtrl(){
@@ -317,6 +326,11 @@ public class MultiplayerGameCtrl {
      */
     public void showResults(List<MultiplayerUser> rankedUsers) {
         // TODO: display list of ranked users on results screen
+        resultsCtrl.setup();
+        mainCtrl.updateQuestionCounters(resultsCtrl, colors);
+        mainCtrl.getPrimaryStage().setTitle("Results Screen");
+        mainCtrl.getPrimaryStage().setScene(results);
+        resultsCtrl.startTimer();
     }
 
     /**
@@ -481,6 +495,7 @@ public class MultiplayerGameCtrl {
      * Resets all jokers at the start of the game, so they can be used again.
      */
     public void resetAllJokers(){
+        this.usedJokers = new ArrayList<>();
         mcQuestionCtrl.resetDoublePoints();
         mcQuestionCtrl.resetReduceTime();
         multiplayerEstimationQuestionCtrl.resetDoublePoints();
@@ -522,7 +537,7 @@ public class MultiplayerGameCtrl {
                 String[] parts = e.getImage().getUrl().split("/");
                 String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
                 emojiPath = emojiPath.substring(
-                        "file:/".length(), emojiPath.length() - "classes/java/main/".length())
+                        0, emojiPath.length() - "classes/java/main/".length())
                         + "resources/main/client/images/" + parts[parts.length - 1];
 
                 e.setImage(new Image(emojiPath));
@@ -600,5 +615,14 @@ public class MultiplayerGameCtrl {
             halfTimeSubscription.unsubscribe();
         }
         halfTimeSubscription = null;
+    }
+
+    public void resetGameCtrl() {
+        mainCtrl.resetMainCtrl();
+        resetAllJokers();
+        hideEmojis();
+        this.answerCount = 0;
+        this.colors = new ArrayList<>();
+        this.user.resetScore();
     }
 }
