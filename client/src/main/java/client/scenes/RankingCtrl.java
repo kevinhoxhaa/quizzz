@@ -4,14 +4,11 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.entities.MultiplayerUser;
 import commons.models.Question;
-import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Modality;
 
 import java.util.List;
 
@@ -52,26 +49,17 @@ public class RankingCtrl extends AbstractRankingCtrl {
      * @param users the ranked users to display
      */
     public void setup(List<MultiplayerUser> users) {
-        try {
-            scoreTable.getItems().clear();
-            usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
-            pointsColumn.setCellValueFactory(new PropertyValueFactory<>("points"));
+        scoreTableUserName.setText(String.format("%s", gameCtrl.getUser().username));
+        scoreTableUserScore.setText(String.format("%d", gameCtrl.getUser().points));
 
-            for (MultiplayerUser user : users) {
-                scoreTable.getItems().add(user);
-            }
+        usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
+        pointsColumn.setCellValueFactory(new PropertyValueFactory<>("points"));
 
-            ranking1stPlayer.setText(users.size() > 0 ? users.get(0).username : "");
-            ranking2ndPlayer.setText(users.size() > 1 ? users.get(1).username : "");
-            ranking3rdPlayer.setText(users.size() > 2 ? users.get(2).username : "");
+        ranking1stPlayer.setText(users.size() > 0 ? users.get(0).username : "");
+        ranking2ndPlayer.setText(users.size() > 1 ? users.get(1).username : "");
+        ranking3rdPlayer.setText(users.size() > 2 ? users.get(2).username : "");
 
-        } catch (WebApplicationException e) {
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-            return;
-        }
+        gameCtrl.populateRanking(scoreTable, users);
     }
 
     /**

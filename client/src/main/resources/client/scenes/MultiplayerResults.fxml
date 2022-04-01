@@ -163,8 +163,8 @@
                                     <children>
                                         <TableView fx:id="scoreTable" prefHeight="277.0" prefWidth="167.0">
                                             <columns>
-                                                <TableColumn prefWidth="240.66664123535156" text="Users" />
-                                                <TableColumn prefWidth="132.00006866455078" text="Score" />
+                                                <TableColumn fx:id="usernameColumn" prefWidth="240" text="Users" />
+                                                <TableColumn fx:id="pointsColumn" prefWidth="132" text="Score" />
                                             </columns>
                                         </TableView>
                                         <HBox prefHeight="59.0" prefWidth="373.0">
