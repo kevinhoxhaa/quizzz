@@ -258,6 +258,7 @@ public class MainCtrl {
     public void showHome() {
         primaryStage.setTitle("Quizzz");
         primaryStage.setScene(home);
+        home.getStylesheets().add("client/stylesheets/homebuttons.css");
     }
 
     /**
