@@ -1,18 +1,18 @@
 package commons.models;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class GameList {
-    private List<Game> games;
+    private Map<Long, Game> games;
 
     /**
      * Constructs a new game state object
      * with an empty list of games
      */
     public GameList() {
-        this.games = new ArrayList<>();
+        this.games = new HashMap();
     }
 
     /**
@@ -20,7 +20,7 @@ public class GameList {
      * @return the games for the current
      * game state
      */
-    public List<Game> getGames() {
+    public Map<Long, Game> getGames() {
         return games;
     }
 
@@ -62,5 +62,22 @@ public class GameList {
     @Override
     public int hashCode() {
         return Objects.hash(games);
+    }
+
+    /**
+     * Adds a game to the game list
+     * @param game the game to add
+     */
+    public void add(Game game){
+        games.put(game.getGameID(), game);
+    }
+
+    /**
+     * Removes the game at the given index from the list
+     * @param index the index of the game in the list
+     * @return whether the list has been changed
+     */
+    public Game remove(long index){
+        return games.remove(Long.valueOf(index));
     }
 }

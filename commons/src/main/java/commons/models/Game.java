@@ -7,6 +7,7 @@ import java.util.Objects;
 public class Game {
     protected List<Long> userIds;
     protected List<Question> questions;
+    private long gameID;
 
     /**
      * Constructs a new game with an empty list of user
@@ -81,5 +82,21 @@ public class Game {
     @Override
     public int hashCode() {
         return Objects.hash(userIds, questions);
+    }
+
+    /**
+     * A setter for the game id
+     * @param gameID the game id to set
+     */
+    public void setGameID(long gameID) {
+        this.gameID = gameID;
+    }
+
+    /**
+     * A getter for the game id
+     * @return the id of this game
+     */
+    public long getGameID() {
+        return gameID;
     }
 }

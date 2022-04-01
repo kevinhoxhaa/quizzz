@@ -25,6 +25,7 @@ import server.database.WaitingUserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Random;
 
@@ -44,6 +45,8 @@ public class GameController {
     private final ActivityRepository activityRepo;
     private final GameUserRepository gameUserRepo;
 
+    private long lastGameIndex;
+
     /**
      * Constructs a game controller with the given repositories
      * and the game state object stored on the server
@@ -60,6 +63,7 @@ public class GameController {
         this.gameUserRepo = gameUserRepo;
         this.activityRepo = activityRepo;
         this.gameList = gameList;
+        this.lastGameIndex = 0;
     }
 
     private Activity getRandomActivity() {
@@ -185,14 +189,15 @@ public class GameController {
             return ResponseEntity.badRequest().build();
         }
 
+        long gameID = lastGameIndex++;
+        game.setGameID(gameID);
+
         List<MultiplayerUser> users = waitingUserRepo.findByGameIDIsNull();
         for(MultiplayerUser user : users) {
-            user.gameID = (long) gameList.getGames().size();
+            user.gameID = gameID;
+            gameUserRepo.save(user);
+            game.getUserIds().add(user.id);
         }
-        users.forEach(u -> gameUserRepo.save(u));
-
-        users = gameUserRepo.findByGameID((long) gameList.getGames().size());
-        users.forEach(u -> game.getUserIds().add(u.id));
 
 //        waitingUserRepo.deleteAll();
 
@@ -200,8 +205,8 @@ public class GameController {
             game.getQuestions().add(generateQuestion());
         }
 
-        gameList.getGames().add(game);
-        return ResponseEntity.ok(gameList.getGames().indexOf(game));
+        gameList.add(game);
+        return ResponseEntity.ok((int) gameID);
     }
 
     /**
@@ -217,7 +222,6 @@ public class GameController {
             game.getQuestions().add(generateQuestion());
         }
 
-        gameList.getGames().add(game);
         return ResponseEntity.ok(game);
     }
 
@@ -227,17 +231,17 @@ public class GameController {
             return ResponseEntity.badRequest().build();
         }
 
-        List<Game> games = gameList.getGames();
-        int index = -1;
+        Map<Long, Game> games = gameList.getGames();
+        long index = -1;
 
-        for(int i = 0; i < games.size(); i++) {
-            if(games.get(i).getUserIds().contains(userId)) {
-                index = i;
+        for(Map.Entry<Long, Game> entry : games.entrySet()) {
+            if(entry.getValue().getUserIds().contains(userId)) {
+                index = entry.getKey();
                 break;
             }
         }
 
-        return ResponseEntity.ok(index);
+        return ResponseEntity.ok((int) index);
     }
 
     /**
@@ -252,7 +256,7 @@ public class GameController {
     @GetMapping(path =  "/{gameIndex}/question/{questionIndex}")
     public ResponseEntity<Question> getQuestion(@PathVariable(name = "gameIndex") int gameIndex,
                                 @PathVariable(name = "questionIndex") int questionIndex) {
-        if(gameIndex >= gameList.getGames().size()) {
+        if(!gameList.getGames().containsKey(gameIndex)) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -287,7 +291,7 @@ public class GameController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        if(gameIndex >= gameList.getGames().size()) {
+        if(!gameList.getGames().containsKey(gameIndex)) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -332,7 +336,7 @@ public class GameController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        if(gameIndex >= gameList.getGames().size()) {
+        if(!gameList.getGames().containsKey(gameIndex)) {
             return ResponseEntity.badRequest().build();
         }
 
