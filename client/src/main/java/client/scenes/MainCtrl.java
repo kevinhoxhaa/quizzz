@@ -261,7 +261,7 @@ public class MainCtrl {
         primaryStage.setTitle("Quizzz");
         primaryStage.setScene(home);
         home.getStylesheets().add("client/stylesheets/homebuttons.css");
-        homeCtrl.setTitleFont();
+        homeCtrl.setFonts();
 
         Image image = new Image("client/images/arrowcursor.png");  //pass in the image path
         home.setCursor(new ImageCursor(image));

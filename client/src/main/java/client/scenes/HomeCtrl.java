@@ -244,10 +244,10 @@ public class HomeCtrl {
     }
 
     /**
-     * Configures the title font to the specified
+     * Configures the fonts of the home page to the specified
      * pixel-art font resource
      */
-    public void setTitleFont() {
+    public void setFonts() {
 
         soloText.setFont(Font.loadFont(
                 ResourceUtils.getClientResource("fonts/arcadeclassic.ttf").getPath(),
