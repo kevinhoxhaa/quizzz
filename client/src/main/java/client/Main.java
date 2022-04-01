@@ -16,6 +16,7 @@
 package client;
 
 import client.scenes.AddQuoteCtrl;
+import client.scenes.HelpCtrl;
 import client.scenes.HomeCtrl;
 import client.scenes.MainCtrl;
 import client.scenes.MultiplayerAnswerCtrl;
@@ -85,9 +86,11 @@ public class Main extends Application {
         var multiplayerResults = FXML.load(
                 MultiplayerResultsCtrl.class, "client", "scenes", "MultiplayerResults.fxml");
 
+        var help = FXML.load(HelpCtrl.class, "client", "scenes", "Help.fxml");
+
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, overview, add, home, waiting, multiplayerQuestion,
                 multiplayerAnswer, ranking, multiplayerEstimation, soloEstimation, soloQuestion,
-                soloAnswer, soloResults, multiplayerResults);
+                soloAnswer, soloResults, multiplayerResults, help);
     }
 }
