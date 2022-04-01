@@ -21,11 +21,8 @@
     -fx-font-size: 40px;
 }
 #bulbView{
-    -fx-image: url("../icons/bulb.png");
+    -fx-image: url("../icons/giflight.gif");
 }
 #questionMark{
-    -fx-image: url("../icons/help.png");
-}
-#questionMark:hover{
     -fx-image: url("../icons/help.png");
 }

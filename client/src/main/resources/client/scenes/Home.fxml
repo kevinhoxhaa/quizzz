@@ -30,7 +30,7 @@
                                  <Font name="Monospaced Bold" size="64.0" />
                              </font>
                          </Text>
-                         <ImageView fx:id="bulbView" fitWidth="96.0" pickOnBounds="true" preserveRatio="true" rotate="24.0">
+                         <ImageView fx:id="bulbView" fitHeight="122.0" fitWidth="146.0" pickOnBounds="true" preserveRatio="true" rotate="24.0">
                              <image>
                                  <Image url="@../icons/bulb.png" />
                              </image>
