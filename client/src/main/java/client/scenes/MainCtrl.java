@@ -104,6 +104,9 @@ public class MainCtrl {
     private MultiplayerResultsCtrl multiplayerResultsCtrl;
     private Scene multiplayerResults;
 
+    private AdminPanelCtrl adminPanelCtrl;
+    private Scene adminPanel;
+
     private User user;
     private int gameIndex;
     private List<Color> colors;
@@ -130,8 +133,8 @@ public class MainCtrl {
                            Pair<SoloQuestionCtrl, Parent> soloQuestion,
                            Pair<SoloAnswerCtrl, Parent> soloAnswer,
                            Pair<SoloResultsCtrl, Parent> soloResults,
-                           Pair<MultiplayerResultsCtrl, Parent> multiplayerResults
-                           ) {
+                           Pair<MultiplayerResultsCtrl, Parent> multiplayerResults,
+                           Pair<AdminPanelCtrl, Parent> adminPanel ) {
         this.primaryStage = primaryStage;
         primaryStage.setMinHeight(MIN_HEIGHT);
         primaryStage.setMinWidth(MIN_WIDTH);
@@ -176,6 +179,9 @@ public class MainCtrl {
 
         this.multiplayerResultsCtrl = multiplayerResults.getKey();
         this.multiplayerResults = new Scene(multiplayerResults.getValue());
+
+        this.adminPanelCtrl = adminPanel.getKey();
+        this.adminPanel = new Scene( adminPanel.getValue() );
 
         showHome();
         primaryStage.show();
@@ -254,6 +260,12 @@ public class MainCtrl {
     public void showHome() {
         primaryStage.setTitle("Quizzz");
         primaryStage.setScene(home);
+    }
+
+    public void showAdminPanel() {
+        primaryStage.setTitle( "Admin Panel");
+        primaryStage.setScene(adminPanel);
+        primaryStage.show();
     }
 
     /**

@@ -25,9 +25,7 @@ import client.scenes.QuoteOverviewCtrl;
 import client.scenes.AddQuoteCtrl;
 import client.scenes.MultiplayerAnswerCtrl;
 import client.scenes.HomeCtrl;
-import client.scenes.MultiplayerAnswerCtrl;
 import client.scenes.MultiplayerResultsCtrl;
-import client.scenes.QuoteOverviewCtrl;
 import client.scenes.MultiplayerQuestionCtrl;
 import client.scenes.SoloAnswerCtrl;
 import client.scenes.SoloEstimationQuestionCtrl;
@@ -96,9 +94,6 @@ public class Main extends Application {
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, overview, add, home, waiting, multiplayerQuestion,
                 multiplayerAnswer, ranking, multiplayerEstimation, soloEstimation, soloQuestion,
-                soloAnswer, soloResults, multiplayerResults);
-
-        var homeCtrl = INJECTOR.getInstance ( HomeCtrl.class );
-        homeCtrl.initialize ( adminPanel );
+                soloAnswer, soloResults, multiplayerResults, adminPanel );
     }
 }

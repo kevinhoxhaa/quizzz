@@ -5,12 +5,10 @@ import commons.entities.Activity;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.beans.EventHandler;
 import java.io.IOException;
 
 public class AdminPanelCtrl {

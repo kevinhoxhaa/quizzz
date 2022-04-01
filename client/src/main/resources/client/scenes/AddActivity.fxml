@@ -9,11 +9,11 @@
     <children>
         <Button fx:id="okButton" layoutX="419.0" layoutY="105.0" mnemonicParsing="false" onAction="#onOkButton" text="Ok" />
         <Button layoutX="350.0" layoutY="105.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
-        <TextField fx:id="Source" layoutX="109.0" layoutY="73.0" prefHeight="26.0" prefWidth="345.0" />
-        <TextField fx:id="Answer" layoutX="109.0" layoutY="11.0" prefHeight="25.0" prefWidth="345.0" />
-        <TextField fx:id="Title" layoutX="109.0" layoutY="39.0" prefHeight="26.0" prefWidth="345.0" />
-        <Label layoutX="13.0" layoutY="15.0" text="Answer in WH" />
-        <Label layoutX="21.0" layoutY="77.0" text="Source" />
-        <Label layoutX="28.0" layoutY="43.0" text="Title" />
+        <TextField fx:id="source" layoutX="109.0" layoutY="73.0" prefHeight="26.0" prefWidth="345.0" />
+        <TextField fx:id="answer" layoutX="109.0" layoutY="11.0" prefHeight="25.0" prefWidth="345.0" />
+        <TextField fx:id="title" layoutX="109.0" layoutY="39.0" prefHeight="26.0" prefWidth="345.0" />
+        <Label fx:id="Answer" layoutX="13.0" layoutY="15.0" text="Answer in WH" />
+        <Label fx:id="Source" layoutX="21.0" layoutY="77.0" text="Source" />
+        <Label fx:id="Title" layoutX="28.0" layoutY="43.0" text="Title" />
     </children>
 </AnchorPane>

@@ -14,13 +14,13 @@ public class AddActivityCtrl {
     private Button okButton;
 
     @FXML
-    private TextField Title;
+    private TextField title;
 
     @FXML
-    private TextField Source;
+    private TextField source;
 
     @FXML
-    private TextField Answer;
+    private TextField answer;
 
 
     public AddActivityCtrl ( ServerUtils server, AdminPanelCtrl adminPanelCtrl ) {
@@ -35,9 +35,9 @@ public class AddActivityCtrl {
     @FXML
     public void onOkButton () {
         adminPanelCtrl.addNewActivity(
-                Title.getText(),
-                Integer.parseInt( Title.getText() ),
-                Source.getText()
+                title.getText(),
+                Integer.parseInt( title.getText() ),
+                source.getText()
         );
     }
 
@@ -54,9 +54,9 @@ public class AddActivityCtrl {
      */
 
     private void clearFields() {
-        Title.clear();
-        Answer.clear();
-        Source.clear();
+        title.clear();
+        answer.clear();
+        source.clear();
     }
 
     public void keyPressed(KeyEvent e) {
