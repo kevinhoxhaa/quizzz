@@ -50,11 +50,7 @@ public class MainCtrl {
     private static final int MILLIS = 50;
     private static final int POLLING_DELAY = 0;
     private static final int POLLING_INTERVAL = 500;
-    private static final long ANSWER_TO_THE_ULTIMATE_QUESTION = 42;
-    private static final int STANDARD_PAGE_TIME = 15;
     private static final int QUESTIONS_PER_GAME = 20;
-    private static final int TOTAL_ANSWERS = 20;
-    private static final int HALFWAY_ANSWERS = 10;
 
     //These are the variables used in the streak calculation formula
     private static final long X1 = 1;
@@ -117,15 +113,6 @@ public class MainCtrl {
     private int answerCount = 0;
 
     private long streak = 0;
-    private int currentQuestion = 0;
-
-    public int getCurrentQuestion() {
-        return currentQuestion;
-    }
-
-    public void setCurrentQuestion(int currentQuestion) {
-        this.currentQuestion = currentQuestion;
-    }
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home,
@@ -261,38 +248,12 @@ public class MainCtrl {
     }
 
     /**
-     * Returns the current game index
-     *
-     * @return the current game index
-     */
-    public int getGameIndex() {
-        return gameIndex;
-    }
-
-    /**
-     * Sets the index of the multiplayer game a user participates in
-     *
-     * @param gameIndex the multiplayer game index
-     */
-    public void setGameIndex(int gameIndex) {
-        this.gameIndex = gameIndex;
-    }
-
-    /**
      * Returns the app primary stage
      * @return the app primary stage
      */
     public Stage getPrimaryStage() {
         return primaryStage;
     }
-
-//    /**
-//     * add the score to the player's own score
-//     * @param score the player score
-//     */
-//    public void addScore(long score) {
-//        this.soloScore += score;
-//    }
 
     /**
      * Returns the solo game points
@@ -455,16 +416,6 @@ public class MainCtrl {
     public int getAnswerCount() {
         return answerCount;
     }
-
-    /**
-     * Fetches a random question from the server. For now, it just returns a placeholder for testing.
-     *
-     * @return a random question
-     */
-    public Question getNextQuestion() {
-        return server.getQuestion(serverUrl, gameIndex, answerCount);
-    }
-
 
     /**
      * Starts a particular countdown timer and initiates the
