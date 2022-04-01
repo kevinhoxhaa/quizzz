@@ -8,11 +8,11 @@ public class ResourceUtils {
      * @param resourceName the resource name
      * @return the resource file
      */
-    public static File getResource(String resourceName) {
+    public static File getClientResource(String resourceName) {
         String path = String.valueOf(ResourceUtils.class.getClassLoader().getResource(""));
         path = path.substring(
                 0, path.length() - "classes/java/main/".length())
-                + "resources/main/client/images/" + resourceName;
+                + "resources/main/client/" + resourceName;
         return new File(path);
     }
 }
