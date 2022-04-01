@@ -89,7 +89,7 @@
                           <Cursor fx:constant="HAND" />
                       </cursor>
                      <graphic>
-                          <ImageView fitHeight="106.0" fitWidth="179.0" pickOnBounds="true" preserveRatio="true">
+                          <ImageView fx:id="questionMark" fitHeight="106.0" fitWidth="179.0" pickOnBounds="true" preserveRatio="true">
                               <image>
                                   <Image url="@../icons/help.png" />
                               </image>
