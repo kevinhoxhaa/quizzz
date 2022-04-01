@@ -224,10 +224,18 @@ public class MainCtrl {
         streak=0;
     }
 
+    /**
+     * This method increments the streak
+     */
     public void incrementStreak(){
         streak++;
     }
 
+    /**
+     * This methods add the calculated score of the previous question to the user object
+     * @param user
+     * @param answeredQuestion
+     */
     public void addScore(User user, Question answeredQuestion){
         if(answeredQuestion.hasCorrectUserAnswer()){
             incrementStreak();

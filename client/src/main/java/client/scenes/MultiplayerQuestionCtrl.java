@@ -26,8 +26,6 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
         implements EmojiController {
 
     private MultiplayerGameCtrl gameCtrl;
-
-
     private List<StackPane> jokers;
 
     @FXML
