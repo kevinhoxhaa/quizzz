@@ -52,7 +52,7 @@ public class MainCtrl {
     private static final int POLLING_INTERVAL = 500;
     private static final long ANSWER_TO_THE_ULTIMATE_QUESTION = 42;
     private static final int STANDARD_PAGE_TIME = 15;
-    private static final int QUESTIONS_PER_GAME = 20;
+    private static final int QUESTIONS_PER_GAME = 2;
     private static final int TOTAL_ANSWERS = 20;
     private static final int HALFWAY_ANSWERS = 10;
 

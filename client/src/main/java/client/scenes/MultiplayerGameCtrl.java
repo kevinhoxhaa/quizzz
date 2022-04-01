@@ -295,8 +295,7 @@ public class MultiplayerGameCtrl {
      * @return the ranked users
      */
     public List<MultiplayerUser> fetchRanking() {
-        // TODO: fetch users ranked by points from server
-        return new ArrayList<>();
+        return server.getRanking(serverUrl, gameIndex);
     }
 
     /**
@@ -304,7 +303,7 @@ public class MultiplayerGameCtrl {
      * @param rankedUsers the list of ranked users to display
      */
     public void showRanking(List<MultiplayerUser> rankedUsers) {
-        // TODO: handle passed multiplayer users
+        System.out.println(rankedUsers);
         mainCtrl.updateQuestionCounters(rankingCtrl, colors);
         mainCtrl.getPrimaryStage().setTitle("Ranking Screen");
         mainCtrl.getPrimaryStage().setScene(ranking);
