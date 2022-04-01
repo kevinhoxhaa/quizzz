@@ -79,22 +79,22 @@
                </children>
             </Pane>
                      <Region VBox.vgrow="ALWAYS" />
-            <VBox alignment="BOTTOM_LEFT" minHeight="108.0" prefHeight="108.0" prefWidth="929.0">
+            <VBox alignment="BOTTOM_LEFT" minHeight="108.0" prefHeight="108.0" prefWidth="978.0">
                <padding>
                   <Insets top="16.0" />
                </padding>
                <children>
-                  <Button mnemonicParsing="false" onAction="#onHelpButtonClick" style="-fx-background-color: transparent;">
-                      <graphic>
-                          <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
-                              <image>
-                                  <Image url="@../icons/help.png" />
-                              </image>
-                          </ImageView>
-                      </graphic>
+                  <Button fx:id="helpButton" mnemonicParsing="false" onAction="#onHelpButtonClick" onMouseEntered="#onButtonHover" prefHeight="96.0" prefWidth="168.0" style="-fx-background-color: transparent;">
                       <cursor>
                           <Cursor fx:constant="HAND" />
                       </cursor>
+                     <graphic>
+                          <ImageView fitHeight="106.0" fitWidth="179.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                  <Image url="/client/icons/help.png" />
+                              </image>
+                          </ImageView>
+                     </graphic>
                   </Button>
                </children>
             </VBox>
