@@ -303,10 +303,10 @@ public class MultiplayerGameCtrl {
      * @param rankedUsers the list of ranked users to display
      */
     public void showRanking(List<MultiplayerUser> rankedUsers) {
-        System.out.println(rankedUsers);
         mainCtrl.updateQuestionCounters(rankingCtrl, colors);
         mainCtrl.getPrimaryStage().setTitle("Ranking Screen");
         mainCtrl.getPrimaryStage().setScene(ranking);
+        rankingCtrl.setup(rankedUsers);
         rankingCtrl.startTimer();
     }
 

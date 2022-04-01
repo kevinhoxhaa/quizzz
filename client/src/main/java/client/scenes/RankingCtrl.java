@@ -22,6 +22,10 @@ public class RankingCtrl extends AbstractRankingCtrl {
 
     @FXML
     private TableView<MultiplayerUser> scoreTable;
+    @FXML
+    private TableColumn<MultiplayerUser, String> usernameColumn;
+    @FXML
+    private TableColumn<MultiplayerUser, Long> pointsColumn;
 
     /**
      * Creates a controller for the ranking page screen, with the given server and mainCtrl parameters.
@@ -42,27 +46,24 @@ public class RankingCtrl extends AbstractRankingCtrl {
     }
 
     /**
-     * Fetches the users in the current waiting room and updates
-     * the list view and the users on the podium
-     * @param serverUrl the url of the server to fetch the users from
+     * Displays the ranked users on the table view according
+     * to their points
+     *
+     * @param users the ranked users to display
      */
-    public void fetchUsers(String serverUrl) {
-        scoreTable = new TableView();
+    public void setup(List<MultiplayerUser> users) {
         try {
-            List<MultiplayerUser> users = server.getUsers(serverUrl);
-            TableColumn usersColumn = new TableColumn ( "Players" );
-            usersColumn.setCellValueFactory( new PropertyValueFactory<>( "username" ) );
-            TableColumn scoreColumn = new TableColumn ( "Score" );
-            scoreColumn.setCellValueFactory( new PropertyValueFactory<>( "points") );
-            scoreTable.getColumns().addAll( usersColumn, scoreColumn );
-            for(MultiplayerUser user : users) {
+            scoreTable.getItems().clear();
+            usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
+            pointsColumn.setCellValueFactory(new PropertyValueFactory<>("points"));
+
+            for (MultiplayerUser user : users) {
                 scoreTable.getItems().add(user);
             }
-            scoreColumn.setSortType ( TableColumn.SortType.DESCENDING );
-            scoreTable.getSortOrder().add ( scoreColumn );
-            ranking1stPlayer.setText( users.get(0).username ) ;
-            ranking2ndPlayer.setText( users.get(1).username ) ;
-            ranking3rdPlayer.setText( users.get(2).username ) ;
+
+            ranking1stPlayer.setText(users.size() > 0 ? users.get(0).username : "");
+            ranking2ndPlayer.setText(users.size() > 1 ? users.get(1).username : "");
+            ranking3rdPlayer.setText(users.size() > 2 ? users.get(2).username : "");
 
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -75,6 +76,7 @@ public class RankingCtrl extends AbstractRankingCtrl {
 
     /**
      * Sets the current game controller
+     *
      * @param gameCtrl the current game controller
      */
     public void setGameCtrl(MultiplayerGameCtrl gameCtrl) {
