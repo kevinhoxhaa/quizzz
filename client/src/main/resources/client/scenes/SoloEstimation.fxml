@@ -11,13 +11,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="492.0" minWidth="748.0" prefHeight="492.0" prefWidth="748.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SoloEstimationQuestionCtrl">
+<BorderPane maxHeight="694.0" maxWidth="1014.0" minHeight="694.0" minWidth="1014.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SoloEstimationQuestionCtrl">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -28,11 +29,11 @@
             </padding>
 
             <children>
-                <HBox alignment="CENTER" layoutX="23.0" layoutY="34.0" prefHeight="32.0" prefWidth="512.0" spacing="4.0" VBox.vgrow="NEVER">
+                <HBox alignment="CENTER" layoutX="23.0" layoutY="34.0" prefHeight="32.0" prefWidth="957.0" spacing="4.0" VBox.vgrow="NEVER">
                     <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Questions" HBox.hgrow="ALWAYS">
                             <font>
-                                <Font size="14.0" />
+                                <Font name="Monospaced Regular" size="14.0" />
                             </font>
                         </Text>
                         <HBox fx:id="circles" alignment="CENTER" prefHeight="52.0" prefWidth="249.0" HBox.hgrow="ALWAYS">
@@ -146,95 +147,114 @@
                             <children>
                                 <Text fx:id="questionNum" strokeType="OUTSIDE" strokeWidth="0.0" text="1">
                                     <font>
-                                        <Font size="14.0" />
+                                        <Font name="Monospaced Regular" size="14.0" />
                                     </font>
                                 </Text>
                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="/20">
                                     <font>
-                                        <Font size="14.0" />
+                                        <Font name="Monospaced Regular" size="14.0" />
                                     </font>
                                 </Text>
                             </children>
                         </HBox>
                     </children>
                 </HBox>
-            <VBox prefHeight="283.0" prefWidth="583.0" spacing="48.0">
-               <children>
-                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="32.0">
-                     <children>
-                        <ImageView fx:id="questionImg" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/heart.png" />
-                           </image>
-                        </ImageView>
-                        <TextFlow maxHeight="92.0" maxWidth="361.0" minHeight="64.0" minWidth="192.0" prefHeight="92.0" prefWidth="361.0">
-                           <children>
-                              <Text fx:id="activityText" strokeType="OUTSIDE" strokeWidth="0.0" text="Question text here?">
-                                 <font>
-                                    <Font name="System Bold" size="18.0" />
-                                 </font>
-                              </Text>
-                           </children>
+                <VBox prefHeight="284.0" prefWidth="1014.0" spacing="48.0">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="32.0">
+                            <children>
+                                <ImageView fx:id="questionImg" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../images/heart.png" />
+                                    </image>
+                                </ImageView>
+                                <TextFlow maxHeight="92.0" maxWidth="770.0" minHeight="64.0" minWidth="192.0" prefHeight="92.0" prefWidth="770.0">
+                                    <children>
+                                        <Text fx:id="questionText" strokeType="OUTSIDE" strokeWidth="0.0" text="Question text here?">
+                                            <font>
+                                                <Font name="Monospaced Regular" size="30.0" />
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </TextFlow>
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                            <children>
+                                <VBox alignment="CENTER_LEFT" prefHeight="85.0" prefWidth="312.0">
+                                    <children>
+                                        <TextFlow prefHeight="200.0" prefWidth="200.0">
+                                            <children>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Your answer: " wrappingWidth="113.91015625">
+                                                    <font>
+                                                        <Font name="Monospaced Regular" size="20.0" />
+                                                    </font>
+                                                </Text>
+                                                <Text fx:id="yourAnswer" strokeType="OUTSIDE" strokeWidth="0.0" text="xy" wrappingWidth="141.857421875">
+                                                    <font>
+                                                        <Font name="Monospaced Regular" size="20.0" />
+                                                    </font>
+                                                </Text>
+                                            </children>
+                                        </TextFlow>
+                                        <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="296.0">
+                                            <children>
+                                                <TextField fx:id="userInput" prefWidth="256.0" />
+                                                <Button mnemonicParsing="false" onAction="#onSubmit">
+                                                    <graphic>
+                                                        <ImageView fx:id="submitButton" fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                                                            <image>
+                                                                <Image url="@../icons/front.png" />
+                                                            </image>
+                                                            <cursor>
+                                                                <Cursor fx:constant="HAND" />
+                                                            </cursor>
+                                                        </ImageView>
+                                                    </graphic>
+                                                    <cursor>
+                                                        <Cursor fx:constant="HAND" />
+                                                    </cursor>
+                                                </Button>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                                <ProgressIndicator fx:id="countdownCircle" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="70.0" progress="0.0">
+                                    <HBox.margin>
+                                        <Insets left="50.0" top="15.0" />
+                                    </HBox.margin>
+                                    <padding>
+                                        <Insets bottom="-16.0" />
+                                    </padding>
+                                </ProgressIndicator>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+                <Region VBox.vgrow="ALWAYS" />
+                <AnchorPane prefHeight="120.0" prefWidth="1014.0">
+                    <children>
+                        <Button fx:id="quitButton" layoutX="876.0" layoutY="32.0" mnemonicParsing="false" onAction="#onQuit" prefHeight="53.0" prefWidth="83.0" text="Quit">
+                            <font>
+                                <Font name="Monospaced Bold" size="20.0" />
+                            </font>
+                        </Button>
+                        <TextFlow layoutX="14.0" layoutY="31.0" prefHeight="71.0" prefWidth="200.0">
+                            <children>
+                                <Text text="Score: " wrappingWidth="187.242919921875">
+                                    <font>
+                                        <Font name="Monospaced Regular" size="32.0" />
+                                    </font>
+                                </Text>
+                                <Text fx:id="currentScore" text="0" wrappingWidth="187.242919921875">
+                                    <font>
+                                        <Font name="Monospaced Regular" size="32.0" />
+                                    </font>
+                                </Text>
+                            </children>
                         </TextFlow>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
-                     <children>
-                        <VBox alignment="CENTER_LEFT" prefHeight="85.0" prefWidth="312.0">
-                           <children>
-                              <Label fx:id="yourAnswer" text="Your answer:">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="296.0">
-                                 <children>
-                                    <TextField fx:id="userInput" prefWidth="192.0" />
-                                     <Button mnemonicParsing="false" onAction="#onSubmit">
-                                         <graphic>
-                                             <ImageView fx:id="submitButton" fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
-                                                 <image>
-                                                     <Image url="@../icons/front.png" />
-                                                 </image>
-                                                 <cursor>
-                                                     <Cursor fx:constant="HAND" />
-                                                 </cursor>
-                                             </ImageView>
-                                         </graphic>
-                                       <cursor>
-                                          <Cursor fx:constant="HAND" />
-                                       </cursor>
-                                     </Button>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                         <ProgressIndicator fx:id="countdownCircle" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="70.0" progress="0.0">
-                             <HBox.margin>
-                                 <Insets left="50.0" top="15.0" />
-                             </HBox.margin>
-                           <padding>
-                              <Insets bottom="-16.0" />
-                           </padding>
-                         </ProgressIndicator>
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-            <AnchorPane prefHeight="120.0" prefWidth="647.0">
-               <children>
-                  <Button fx:id="quitButton" layoutX="556.0" layoutY="9.0" mnemonicParsing="false" onAction="#onQuit" prefHeight="53.0" prefWidth="83.0" text="Quit">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Button>
-                  <Text fx:id="currentScore" layoutX="27.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Score: 0" wrappingWidth="120.13671875">
-                     <font>
-                        <Font size="32.0" />
-                     </font>
-                  </Text>
-               </children>
-            </AnchorPane>
+                    </children>
+                </AnchorPane>
             </children>
         </VBox>
     </center>
