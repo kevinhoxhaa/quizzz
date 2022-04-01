@@ -259,6 +259,7 @@ public class MainCtrl {
         primaryStage.setTitle("Quizzz");
         primaryStage.setScene(home);
         home.getStylesheets().add("client/stylesheets/homebuttons.css");
+        homeCtrl.setTitleFont();
     }
 
     /**

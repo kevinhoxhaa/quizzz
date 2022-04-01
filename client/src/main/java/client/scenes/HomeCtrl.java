@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.ResourceUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.entities.MultiplayerUser;
@@ -13,6 +14,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -25,6 +28,7 @@ public class HomeCtrl {
     private static final int UNAUTHORIZED = 401;
     private static final int FORBIDDEN = 403;
     private static final int USERNAME_LENGTH = 15;
+    private static final int TITLE_SIZE = 45;
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -33,6 +37,8 @@ public class HomeCtrl {
 
     @FXML
     private ImageView bulbView;
+    @FXML
+    private Text logoTitle;
 
     @FXML
     private TextField usernameField;
@@ -221,5 +227,16 @@ public class HomeCtrl {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Configures the title font to the specified
+     * pixel-art font resource
+     */
+    public void setTitleFont() {
+        logoTitle.setFont(Font.loadFont(
+                ResourceUtils.getClientResource("fonts/ka1.ttf").getPath(),
+                TITLE_SIZE
+        ));
     }
 }
