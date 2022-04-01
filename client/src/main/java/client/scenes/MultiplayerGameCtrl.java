@@ -143,12 +143,12 @@ public class MultiplayerGameCtrl {
         registerForEmojis(answerCtrl);
         registerForEmojis(mcQuestionCtrl);
         registerForHalfTime();
-         resetAllJokers();
-         mainCtrl.resetStreak();
-         user.unansweredQuestions = 0;
+        resetAllJokers();
+        mainCtrl.resetStreak();
+        user.unansweredQuestions = 0;
 
-         Question firstQuestion = fetchQuestion();
-         showQuestion(firstQuestion);
+        Question firstQuestion = fetchQuestion();
+        showQuestion(firstQuestion);
     }
 
     /**
@@ -171,12 +171,6 @@ public class MultiplayerGameCtrl {
      * @param answeredQuestion the answered question to post
      */
     public void postAnswer(Question answeredQuestion) {
-        if(getIsActiveDoublePoints()){
-            mainCtrl.addScore(user,answeredQuestion);
-        }
-        else{
-            mainCtrl.addScore(user,answeredQuestion);
-        }
         answerTimer = new Timer();
         answerTimer.schedule(
                 new TimerTask() {
@@ -215,7 +209,6 @@ public class MultiplayerGameCtrl {
      */
     public List<MultiplayerUser> fetchCorrectUsers(Question answeredQuestion) throws WebApplicationException {
         if(isActiveDoublePoints){
-            setIsActiveDoublePoints(false);
             return server.answerDoublePointsQuestion(serverUrl, gameIndex,
                     mainCtrl.getUser().id, answerCount, answeredQuestion);
         }

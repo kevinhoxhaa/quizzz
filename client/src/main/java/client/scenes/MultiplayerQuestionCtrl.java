@@ -27,6 +27,7 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
 
     private MultiplayerGameCtrl gameCtrl;
 
+
     private List<StackPane> jokers;
 
     @FXML

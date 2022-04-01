@@ -31,10 +31,8 @@ public class SoloAnswerCtrl extends AbstractAnswerCtrl{
     public void setup(SoloGame soloGame) {
         this.game = soloGame;
         Question prevQuestion = soloGame.loadCurrentQuestion();
-        mainCtrl.addScore(mainCtrl.getUser(),prevQuestion);
-        }
 
-        super.setup(prevQuestion, mainCtrl.getSoloScore());
+        super.setup(prevQuestion);
     }
 
     /**

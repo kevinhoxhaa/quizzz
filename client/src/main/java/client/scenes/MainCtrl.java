@@ -128,16 +128,16 @@ public class MainCtrl {
     }
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home,
-            Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> multiplayerQuestion,
-            Pair<MultiplayerAnswerCtrl, Parent> multiplayerAnswer, Pair<RankingCtrl, Parent> ranking,
-            Pair<MultiplayerEstimationQuestionCtrl, Parent> multiplayerEstimation,
+                           Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home,
+                           Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> multiplayerQuestion,
+                           Pair<MultiplayerAnswerCtrl, Parent> multiplayerAnswer, Pair<RankingCtrl, Parent> ranking,
+                           Pair<MultiplayerEstimationQuestionCtrl, Parent> multiplayerEstimation,
                            Pair<SoloEstimationQuestionCtrl, Parent> soloEstimation,
                            Pair<SoloQuestionCtrl, Parent> soloQuestion,
                            Pair<SoloAnswerCtrl, Parent> soloAnswer,
                            Pair<SoloResultsCtrl, Parent> soloResults,
                            Pair<MultiplayerResultsCtrl, Parent> multiplayerResults
-                           ) {
+    ) {
         this.primaryStage = primaryStage;
         primaryStage.setMinHeight(HEIGHT);
         primaryStage.setMinWidth(WIDTH);
@@ -218,6 +218,7 @@ public class MainCtrl {
 
     /**
      * This method resets the streak when an answer is incorrect.
+     * Since it is called after the postAnswers method, it also disables the isActiveDoublePoints
      */
     public void resetStreak(){
         streak=0;
@@ -228,8 +229,16 @@ public class MainCtrl {
     }
 
     public void addScore(User user, Question answeredQuestion){
-        incrementStreak();
+        if(answeredQuestion.hasCorrectUserAnswer()){
+            incrementStreak();
+        }
+        else{
+            resetStreak();
+        }
         int multiplyingFactor = (multiplayerCtrl!=null && multiplayerCtrl.getIsActiveDoublePoints()) ? 2 : 1;
+        if(multiplayerCtrl!=null && multiplayerCtrl.getIsActiveDoublePoints()) {
+            multiplayerCtrl.setIsActiveDoublePoints(false);
+        }
         int correctFactor = answeredQuestion.hasCorrectUserAnswer() ? 1 : 0;
 
         if(streak<X2){
