@@ -160,7 +160,7 @@
                             <children>
                                 <VBox prefHeight="305.0" prefWidth="373.0">
                                     <children>
-                                        <TableView fx:id="scoreTable" prefHeight="277.0" prefWidth="167.0">
+                                        <TableView fx:id="scoreTable" prefHeight="277.0" prefWidth="167.0" stylesheets="@/client/Stylesheets/TableView.css">
                                             <columns>
                                                 <TableColumn prefWidth="240.66664123535156" text="Users" />
                                                 <TableColumn prefWidth="132.00006866455078" text="Score" />
