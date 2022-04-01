@@ -175,7 +175,7 @@
                                         </StackPane>
                                         <StackPane prefHeight="110.0" prefWidth="214.0">
                                             <children>
-                                                <Text fx:id="activityText" strokeType="OUTSIDE" strokeWidth="0.0" text="What is the answer to this activity?" wrappingWidth="321.20001220703125">
+                                                <Text fx:id="questionText" strokeType="OUTSIDE" strokeWidth="0.0" text="What is the answer to this activity?" wrappingWidth="321.20001220703125">
                                                     <font>
                                                         <Font name="Monospaced Bold" size="18.0" />
                                                     </font>
@@ -423,11 +423,20 @@
                                 <Cursor fx:constant="HAND" />
                             </cursor>
                         </Button>
-                        <Text fx:id="currentScore" layoutX="43.0" layoutY="46.0" text="Score: 0" wrappingWidth="187.242919921875">
-                            <font>
-                                <Font name="Monospaced Regular" size="32.0" />
-                            </font>
-                        </Text>
+                        <TextFlow layoutX="14.0" layoutY="31.0" prefHeight="71.0" prefWidth="391.0">
+                            <children>
+                                <Text text="Score: " wrappingWidth="187.242919921875">
+                                    <font>
+                                        <Font name="Monospaced Regular" size="32.0" />
+                                    </font>
+                                </Text>
+                                <Text fx:id="currentScore" text="0" wrappingWidth="187.242919921875">
+                                    <font>
+                                        <Font name="Monospaced Regular" size="32.0" />
+                                    </font>
+                                </Text>
+                            </children>
+                        </TextFlow>
                         <Pane layoutX="216.0" prefHeight="52.0" prefWidth="228.0">
                             <children>
                                 <ImageView fx:id="doublePointsImage" fitHeight="52.0" fitWidth="62.0" layoutX="-6.0" pickOnBounds="true" preserveRatio="true" visible="false">

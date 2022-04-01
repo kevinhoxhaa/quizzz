@@ -2,119 +2,39 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.entities.Activity;
-import commons.entities.MultiplayerUser;
 import commons.models.Answer;
-import commons.models.ChoiceQuestion;
-import commons.models.ComparisonQuestion;
-import commons.models.ConsumptionQuestion;
 import commons.models.Emoji;
 import commons.models.Question;
-import jakarta.ws.rs.WebApplicationException;
-import commons.utils.CompareType;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.Cursor;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import javafx.util.Pair;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static commons.utils.CompareType.EQUAL;
-import static commons.utils.CompareType.LARGER;
-import static commons.utils.CompareType.SMALLER;
 
-
-public class MultiplayerQuestionCtrl implements SceneController, QuestionNumController,
-        EmojiController {
-    private static final double MILLISECONDS_PER_SECONDS = 1000.0;
-    private static final double CIRCLE_BORDER_SIZE = 1.7;
-    private static final double STANDARD_SIZE = 1.0;
-    private static final int KICK_AT_X_QUESTIONS = 3;
-    private static final int POLLING_DELAY = 0;
-    private static final int POLLING_INTERVAL = 500;
-
-    private final ServerUtils server;
-    private final MainCtrl mainCtrl;
+public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
+        implements EmojiController {
 
     private MultiplayerGameCtrl gameCtrl;
-    private Question currentQuestion;
 
-    private double startTime;
-
-
-    private boolean answerTopDisable = false;
-    private boolean answerMidDisable = false;
-    private boolean answerBotDisable = false;
-
-
-    @FXML
-    private StackPane answerTop;
-
-    @FXML
-    private StackPane answerMid;
-
-    @FXML
-    private StackPane answerBot;
-
-    @FXML
-    private Label answerTopText;
-
-    @FXML
-    private Label answerMidText;
-
-    @FXML
-    private Label answerBotText;
-
-    @FXML
-    private GridPane emojiPane;
-
-    @FXML
-    private ImageView emojiImage;
-
-    @FXML
-    private Text emojiText;
-
-    private Answer answerTopAnswer;
-    private Answer answerMidAnswer;
-    private Answer answerBotAnswer;
-
-    private List<StackPane> answerButtons;
-    private StackPane selectedAnswerButton;
-
-    private double secondsTaken;
-    private Answer userAnswer;
-
-    private List<String> correctPlayers;
     private List<StackPane> jokers;
 
     @FXML
-    private Text activityText;
+    private GridPane emojiPane;
     @FXML
-    private Text questionNum;
+    private ImageView emojiImage;
     @FXML
-    private ImageView questionImg;
-
-    @FXML
-    private ProgressIndicator countdownCircle;
-
-    @FXML
-    private HBox circles;
+    private Text emojiText;
 
     @FXML
     private StackPane doublePoints;
@@ -122,8 +42,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     private StackPane removeIncorrect;
     @FXML
     private StackPane reduceTime;
-    @FXML
-    private Text currentScore;
+
     @FXML
     private ImageView doublePointsImage;
     @FXML
@@ -139,10 +58,8 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      * @param mainCtrl
      */
     @Inject
-
     public MultiplayerQuestionCtrl(ServerUtils server, MainCtrl mainCtrl) {
-        this.server = server;
-        this.mainCtrl = mainCtrl;
+        super(server, mainCtrl);
     }
 
     /**
@@ -153,7 +70,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      *
      * @param question the question instance upon which the setup is based
      */
-    protected void setup(Question question) {
+    public void setup(Question question) {
         jokers=new ArrayList<>();
         jokers.add(doublePoints);
         jokers.add(removeIncorrect);
@@ -165,124 +82,17 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
             }
         }
 
-        selectedAnswerButton = null;
         gameCtrl.setAnsweredQuestion ( false );
-        this.currentQuestion = question;
-        currentScore.setText("Score: " + gameCtrl.getUser().points);
 
-        switch (question.getType()) {
-            case CONSUMPTION:
-                setupConsumptionQuestion(question);
-                break;
-            case COMPARISON:
-                setupComparisonQuestion(question);
-                break;
-            case CHOICE:
-                setupChoiceQuestion(question);
-                break;
-        }
+        super.setup(question, gameCtrl.getUser().points);
 
-        this.answerButtons = new ArrayList<>();
-        this.answerButtons.add(answerTop);
-        this.answerButtons.add(answerMid);
-        this.answerButtons.add(answerBot);
-
-        for (StackPane answerBtnLoop : answerButtons) {
-            answerBtnLoop.setStyle("-fx-border-width: 1; -fx-border-color: black");
-            answerBtnLoop.getChildren().get(0).setStyle("-fx-font-weight: normal");
-        }
-        resetAnswerColors();
         resetAnswerClickability();
-        resetAnswerOnMouseEnter();
-        enableEmojis();
+        disabledAnswer = null;
+        gameCtrl.enableEmojis(emojiPane);
         doublePointsImage.setVisible(false);
         removeIncorrectImage.setVisible(false);
         reduceTimeImage.setVisible(false);
-
-        try {
-            questionImg.setImage(
-                    server.fetchImage(mainCtrl.getServerUrl(), currentQuestion.getImagePath())
-            );
-        }
-        catch (IOException e){
-        }
     }
-
-    /**
-     * Sets up the questions and answers on the page for the given comparison question
-     *
-     * @param generalQuestion the given question
-     */
-    private void setupComparisonQuestion(Question generalQuestion) {
-        ComparisonQuestion question = (ComparisonQuestion) generalQuestion;
-
-        activityText.setText(
-                String.format("Does %s use more, less, or the same amount of energy as %s?",
-                        question.getFirstActivity().title, question.getSecondActivity().title)
-        );
-        answerTopText.setText("MORE");
-        answerMidText.setText("EQUAL");
-        answerBotText.setText("LESS");
-
-        answerTopAnswer = new Answer(LARGER);
-        answerMidAnswer = new Answer(EQUAL);
-        answerBotAnswer = new Answer(SMALLER);
-    }
-
-    /**
-     * Sets up the questions and answers on the page for the given consumption question
-     *
-     * @param generalQuestion the given question
-     */
-    private void setupConsumptionQuestion(Question generalQuestion) {
-        ConsumptionQuestion question = (ConsumptionQuestion) generalQuestion;
-
-        activityText.setText(
-                String.format("How much energy does %s cost?",
-                        question.getActivity().title)
-        );
-
-        List<Long> answers = question.getAnswers();
-
-        answerTopText.setText(answers.get(0).toString());
-        answerMidText.setText(answers.get(1).toString());
-        answerBotText.setText(answers.get(2).toString());
-
-        answerTopAnswer = new Answer(answers.get(0));
-        answerMidAnswer = new Answer(answers.get(1));
-        answerBotAnswer = new Answer(answers.get(2));
-    }
-
-    /**
-     * Sets up the questions and answers on the page for the given choice question
-     *
-     * @param generalQuestion the given question
-     */
-    private void setupChoiceQuestion(Question generalQuestion) {
-        ChoiceQuestion question = (ChoiceQuestion) generalQuestion;
-
-        activityText.setText(
-                String.format("What could you do instead of %s to consume less energy?",
-                        question.getComparedActivity().title)
-        );
-
-        List<Activity> answers = new ArrayList<>();
-        for (Activity activity : question.getActivities()) {
-            if (!activity.equals(question.getComparedActivity())) {
-                answers.add(activity);
-            }
-        }
-        Collections.shuffle(answers);
-
-        answerTopText.setText(answers.get(0).title);
-        answerMidText.setText(answers.get(1).title);
-        answerBotText.setText(answers.get(2).title);
-
-        answerTopAnswer = new Answer(answers.get(0));
-        answerMidAnswer = new Answer(answers.get(1));
-        answerBotAnswer = new Answer(answers.get(2));
-    }
-
 
     /**
      * Saves the answer selected last by the user, as well as the amount of time it took.
@@ -291,96 +101,9 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      * @param answerButton The answer button pressed.
      * @param answer       The answer corresponding to the answer button.
      */
-    private void onAnswerClicked(StackPane answerButton, Answer answer) {
-
-        server.send("/app/emoji/" + gameCtrl.getGameIndex(),
-                new Emoji("image", String.valueOf(gameCtrl.getGameIndex())));
-        gameCtrl.setAnsweredQuestion ( true );
-        if (!answerButton.equals(selectedAnswerButton)) {
-            currentQuestion.setUserAnswer(answer, getSeconds());
-
-            selectedAnswerButton = answerButton;
-            resetAnswerColors();
-            answerButton.setBackground(new Background(
-                    new BackgroundFill(Color.DARKCYAN, CornerRadii.EMPTY, Insets.EMPTY)));
-
-            for (StackPane answerBtnLoop : answerButtons) {
-                answerBtnLoop.setStyle("-fx-border-width: 1; -fx-border-color: black");
-                answerBtnLoop.getChildren().get(0).setStyle("-fx-font-weight: normal");
-            }
-            answerButton.getChildren().get(0).setStyle("-fx-font-weight: bold");
-            answerButton.setStyle("-fx-border-width: 2; -fx-border-color: black");
-        }
-
-    }
-
-    /**
-     * Returns the time since the timer started, in seconds.
-     * For now, a placeholder method.
-     *
-     * @return the time since the timer started, in seconds.
-     */
-    private double getSeconds() {
-        return (System.currentTimeMillis() - startTime) / MILLISECONDS_PER_SECONDS;
-    }
-
-    /**
-     * Called when the timer is up.
-     * Responsible for:
-     * - Disabling inputs
-     * - Sending the question instance back to the server
-     * - Waiting for the list of people who got it right
-     * - Making sure the answer page has all the necessary information
-     * - Redirecting to the answer page
-     */
-    public void finalizeAndSend() {
-        gameCtrl.postAnswer(currentQuestion);
-    }
-
-    /**
-     * Halves the remaining timer for the user.
-     *
-     * @param user the user that called the joker
-     */
-
-    public void halfTime ( MultiplayerUser user ) {
-        mainCtrl.halfTime( user );
-    }
-
-
-    /**
-     * Captures the exact time the question page started showing used for measuring the time
-     * players needed for answering the question.
-     */
-    protected void setStartTime() {
-        startTime = System.currentTimeMillis();
-    }
-
-    /**
-     * The method called when the button answerTop is clicked.
-     * Calls the generic method for clicking an answer, specifying that it was the top button.
-     */
-    @FXML
-    protected void onAnswerTopClicked() {
-        onAnswerClicked(answerTop, answerTopAnswer);
-    }
-
-    /**
-     * The method called when the button answerMid is clicked.
-     * Calls the generic method for clicking an answer, specifying that it was the middle button.
-     */
-    @FXML
-    protected void onAnswerMidClicked() {
-        onAnswerClicked(answerMid, answerMidAnswer);
-    }
-
-    /**
-     * The method called when the button answerBot is clicked.
-     * Calls the generic method for clicking an answer, specifying that it was the bottom button.
-     */
-    @FXML
-    protected void onAnswerBotClicked() {
-        onAnswerClicked(answerBot, answerBotAnswer);
+    protected void onAnswerClicked(StackPane answerButton, Answer answer) {
+        gameCtrl.setAnsweredQuestion(true);
+        super.onAnswerClicked(answerButton, answer);
     }
 
     /**
@@ -388,10 +111,9 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      * Sets answerTop's background color according to whether it is selected.
      */
     @FXML
+    @Override
     protected void enterAnswerTop() {
-        if(!answerTopDisable) {
-            enterAnswer(answerTop);
-        }
+        enterAnswer(answerTop);
     }
 
     /**
@@ -399,10 +121,9 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      * Sets answerMid's background color according to whether it is selected.
      */
     @FXML
+    @Override
     protected void enterAnswerMid() {
-        if(!answerMidDisable) {
-            enterAnswer(answerMid);
-        }
+        enterAnswer(answerMid);
     }
 
     /**
@@ -410,10 +131,9 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      * Sets answerBot's background color according to whether it is selected.
      */
     @FXML
+    @Override
     protected void enterAnswerBot() {
-        if(!answerBotDisable) {
-            enterAnswer(answerBot);
-        }
+        enterAnswer(answerBot);
     }
 
     /**
@@ -422,9 +142,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      */
     @FXML
     protected void exitAnswerTop() {
-        if(!answerTopDisable) {
-            resetAnswerColors(answerTop);
-        }
+        resetAnswerColors(answerTop);
     }
 
     /**
@@ -433,9 +151,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      */
     @FXML
     protected void exitAnswerMid() {
-        if(!answerMidDisable) {
-            resetAnswerColors(answerMid);
-        }
+        resetAnswerColors(answerMid);
     }
 
     /**
@@ -444,9 +160,7 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      */
     @FXML
     protected void exitAnswerBot() {
-        if(!answerBotDisable) {
-            resetAnswerColors(answerBot);
-        }
+        resetAnswerColors(answerBot);
     }
 
     /**
@@ -477,70 +191,13 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     }
 
     /**
-     * A general method for setting an answer button's background color upon the cursor enters it,
-     * according to whether it is selected.
-     *
-     * @param answerBtn The answer button to be recolor.
-     */
-    private void enterAnswer(StackPane answerBtn) {
-        if (answerBtn.equals(selectedAnswerButton)) {
-            answerBtn.setBackground(new Background(
-                    new BackgroundFill(Color.DARKCYAN, CornerRadii.EMPTY, Insets.EMPTY)));
-        } else {
-            answerBtn.setBackground(new Background(
-                    new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
-        }
-    }
-
-    /**
-     * The method called upon loading the question scene, and when the cursor leaves the given answer button .
-     * Resets the given answer box's background color according to whether they are selected.
-     * @param answerBtn The answer button to be recolor.
-     */
-    @FXML
-    public void resetAnswerColors(StackPane answerBtn) {
-                if (answerBtn.equals(selectedAnswerButton)) {
-                    answerBtn.setBackground(new Background(
-                            new BackgroundFill(Color.LIGHTSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
-                } else {
-                    answerBtn.setBackground(new Background(
-                            new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
-                }
-    }
-
-    /**
-     * The method called upon loading the question scene, and when the cursor leaves any of the answer buttons.
-     * Resets all answer boxes' background color according to whether they are selected.
-     */
-    @FXML
-    public void resetAnswerColors() {
-        for(StackPane answerBtn: answerButtons) {
-            if (answerBtn.equals(selectedAnswerButton)) {
-                answerBtn.setBackground(new Background(
-                        new BackgroundFill(Color.LIGHTSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
-            } else {
-                answerBtn.setBackground(new Background(
-                        new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
-            }
-        }
-    }
-
-    /**
      * The method is called upon loading the question scene, to make sure each answer button is clickable.
      * Else an answer is disabled after a user uses the Remove Incorrect Answer Joker.
      */
-    @FXML
-    public void resetAnswerClickability(){
-
+    private void resetAnswerClickability(){
         for(StackPane answerBtn : answerButtons){
             answerBtn.setDisable(false);
         }
-    }
-
-    public void resetAnswerOnMouseEnter(){
-        answerTopDisable = false;
-        answerMidDisable = false;
-        answerBotDisable = false;
     }
 
     /**
@@ -562,7 +219,6 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      */
     @FXML
     public void resetJokerColors() {
-
         for (StackPane joker : jokers) {
             if (!gameCtrl.getUsedJokers().contains(joker.idProperty().getValue())) {
                 joker.setBackground(new Background(
@@ -617,87 +273,27 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     public void useRemoveIncorrect(){
         gameCtrl.setIsActiveRemoveIncorrect(true);
         gameCtrl.useJoker(removeIncorrect, removeIncorrectImage);
-        Question question = getCurrentQuestion();
-        switch (question.getType()) {
-            case CONSUMPTION: {
-                List<Long> incorrectAnswers = new ArrayList<>();
-                incorrectAnswers.add(answerTopAnswer.getLongAnswer());
-                incorrectAnswers.add(answerMidAnswer.getLongAnswer());
-                incorrectAnswers.add(answerBotAnswer.getLongAnswer());
-                for(Long answer:incorrectAnswers){
-                    if(answer==((ConsumptionQuestion)currentQuestion).getUserAnswer().getLongAnswer()){
-                        incorrectAnswers.remove(answer);
-                    }
-                };
-                if (answerTopAnswer.getLongAnswer() == incorrectAnswers.get(0)) {
-                    answerTop.setDisable(true);
-                    answerTop.setBackground(new Background(
-                            new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
-                    answerTopDisable = true;
 
-                }
-                if (answerBotAnswer.getLongAnswer() == incorrectAnswers.get(0)) {
-                    answerBot.setDisable(true);
-                    answerBot.setBackground(new Background(
-                            new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
-                    answerBotDisable = true;
-                }
-                if (answerMidAnswer.getLongAnswer() == incorrectAnswers.get(0)) {
-                    answerMid.setDisable(true);
-                    answerMid.setBackground(new Background(
-                            new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
-                    answerMidDisable = true;
+        List<Answer> incorrectAnswers = new ArrayList<>();
 
-                }
-                break;
-            }
-            case COMPARISON: {
-                List<CompareType> incorrectAnswers = ((ComparisonQuestion) currentQuestion).getincorrectAnswers();
-                if(answerTopAnswer.getCompareType() == incorrectAnswers.get(0)){
-                    answerTop.setDisable(true);
-                    answerTop.setBackground(new Background(
-                            new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
-                    answerTopDisable = true;
-                }
-                if(answerBotAnswer.getCompareType() == incorrectAnswers.get(0)){
-                    answerBot.setDisable(true);
-                    answerBot.setBackground(new Background(
-                            new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
-                    answerBotDisable = true;
-                }
-                if(answerMidAnswer.getCompareType() == incorrectAnswers.get(0)){
-                    answerMid.setDisable(true);
-                    answerMid.setBackground(new Background(
-                            new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
-                    answerMidDisable = true;
-                }
-                break;
-            }
-            case CHOICE: {
-                List<Activity> incorrectAnswers = ((ChoiceQuestion) currentQuestion).getIncorrectActivities();
-                if(answerTopAnswer.getActivity() == incorrectAnswers.get(0)){
-                    answerTop.setDisable(true);
-                    answerTop.setBackground(new Background(
-                            new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
-                    answerTopDisable = true;
-                }
-                if(answerBotAnswer.getActivity() == incorrectAnswers.get(0)){
-                    answerBot.setDisable(true);
-                    answerBot.setBackground(new Background(
-                            new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
-                    answerBotDisable = true;
-                }
-                if(answerMidAnswer.getActivity() == incorrectAnswers.get(0)){
-                    answerMid.setDisable(true);
-                    answerMid.setBackground(new Background(
-                            new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
-                    answerMidDisable = true;
-                }
+        incorrectAnswers.add(answerTopAnswer);
+        incorrectAnswers.add(answerMidAnswer);
+        incorrectAnswers.add(answerBotAnswer);
+        incorrectAnswers.remove(currentQuestion.getUserAnswer());
+        incorrectAnswers.remove(currentQuestion.generateCorrectAnswer());
+        Collections.shuffle(incorrectAnswers);
+        Answer answerToRemove = incorrectAnswers.get(0);
 
-                break;
+        for(Pair pair : answerButtonPairs){
+            StackPane button = (StackPane) pair.getKey();
+            Answer answer = (Answer) pair.getValue();
+            if(answer.equals(answerToRemove)){
+                button.setDisable(true);
+                button.setBackground(new Background(
+                        new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+                disabledAnswer = button;
             }
         }
-
     }
 
     /**
@@ -728,56 +324,31 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
         answerBot.setOnMouseClicked(null);
     }
 
+    /**
+     * Enables interaction with the answer buttons.
+     */
     public void enableAnswers() {
         answerTop.setOnMouseClicked(event -> onAnswerTopClicked());
         answerMid.setOnMouseClicked(event -> onAnswerMidClicked());
         answerBot.setOnMouseClicked(event -> onAnswerBotClicked());
     }
 
+    /**
+     * Redirects the player to the corresponding answer page.
+     * If the player was inactive for 3 questions, kicks them.
+     * Called when the timer is up.
+     */
     @Override
     public void redirect() {
         disableAnswers();
-        disableEmojis();
-        MultiplayerUser user = gameCtrl.getUser();
-        if (!gameCtrl.getAnsweredQuestion()) {
-            user.unansweredQuestions++;
-            if (user.unansweredQuestions == KICK_AT_X_QUESTIONS) {
-                try {
-                    server.removeMultiplayerUser(server.getURL(), user);
-                } catch(WebApplicationException e) {
-                    System.out.println("User to remove not found!");
-                }
-
-                mainCtrl.killThread();
-
-                if(server.getSession() != null && server.getSession().isConnected()) {
-                    gameCtrl.unregisterForEmojis();
-                    gameCtrl.unregisterForHalfTime();
-                    server.getSession().disconnect();
-                }
-                gameCtrl.hideEmojis();
-                mainCtrl.showHome();
-                mainCtrl.bindUser(null);
-
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle ("Kicked :(");
-                alert.setHeaderText(null);
-                alert.setGraphic(null);
-                alert.setContentText("You've been kicked for not answering 3 question in a row!");
-                alert.show();
-
-                return;
-            }
-        } else {
-            user.unansweredQuestions = 0;
-        }
-
-        gameCtrl.setAnsweredQuestion(false);
-        disableAnswers();
-        disableEmojis();
-        finalizeAndSend();
+        gameCtrl.disableEmojis(emojiPane);
+        gameCtrl.redirectFromQuestion();
+        gameCtrl.postAnswer(currentQuestion);
     }
 
+    /**
+     * Quits the game. Called when clicking 'quit'.
+     */
     @Override
     public void onQuit() {
         mainCtrl.quitGame(false, true);
@@ -785,76 +356,19 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
     }
 
     /**
-     * Getter for the circles bar
-     *
-     * @return circles
-     */
-    public HBox getCirclesHBox() {
-        return circles;
-    }
-
-    /**
-     * Getter for the text node containing the current question number
-     *
-     * @return questionNum
-     */
-    public Text getQuestionNum() {
-        return questionNum;
-    }
-
-    public Question getCurrentQuestion(){
-        return currentQuestion;
-    }
-
-    /**
      * Highlights current question so the user is aware which circle corresponds to his current question
      */
+    @Override
     public void highlightCurrentCircle() {
-        Circle circle = (Circle) circles.getChildren().get(gameCtrl.getAnswerCount());
-        circle.setFill(Color.DARKGRAY);
-        circle.setStrokeWidth(CIRCLE_BORDER_SIZE);
+        highlightCurrentCircle(gameCtrl.getAnswerCount());
     }
 
     /**
-     * Resets the highlighting of the circle borders
+     * Updates the question number on the top of the screen.
      */
-    public void resetHighlight() {
-        for (int i = 0; i < circles.getChildren().size(); i++) {
-            Circle circle = (Circle) circles.getChildren().get(i);
-            circle.setStrokeWidth(STANDARD_SIZE);
-        }
-    }
-
-    /**
-     * Send emojis to the server on emoji click
-     */
-    public void enableEmojis() {
-        emojiPane.getChildren().forEach(n -> {
-            if(n instanceof ImageView) {
-                ImageView e = (ImageView) n;
-                e.setOnMouseClicked(event -> gameCtrl.sendEmoji(e));
-                e.setCursor(Cursor.HAND);
-
-                String[] parts = e.getImage().getUrl().split("/");
-                String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
-                emojiPath = emojiPath.substring(
-                        0, emojiPath.length() - "classes/java/main/".length())
-                        + "resources/main/client/images/" + parts[parts.length - 1];
-
-                e.setImage(new Image(emojiPath));
-            }
-        });
-    }
-    /**
-     * Disable emoji clicks
-     */
-    public void disableEmojis() {
-        emojiPane.getChildren().forEach(n -> {
-            if(n instanceof ImageView) {
-                ImageView e = (ImageView) n;
-                e.setOnMouseClicked(null);
-            }
-        });
+    @Override
+    public void updateQuestionNumber() {
+        questionNum.setText("" + (gameCtrl.getAnswerCount() + 1));
     }
 
     /**
@@ -863,18 +377,12 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
      */
     @Override
     public void displayEmoji(Emoji emoji) {
-        String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
-        emojiPath = emojiPath.substring(
-                0, emojiPath.length() - "classes/java/main/".length())
-                + "resources/main/client/images/" + emoji.getImageName();
-        emojiImage.setImage(new Image(emojiPath));
-        emojiText.setText(emoji.getUsername());
+        gameCtrl.displayEmoji(emoji, emojiImage, emojiText);
     }
 
     /**
      * Removes the emoji from the image view
      */
-    @Override
     public void hideEmoji() {
         emojiImage.setImage(null);
         emojiText.setText("");
@@ -888,24 +396,4 @@ public class MultiplayerQuestionCtrl implements SceneController, QuestionNumCont
         this.gameCtrl = gameCtrl;
     }
 
-    @Override
-    public void updateCircleColor(List<Color> colors) {
-        for (int i = 0; i < gameCtrl.getAnswerCount(); i++) {
-            Circle circle = (Circle) getCirclesHBox().getChildren().get(i);
-            circle.setFill(colors.get(i));
-        }
-    }
-
-    @Override
-    public void resetCircleColor() {
-        for (int i = 0; i < mainCtrl.getQuestionsPerGame(); i++) {
-            Circle circle = (Circle) getCirclesHBox().getChildren().get(i);
-            circle.setFill(Color.LIGHTGRAY);
-        }
-    }
-
-    @Override
-    public void updateQuestionNumber() {
-        getQuestionNum().setText("" + (gameCtrl.getAnswerCount() + 1));
-    }
 }

@@ -89,7 +89,7 @@ public class MainCtrl {
     private RankingCtrl rankingCtrl;
     private Scene ranking;
 
-    private EstimationQuestionCtrl multiplayerEstimationCtrl;
+    private MultiplayerEstimationQuestionCtrl multiplayerEstimationCtrl;
     private Scene multiplayerEstimation;
 
     private SoloEstimationQuestionCtrl soloEstimationCtrl;
@@ -131,7 +131,7 @@ public class MainCtrl {
             Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home,
             Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> multiplayerQuestion,
             Pair<MultiplayerAnswerCtrl, Parent> multiplayerAnswer, Pair<RankingCtrl, Parent> ranking,
-            Pair<EstimationQuestionCtrl, Parent> multiplayerEstimation,
+            Pair<MultiplayerEstimationQuestionCtrl, Parent> multiplayerEstimation,
                            Pair<SoloEstimationQuestionCtrl, Parent> soloEstimation,
                            Pair<SoloQuestionCtrl, Parent> soloQuestion,
                            Pair<SoloAnswerCtrl, Parent> soloAnswer,
@@ -458,7 +458,7 @@ public class MainCtrl {
      * @param sceneController the scene controller instance that will redirect to the next scene,
      *                        once the timer is up
      */
-    public void startTimer(ProgressIndicator countdownCircle, SceneController sceneController) {
+    public void startTimer(ProgressIndicator countdownCircle, QuestionNumController sceneController) {
         countdownCircle.applyCss();
         Text text = (Text) countdownCircle.lookup(".text.percentage");
         if (timerThread != null && timerThread.isAlive()) {
@@ -541,7 +541,6 @@ public class MainCtrl {
         soloAnswerCtrl.setup(game);
         updateQuestionCounters(soloAnswerCtrl, colors);
         primaryStage.setScene(soloAnswer);
-        soloAnswerCtrl.startTimer();
     }
 
     /**
@@ -678,7 +677,7 @@ public class MainCtrl {
         controller.updateCircleColor(colors);
         controller.updateQuestionNumber();
         if(controller instanceof MultiplayerQuestionCtrl ||
-                controller instanceof EstimationQuestionCtrl ||
+                controller instanceof MultiplayerEstimationQuestionCtrl ||
                 controller instanceof SoloQuestionCtrl ||
                 controller instanceof SoloEstimationQuestionCtrl){
             controller.resetHighlight();
