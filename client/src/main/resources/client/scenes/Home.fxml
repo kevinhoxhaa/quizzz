@@ -36,11 +36,11 @@
                              </image>
                          </ImageView>
                      </HBox>
-                     <TextField fx:id="usernameField" prefWidth="256.0" promptText="Username" style="-fx-font-size: 1.5em; -fx-font-family: Monospaced; -fx-pref-width: 28em;">
+                     <TextField styleClass="pixelField" fx:id="usernameField" prefWidth="256.0" promptText="Username" style="-fx-font-size: 1.5em; -fx-font-family: Monospaced; -fx-pref-width: 28em;">
                <font>
                   <Font name="Monospaced Regular" size="12.0" />
                </font></TextField>
-                     <TextField fx:id="urlField" prefHeight="35.0" prefWidth="566.0" promptText="Server URL" style="-fx-font-size: 1.5em; -fx-font-family: Monospaced; -fx-pref-width: 28em;">
+                     <TextField styleClass="pixelField" fx:id="urlField" prefHeight="35.0" prefWidth="566.0" promptText="Server URL" style="-fx-font-size: 1.5em; -fx-font-family: Monospaced; -fx-pref-width: 28em;">
                <font>
                   <Font name="Monospaced Regular" size="12.0" />
                </font></TextField>
