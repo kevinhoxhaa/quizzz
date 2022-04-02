@@ -15,14 +15,16 @@ import java.io.IOException;
 public class AdminPanelCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private final MultiplayerGameCtrl gameCtrl;
 
     @FXML
     private Stage activityAdd;
 
     @Inject
-    public AdminPanelCtrl ( ServerUtils server, MainCtrl mainCtrl ) {
+    public AdminPanelCtrl (ServerUtils server, MainCtrl mainCtrl, MultiplayerGameCtrl gameCtrl ) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        this.gameCtrl = gameCtrl;
     }
 
     /**
@@ -75,7 +77,7 @@ public class AdminPanelCtrl {
     public void addNewActivity ( String source, int consumption, String title ) {
         server.addActivity (
                 mainCtrl.getServerUrl(),
-                mainCtrl.getGameIndex(),
+                gameCtrl.getGameIndex(),
                 new Activity ( title, consumption, source  )
         );
     }
