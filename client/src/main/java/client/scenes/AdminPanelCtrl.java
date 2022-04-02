@@ -9,6 +9,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import javax.inject.Inject;
 import java.io.IOException;
 
 public class AdminPanelCtrl {
@@ -18,6 +19,7 @@ public class AdminPanelCtrl {
     @FXML
     private Stage activityAdd;
 
+    @Inject
     public AdminPanelCtrl ( ServerUtils server, MainCtrl mainCtrl ) {
         this.server = server;
         this.mainCtrl = mainCtrl;
