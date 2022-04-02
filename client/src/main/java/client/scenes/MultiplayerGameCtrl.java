@@ -31,6 +31,7 @@ import java.util.TimerTask;
 
 public class MultiplayerGameCtrl {
 
+
     private List<Color> colors;
 
     private boolean answeredQuestion = false;
@@ -64,8 +65,6 @@ public class MultiplayerGameCtrl {
     private MultiplayerResultsCtrl resultsCtrl;
 
     private boolean isActiveDoublePoints;
-
-    private boolean isAvailableRemoveIncorrect = true;
     private boolean isActiveRemoveIncorrect;
 
     private List<String> usedJokers;
@@ -153,9 +152,12 @@ public class MultiplayerGameCtrl {
         registerForEmojis(answerCtrl);
         registerForEmojis(mcQuestionCtrl);
         registerForHalfTime();
+        resetAllJokers();
+        mainCtrl.resetStreak();
+        user.unansweredQuestions = 0;
+
         Question firstQuestion = fetchQuestion();
         showQuestion(firstQuestion);
-        resetAllJokers();
     }
 
     /**
@@ -173,15 +175,11 @@ public class MultiplayerGameCtrl {
      * - Gives double points if the joker isn't available
      * - Sets the joker as "available" after it is used,
      * even though it won't be possible to use it again
+     * Introduced a streak factor to the point calculation method
+     * to make the game more interesting and competitive.
      * @param answeredQuestion the answered question to post
      */
     public void postAnswer(Question answeredQuestion) {
-        if(getIsActiveDoublePoints()){
-            user.points += 2*answeredQuestion.calculatePoints();
-        }
-        else{
-            user.points += answeredQuestion.calculatePoints();
-        }
         answerTimer = new Timer();
         answerTimer.schedule(
                 new TimerTask() {
@@ -210,6 +208,7 @@ public class MultiplayerGameCtrl {
                 }, POLLING_DELAY, POLLING_INTERVAL);
     }
 
+
     /**
      * Returns the correct users to an answered question
      * @param answeredQuestion the answered question
@@ -219,7 +218,6 @@ public class MultiplayerGameCtrl {
      */
     public List<MultiplayerUser> fetchCorrectUsers(Question answeredQuestion) throws WebApplicationException {
         if(isActiveDoublePoints){
-            setIsActiveDoublePoints(false);
             return server.answerDoublePointsQuestion(serverUrl, gameIndex,
                     mainCtrl.getUser().id, answerCount, answeredQuestion);
         }
