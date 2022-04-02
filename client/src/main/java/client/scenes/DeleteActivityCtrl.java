@@ -6,20 +6,15 @@ import javafx.scene.input.KeyEvent;
 
 import javax.inject.Inject;
 
-public class AddActivityCtrl {
+public class DeleteActivityCtrl {
     private AdminPanelCtrl adminPanelCtrl;
 
     @FXML
-    private TextField title;
+    private TextField id;
 
-    @FXML
-    private TextField source;
-
-    @FXML
-    private TextField answer;
 
     @Inject
-    public AddActivityCtrl ( AdminPanelCtrl adminPanelCtrl ) {
+    public DeleteActivityCtrl ( AdminPanelCtrl adminPanelCtrl ) {
         this.adminPanelCtrl = adminPanelCtrl;
     }
 
@@ -29,18 +24,15 @@ public class AddActivityCtrl {
      */
     @FXML
     public void onOkButton () {
-        adminPanelCtrl.addNewActivity(
-                title.getText(),
-                Integer.parseInt( answer.getText() ),
-                source.getText()
+        adminPanelCtrl.deleteActivity(
+                Integer.parseInt( id.getText() )
         );
     }
-
 
     @FXML
     public void cancel() {
         clearFields();
-        adminPanelCtrl.getActivityAdd().close();
+        adminPanelCtrl.getActivityDelete().close();
     }
 
     /**
@@ -49,9 +41,7 @@ public class AddActivityCtrl {
      */
 
     private void clearFields() {
-        title.clear();
-        answer.clear();
-        source.clear();
+       id.clear();
     }
 
     public void keyPressed(KeyEvent e) {
@@ -66,4 +56,5 @@ public class AddActivityCtrl {
                 break;
         }
     }
+
 }

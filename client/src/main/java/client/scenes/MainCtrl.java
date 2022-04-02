@@ -110,6 +110,12 @@ public class MainCtrl {
     private AdminPanelCtrl adminPanelCtrl;
     private Scene adminPanel;
 
+    private AddActivityCtrl addActivityCtrl;
+    private Scene addActivity;
+
+    private DeleteActivityCtrl deleteActivityCtrl;
+    private Scene deleteActivity;
+
     private User user;
     private int gameIndex;
     private List<Color> colors;
@@ -129,7 +135,9 @@ public class MainCtrl {
                            Pair<SoloAnswerCtrl, Parent> soloAnswer,
                            Pair<SoloResultsCtrl, Parent> soloResults,
                            Pair<MultiplayerResultsCtrl, Parent> multiplayerResults,
-                           Pair<AdminPanelCtrl, Parent> adminPanel ) {
+                           Pair<AdminPanelCtrl, Parent> adminPanel,
+                           Pair<AddActivityCtrl, Parent> addActivity,
+                           Pair<DeleteActivityCtrl, Parent> deleteActivity ) {
         this.primaryStage = primaryStage;
         primaryStage.setMinHeight(HEIGHT);
         primaryStage.setMinWidth(WIDTH);
@@ -180,6 +188,12 @@ public class MainCtrl {
 
         this.adminPanelCtrl = adminPanel.getKey();
         this.adminPanel = new Scene( adminPanel.getValue() );
+
+        this.addActivityCtrl = addActivity.getKey();
+        this.addActivity = new Scene( addActivity.getValue() );
+
+        this.deleteActivityCtrl = deleteActivity.getKey();
+        this.deleteActivity = new Scene( deleteActivity.getValue() );
 
         countdown = START_TIME;
 
@@ -269,6 +283,24 @@ public class MainCtrl {
      */
     public long getSoloScore() {
         return getUser().getPoints();
+    }
+
+    /**
+     * Returns the addActivityScene
+     * @return the addActivityScene
+     */
+
+    public Scene getAddActivityScene() {
+        return this.addActivity;
+    }
+
+    /**
+     * Returns the deleteActivityScene
+     * @return the deleteActivityScene
+     */
+
+    public Scene getDeleteActivityScene() {
+        return this.deleteActivity;
     }
 
     /**

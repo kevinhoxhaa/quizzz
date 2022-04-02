@@ -3,28 +3,42 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.entities.Activity;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import javax.inject.Inject;
-import java.io.IOException;
+import java.util.List;
 
 public class AdminPanelCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
-    private final MultiplayerGameCtrl gameCtrl;
 
     @FXML
     private Stage activityAdd;
 
+    @FXML
+    private Stage activityDelete;
+
+    @FXML
+    private TableView activityTable;
+    @FXML
+    private TableColumn id;
+    @FXML
+    private TableColumn title;
+    @FXML
+    private TableColumn consumption;
+    @FXML
+    private TableColumn source;
+    @FXML
+    private TableColumn imagePath;
+
     @Inject
-    public AdminPanelCtrl (ServerUtils server, MainCtrl mainCtrl, MultiplayerGameCtrl gameCtrl ) {
+    public AdminPanelCtrl (ServerUtils server, MainCtrl mainCtrl ) {
         this.server = server;
         this.mainCtrl = mainCtrl;
-        this.gameCtrl = gameCtrl;
     }
 
     /**
@@ -38,32 +52,51 @@ public class AdminPanelCtrl {
     }
 
     /**
-     * Opens the Activity add Screen
+     * Getter for the activity delete stage
      *
-     * @throws IOException
+     * @return the stage
+     */
+
+    public Stage getActivityDelete() {
+        return this.activityDelete;
+    }
+
+    /**
+     * Opens the Activity add Screen
      */
 
     @FXML
-    public void onAddActivityButton () throws IOException {
-
-        if ( activityAdd != null ) {
+    public void onAddActivityButton () {
+        if ( activityAdd != null) {
             activityAdd.show();
-            return ;
+            return;
         }
 
         activityAdd = new Stage();
         activityAdd.initModality(Modality.APPLICATION_MODAL);
         activityAdd.setResizable(false);
 
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/client/scenes/AddActivity.fxml"));
-        loader.setController(this);
-
-        ScrollPane addActivityPane = loader.load();
-        Scene addActivityScene = new Scene(addActivityPane);
-        activityAdd.setScene(addActivityScene);
+        activityAdd.setScene(mainCtrl.getAddActivityScene());
         activityAdd.show();
+    }
 
+    /**
+     * Opens the Activity delete Screen
+     */
+
+    @FXML
+    public void onDeleteActivityButton () {
+        if ( activityDelete != null) {
+            activityDelete.show();
+            return;
+        }
+
+        activityDelete = new Stage();
+        activityDelete.initModality(Modality.APPLICATION_MODAL);
+        activityDelete.setResizable(false);
+
+        activityDelete.setScene(mainCtrl.getDeleteActivityScene());
+        activityDelete.show();
     }
 
     /**
@@ -75,11 +108,34 @@ public class AdminPanelCtrl {
      */
 
     public void addNewActivity ( String source, int consumption, String title ) {
-        server.addActivity (
+        server.addActivityToRepo (
                 mainCtrl.getServerUrl(),
-                gameCtrl.getGameIndex(),
                 new Activity ( title, consumption, source  )
         );
+    }
+
+    /**
+     * Populates the table with all the activities from the database
+     *
+     */
+
+    @FXML
+    public void showActivities() {
+        List<Activity> activityList = server.getActivities ( server.getURL() );
+        id.setCellValueFactory( new PropertyValueFactory<>( "ID" ) );
+        title.setCellValueFactory( new PropertyValueFactory<>( "Title" ) );
+        consumption.setCellValueFactory( new PropertyValueFactory<>( "Consumption" ) );
+        source.setCellValueFactory( new PropertyValueFactory<>( "Source" ) );
+        imagePath.setCellValueFactory( new PropertyValueFactory<>( "Image Path" ) );
+        for ( Activity activity : activityList ) {
+            activityTable.getItems().add ( activity );
+        }
+    }
+
+
+    public void deleteActivity ( int id ) {
+        Activity activity = server.findActivityByID ( server.getURL(), id );
+        server.deleteActivityFromRepo ( server.getURL(), activity );
     }
 
 

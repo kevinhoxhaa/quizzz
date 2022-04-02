@@ -179,7 +179,7 @@ public class ServerUtils {
     }
 
     /**
-     * Adds a new activity to the database
+     * Adds a new activity to the database of the game
      * @param serverUrl The server URL of the game the user is in
      * @param gameIndex the game index
      * @param activity the activity to be added
@@ -196,6 +196,56 @@ public class ServerUtils {
     }
 
     /**
+     * Adds a new activity to the repo
+     *
+     * @param serverUrl the current server
+     * @param activity the activity to be added
+     * @return the added activity
+     */
+
+    public Activity addActivityToRepo ( String serverUrl, Activity activity ) {
+        String path = "/api/activity";
+        return ClientBuilder.newClient ( new ClientConfig() )
+                .target(serverUrl).path(path)
+                .request( APPLICATION_JSON )
+                .accept ( APPLICATION_JSON )
+                .post ( Entity.entity ( activity, APPLICATION_JSON ), Activity.class );
+    }
+
+    /**
+     * Finds and returns an activity based on the id
+     *
+     * @param serverUrl the server of the game
+     * @param id the id of the actvity
+     * @return the desired activity
+     */
+
+    public Activity findActivityByID ( String serverUrl, int id ) {
+        String path = String.format ( "/api/activity/%d", id );
+        return ClientBuilder.newClient ( new ClientConfig() )
+                .target ( serverUrl ).path ( path )
+                .request ( APPLICATION_JSON )
+                .accept ( APPLICATION_JSON )
+                .get ( Activity.class );
+    }
+
+    /**
+     * Returns a list of all activities
+     *
+     * @param serverUrl the server url of the game the user is in
+     * @return a list of activities
+     */
+
+    public List<Activity> getActivities ( String serverUrl ) {
+        String path = "/api/activity";
+        return ClientBuilder.newClient ( new ClientConfig() )
+                .target ( serverUrl ).path( path )
+                .request( APPLICATION_JSON )
+                .accept( APPLICATION_JSON )
+                .get( new GenericType<List<Activity>>() {} );
+    }
+
+    /**
      * Deletes an activity
      * @param serverUrl The server URL of the game the user is in
      * @param gameIndex the game index
@@ -205,6 +255,23 @@ public class ServerUtils {
 
     public Activity deleteActivity ( String serverUrl, int gameIndex, Activity activity ) {
         String path = String.format("/api/games/%d/activity/%s", gameIndex, activity.identifier );
+        return ClientBuilder.newClient ( new ClientConfig() )
+                .target(serverUrl).path(path)
+                .request( APPLICATION_JSON )
+                .accept ( APPLICATION_JSON )
+                .delete ( Activity.class );
+    }
+
+    /**
+     * Deletes an activity from the repo
+     *
+     * @param serverUrl the server url
+     * @param activity the activity to be deleted
+     * @return the deleted activity
+     */
+
+    public Activity deleteActivityFromRepo ( String serverUrl, Activity activity ) {
+        String path = String.format("/api/activity/%s", activity.identifier );
         return ClientBuilder.newClient ( new ClientConfig() )
                 .target(serverUrl).path(path)
                 .request( APPLICATION_JSON )

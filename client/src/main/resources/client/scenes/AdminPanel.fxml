@@ -9,15 +9,15 @@
 
 <AnchorPane minHeight="694.0" minWidth="1014.0" onMouseClicked="#onAddActivityButton" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminPanelCtrl">
    <children>
-      <Button layoutX="17.0" layoutY="186.0" mnemonicParsing="false" prefHeight="71.0" prefWidth="116.0" text="Show Activities">
+      <Button layoutX="17.0" layoutY="186.0" mnemonicParsing="false" onAction="#showActivities" prefHeight="71.0" prefWidth="116.0" text="Show Activities">
          <font>
             <Font size="14.0" />
          </font></Button>
-      <Button fx:id="addActivity" layoutX="17.0" layoutY="300.0" mnemonicParsing="false" onMouseClicked="#onAddActivityButton" prefHeight="71.0" prefWidth="116.0" text="Add Activity">
+      <Button fx:id="addActivity" layoutX="17.0" layoutY="300.0" mnemonicParsing="false" onAction="#onAddActivityButton" onMouseClicked="#onAddActivityButton" prefHeight="71.0" prefWidth="116.0" text="Add Activity">
          <font>
             <Font size="15.0" />
          </font></Button>
-      <Button layoutX="17.0" layoutY="425.0" mnemonicParsing="false" prefHeight="71.0" prefWidth="116.0" text="Delete Activity">
+      <Button layoutX="17.0" layoutY="425.0" mnemonicParsing="false" onAction="#onDeleteActivityButton" prefHeight="71.0" prefWidth="116.0" text="Delete Activity">
          <font>
             <Font size="15.0" />
          </font></Button>
@@ -26,13 +26,13 @@
             <Font name="Monospaced Regular" size="43.0" />
          </font>
       </Text>
-      <TableView layoutX="158.0" layoutY="87.0" prefHeight="498.0" prefWidth="775.0">
+      <TableView fx:id="activityTable" layoutX="158.0" layoutY="87.0" prefHeight="498.0" prefWidth="775.0">
         <columns>
-          <TableColumn prefWidth="46.0" text="ID" />
-          <TableColumn prefWidth="283.1999816894531" text="Title" />
-            <TableColumn prefWidth="94.79995727539062" text="Consumption" />
-            <TableColumn prefWidth="173.2000732421875" text="Source" />
-            <TableColumn prefWidth="178.0" text="Image Path" />
+          <TableColumn fx:id="id" prefWidth="46.0" text="ID" />
+          <TableColumn fx:id="title" prefWidth="283.1999816894531" text="Title" />
+            <TableColumn fx:id="consumption" prefWidth="94.79995727539062" text="Consumption" />
+            <TableColumn fx:id="source" prefWidth="173.2000732421875" text="Source" />
+            <TableColumn fx:id="imagePath" prefWidth="178.0" text="Image Path" />
         </columns>
       </TableView>
       <Button fx:id="quitButton" layoutX="828.0" layoutY="614.0" mnemonicParsing="false" prefHeight="59.0" prefWidth="125.0" text="Quit">
