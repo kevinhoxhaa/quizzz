@@ -249,8 +249,8 @@ public class GameController {
      * @return The list of all user ID's of users that are still in the game.
      */
     @DeleteMapping(path = "/{gameIndex}/{userId}")
-    public ResponseEntity<List<Long>> deleteUser(@PathVariable("gameIndex") int gameIndex,
-                                                 @PathVariable("userId") long userId) {
+    public ResponseEntity<List<Long>> deleteUserFromGame(@PathVariable("gameIndex") int gameIndex,
+                                                         @PathVariable("userId") long userId) {
         Game game = areGameAndUserValid(gameIndex, userId).getBody();
         if (game == null) {
             return ResponseEntity.badRequest().build();

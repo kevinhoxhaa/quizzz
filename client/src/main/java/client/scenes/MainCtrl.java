@@ -615,7 +615,7 @@ public class MainCtrl {
                         if(quitApp) {
                             server.removeMultiplayerUser(serverUrl, gameIndex, (MultiplayerUser) user);
                         } else {
-                            server.removeMultiplayerUserID(serverUrl, gameIndex, user.id);
+                            server.removeMultiplayerUserFromGame(serverUrl, gameIndex, user.id);
                         }
                         bindUser(null);
                         multiplayerEstimationCtrl.resetDoublePoints();

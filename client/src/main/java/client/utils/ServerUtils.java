@@ -200,7 +200,7 @@ public class ServerUtils {
      */
     public MultiplayerUser removeMultiplayerUser(String serverUrl, int gameIndex, MultiplayerUser user) {
         if(gameIndex != -1){
-            removeMultiplayerUserID(serverUrl, gameIndex, user.id);
+            removeMultiplayerUserFromGame(serverUrl, gameIndex, user.id);
         }
 
         return ClientBuilder.newClient(new ClientConfig())
@@ -267,7 +267,7 @@ public class ServerUtils {
      * @param userId The ID of the user that should be removed.
      * @return A list with all ID's of the users that are still left in the game.
      */
-    public List<Long> removeMultiplayerUserID(String serverUrl, int gameIndex, Long userId) {
+    public List<Long> removeMultiplayerUserFromGame(String serverUrl, int gameIndex, Long userId) {
         String path = String.format("/api/games/%d/%d", gameIndex, userId);
         return ClientBuilder.newClient(new ClientConfig())
                 .target(serverUrl).path(path)

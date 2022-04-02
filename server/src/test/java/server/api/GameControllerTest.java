@@ -172,31 +172,31 @@ public class GameControllerTest {
     @Test
     public void deleteUserReturnsBadRequestOnInvalidGameIndex() {
         Integer gameIndex = sut.startGame((int) NUMBER).getBody();
-        assertTrue(sut.deleteUser(gameIndex+1, 1).getStatusCode().is4xxClientError());
+        assertTrue(sut.deleteUserFromGame(gameIndex+1, 1).getStatusCode().is4xxClientError());
     }
 
     @Test
     public void deleteUserReturnsBadRequestOnNegativeGameIndex() {
         Integer gameIndex = sut.startGame((int) NUMBER).getBody();
-        assertTrue(sut.deleteUser(-1, 1).getStatusCode().is4xxClientError());
+        assertTrue(sut.deleteUserFromGame(-1, 1).getStatusCode().is4xxClientError());
     }
 
     @Test
     public void deleteUserReturnsBadRequestOnInvalidUserId() {
         Integer gameIndex = sut.startGame((int) NUMBER).getBody();
-        assertTrue(sut.deleteUser(gameIndex, NUMBER).getStatusCode().is4xxClientError());
+        assertTrue(sut.deleteUserFromGame(gameIndex, NUMBER).getStatusCode().is4xxClientError());
     }
 
     @Test
     public void deleteUserReturnsBadRequestOnNegativeUserId() {
         Integer gameIndex = sut.startGame((int) NUMBER).getBody();
-        assertTrue(sut.deleteUser(gameIndex, -1).getStatusCode().is4xxClientError());
+        assertTrue(sut.deleteUserFromGame(gameIndex, -1).getStatusCode().is4xxClientError());
     }
 
     @Test
     public void deleteUserReturnsOkRequestOnValidParameters() {
         Integer gameIndex = sut.startGame((int) NUMBER).getBody();
-        assertTrue(sut.deleteUser(gameIndex, NUMBER-1).getStatusCode().is2xxSuccessful());
+        assertTrue(sut.deleteUserFromGame(gameIndex, NUMBER-1).getStatusCode().is2xxSuccessful());
     }
 
     @Test
@@ -206,7 +206,7 @@ public class GameControllerTest {
         for (int i = 0; i < NUMBER-1; i++) {
             expected.add((long) i);
         }
-        assertEquals(expected, sut.deleteUser(gameIndex, NUMBER-1).getBody());
+        assertEquals(expected, sut.deleteUserFromGame(gameIndex, NUMBER-1).getBody());
     }
 
     @Test

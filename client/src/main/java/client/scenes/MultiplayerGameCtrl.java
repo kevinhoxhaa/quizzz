@@ -576,7 +576,7 @@ public class MultiplayerGameCtrl {
             user.unansweredQuestions++;
             if (user.unansweredQuestions == KICK_AT_X_QUESTIONS) {
                 try {
-                    server.removeMultiplayerUserID(server.getURL(), mainCtrl.getGameIndex(), user.id);
+                    server.removeMultiplayerUserFromGame(server.getURL(), mainCtrl.getGameIndex(), user.id);
                 } catch(WebApplicationException e) {
                     System.out.println("User to remove not found!");
                 }
