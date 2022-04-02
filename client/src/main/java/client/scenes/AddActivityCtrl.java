@@ -34,6 +34,7 @@ public class AddActivityCtrl {
                 Integer.parseInt( answer.getText() ),
                 source.getText()
         );
+        cancel();
     }
 
 

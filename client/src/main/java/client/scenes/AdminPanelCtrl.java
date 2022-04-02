@@ -121,12 +121,14 @@ public class AdminPanelCtrl {
 
     @FXML
     public void showActivities() {
+        activityTable = new TableView();
         List<Activity> activityList = server.getActivities ( server.getURL() );
-        id.setCellValueFactory( new PropertyValueFactory<>( "ID" ) );
-        title.setCellValueFactory( new PropertyValueFactory<>( "Title" ) );
-        consumption.setCellValueFactory( new PropertyValueFactory<>( "Consumption" ) );
-        source.setCellValueFactory( new PropertyValueFactory<>( "Source" ) );
-        imagePath.setCellValueFactory( new PropertyValueFactory<>( "Image Path" ) );
+        id.setCellValueFactory( new PropertyValueFactory<>( "id" ) );
+        title.setCellValueFactory( new PropertyValueFactory<>( "title" ) );
+        consumption.setCellValueFactory( new PropertyValueFactory<>( "consumption" ) );
+        source.setCellValueFactory( new PropertyValueFactory<>( "source" ) );
+        imagePath.setCellValueFactory( new PropertyValueFactory<>( "imagePath" ) );
+        activityTable.getColumns().addAll ( id, title, consumption, source, imagePath );
         for ( Activity activity : activityList ) {
             activityTable.getItems().add ( activity );
         }

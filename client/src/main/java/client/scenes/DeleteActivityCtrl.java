@@ -27,6 +27,7 @@ public class DeleteActivityCtrl {
         adminPanelCtrl.deleteActivity(
                 Integer.parseInt( id.getText() )
         );
+        cancel();
     }
 
     @FXML

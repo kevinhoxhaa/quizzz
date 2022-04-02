@@ -204,7 +204,7 @@ public class ServerUtils {
      */
 
     public Activity addActivityToRepo ( String serverUrl, Activity activity ) {
-        String path = "/api/activity";
+        String path = "/api/activities";
         return ClientBuilder.newClient ( new ClientConfig() )
                 .target(serverUrl).path(path)
                 .request( APPLICATION_JSON )
@@ -221,7 +221,7 @@ public class ServerUtils {
      */
 
     public Activity findActivityByID ( String serverUrl, int id ) {
-        String path = String.format ( "/api/activity/%d", id );
+        String path = String.format ( "/api/activities/%d", id );
         return ClientBuilder.newClient ( new ClientConfig() )
                 .target ( serverUrl ).path ( path )
                 .request ( APPLICATION_JSON )
@@ -237,7 +237,7 @@ public class ServerUtils {
      */
 
     public List<Activity> getActivities ( String serverUrl ) {
-        String path = "/api/activity";
+        String path = "/api/activities";
         return ClientBuilder.newClient ( new ClientConfig() )
                 .target ( serverUrl ).path( path )
                 .request( APPLICATION_JSON )
@@ -271,7 +271,7 @@ public class ServerUtils {
      */
 
     public Activity deleteActivityFromRepo ( String serverUrl, Activity activity ) {
-        String path = String.format("/api/activity/%s", activity.identifier );
+        String path = String.format("/api/activities/%s", activity.identifier );
         return ClientBuilder.newClient ( new ClientConfig() )
                 .target(serverUrl).path(path)
                 .request( APPLICATION_JSON )
