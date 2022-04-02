@@ -104,7 +104,7 @@ public class WaitingCtrl {
     @FXML
     protected void onBackButtonClick() {
         User user = mainCtrl.getUser();
-        server.removeMultiplayerUser(server.getURL(), user);
+        server.removeMultiplayerUser(server.getURL(), (MultiplayerUser) user);
         mainCtrl.bindUser(null);
         mainCtrl.showHome();
         mainCtrl.stopWaitingTimer();

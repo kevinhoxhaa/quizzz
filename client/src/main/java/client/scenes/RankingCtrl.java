@@ -99,7 +99,6 @@ public class RankingCtrl extends AbstractRankingCtrl {
     @Override
     public void onQuit() {
         mainCtrl.quitGame(false, true);
-        mainCtrl.bindUser(null);
     }
 
     /**

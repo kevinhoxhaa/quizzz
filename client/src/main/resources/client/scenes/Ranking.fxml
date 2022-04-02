@@ -253,7 +253,7 @@
                         </ProgressIndicator>
                         <AnchorPane prefHeight="49.0" prefWidth="708.0">
                             <children>
-                                <Button fx:id="quitButton" layoutX="327.0" layoutY="21.0" mnemonicParsing="false" onAction="#onQuit" prefHeight="40.0" prefWidth="90.0" text="Quit" AnchorPane.rightAnchor="28.200000000000045">
+                                <Button styleClass="pixelButton" fx:id="quitButton" layoutX="327.0" layoutY="21.0" mnemonicParsing="false" onAction="#onQuit" prefHeight="40.0" prefWidth="90.0" text="Quit" AnchorPane.rightAnchor="28.200000000000045">
                                     <font>
                                         <Font name="Monospaced Bold" size="20.0" />
                                     </font>

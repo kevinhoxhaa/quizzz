@@ -35,7 +35,7 @@
                      </font>
                   </Label>
                   <ListView fx:id="usersList" minWidth="400.0" prefHeight="200.0" prefWidth="512.0" />
-                  <Button fx:id="startButton" mnemonicParsing="false" onAction="#onStartButtonClick" text="Start">
+                  <Button styleClass="pixelButton" fx:id="startButton" mnemonicParsing="false" onAction="#onStartButtonClick" text="Start">
                      <font>
                         <Font name="Monospaced Bold" size="18.0" />
                      </font>

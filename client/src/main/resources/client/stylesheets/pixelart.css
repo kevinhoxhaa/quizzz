@@ -1,0 +1,46 @@
+.pixelField {
+    -fx-background-image: url("../images/pixelfield.png");
+    -fx-background-color: #D6EAF8;
+    -fx-background-radius: 30;
+    -fx-background-size: stretch;
+    -fx-background-insets: 0,1,2,3,0;
+    -fx-padding: 10 20 10 20;
+}
+
+.pixelButton {
+    -fx-background-image: url("../images/pixelborder.png");
+    -fx-background-size: stretch;
+    -fx-background-radius: 30;
+    -fx-background-color: #D6EAF8;
+    -fx-background-insets: 0,1,2,3,0;
+    -fx-padding: 10 20 10 20;
+}
+
+.pixelButton:hover {
+    -fx-background-radius: 30;
+    -fx-background-insets: 0,1,2,3,0;
+    -fx-padding: 10 20 10 20;
+    -fx-background-color: #85C1E9;
+    -fx-scale-y: -1;
+}
+
+.root {
+    -fx-background-color: #A9CCE3;
+}
+
+#helpButton:hover {
+    -fx-scale-y: -1;
+}
+
+#soloText:hover,
+#multiplayerText:hover{
+    -fx-font-size: 40px;
+}
+
+#bulbView{
+    -fx-image: url("../icons/giflight.gif");
+}
+
+#questionMark{
+    -fx-image: url("../icons/help.png");
+}

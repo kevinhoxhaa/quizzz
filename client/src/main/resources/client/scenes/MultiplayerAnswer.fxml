@@ -304,7 +304,7 @@
                 <Region VBox.vgrow="ALWAYS" />
                 <AnchorPane maxHeight="156.0" minHeight="0.0" prefHeight="101.0" prefWidth="974.0">
                     <children>
-                        <Button fx:id="quitButton" layoutX="826.0" layoutY="31.0" mnemonicParsing="false" onAction="#onQuit" prefHeight="40.0" prefWidth="90.0" text="Quit" AnchorPane.rightAnchor="58.0">
+                        <Button styleClass="pixelButton" fx:id="quitButton" layoutX="826.0" layoutY="31.0" mnemonicParsing="false" onAction="#onQuit" prefHeight="40.0" prefWidth="90.0" text="Quit" AnchorPane.rightAnchor="58.0">
                             <font>
                                 <Font name="Monospaced Bold" size="20.0" />
                             </font>
