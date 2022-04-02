@@ -132,13 +132,14 @@ public class UserController {
      * @return A response that shows if the deletion was successful or not.
      */
     @DeleteMapping(path = {"/{id}"})
-    public ResponseEntity<User> delete(@PathVariable("id") long id) {
+    public ResponseEntity<MultiplayerUser> deleteMultiplayerUser(@PathVariable("id") long id) {
         if (id < 0 || !waitingRepo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
 
+        MultiplayerUser removed = waitingRepo.findById(id).get();
         waitingRepo.deleteById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(removed);
     }
 
     /**

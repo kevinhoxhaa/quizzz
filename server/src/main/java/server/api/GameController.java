@@ -13,6 +13,7 @@ import commons.models.Question;
 import commons.models.SoloGame;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,6 +42,8 @@ public class GameController {
 
     private final Random random;
     private final GameList gameList;
+    private boolean isRestarted;
+
     private final WaitingUserRepository waitingUserRepo;
     private final ActivityRepository activityRepo;
     private final GameUserRepository gameUserRepo;
@@ -63,6 +66,7 @@ public class GameController {
         this.gameUserRepo = gameUserRepo;
         this.activityRepo = activityRepo;
         this.gameList = gameList;
+        this.isRestarted = false;
         this.lastGameIndex = 0;
     }
 
@@ -171,6 +175,15 @@ public class GameController {
     }
 
     /**
+     * Getter for the gameList.
+     * @return A list containing all the active games.
+     */
+    @GetMapping(path = {"", "/"})
+    public ResponseEntity<GameList> getGameList() {
+        return ResponseEntity.ok(gameList);
+    }
+
+    /**
      * Creates a new game object with a specified index in the
      * game state stored on the server
      * Deletes all users from the waiting room repo and moves them
@@ -207,6 +220,126 @@ public class GameController {
 
         gameList.add(game);
         return ResponseEntity.ok((int) gameID);
+    }
+
+    /**
+     * Adds the user ID from the user who wants to restart to the list,
+     * in the game object with the given index, that contains all players that want to have a rematch.
+     * @param gameIndex The index of the game object to where the user ID should be added.
+     * @param userId The user ID of the user that wants to have a rematch.
+     * @return The list of all user ID's of users that want to have a rematch.
+     */
+    @PostMapping(path = "restart/{gameIndex}/{userId}")
+    public ResponseEntity<List<Long>> addRestartUser(@PathVariable("gameIndex") int gameIndex,
+                                                     @PathVariable("userId") long userId) {
+        Game game = areGameAndUserValid(gameIndex, userId).getBody();
+        if (game == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        game.getRestartUserIds().add(userId);
+        return ResponseEntity.ok(game.getRestartUserIds());
+    }
+
+    /**
+     * Deletes the user ID from the user who quit the game from the list,
+     * in the game object with the given index, that contains all players that are still in the game.
+     * @param gameIndex The index of the game object from where the user ID should be removed.
+     * @param userId The user ID of the user that wants to quit the game.
+     * @return The list of all user ID's of users that are still in the game.
+     */
+    @DeleteMapping(path = "/{gameIndex}/{userId}")
+    public ResponseEntity<List<Long>> deleteUser(@PathVariable("gameIndex") int gameIndex,
+                                                 @PathVariable("userId") long userId) {
+        Game game = areGameAndUserValid(gameIndex, userId).getBody();
+        if (game == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        game.getUserIds().remove(userId);
+        return ResponseEntity.ok(game.getUserIds());
+    }
+
+    /**
+     * Deletes the user ID from the user who doesn't want to restart from the list,
+     * in the game object with the given index, that contains all players that want to have a rematch.
+     * @param gameIndex The index of the game object from where the user ID should be removed.
+     * @param userId The user ID of the user that doesn't want to have a rematch anymore.
+     * @return The list of all user ID's of users that want to have a rematch.
+     */
+    @DeleteMapping(path = "/restart/{gameIndex}/{userId}")
+    public ResponseEntity<List<Long>> deleteRestartUser(@PathVariable("gameIndex") int gameIndex,
+                                                 @PathVariable("userId") long userId) {
+        Game game = areGameAndUserValid(gameIndex, userId).getBody();
+        if (game == null || !game.getRestartUserIds().contains(userId)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        game.getRestartUserIds().remove(userId);
+        return ResponseEntity.ok(game.getRestartUserIds());
+    }
+
+    /**
+     * Checks if the game index and the user ID given are valid and if so, returns the corresponding game.
+     * @param gameIndex The game index that needs to be checked.
+     * @param userId The user ID that needs to be checked.
+     * @return A response entity containing a game if the game index and the user ID are valid.
+     */
+    private ResponseEntity<Game> areGameAndUserValid(int gameIndex, long userId) {
+        if(gameIndex >= gameList.getGames().size() || gameIndex < 0) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Game game = gameList.getGames().get(gameIndex);
+
+        if(!game.getUserIds().contains(userId)) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(game);
+    }
+
+    /**
+     * Adds the user ID from the user who wants to have a rematch to a list, in the game object with the
+     * given index, that contains all players that want to have a rematch.
+     * If the player is the last one to be added to the list, it will create a new game, including
+     * all users who wanted a rematch.
+     * @param gameIndex The index of the game object that should store the user ID.
+     * @param count The number of random questions to generate.
+     * @param userId The user ID of the user that wants to have a rematch.
+     * @return The index of the new game.
+     */
+    @GetMapping(path = "/restart/{gameIndex}/{count}/{userId}")
+    public ResponseEntity<Question> restartGame(@PathVariable("gameIndex") int gameIndex,
+                                               @PathVariable("count") int count,
+                                               @PathVariable("userId") long userId) {
+        Game game = areGameAndUserValid(gameIndex, userId).getBody();
+        if (game == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        if(!game.getRestartUserIds().contains(userId)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        game.getRestartUserIds().remove(userId);
+        MultiplayerUser rematchUser = gameUserRepo.findById(userId).get();
+        rematchUser.resetScore();
+        gameUserRepo.save(rematchUser);
+
+        if(!isRestarted) {
+            isRestarted = true;
+            List<Question> newQuestions = new ArrayList<>();
+            for(int i = 0; i < count; i++) {
+                newQuestions.add(generateQuestion());
+            }
+            game.setQuestions(newQuestions);
+        }
+
+        if (game.getRestartUserIds().size() == 0) {
+            isRestarted = false;
+        }
+
+        return ResponseEntity.ok(game.getQuestions().get(0));
     }
 
     /**

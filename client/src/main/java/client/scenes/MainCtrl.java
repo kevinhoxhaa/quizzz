@@ -24,12 +24,14 @@ import commons.models.SoloGame;
 import commons.utils.QuestionType;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.application.Platform;
+import javafx.scene.ImageCursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -258,6 +260,11 @@ public class MainCtrl {
     public void showHome() {
         primaryStage.setTitle("Quizzz");
         primaryStage.setScene(home);
+        home.getStylesheets().add("client/stylesheets/homebuttons.css");
+        homeCtrl.setFonts();
+
+        Image image = new Image("client/images/arrowcursor.png");  //pass in the image path
+        home.setCursor(new ImageCursor(image));
     }
 
     /**
@@ -297,7 +304,8 @@ public class MainCtrl {
                 new Pair<>(this.multiplayerQuestionCtrl, this.multiplayerQuestion),
                 new Pair<>(this.multiplayerEstimationCtrl, this.multiplayerEstimation),
                 new Pair<>(this.multiplayerAnswerCtrl, this.multiplayerAnswer),
-                new Pair<>(this.rankingCtrl, this.ranking)
+                new Pair<>(this.rankingCtrl, this.ranking),
+                new Pair<>(this.multiplayerResultsCtrl, this.multiplayerResults)
         );
         multiplayerCtrl.startGame();
     }
@@ -574,16 +582,6 @@ public class MainCtrl {
     }
 
     /**
-     * Called after the last answer screen's timer is up, shows the solo results page
-     */
-    public void showMultiplayerResults() {
-        multiplayerResultsCtrl.setup();
-        updateQuestionCounters(multiplayerResultsCtrl, colors);
-        primaryStage.setTitle("Multiplayer results screen");
-        primaryStage.setScene(multiplayerResults);
-    }
-
-    /**
      * Shows a pop up on screen to confirm quitting the game
      * @param quitApp is used to decide whether the application should be closed or not
      *                  If quitApp is true: the application is closed
@@ -612,8 +610,8 @@ public class MainCtrl {
                     }
 
                     try {
-                        server.removeMultiplayerUser(serverUrl, user);
-                        user = null;
+                        server.removeMultiplayerUser(serverUrl, (MultiplayerUser) user);
+                        bindUser(null);
                         multiplayerEstimationCtrl.resetDoublePoints();
                         multiplayerQuestionCtrl.resetDoublePoints();
                         multiplayerQuestionCtrl.resetRemoveIncorrect();
@@ -648,5 +646,15 @@ public class MainCtrl {
             controller.resetHighlight();
             controller.highlightCurrentCircle();
         }
+    }
+
+    public void resetMainCtrl() {
+        multiplayerQuestionCtrl.resetCircleColor();
+        multiplayerAnswerCtrl.resetCircleColor();
+        rankingCtrl.resetCircleColor();
+        multiplayerResultsCtrl.resetCircleColor();
+        this.colors = new ArrayList<>();
+        this.answerCount = 0;
+        this.user.resetScore();
     }
 }
