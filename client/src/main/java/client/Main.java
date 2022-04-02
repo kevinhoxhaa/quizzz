@@ -23,23 +23,22 @@ import java.net.URISyntaxException;
 import client.scenes.AdminPanelCtrl;
 import client.scenes.QuoteOverviewCtrl;
 import client.scenes.AddQuoteCtrl;
-import client.scenes.MultiplayerAnswerCtrl;
 import client.scenes.HomeCtrl;
 import client.scenes.MultiplayerResultsCtrl;
 import client.scenes.MultiplayerQuestionCtrl;
 import client.scenes.SoloAnswerCtrl;
 import client.scenes.SoloEstimationQuestionCtrl;
 import client.scenes.SoloQuestionCtrl;
-import client.scenes.WaitingCtrl;
 import client.scenes.SoloResultsCtrl;
-import client.scenes.EstimationQuestionCtrl;
-import client.scenes.RankingCtrl;
-import client.scenes.MainCtrl;
-
+import client.scenes.WaitingCtrl;
 import com.google.inject.Injector;
-
 import javafx.application.Application;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+
+import static com.google.inject.Guice.createInjector;
 
 public class Main extends Application {
 
@@ -74,7 +73,7 @@ public class Main extends Application {
         var ranking = FXML.load(RankingCtrl.class, "client", "scenes", "Ranking.fxml");
 
         var multiplayerEstimation = FXML.load(
-                EstimationQuestionCtrl.class, "client", "scenes", "MultiplayerEstimation.fxml");
+                MultiplayerEstimationQuestionCtrl.class, "client", "scenes", "MultiplayerEstimation.fxml");
 
         var soloEstimation = FXML.load(
                 SoloEstimationQuestionCtrl.class, "client", "scenes", "SoloEstimation.fxml");

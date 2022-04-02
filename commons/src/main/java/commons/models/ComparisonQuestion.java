@@ -5,6 +5,9 @@ import commons.entities.Activity;
 import commons.utils.CompareType;
 import commons.utils.QuestionType;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 @JsonTypeName(value = "comparison")
@@ -16,8 +19,9 @@ public class ComparisonQuestion extends Question {
     private Activity firstActivity;
     private Activity secondActivity;
 
+
     @SuppressWarnings("unused")
-    private ComparisonQuestion() {
+    public ComparisonQuestion() {
         super(QuestionType.COMPARISON);
         // for object mapper
     }
@@ -82,6 +86,26 @@ public class ComparisonQuestion extends Question {
                 || (userAnswer.generateAnswer().equals(CompareType.LARGER)
                         && firstActivity.consumption > secondActivity.consumption)
         );
+    }
+
+    /**
+     * A method that returns the incorrect answers for the question in a List of CompareType entities
+     * @return a list of CompareType entities
+     */
+
+    public List<CompareType> getincorrectAnswers(){
+        ArrayList<CompareType> incorrectAnswers = new ArrayList<>();
+        if(!(firstActivity.consumption == secondActivity.consumption)){
+            incorrectAnswers.add(CompareType.EQUAL);
+        }
+        if(!(firstActivity.consumption < secondActivity.consumption)){
+            incorrectAnswers.add(CompareType.SMALLER);
+        }
+        if(!(firstActivity.consumption > secondActivity.consumption)){
+            incorrectAnswers.add(CompareType.LARGER);
+        }
+        Collections.shuffle(incorrectAnswers);
+        return incorrectAnswers;
     }
 
     /**
@@ -157,5 +181,31 @@ public class ComparisonQuestion extends Question {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), firstActivity, secondActivity, userAnswer, seconds);
+    }
+
+    /**
+     * Returns the text representation of the question
+     * @return the text representation of the question
+     */
+    @Override
+    public String generateQuestionText(){
+        return "Which one consumes more energy?";
+    }
+
+    /**
+     * Returns an answer object corresponding to the correct answer to this question
+     * @return an answer object corresponding to the correct answer to this question
+     */
+    @Override
+    public Answer generateCorrectAnswer(){
+        CompareType compareType = null;
+        if (firstActivity.consumption < secondActivity.consumption){
+            compareType = CompareType.SMALLER;
+        } else if (firstActivity.consumption > secondActivity.consumption){
+            compareType = CompareType.LARGER;
+        } else {
+            compareType = CompareType.EQUAL;
+        }
+        return new Answer(compareType);
     }
 }

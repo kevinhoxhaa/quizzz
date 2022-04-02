@@ -2,39 +2,25 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.text.Text;
 
-import java.util.List;
+public class MultiplayerResultsCtrl extends AbstractRankingCtrl{
 
-public class MultiplayerResultsCtrl implements QuestionNumController{
-
-    private final ServerUtils server;
-    private final MainCtrl mainCtrl;
-
-    @FXML
-    private Text scoreTableUserName;
-    @FXML
-    private Text scoreTableUserScore;
-
-    @FXML
-    private Text personalBest;
-
-    @FXML
-    private Button quitButton;
+    private boolean rematch;
 
     @FXML
     private Button rematchButton;
-
     @FXML
-    private Text questionNum;
-
-    @FXML
-    private HBox circles;
+    private ProgressIndicator countdownCircle;
 
     /**
      * Creates a controller for the multiplayer results page screen, with the given server and mainCtrl parameters.
@@ -43,23 +29,26 @@ public class MultiplayerResultsCtrl implements QuestionNumController{
      */
     @Inject
     public MultiplayerResultsCtrl(ServerUtils server, MainCtrl mainCtrl) {
-        this.server = server;
-        this.mainCtrl = mainCtrl;
+        super(server, mainCtrl);
     }
 
     /**
      * Setups the page quit button that redirects to the main page, and fills in the score and personal best
-     * @param colors
      */
+    public void setup() {
 
-    protected void setup(List<Color> colors) {
-
-        updateQuestionNumber();
-        updateCircleColor(colors);
-
+        enableRematchButton();
         scoreTableUserName.setText( String.format( "%s", mainCtrl.getUser().username) );
-        // scoreTableUserScore.setText( String.format( "%d", mainCtrl.getSoloScore()) );
+        scoreTableUserScore.setText( String.format( "%d", mainCtrl.getSoloScore()) );
         //TODO: Show all players in the leaderboard.
+    }
+
+    /**
+     * Sets the current game controller
+     * @param gameCtrl the current game controller
+     */
+    public void setGameCtrl(MultiplayerGameCtrl gameCtrl) {
+        this.gameCtrl = gameCtrl;
     }
 
     /**
@@ -67,57 +56,77 @@ public class MultiplayerResultsCtrl implements QuestionNumController{
      */
     @FXML
     protected void onRematchButton(){
-        //TODO: Make a working rematch button.
+        rematch = !rematch;
+        if (rematch) {
+            server.addRestartUserID(server.getURL(), gameCtrl.getGameIndex(), gameCtrl.getUser().id);
+            rematchButton.setBackground(new Background(
+                    new BackgroundFill(Color.DARKCYAN, CornerRadii.EMPTY, Insets.EMPTY)));
+        } else {
+            server.removeRestartUserID(server.getURL(), gameCtrl.getGameIndex(), gameCtrl.getUser().id);
+            rematchButton.setBackground(new Background(
+                    new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+        }
     }
     /**
      * Redirects the user to the home page when the quit button is clicked.
      */
+    @Override
     @FXML
-    protected void onQuitButton(){
-        mainCtrl.bindUser(null);
-        mainCtrl.killThread();
-        mainCtrl.showHome();
+    public void onQuit(){
+        if (rematch) {
+            rematch = false;
+            server.removeRestartUserID(server.getURL(), gameCtrl.getGameIndex(), gameCtrl.getUser().id);
+            rematchButton.setBackground(new Background(
+                    new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+        }
+        mainCtrl.quitGame(false, true);
     }
 
     /**
-     * Getter for the current question number
-     * @return questionNum
-     */
-    public Text getQuestionNum(){
-        return questionNum;
-    }
-
-    /**
-     * Getter for the circles bar
-     * @return circles
-     */
-    public HBox getCirclesHBox(){
-        return circles;
-    }
-
-    /**
-     * Updates the color of the past questions' circles on the circle bar
-     * (green/red depending on the correctness of the answer)
-     *
-     * @param colors Is the list of colors of previous answers(green/red depending on their correctness)
+     * Redirects the user to the question page if the user clicked rematch
+     * and after a new game has started, otherwise, the user is redirected to the home page.
      */
     @Override
-    public void updateCircleColor(List<Color> colors) {
-        for (int i = 0; i < colors.size(); i++) {
-            Circle c = (Circle) getCirclesHBox().getChildren().get(i);
-            c.setFill(colors.get(i));
+    public void redirect() {
+        if (rematch) {
+            gameCtrl.resetGameCtrl();
+            rematch = false;
+            rematchButton.setBackground(new Background(
+                    new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+            String serverUrl = mainCtrl.getServerUrl();
+            gameCtrl.showQuestion(server.restartGame(serverUrl, gameCtrl.getGameIndex(),
+                    gameCtrl.getUser().id));
+        } else {
+            disableRematchButton();
         }
     }
 
     /**
-     * Resets the circles colors every time the game starts
+     * Disables the rematch button.
      */
-    @Override
-    public void resetCircleColor() {
-        for(int i=0; i<mainCtrl.getQuestionsPerGame();i++){
-            Circle circle = (Circle) getCirclesHBox().getChildren().get(i);
-            circle.setFill(Color.LIGHTGRAY);
-        }
+    public void disableRematchButton() {
+        rematchButton.setOnAction(null);
+        rematchButton.setDisable(true);
+    }
+
+    /**
+     * Enables the rematch button.
+     */
+    public void enableRematchButton() {
+        rematchButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                onRematchButton();
+            }
+        });
+        rematchButton.setDisable(false);
+    }
+
+    /**
+     * Initiates the timer countdown and animation
+     */
+    public void startTimer() {
+        mainCtrl.startTimer(countdownCircle, this);
     }
 
     /**
@@ -125,6 +134,14 @@ public class MultiplayerResultsCtrl implements QuestionNumController{
      */
     @Override
     public void updateQuestionNumber() {
-        getQuestionNum().setText("" + mainCtrl.getAnswerCount());
+        questionNum.setText("" + gameCtrl.getAnswerCount());
+    }
+
+    /**
+     * Highlights current question so the user is aware which circle corresponds to his current question
+     */
+    @Override
+    public void highlightCurrentCircle() {
+        highlightCurrentCircle(gameCtrl.getAnswerCount());
     }
 }

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import commons.entities.Activity;
 import commons.utils.QuestionType;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,7 +19,7 @@ public class ChoiceQuestion extends Question {
     private Activity answer;
 
     @SuppressWarnings("unused")
-    private ChoiceQuestion() {
+    public ChoiceQuestion() {
         super(QuestionType.CHOICE);
         // for object mapper
     }
@@ -50,8 +52,28 @@ public class ChoiceQuestion extends Question {
         }
     }
 
+    /**
+     * sets the answer
+     * @param answer
+     */
+
     public void setAnswer(Activity answer) {
         this.answer = answer;
+    }
+
+    /**
+     * gets the incorrect Activities in a list
+     * @return list of Activity
+     */
+    public List<Activity> getIncorrectActivities(){
+        ArrayList<Activity> incorrectActivities = new ArrayList<>();
+        for(Activity a: activities){
+            if(!a.equals(answer) && !a.equals(comparedActivity)){
+                incorrectActivities.add(a);
+            }
+        }
+        Collections.shuffle(incorrectActivities);
+        return incorrectActivities;
     }
 
     /**
@@ -180,5 +202,24 @@ public class ChoiceQuestion extends Question {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), comparedActivity, activities, answer);
+    }
+
+    /**
+     * Returns the text representation of the question
+     * @return the text representation of the question
+     */
+    @Override
+    public String generateQuestionText(){
+         return String.format("What could you do instead of %s to consume less energy?",
+                getComparedActivity().title);
+    }
+
+    /**
+     * Returns an answer object corresponding to the correct answer to this question
+     * @return an answer object corresponding to the correct answer to this question
+     */
+    @Override
+    public Answer generateCorrectAnswer(){
+        return new Answer(answer);
     }
 }

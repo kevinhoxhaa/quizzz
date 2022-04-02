@@ -19,7 +19,7 @@ import commons.entities.Activity;
 import commons.entities.MultiplayerUser;
 import commons.entities.Quote;
 import commons.entities.SoloUser;
-import commons.entities.User;
+import commons.models.GameList;
 import commons.models.Question;
 import commons.models.SoloGame;
 import jakarta.ws.rs.client.ClientBuilder;
@@ -27,6 +27,13 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import javafx.scene.image.Image;
 import org.glassfish.jersey.client.ClientConfig;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.simp.stomp.StompFrameHandler;
+import org.springframework.messaging.simp.stomp.StompHeaders;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import javax.imageio.ImageIO;
 import java.io.BufferedReader;
@@ -34,9 +41,12 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.Base64;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -45,6 +55,8 @@ public class ServerUtils {
     private static final String SERVER = "http://localhost:8080/";
     private static final long MAGICNUMBER = 42;
     private static final int QUESTIONS_PER_GAME = 20;
+
+    private StompSession session;
 
     public void getQuotesTheHardWay() throws IOException {
         var url = new URL("http://localhost:8080/api/quotes");
@@ -83,6 +95,19 @@ public class ServerUtils {
     }
 
     /**
+     * Gets the games that are currently on the server.
+     * @param serverUrl The server where the games should be fetched from.
+     * @return A GameList object containing all the games on the server.
+     */
+    public GameList getGames(String serverUrl) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path("api/games")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(GameList.class);
+    }
+
+    /**
      * Starts a game on the server and returns the index
      * of the game object
      * @param serverUrl the server to start a game on
@@ -95,6 +120,23 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(Integer.class);
+    }
+
+    /**
+     * Restarts the game on the server and returns the index
+     * of the game object.
+     * @param serverUrl The server to start a game on.
+     * @param gameIndex The index of the current game.
+     * @param userId The ID of the user that wants a rematch.
+     * @return The first question of the new game.
+     */
+    public Question restartGame(String serverUrl, Integer gameIndex, Long userId) {
+        String path = String.format("/api/games/restart/%d/%d/%d", gameIndex,  QUESTIONS_PER_GAME, userId);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path(path)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(Question.class);
     }
 
     public MultiplayerUser addUserMultiplayer(String serverUrl, MultiplayerUser user) {
@@ -188,17 +230,28 @@ public class ServerUtils {
      * A method that removes a multiplayer user from the repository
      * @param serverUrl
      * @param user
-     * @return the user that was removed
+     * @return The user that has been deleted.
      */
-    public MultiplayerUser removeMultiplayerUser(String serverUrl, User user) {
-        MultiplayerUser mu = (MultiplayerUser) user;
+    public MultiplayerUser removeMultiplayerUser(String serverUrl, MultiplayerUser user) {
+        if (user.gameID != null) {
+            removeMultiplayerUserID(serverUrl, (int) ((long) user.gameID), user.id);
+        }
         return ClientBuilder.newClient(new ClientConfig())
-                .target(serverUrl).path("api/users/"+mu.id)
+                .target(serverUrl).path("api/users/"+user.id)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .delete(MultiplayerUser.class);
     }
 
+    /**
+     * A method that posts the answer of the user in the repository
+     * @param serverUrl
+     * @param gameIndex
+     * @param userId
+     * @param questionIndex
+     * @param question
+     * @return list of the users who got the question right
+     */
     public List<MultiplayerUser> answerQuestion(String serverUrl, int gameIndex,
                                                 long userId, int questionIndex, Question question) {
         String path = String.format(
@@ -213,6 +266,79 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(question, APPLICATION_JSON), new GenericType<List<MultiplayerUser>>() {});
+    }
+
+    /**
+     * A method that posts the answer of the user in the repository when the double points joker is activated
+     * @param serverUrl
+     * @param gameIndex
+     * @param userId
+     * @param questionIndex
+     * @param question
+     * @return list of the users who got the question right
+     */
+    public List<MultiplayerUser> answerDoublePointsQuestion(String serverUrl, int gameIndex,
+                                                long userId, int questionIndex, Question question) {
+        String path = String.format(
+                "api/games/%d/user/%d/question/%d/doublePoints",
+                gameIndex,
+                userId,
+                questionIndex
+        );
+
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path(path)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(question, APPLICATION_JSON), new GenericType<List<MultiplayerUser>>() {});
+    }
+
+    /**
+     * Removes an ID from a player from the list of ID's of the users that are in a game.
+     * @param serverUrl The URL of the server.
+     * @param gameIndex The index of the game from where the user should be removed.
+     * @param userId The ID of the user that should be removed.
+     * @return A list with all ID's of the users that are still left in the game.
+     */
+    private List<Long> removeMultiplayerUserID(String serverUrl, int gameIndex, Long userId) {
+        String path = String.format("/api/games/%d/%d", gameIndex, userId);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path(path)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete(List.class);
+    }
+
+    /**
+     * Removes an ID from a player from the list of ID's of the users that want to have a rematch.
+     * @param serverUrl The URL of the server.
+     * @param gameIndex The index of the game from where the user should be removed.
+     * @param userId The ID of the user that should be removed.
+     * @return A list with all ID's of the users that want to have a rematch.
+     */
+    public List<Long> removeRestartUserID(String serverUrl, int gameIndex, Long userId) {
+        String path = String.format("/api/games/restart/%d/%d", gameIndex, userId);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path(path)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete(List.class);
+    }
+
+    /**
+     * Adds an ID from a player to the list of ID's of the users that want to have a rematch.
+     * @param serverUrl The URL of the server.
+     * @param gameIndex The index of the game to where the user should be added.
+     * @param userId The ID of the user that should be added.
+     * @return A list with all ID's of the users that want to have a rematch.
+     */
+    public List<Long> addRestartUserID(String serverUrl, int gameIndex, Long userId) {
+        String path = String.format("/api/games/restart/%d/%d", gameIndex, userId);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path(path)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(userId, APPLICATION_JSON), List.class);
     }
 
     /**
@@ -243,6 +369,69 @@ public class ServerUtils {
                 .get(new GenericType<List<SoloUser>>() {});
     }
 
+    /**
+     * Initiates the websocket connection with the server
+     * and sets the current session
+     * @param httpUrl the url of the http server to connect to
+     */
+    public void connect(String httpUrl) {
+        String websocketUrl = httpUrl.replace("http", "ws");
+
+        if(websocketUrl.charAt(websocketUrl.length() - 1) != '/') {
+            websocketUrl += "/";
+        }
+        websocketUrl += "websocket";
+
+        var client = new StandardWebSocketClient();
+        var stomp = new WebSocketStompClient(client);
+        stomp.setMessageConverter(new MappingJackson2MessageConverter());
+
+        try {
+            session = stomp.connect(websocketUrl, new StompSessionHandlerAdapter() {}).get();
+            return;
+        } catch(ExecutionException ex) {
+            throw new RuntimeException(ex);
+        } catch(InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
+
+        throw new IllegalStateException();
+    }
+
+    /**
+     * Sends an object to the server
+     * @param dest the destination to send to
+     * @param o the object to send
+     */
+    public void send(String dest, Object o) {
+        session.send(dest, o);
+    }
+
+    /**
+     * Registers for websocket messages from the server
+     * to the client
+     * @param dest the destination url of the server to register to
+     * @param type the type of the payload to expect from the server
+     * @param consumer the consumer that handles the received payload
+     * @param <T> the type of the payload to expect from the server
+     * @return the created subscription
+     */
+    public <T> StompSession.Subscription registerForMessages(String dest, Class<T> type, Consumer<T> consumer) {
+        //noinspection NullableProblems
+        return session.subscribe(dest, new StompFrameHandler() {
+            @Override
+            public Type getPayloadType(StompHeaders headers) {
+                return type;
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            public void handleFrame(StompHeaders headers, Object payload) {
+                consumer.accept((T) payload);
+            }
+        });
+    }
+
     public Image fetchImage(String serverUrl, String path) throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         try {
@@ -262,7 +451,7 @@ public class ServerUtils {
             String defaultPathString = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
 
             defaultPathString = defaultPathString.substring(
-                    "file:/".length(), defaultPathString.length() - "classes/java/main/".length())
+                    0, defaultPathString.length() - "classes/java/main/".length())
                     + "resources/main/client/images/lightning.jpg";
 
             return new Image(defaultPathString);
@@ -270,5 +459,13 @@ public class ServerUtils {
         byte[] buffer = bos.toByteArray();
 
         return new Image(new ByteArrayInputStream(buffer));
+    }
+
+    /**
+     * Returns the current session
+     * @return the current websocket session
+     */
+    public StompSession getSession() {
+        return session;
     }
 }

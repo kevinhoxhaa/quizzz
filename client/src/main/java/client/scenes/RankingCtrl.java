@@ -2,8 +2,8 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.models.Question;
 import commons.entities.MultiplayerUser;
+import commons.models.Question;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -11,41 +11,17 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 
 import java.util.List;
 
 
-public class RankingCtrl implements SceneController, QuestionNumController {
-
-
-    private final ServerUtils server;
-    private final MainCtrl mainCtrl;
-    private MultiplayerGameCtrl gameCtrl;
-
+public class RankingCtrl extends AbstractRankingCtrl {
     @FXML
-    private HBox circles;
-    @FXML
-    private ProgressIndicator countdownCircle;
-    @FXML
-    private Text questionNum;
+    protected ProgressIndicator countdownCircle;
+
     @FXML
     private TableView<MultiplayerUser> scoreTable;
-
-    @FXML
-    private Text scoreTableUserSore;
-    @FXML
-    private Text ranking1stPlayer;
-    @FXML
-    private Text ranking2ndPlayer;
-    @FXML
-    private Text ranking3rdPlayer;
-    @FXML
-    private Text scoreTableUserName;
 
     /**
      * Creates a controller for the ranking page screen, with the given server and mainCtrl parameters.
@@ -55,8 +31,7 @@ public class RankingCtrl implements SceneController, QuestionNumController {
      */
     @Inject
     public RankingCtrl(ServerUtils server, MainCtrl mainCtrl) {
-        this.server = server;
-        this.mainCtrl = mainCtrl;
+        super(server, mainCtrl);
     }
 
     /**
@@ -64,24 +39,6 @@ public class RankingCtrl implements SceneController, QuestionNumController {
      */
     public void startTimer() {
         mainCtrl.startTimer(countdownCircle, this);
-    }
-
-    /**
-     * Getter for the circles that show past questions' correctness
-     *
-     * @return circles
-     */
-    public HBox getCircles() {
-        return circles;
-    }
-
-    /**
-     * Getter for the current question number
-     *
-     * @return questionNum
-     */
-    public Text getQuestionNum() {
-        return questionNum;
     }
 
     /**
@@ -116,26 +73,6 @@ public class RankingCtrl implements SceneController, QuestionNumController {
         }
     }
 
-//    /**
-//     * Sets up a timeline with keyFrames that have an interval of one second. This allows us to create a
-//     * visual countdown timer.
-//     * @param location
-//     * @param resources
-//     */
-//    @Override
-//    public void initialize(URL location, ResourceBundle resources) {
-//
-//        startTimer();
-//        countdownCircle.progressProperty().addListener((ov, oldValue, newValue) -> {
-//            countdownCircle.applyCss();
-//            Text text = (Text) countdownCircle.lookup(".text.percentage");
-//            String progress = text.getText();
-//            if(progress.equals("Timeout")) {
-//                // TODO: handle next question
-//            }
-//        });
-//    }
-
     /**
      * Sets the current game controller
      * @param gameCtrl the current game controller
@@ -144,36 +81,38 @@ public class RankingCtrl implements SceneController, QuestionNumController {
         this.gameCtrl = gameCtrl;
     }
 
+    /**
+     * Redirects the player to the next question page.
+     * Called when the timer is up.
+     */
     @Override
     public void redirect() {
         Question nextQuestion = gameCtrl.fetchQuestion();
         gameCtrl.showQuestion(nextQuestion);
     }
 
+    /**
+     * Quits the game.
+     * Called when the timer is up.
+     */
     @Override
     public void onQuit() {
         mainCtrl.quitGame(false, true);
-        mainCtrl.bindUser(null);
     }
 
-    @Override
-    public void updateCircleColor(List<Color> colors) {
-        for (int i = 0; i < mainCtrl.getAnswerCount(); i++) {
-            Circle circle = (Circle) getCircles().getChildren().get(i);
-            circle.setFill(colors.get(i));
-        }
-    }
-
-    @Override
-    public void resetCircleColor() {
-        for (int i = 0; i < mainCtrl.getQuestionsPerGame(); i++) {
-            Circle circle = (Circle) getCircles().getChildren().get(i);
-            circle.setFill(Color.LIGHTGRAY);
-        }
-    }
-
+    /**
+     * Updates the question number shown on screen.
+     */
     @Override
     public void updateQuestionNumber() {
-        getQuestionNum().setText("" + (mainCtrl.getAnswerCount()));
+        questionNum.setText("" + (mainCtrl.getAnswerCount()));
+    }
+
+    /**
+     * Highlights current question so the user is aware which circle corresponds to his current question
+     */
+    @Override
+    public void highlightCurrentCircle() {
+        highlightCurrentCircle(gameCtrl.getAnswerCount());
     }
 }

@@ -141,4 +141,16 @@ public abstract class Question {
         }
         return imagePath;
     }
+
+    /**
+     * Returns the text representation of the question
+     * @return the text representation of the question
+     */
+    public abstract String generateQuestionText();
+
+    /**
+     * Returns an answer object corresponding to the correct answer to this question
+     * @return an answer object corresponding to the correct answer to this question
+     */
+    public abstract Answer generateCorrectAnswer();
 }

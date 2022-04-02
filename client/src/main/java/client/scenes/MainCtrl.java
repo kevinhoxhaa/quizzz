@@ -24,17 +24,17 @@ import commons.models.SoloGame;
 import commons.utils.QuestionType;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
+import javafx.scene.ImageCursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
@@ -44,19 +44,22 @@ import java.util.TimerTask;
 
 public class MainCtrl {
 
-    public static final double MIN_WIDTH = 768.0;
-    public static final double MIN_HEIGHT = 512.0;
+    public static final double WIDTH = 1024.0;
+    public static final double HEIGHT = 704.0;
     private static final double TIMEOUT = 8.0;
     private static final double START_TIME = 7.95;
     private static final double INTERVAL = 0.05;
     private static final int MILLIS = 50;
     private static final int POLLING_DELAY = 0;
     private static final int POLLING_INTERVAL = 500;
-    private static final long ANSWER_TO_THE_ULTIMATE_QUESTION = 42;
-    private static final int STANDARD_PAGE_TIME = 15;
     private static final int QUESTIONS_PER_GAME = 20;
-    private static final int TOTAL_ANSWERS = 20;
-    private static final int HALFWAY_ANSWERS = 10;
+
+    //These are the variables used in the streak calculation formula
+    private static final long X1 = 1;
+    private static final long X2 = 4;
+    private static final long X3 = 17;
+    private static final long X4 = 20;
+    private static final long FACTOR = 300;
 
     private String serverUrl;
     private Timer waitingTimer;
@@ -84,7 +87,7 @@ public class MainCtrl {
     private RankingCtrl rankingCtrl;
     private Scene ranking;
 
-    private EstimationQuestionCtrl multiplayerEstimationCtrl;
+    private MultiplayerEstimationQuestionCtrl multiplayerEstimationCtrl;
     private Scene multiplayerEstimation;
 
     private SoloEstimationQuestionCtrl soloEstimationCtrl;
@@ -111,24 +114,16 @@ public class MainCtrl {
     private int gameIndex;
     private List<Color> colors;
     private Thread timerThread;
+    private double countdown;
     private int answerCount = 0;
 
-    private long soloScore = 0;
-    private int currentQuestion = 0;
-
-    public int getCurrentQuestion() {
-        return currentQuestion;
-    }
-
-    public void setCurrentQuestion(int currentQuestion) {
-        this.currentQuestion = currentQuestion;
-    }
+    private long streak = 0;
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home,
-            Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> multiplayerQuestion,
-            Pair<MultiplayerAnswerCtrl, Parent> multiplayerAnswer, Pair<RankingCtrl, Parent> ranking,
-            Pair<EstimationQuestionCtrl, Parent> multiplayerEstimation,
+                           Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home,
+                           Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> multiplayerQuestion,
+                           Pair<MultiplayerAnswerCtrl, Parent> multiplayerAnswer, Pair<RankingCtrl, Parent> ranking,
+                           Pair<MultiplayerEstimationQuestionCtrl, Parent> multiplayerEstimation,
                            Pair<SoloEstimationQuestionCtrl, Parent> soloEstimation,
                            Pair<SoloQuestionCtrl, Parent> soloQuestion,
                            Pair<SoloAnswerCtrl, Parent> soloAnswer,
@@ -136,8 +131,11 @@ public class MainCtrl {
                            Pair<MultiplayerResultsCtrl, Parent> multiplayerResults,
                            Pair<AdminPanelCtrl, Parent> adminPanel ) {
         this.primaryStage = primaryStage;
-        primaryStage.setMinHeight(MIN_HEIGHT);
-        primaryStage.setMinWidth(MIN_WIDTH);
+        primaryStage.setMinHeight(HEIGHT);
+        primaryStage.setMinWidth(WIDTH);
+        primaryStage.setMaxHeight(HEIGHT);
+        primaryStage.setMaxWidth(WIDTH);
+        primaryStage.setResizable(false);
 
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -183,6 +181,8 @@ public class MainCtrl {
         this.adminPanelCtrl = adminPanel.getKey();
         this.adminPanel = new Scene( adminPanel.getValue() );
 
+        countdown = START_TIME;
+
         showHome();
         primaryStage.show();
         primaryStage.setOnCloseRequest(event -> {
@@ -212,21 +212,47 @@ public class MainCtrl {
     }
 
     /**
-     * Returns the current game index
-     *
-     * @return the current game index
+     * This method resets the streak when an answer is incorrect.
+     * Since it is called after the postAnswers method, it also disables the isActiveDoublePoints
      */
-    public int getGameIndex() {
-        return gameIndex;
+    public void resetStreak(){
+        streak=0;
     }
 
     /**
-     * Sets the index of the multiplayer game a user participates in
-     *
-     * @param gameIndex the multiplayer game index
+     * This method increments the streak
      */
-    public void setGameIndex(int gameIndex) {
-        this.gameIndex = gameIndex;
+    public void incrementStreak(){
+        streak++;
+    }
+
+    /**
+     * This methods add the calculated score of the previous question to the user object
+     * @param user
+     * @param answeredQuestion
+     */
+    public void addScore(User user, Question answeredQuestion){
+        if(answeredQuestion.hasCorrectUserAnswer()){
+            incrementStreak();
+        }
+        else{
+            resetStreak();
+        }
+        int multiplyingFactor = (multiplayerCtrl!=null && multiplayerCtrl.getIsActiveDoublePoints()) ? 2 : 1;
+        if(multiplayerCtrl!=null && multiplayerCtrl.getIsActiveDoublePoints()) {
+            multiplayerCtrl.setIsActiveDoublePoints(false);
+        }
+        int correctFactor = answeredQuestion.hasCorrectUserAnswer() ? 1 : 0;
+
+        if(streak<X2){
+
+            user.incrementScore(multiplyingFactor * (answeredQuestion.calculatePoints() +
+                    correctFactor * Math.round(Math.pow(FACTOR,((double)(streak+X1)/X2)))));
+        }
+        else{
+            user.incrementScore(multiplyingFactor * (answeredQuestion.calculatePoints() +
+                    correctFactor * Math.round(Math.pow(FACTOR,((double)(streak+X3)/X4)))));
+        }
     }
 
     /**
@@ -235,14 +261,6 @@ public class MainCtrl {
      */
     public Stage getPrimaryStage() {
         return primaryStage;
-    }
-
-    /**
-     * add the score to the player's own score
-     * @param score the player score
-     */
-    public void addScore(long score) {
-        this.soloScore += score;
     }
 
     /**
@@ -260,6 +278,11 @@ public class MainCtrl {
     public void showHome() {
         primaryStage.setTitle("Quizzz");
         primaryStage.setScene(home);
+        home.getStylesheets().add("client/stylesheets/homebuttons.css");
+        homeCtrl.setFonts();
+
+        Image image = new Image("client/images/arrowcursor.png");  //pass in the image path
+        home.setCursor(new ImageCursor(image));
     }
 
     public void showAdminPanel() {
@@ -305,7 +328,8 @@ public class MainCtrl {
                 new Pair<>(this.multiplayerQuestionCtrl, this.multiplayerQuestion),
                 new Pair<>(this.multiplayerEstimationCtrl, this.multiplayerEstimation),
                 new Pair<>(this.multiplayerAnswerCtrl, this.multiplayerAnswer),
-                new Pair<>(this.rankingCtrl, this.ranking)
+                new Pair<>(this.rankingCtrl, this.ranking),
+                new Pair<>(this.multiplayerResultsCtrl, this.multiplayerResults)
         );
         multiplayerCtrl.startGame();
     }
@@ -339,7 +363,7 @@ public class MainCtrl {
      * @param prevQuestion The question that has just been asked to the players.
      */
     public void showAnswerPage(Question prevQuestion, List<MultiplayerUser> correctUsers) {
-        multiplayerAnswerCtrl.updateQuestionNumber();
+        updateQuestionCounters(multiplayerAnswerCtrl, colors);
         //Adds the color of the answer correctness to a list of answers
         if (prevQuestion.hasCorrectUserAnswer()) {
             colors.add(Color.LIGHTGREEN);
@@ -347,7 +371,6 @@ public class MainCtrl {
             colors.add(Color.INDIANRED);
         }
         answerCount++;
-        multiplayerAnswerCtrl.updateCircleColor(colors);
         multiplayerAnswerCtrl.setup(prevQuestion, correctUsers);
         primaryStage.setTitle("Answer screen");
         primaryStage.setScene(multiplayerAnswer);
@@ -368,41 +391,10 @@ public class MainCtrl {
     }
 
     /**
-     * Sets the scene in the primary stage to the one corresponding to a multiplayer question screen.
-     * Sets the timer to an initial 10 seconds for the players to answer the question.
-     *
-     * @param question the question to visualise
-     */
-    public void showQuestion(Question question) {
-        if (question.getType() == QuestionType.ESTIMATION) {
-            showEstimationQuestion((EstimationQuestion) question);
-            return;
-        }
-
-        showMultipleChoiceQuestion(question);
-    }
-
-    public void showMultipleChoiceQuestion(Question question) {
-        multiplayerQuestionCtrl.updateCircleColor(colors);
-        multiplayerQuestionCtrl.resetHighlight();
-        multiplayerQuestionCtrl.highlightCurrentCircle();
-        multiplayerQuestionCtrl.setup(question);
-        multiplayerQuestionCtrl.resetAnswerColors();
-        multiplayerQuestionCtrl.updateQuestionNumber();
-
-        multiplayerQuestionCtrl.enableAnswers();
-        multiplayerQuestionCtrl.startTimer();
-        multiplayerQuestionCtrl.setStartTime();
-        primaryStage.setTitle("Question screen");
-        primaryStage.setScene(multiplayerQuestion);
-    }
-
-    /**
      * Sets the scene in the primary stage to the one corresponding to a ranking screen.
      */
     public void showRanking() {
-        rankingCtrl.updateCircleColor(colors);
-        rankingCtrl.updateQuestionNumber();
+        updateQuestionCounters(rankingCtrl, colors);
         primaryStage.setTitle("Ranking Screen");
         primaryStage.setScene(ranking);
         rankingCtrl.startTimer();
@@ -425,82 +417,24 @@ public class MainCtrl {
     }
 
     /**
+     * Halves the remaining timer for the user.
+     * @param user the user that used the joker
+     */
+    public void halfTime ( MultiplayerUser user ) {
+        System.out.println("Received message from user: ");
+        System.out.println(user);
+        if ( !user.username.equals(this.user.username) ) {
+            countdown = countdown / 2;
+        }
+    }
+
+    /**
      * A getter for the number of the current question
      *
      * @return questionCount, which is the count of the number of questions that have already been shown.
      */
     public int getAnswerCount() {
         return answerCount;
-    }
-
-
-    /**
-     * Fetches a random question from the server. For now, it just returns a placeholder for testing.
-     *
-     * @return a random question
-     */
-    public Question getNextQuestion() {
-        return server.getQuestion(serverUrl, gameIndex, answerCount);
-    }
-
-    /**
-     * Deletes user from database when the close button is clicked
-     */
-    public void onClose() {
-        primaryStage.setOnHiding(new EventHandler<WindowEvent>() {
-
-            @Override
-            public void handle(WindowEvent event) {
-                Platform.runLater(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        try {
-                            server.removeMultiplayerUser(multiplayerCtrl.getServerUrl(), multiplayerCtrl.getUser());
-                            user = null;
-                        } catch (WebApplicationException e) {
-                            System.out.println("User to remove not found!");
-                        } catch (NullPointerException ex) {
-                            System.out.println("Multiplayer game to remove from not found!");
-                        } finally {
-                            System.exit(0);
-                        }
-                    }
-                });
-            }
-        });
-    }
-
-    /**
-=======
-        //TODO instead of this, return a random question fetched from the server
-        Activity activity = new Activity(
-                "testing the question models", ANSWER_TO_THE_ULTIMATE_QUESTION,
-                "it was me. I said it. haha", "client/images/xd.png");
-        return new ConsumptionQuestion(activity, new Random());
-    }
-
-    /**
->>>>>>> dev
-     * A method that redirects the User to:
-     * - The next question if the number of previous answers is less than 20 and not equal to 10
-     * - The Ranking Page if the User is halfway through the game (10 answers so far)
-     * - The Final Results Page if the User has answered all 20 questions
-     */
-    public void afterAnswerScreen() {
-        if (getAnswerCount() <= TOTAL_ANSWERS) {
-            if (getAnswerCount() == HALFWAY_ANSWERS) {
-                showRanking();
-                // The ranking page will be showed here
-            }
-            //If the User is not redirected to the ranking page, they go to the next Question
-            else {
-                multiplayerQuestionCtrl.resetAnswerColors();
-                showQuestion(getNextQuestion());
-            }
-        } else {
-            showMultiplayerResults();
-        }
     }
 
     /**
@@ -512,14 +446,14 @@ public class MainCtrl {
      * @param sceneController the scene controller instance that will redirect to the next scene,
      *                        once the timer is up
      */
-    public void startTimer(ProgressIndicator countdownCircle, SceneController sceneController) {
+    public void startTimer(ProgressIndicator countdownCircle, QuestionNumController sceneController) {
         countdownCircle.applyCss();
         Text text = (Text) countdownCircle.lookup(".text.percentage");
         if (timerThread != null && timerThread.isAlive()) {
             timerThread.interrupt();
         }
         timerThread = new Thread(() -> {
-            double countdown = START_TIME;
+            countdown = START_TIME;
             while (countdown >= 0.0) {
                 try {
                     double finalCountdown = countdown;
@@ -567,6 +501,7 @@ public class MainCtrl {
 
         soloQuestionCtrl.resetCircleColor();
         soloAnswerCtrl.resetCircleColor();
+        resetStreak();
 
         SoloGame soloGame = server.getSoloGame(server.getURL(), QUESTIONS_PER_GAME);
         primaryStage.setTitle("Solo game");
@@ -591,9 +526,9 @@ public class MainCtrl {
         } else {
             colors.add(Color.INDIANRED);
         }
-        soloAnswerCtrl.setup(game, colors);
+        soloAnswerCtrl.setup(game);
+        updateQuestionCounters(soloAnswerCtrl, colors);
         primaryStage.setScene(soloAnswer);
-        soloAnswerCtrl.startTimer();
     }
 
     /**
@@ -611,7 +546,8 @@ public class MainCtrl {
      * @param game the solo game instance
      */
     public void showSoloQuestion(SoloGame game) {
-        soloQuestionCtrl.setup(game, colors);
+        soloQuestionCtrl.setup(game);
+        updateQuestionCounters(soloQuestionCtrl, colors);
         primaryStage.setScene(soloQuestion);
         soloQuestionCtrl.startTimer();
         soloQuestionCtrl.setStartTime();
@@ -622,7 +558,8 @@ public class MainCtrl {
      * @param game the solo game instance
      */
     public void showSoloEstimationQuestion(SoloGame game) {
-        soloEstimationCtrl.setup(game, colors);
+        soloEstimationCtrl.setup(game);
+        updateQuestionCounters(soloEstimationCtrl, colors);
         primaryStage.setScene(soloEstimation);
         soloEstimationCtrl.startTimer();
         soloEstimationCtrl.setStartTime();
@@ -654,17 +591,9 @@ public class MainCtrl {
      * @param game
      */
     public void showSoloResults(SoloGame game) {
-        soloResultsCtrl.setup(game, colors);
+        soloResultsCtrl.setup(game);
+        updateQuestionCounters(soloResultsCtrl, colors);
         primaryStage.setScene(soloResults);
-    }
-
-    /**
-     * Called after the last answer screen's timer is up, shows the solo results page
-     */
-    public void showMultiplayerResults() {
-        multiplayerResultsCtrl.setup(colors);
-        primaryStage.setTitle("Multiplayer results screen");
-        primaryStage.setScene(multiplayerResults);
     }
 
     /**
@@ -685,9 +614,23 @@ public class MainCtrl {
         alert.showAndWait().ifPresent(type -> {
             if (type == okButton) {
                 if(isMultiplayer) {
+                    if(multiplayerCtrl != null) {
+                        multiplayerCtrl.unregisterForEmojis();
+                        multiplayerCtrl.unregisterForHalfTime();
+                        multiplayerCtrl.hideEmojis();
+                    }
+
+                    if(server.getSession() != null && server.getSession().isConnected()) {
+                        server.getSession().disconnect();
+                    }
+
                     try {
-                        server.removeMultiplayerUser(serverUrl, user);
-                        user = null;
+                        server.removeMultiplayerUser(serverUrl, (MultiplayerUser) user);
+                        bindUser(null);
+                        multiplayerEstimationCtrl.resetDoublePoints();
+                        multiplayerQuestionCtrl.resetDoublePoints();
+                        multiplayerQuestionCtrl.resetRemoveIncorrect();
+
                     } catch(WebApplicationException e) {
                         System.out.println("User to remove not found!");
                     } finally {
@@ -700,5 +643,33 @@ public class MainCtrl {
                 showHome();
             }
         });
+    }
+
+    /**
+     * Updates the little circles and the question counter in the given controller
+     * @param controller the controller of the scene
+     * @param colors the list of colors corresponding to answers to past questions
+     */
+    public void updateQuestionCounters(QuestionNumController controller, List<Color> colors){
+        controller.resetCircleColor();
+        controller.updateCircleColor(colors);
+        controller.updateQuestionNumber();
+        if(controller instanceof MultiplayerQuestionCtrl ||
+                controller instanceof MultiplayerEstimationQuestionCtrl ||
+                controller instanceof SoloQuestionCtrl ||
+                controller instanceof SoloEstimationQuestionCtrl){
+            controller.resetHighlight();
+            controller.highlightCurrentCircle();
+        }
+    }
+
+    public void resetMainCtrl() {
+        multiplayerQuestionCtrl.resetCircleColor();
+        multiplayerAnswerCtrl.resetCircleColor();
+        rankingCtrl.resetCircleColor();
+        multiplayerResultsCtrl.resetCircleColor();
+        this.colors = new ArrayList<>();
+        this.answerCount = 0;
+        this.user.resetScore();
     }
 }

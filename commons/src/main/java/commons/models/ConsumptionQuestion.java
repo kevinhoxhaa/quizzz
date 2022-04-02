@@ -19,8 +19,11 @@ public class ConsumptionQuestion extends Question {
     private List<Long> answers;
     private Random random;
 
+    private Long firstAlternative;
+    private Long secondAlternative;
+
     @SuppressWarnings("unused")
-    private ConsumptionQuestion() {
+    public ConsumptionQuestion() {
         super(QuestionType.CONSUMPTION);
         this.random = new Random();
         // for object mapper
@@ -61,35 +64,105 @@ public class ConsumptionQuestion extends Question {
         loadAnswers(activity.consumption);
     }
 
+
+    /**
+     * Generates two alternative answers.
+     * @param correctAnswer The correct answer (after being divided by the coefficient)
+     * @param coefficient The coefficient
+     * @return A list with 3 items:
+     *  - Index 0: the correct answer
+     *  - Index 1: the first alternative
+     *  - Index 2: the second alternative
+     */
+    // CHECKSTYLE:OFF
+    private List<Long> generateAlternatives(long correctAnswer, long coefficient){
+
+        int tries = 0;
+
+        long firstAlternative = 0;
+        long secondAlternative = 0;
+
+        do {
+            tries++;
+            firstAlternative = (long) (correctAnswer +
+                    (random.nextBoolean() ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
+        } while ((correctAnswer == firstAlternative || firstAlternative <= 0L) && tries < 30);
+
+        do {
+            tries++;
+            secondAlternative = (long) (correctAnswer +
+                    (random.nextBoolean() ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
+        } while ((correctAnswer == secondAlternative
+                || firstAlternative == secondAlternative || secondAlternative <= 0L) && tries < 30);
+
+        if(tries >= 30){
+            return null;
+        }
+
+        List<Long> out = new ArrayList<>();
+        out.add(correctAnswer);
+        out.add(firstAlternative);
+        out.add(secondAlternative);
+        return out;
+    }
+
     /**
      * Returns a list of two numbers which are a little
      * greater or smaller than the correct answer, in order
      * to confuse the user
+     * Also returns a list of incorrect answers for the remove
+     * incorrect answer joker
      * Note: ignoring checkstyle because of too many
      * magic numbers
      * @param correctAnswer the correct answer
      */
-    // CHECKSTYLE:OFF
+
     private void loadAnswers(long correctAnswer) {
         answers = new ArrayList<>();
 
-        long firstAlternative;
-        long secondAlternative;
+        long coefficient = 1L;
 
-        do {
-             firstAlternative = (long) (correctAnswer +
-                    (random.nextDouble() < 0.5 ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
-        } while (correctAnswer == firstAlternative);
+        while(correctAnswer % 10 == 0){
+            correctAnswer = correctAnswer / 10;
+            coefficient *= 10;
+        }
 
-        do {
-            secondAlternative = (long) (correctAnswer +
-                    (random.nextDouble() < 0.5 ? -1 : 1) * correctAnswer * 0.6 * random.nextDouble());
-        } while (correctAnswer == secondAlternative || firstAlternative == secondAlternative);
+        if(coefficient == 1 && correctAnswer % 5 == 0){
+            correctAnswer = correctAnswer / 5;
+            coefficient *= 5;
+        }
+
+        List<Long> alternatives = generateAlternatives(correctAnswer, coefficient);
+
+        while(alternatives == null){
+            if(coefficient == 1){
+                answers.add(correctAnswer);
+                answers.add(correctAnswer + 1);
+                answers.add(correctAnswer + 2);
+                Collections.shuffle(answers);
+                return;
+            }
+            if(coefficient % 5 == 0){
+                coefficient /= 5;
+                correctAnswer *= 5;
+                alternatives = generateAlternatives(correctAnswer, coefficient);
+            }
+        }
+
+        correctAnswer = alternatives.get(0);
+        long firstAlternative = alternatives.get(1);
+        long secondAlternative = alternatives.get(2);
+
+        correctAnswer *= coefficient;
+        firstAlternative *= coefficient;
+        secondAlternative *= coefficient;
 
         answers.add(correctAnswer);
         answers.add(firstAlternative);
         answers.add(secondAlternative);
         Collections.shuffle(answers);
+        this.firstAlternative = firstAlternative;
+        this.secondAlternative = secondAlternative;
     }
     // CHECKSTYLE:ON
 
@@ -166,5 +239,24 @@ public class ConsumptionQuestion extends Question {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), activity, userAnswer, seconds, answers);
+    }
+
+    /**
+     * Returns the text representation of the question
+     * @return the text representation of the question
+     */
+    @Override
+    public String generateQuestionText(){
+        return String.format("How much energy does %s consume?",
+                getActivity().title);
+    }
+
+    /**
+     * Returns an answer object corresponding to the correct answer to this question
+     * @return an answer object corresponding to the correct answer to this question
+     */
+    @Override
+    public Answer generateCorrectAnswer(){
+        return new Answer(activity.consumption);
     }
 }

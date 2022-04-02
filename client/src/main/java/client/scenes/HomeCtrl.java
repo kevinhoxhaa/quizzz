@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.ResourceUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.entities.MultiplayerUser;
@@ -8,15 +9,21 @@ import commons.entities.User;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Locale;
 
 public class HomeCtrl {
 
@@ -25,6 +32,8 @@ public class HomeCtrl {
     private static final int UNAUTHORIZED = 401;
     private static final int FORBIDDEN = 403;
     private static final int USERNAME_LENGTH = 15;
+    private static final int TITLE_SIZE = 45;
+    private static final int BUTTON_TEXT_SIZE = 42;
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -33,6 +42,23 @@ public class HomeCtrl {
 
     @FXML
     private ImageView bulbView;
+    @FXML
+    private Text logoTitle;
+
+    @FXML
+    private Text soloText;
+
+    @FXML
+    private Text multiplayerText;
+
+    @FXML
+    private Button soloButton;
+
+    @FXML
+    private Button multiplayerButton;
+
+    @FXML
+    private Button helpButton;
 
     @FXML
     private TextField usernameField;
@@ -163,7 +189,6 @@ public class HomeCtrl {
             invalidURL();
             return;
         }
-
         mainCtrl.startSoloGame();
     }
 
@@ -179,7 +204,7 @@ public class HomeCtrl {
             if (!isValidUsername(user)) {
                 return;
             }
-            mainCtrl.setServerUrl(serverUrl);
+            mainCtrl.setServerUrl(serverUrl.toLowerCase(Locale.ROOT));
             mainCtrl.bindUser(server.addUserMultiplayer(serverUrl, user));
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -205,6 +230,9 @@ public class HomeCtrl {
         mainCtrl.showWaiting();
     }
 
+    /**
+     * Alerts the user about the invalid URL
+     */
     private void invalidURL() {
         var alert = new Alert(Alert.AlertType.ERROR);
         alert.initModality(Modality.APPLICATION_MODAL);
@@ -213,6 +241,11 @@ public class HomeCtrl {
         return;
     }
 
+    /**
+     * Checks if the given user object has a valid username
+     * @param user the user in question
+     * @return a boolean representation of the username's validity
+     */
     private boolean isValidUsername(User user) {
         if (user.username.contains(" ") || user.username.length() > USERNAME_LENGTH) {
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -222,5 +255,38 @@ public class HomeCtrl {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Configures the fonts of the home page to the specified
+     * pixel-art font resource
+     */
+    public void setFonts() {
+
+        soloText.setFont(Font.loadFont(
+                ResourceUtils.getClientResource("fonts/arcadeclassic.ttf").getPath(),
+                BUTTON_TEXT_SIZE
+        ));
+
+        multiplayerText.setFont(Font.loadFont(
+                ResourceUtils.getClientResource("fonts/arcadeclassic.ttf").getPath(),
+                BUTTON_TEXT_SIZE
+        ));
+
+        logoTitle.setFont(Font.loadFont(
+                ResourceUtils.getClientResource("fonts/ka1.ttf").getPath(),
+                TITLE_SIZE
+        ));
+    }
+
+    /**
+     * This method sets the hand cursor when the mouse is hovering the buttons
+     */
+    @FXML
+    public void onButtonHover(){
+        Image image = new Image("client/images/handcursor.png");  //pass in the image path
+        soloButton.setCursor(new ImageCursor(image));
+        multiplayerButton.setCursor(new ImageCursor(image));
+        helpButton.setCursor(new ImageCursor(image));
     }
 }
