@@ -52,11 +52,14 @@ public class MainCtrl {
     private static final int MILLIS = 50;
     private static final int POLLING_DELAY = 0;
     private static final int POLLING_INTERVAL = 500;
-    private static final long ANSWER_TO_THE_ULTIMATE_QUESTION = 42;
-    private static final int STANDARD_PAGE_TIME = 15;
     private static final int QUESTIONS_PER_GAME = 20;
-    private static final int TOTAL_ANSWERS = 20;
-    private static final int HALFWAY_ANSWERS = 10;
+
+    //These are the variables used in the streak calculation formula
+    private static final long X1 = 1;
+    private static final long X2 = 4;
+    private static final long X3 = 17;
+    private static final long X4 = 20;
+    private static final long FACTOR = 300;
 
     private String serverUrl;
     private Timer waitingTimer;
@@ -111,28 +114,19 @@ public class MainCtrl {
     private double countdown;
     private int answerCount = 0;
 
-    private long soloScore = 0;
-    private int currentQuestion = 0;
-
-    public int getCurrentQuestion() {
-        return currentQuestion;
-    }
-
-    public void setCurrentQuestion(int currentQuestion) {
-        this.currentQuestion = currentQuestion;
-    }
+    private long streak = 0;
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home,
-            Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> multiplayerQuestion,
-            Pair<MultiplayerAnswerCtrl, Parent> multiplayerAnswer, Pair<RankingCtrl, Parent> ranking,
-            Pair<MultiplayerEstimationQuestionCtrl, Parent> multiplayerEstimation,
+                           Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home,
+                           Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> multiplayerQuestion,
+                           Pair<MultiplayerAnswerCtrl, Parent> multiplayerAnswer, Pair<RankingCtrl, Parent> ranking,
+                           Pair<MultiplayerEstimationQuestionCtrl, Parent> multiplayerEstimation,
                            Pair<SoloEstimationQuestionCtrl, Parent> soloEstimation,
                            Pair<SoloQuestionCtrl, Parent> soloQuestion,
                            Pair<SoloAnswerCtrl, Parent> soloAnswer,
                            Pair<SoloResultsCtrl, Parent> soloResults,
                            Pair<MultiplayerResultsCtrl, Parent> multiplayerResults
-                           ) {
+    ) {
         this.primaryStage = primaryStage;
         primaryStage.setMinHeight(HEIGHT);
         primaryStage.setMinWidth(WIDTH);
@@ -212,21 +206,47 @@ public class MainCtrl {
     }
 
     /**
-     * Returns the current game index
-     *
-     * @return the current game index
+     * This method resets the streak when an answer is incorrect.
+     * Since it is called after the postAnswers method, it also disables the isActiveDoublePoints
      */
-    public int getGameIndex() {
-        return gameIndex;
+    public void resetStreak(){
+        streak=0;
     }
 
     /**
-     * Sets the index of the multiplayer game a user participates in
-     *
-     * @param gameIndex the multiplayer game index
+     * This method increments the streak
      */
-    public void setGameIndex(int gameIndex) {
-        this.gameIndex = gameIndex;
+    public void incrementStreak(){
+        streak++;
+    }
+
+    /**
+     * This methods add the calculated score of the previous question to the user object
+     * @param user
+     * @param answeredQuestion
+     */
+    public void addScore(User user, Question answeredQuestion){
+        if(answeredQuestion.hasCorrectUserAnswer()){
+            incrementStreak();
+        }
+        else{
+            resetStreak();
+        }
+        int multiplyingFactor = (multiplayerCtrl!=null && multiplayerCtrl.getIsActiveDoublePoints()) ? 2 : 1;
+        if(multiplayerCtrl!=null && multiplayerCtrl.getIsActiveDoublePoints()) {
+            multiplayerCtrl.setIsActiveDoublePoints(false);
+        }
+        int correctFactor = answeredQuestion.hasCorrectUserAnswer() ? 1 : 0;
+
+        if(streak<X2){
+
+            user.incrementScore(multiplyingFactor * (answeredQuestion.calculatePoints() +
+                    correctFactor * Math.round(Math.pow(FACTOR,((double)(streak+X1)/X2)))));
+        }
+        else{
+            user.incrementScore(multiplyingFactor * (answeredQuestion.calculatePoints() +
+                    correctFactor * Math.round(Math.pow(FACTOR,((double)(streak+X3)/X4)))));
+        }
     }
 
     /**
@@ -235,14 +255,6 @@ public class MainCtrl {
      */
     public Stage getPrimaryStage() {
         return primaryStage;
-    }
-
-    /**
-     * add the score to the player's own score
-     * @param score the player score
-     */
-    public void addScore(long score) {
-        this.soloScore += score;
     }
 
     /**
@@ -413,16 +425,6 @@ public class MainCtrl {
     }
 
     /**
-     * Fetches a random question from the server. For now, it just returns a placeholder for testing.
-     *
-     * @return a random question
-     */
-    public Question getNextQuestion() {
-        return server.getQuestion(serverUrl, gameIndex, answerCount);
-    }
-
-
-    /**
      * Starts a particular countdown timer and initiates the
      * timer animation with a new thread
      *
@@ -486,6 +488,7 @@ public class MainCtrl {
 
         soloQuestionCtrl.resetCircleColor();
         soloAnswerCtrl.resetCircleColor();
+        resetStreak();
 
         SoloGame soloGame = server.getSoloGame(server.getURL(), QUESTIONS_PER_GAME);
         primaryStage.setTitle("Solo game");
@@ -659,5 +662,21 @@ public class MainCtrl {
         this.colors = new ArrayList<>();
         this.answerCount = 0;
         this.user.resetScore();
+    }
+
+    /**
+     * A getter for the game index
+     * @return the game index
+     */
+    public int getGameIndex() {
+        return gameIndex;
+    }
+
+    /**
+     * A setter for the game index
+     * @param gameIndex the game index to set
+     */
+    public void setGameIndex(int gameIndex) {
+        this.gameIndex = gameIndex;
     }
 }
