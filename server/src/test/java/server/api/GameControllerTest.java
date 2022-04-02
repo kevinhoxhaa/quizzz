@@ -250,7 +250,8 @@ public class GameControllerTest {
         sut.addRestartUser(gameIndex, 1);
         sut.addRestartUser(gameIndex, 2);
         sut.restartGame(gameIndex, (int) NUMBER, 1);
-        assertEquals(List.of((long) 2), sut.getGameList().getBody().getGames().get((long) gameIndex).getRestartUserIds());
+        assertEquals(List.of((long) 2), sut.getGameList().getBody().getGames()
+                .get((long) gameIndex).getRestartUserIds());
     }
 
     @Test
