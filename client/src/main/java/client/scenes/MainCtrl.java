@@ -18,17 +18,20 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.entities.MultiplayerUser;
 import commons.entities.User;
+import commons.models.EstimationQuestion;
 import commons.models.Question;
 import commons.models.SoloGame;
 import commons.utils.QuestionType;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.application.Platform;
+import javafx.scene.ImageCursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -41,8 +44,8 @@ import java.util.TimerTask;
 
 public class MainCtrl {
 
-    public static final double MIN_WIDTH = 768.0;
-    public static final double MIN_HEIGHT = 512.0;
+    public static final double WIDTH = 1024.0;
+    public static final double HEIGHT = 704.0;
     private static final double TIMEOUT = 8.0;
     private static final double START_TIME = 7.95;
     private static final double INTERVAL = 0.05;
@@ -81,7 +84,7 @@ public class MainCtrl {
     private RankingCtrl rankingCtrl;
     private Scene ranking;
 
-    private EstimationQuestionCtrl multiplayerEstimationCtrl;
+    private MultiplayerEstimationQuestionCtrl multiplayerEstimationCtrl;
     private Scene multiplayerEstimation;
 
     private SoloEstimationQuestionCtrl soloEstimationCtrl;
@@ -105,6 +108,7 @@ public class MainCtrl {
     private int gameIndex;
     private List<Color> colors;
     private Thread timerThread;
+    private double countdown;
     private int answerCount = 0;
 
     private long soloScore = 0;
@@ -122,7 +126,7 @@ public class MainCtrl {
             Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home,
             Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> multiplayerQuestion,
             Pair<MultiplayerAnswerCtrl, Parent> multiplayerAnswer, Pair<RankingCtrl, Parent> ranking,
-            Pair<EstimationQuestionCtrl, Parent> multiplayerEstimation,
+            Pair<MultiplayerEstimationQuestionCtrl, Parent> multiplayerEstimation,
                            Pair<SoloEstimationQuestionCtrl, Parent> soloEstimation,
                            Pair<SoloQuestionCtrl, Parent> soloQuestion,
                            Pair<SoloAnswerCtrl, Parent> soloAnswer,
@@ -130,8 +134,11 @@ public class MainCtrl {
                            Pair<MultiplayerResultsCtrl, Parent> multiplayerResults
                            ) {
         this.primaryStage = primaryStage;
-        primaryStage.setMinHeight(MIN_HEIGHT);
-        primaryStage.setMinWidth(MIN_WIDTH);
+        primaryStage.setMinHeight(HEIGHT);
+        primaryStage.setMinWidth(WIDTH);
+        primaryStage.setMaxHeight(HEIGHT);
+        primaryStage.setMaxWidth(WIDTH);
+        primaryStage.setResizable(false);
 
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -173,6 +180,8 @@ public class MainCtrl {
 
         this.multiplayerResultsCtrl = multiplayerResults.getKey();
         this.multiplayerResults = new Scene(multiplayerResults.getValue());
+
+        countdown = START_TIME;
 
         showHome();
         primaryStage.show();
@@ -251,6 +260,11 @@ public class MainCtrl {
     public void showHome() {
         primaryStage.setTitle("Quizzz");
         primaryStage.setScene(home);
+        home.getStylesheets().add("client/stylesheets/homebuttons.css");
+        homeCtrl.setFonts();
+
+        Image image = new Image("client/images/arrowcursor.png");  //pass in the image path
+        home.setCursor(new ImageCursor(image));
     }
 
     /**
@@ -362,6 +376,34 @@ public class MainCtrl {
     }
 
     /**
+     * Sets the scene in the primary stage to the estimation screen
+     *
+     * @param question the estimation question to visualise
+     */
+    public void showEstimationQuestion(EstimationQuestion question) {
+        primaryStage.setTitle("Estimation");
+        primaryStage.setScene(multiplayerEstimation);
+
+        multiplayerEstimationCtrl.startTimer();
+        multiplayerEstimationCtrl.setup(question);
+
+        primaryStage.setScene(multiplayerEstimation);
+        multiplayerEstimationCtrl.startTimer();
+    }
+
+    /**
+     * Halves the remaining timer for the user.
+     * @param user the user that used the joker
+     */
+    public void halfTime ( MultiplayerUser user ) {
+        System.out.println("Received message from user: ");
+        System.out.println(user);
+        if ( !user.username.equals(this.user.username) ) {
+            countdown = countdown / 2;
+        }
+    }
+
+    /**
      * A getter for the number of the current question
      *
      * @return questionCount, which is the count of the number of questions that have already been shown.
@@ -369,7 +411,6 @@ public class MainCtrl {
     public int getAnswerCount() {
         return answerCount;
     }
-
 
     /**
      * Fetches a random question from the server. For now, it just returns a placeholder for testing.
@@ -390,14 +431,14 @@ public class MainCtrl {
      * @param sceneController the scene controller instance that will redirect to the next scene,
      *                        once the timer is up
      */
-    public void startTimer(ProgressIndicator countdownCircle, SceneController sceneController) {
+    public void startTimer(ProgressIndicator countdownCircle, QuestionNumController sceneController) {
         countdownCircle.applyCss();
         Text text = (Text) countdownCircle.lookup(".text.percentage");
         if (timerThread != null && timerThread.isAlive()) {
             timerThread.interrupt();
         }
         timerThread = new Thread(() -> {
-            double countdown = START_TIME;
+            countdown = START_TIME;
             while (countdown >= 0.0) {
                 try {
                     double finalCountdown = countdown;
@@ -472,7 +513,6 @@ public class MainCtrl {
         soloAnswerCtrl.setup(game);
         updateQuestionCounters(soloAnswerCtrl, colors);
         primaryStage.setScene(soloAnswer);
-        soloAnswerCtrl.startTimer();
     }
 
     /**
@@ -570,6 +610,7 @@ public class MainCtrl {
                 if(isMultiplayer) {
                     if(multiplayerCtrl != null) {
                         multiplayerCtrl.unregisterForEmojis();
+                        multiplayerCtrl.unregisterForHalfTime();
                         multiplayerCtrl.hideEmojis();
                     }
 
@@ -608,7 +649,7 @@ public class MainCtrl {
         controller.updateCircleColor(colors);
         controller.updateQuestionNumber();
         if(controller instanceof MultiplayerQuestionCtrl ||
-                controller instanceof EstimationQuestionCtrl ||
+                controller instanceof MultiplayerEstimationQuestionCtrl ||
                 controller instanceof SoloQuestionCtrl ||
                 controller instanceof SoloEstimationQuestionCtrl){
             controller.resetHighlight();
