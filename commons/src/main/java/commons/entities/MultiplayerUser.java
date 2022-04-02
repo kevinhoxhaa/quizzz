@@ -18,4 +18,10 @@ public class MultiplayerUser extends User{
     public MultiplayerUser(String username) {
         super(username);
     }
+
+    @Override
+    public void resetScore() {
+        unansweredQuestions = 0;
+        super.resetScore();
+    }
 }

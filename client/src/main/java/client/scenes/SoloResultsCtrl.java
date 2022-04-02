@@ -72,7 +72,7 @@ public class SoloResultsCtrl extends AbstractRankingCtrl {
     }
 
     /**
-     * Redirects the user to the home page when the quit button is clicked
+     * Quits the solo game, unbinds the user and redirects the user to the home page.
      */
     @FXML
     public void onQuit() {

@@ -117,7 +117,6 @@ public class MultiplayerAnswerCtrl extends AbstractAnswerCtrl implements EmojiCo
     @Override
     public void onQuit() {
         mainCtrl.quitGame(false, true);
-        mainCtrl.bindUser(null);
     }
 
     /**

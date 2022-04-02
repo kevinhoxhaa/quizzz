@@ -8,6 +8,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -24,12 +25,12 @@
                  </padding>
                  <children>
                      <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0">
-                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Quizzzz" HBox.hgrow="ALWAYS">
+                         <Text fx:id="logoTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Quizzzz" HBox.hgrow="ALWAYS">
                              <font>
                                  <Font name="Monospaced Bold" size="64.0" />
                              </font>
                          </Text>
-                         <ImageView fx:id="bulbView" fitWidth="96.0" pickOnBounds="true" preserveRatio="true" rotate="24.0">
+                         <ImageView fx:id="bulbView" fitHeight="122.0" fitWidth="146.0" pickOnBounds="true" preserveRatio="true" rotate="24.0">
                              <image>
                                  <Image url="@../icons/bulb.png" />
                              </image>
@@ -39,50 +40,61 @@
                <font>
                   <Font name="Monospaced Regular" size="12.0" />
                </font></TextField>
-                     <TextField fx:id="urlField" prefWidth="256.0" promptText="Server URL" style="-fx-font-size: 1.5em; -fx-font-family: Monospaced; -fx-pref-width: 28em;">
+                     <TextField fx:id="urlField" prefHeight="35.0" prefWidth="566.0" promptText="Server URL" style="-fx-font-size: 1.5em; -fx-font-family: Monospaced; -fx-pref-width: 28em;">
                <font>
                   <Font name="Monospaced Regular" size="12.0" />
                </font></TextField>
-                     <VBox alignment="CENTER" minWidth="248.0" prefHeight="200.0" prefWidth="222.0" spacing="8.0" style="-fx-pref-width: 14em;">
-                         <padding>
-                             <Insets bottom="10.0" left="20.0" right="20.0" />
-                         </padding>
-                         <children>
-                             <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onSoloButtonClick" text="Solo" textAlignment="CENTER">
+            <Pane prefHeight="271.0" prefWidth="412.0">
+               <children>
+                             <Button fx:id="soloButton" layoutX="37.0" layoutY="51.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onSoloButtonClick" onMouseEntered="#onButtonHover" prefHeight="66.0" prefWidth="326.0" textAlignment="CENTER">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                     <font>
+                        <Font name="Monospaced Bold" size="26.0" />
+                     </font>
+                     <graphic>
+                        <Text fx:id="soloText" strokeType="OUTSIDE" strokeWidth="0.0" text="Solo" textAlignment="CENTER" wrappingWidth="94.44390535354614">
+                           <font>
+                              <Font name="Monospaced Bold" size="39.0" />
+                           </font>
+                        </Text>
+                     </graphic>
+                        </Button>
+                             <Button fx:id="multiplayerButton" layoutX="35.0" layoutY="143.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onMultiplayerButtonClick" onMouseEntered="#onButtonHover" prefHeight="66.0" prefWidth="326.0" textAlignment="CENTER">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
                      <font>
                         <Font name="Monospaced Bold" size="24.0" />
                      </font>
+                     <graphic>
+                        <Text fx:id="multiplayerText" strokeType="OUTSIDE" strokeWidth="0.0" text="Multiplayer" textAlignment="CENTER" wrappingWidth="280.84392976760864">
+                           <font>
+                              <Font name="Monospaced Bold" size="39.0" />
+                           </font>
+                        </Text>
+                     </graphic>
                         </Button>
-                             <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onMultiplayerButtonClick" text="Multiplayer" textAlignment="CENTER">
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                     <font>
-                        <Font name="Monospaced Bold" size="24.0" />
-                     </font>
-                        </Button>
-                         </children>
-                     </VBox>
+               </children>
+            </Pane>
                      <Region VBox.vgrow="ALWAYS" />
-            <VBox alignment="BOTTOM_LEFT" minHeight="108.0" prefHeight="108.0" prefWidth="929.0">
+            <VBox alignment="BOTTOM_LEFT" minHeight="108.0" prefHeight="108.0" prefWidth="978.0">
                <padding>
                   <Insets top="16.0" />
                </padding>
                <children>
-                  <Button mnemonicParsing="false" onAction="#onHelpButtonClick" style="-fx-background-color: transparent;">
-                      <graphic>
-                          <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
+                  <Button fx:id="helpButton" mnemonicParsing="false" onAction="#onHelpButtonClick" onMouseEntered="#onButtonHover" prefHeight="96.0" prefWidth="168.0" style="-fx-background-color: transparent;">
+                      <cursor>
+                          <Cursor fx:constant="HAND" />
+                      </cursor>
+                     <graphic>
+                          <ImageView fx:id="questionMark" fitHeight="106.0" fitWidth="179.0" pickOnBounds="true" preserveRatio="true">
                               <image>
                                   <Image url="@../icons/help.png" />
                               </image>
                           </ImageView>
-                      </graphic>
-                      <cursor>
-                          <Cursor fx:constant="HAND" />
-                      </cursor>
+                     </graphic>
                   </Button>
                </children>
             </VBox>
