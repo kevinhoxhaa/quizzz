@@ -256,7 +256,13 @@ public class GameController {
             return ResponseEntity.badRequest().build();
         }
 
-        game.getUserIds().remove(userId);
+        List<Long> userIds = game.getUserIds();
+        userIds.remove(userId);
+
+        if(userIds.size() == 0){
+            gameList.remove(game.getGameID());
+        }
+
         return ResponseEntity.ok(game.getUserIds());
     }
 

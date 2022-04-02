@@ -104,7 +104,7 @@ public class WaitingCtrl {
     @FXML
     protected void onBackButtonClick() {
         User user = mainCtrl.getUser();
-        server.removeMultiplayerUser(server.getURL(), (MultiplayerUser) user);
+        server.removeMultiplayerUser(server.getURL(), -1, (MultiplayerUser) user);
         mainCtrl.bindUser(null);
         mainCtrl.showHome();
         mainCtrl.stopWaitingTimer();
@@ -120,6 +120,7 @@ public class WaitingCtrl {
         try {
             String serverUrl = mainCtrl.getServerUrl();
             Integer gameIndex = server.startGame(serverUrl);
+            mainCtrl.setGameIndex(gameIndex);
             Question firstQuestion = server.getQuestion(serverUrl, gameIndex, 0);
             System.out.println(firstQuestion);
             mainCtrl.stopWaitingTimer();
