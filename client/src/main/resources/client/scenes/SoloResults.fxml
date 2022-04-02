@@ -160,7 +160,7 @@
                             <children>
                                 <VBox prefHeight="305.0" prefWidth="373.0">
                                     <children>
-                                        <TableView fx:id="scoreTable" prefHeight="277.0" prefWidth="167.0" stylesheets="@/client/Stylesheets/TableView.css">
+                                        <TableView fx:id="scoreTable" maxHeight="282.0" maxWidth="375.0" minHeight="282.0" minWidth="206.0" prefHeight="282.0" prefWidth="339.0" stylesheets="@/client/Stylesheets/TableView.css">
                                             <columns>
                                                 <TableColumn fx:id="tableUsers" prefWidth="240.66664123535156" text="Users" />
                                                 <TableColumn fx:id="tableScore" prefWidth="132.00006866455078" text="Score" />
@@ -224,7 +224,7 @@
                             <children>
                                 <Pane prefHeight="92.0" prefWidth="357.0">
                                     <children>
-                                        <Button styleClass="pixelButton" id="restart" fx:id="restartButton" layoutX="14.0" layoutY="12.0" mnemonicParsing="false" onAction="#onRestartButton" prefHeight="67.0" prefWidth="211.0" text="Restart">
+                                        <Button id="restart" fx:id="restartButton" layoutX="14.0" layoutY="12.0" mnemonicParsing="false" onAction="#onRestartButton" prefHeight="67.0" prefWidth="211.0" styleClass="pixelButton" text="Restart">
                                             <font>
                                                 <Font name="Monospaced Bold" size="20.0" />
                                             </font>
@@ -236,7 +236,7 @@
                                 </Pane>
                                 <Pane prefHeight="92.0" prefWidth="350.0">
                                     <children>
-                                        <Button styleClass="pixelButton" id="quit" fx:id="quitButton" layoutX="125.0" layoutY="13.0" mnemonicParsing="false" onAction="#onQuit" prefHeight="67.0" prefWidth="211.0" text="Quit">
+                                        <Button id="quit" fx:id="quitButton" layoutX="125.0" layoutY="13.0" mnemonicParsing="false" onAction="#onQuit" prefHeight="67.0" prefWidth="211.0" styleClass="pixelButton" text="Quit">
                                             <font>
                                                 <Font name="Monospaced Bold" size="20.0" />
                                             </font>

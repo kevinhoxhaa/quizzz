@@ -34,8 +34,8 @@
                         <Font name="Monospaced Regular" size="24.0" />
                      </font>
                   </Label>
-                  <ListView fx:id="usersList" minWidth="400.0" prefHeight="200.0" prefWidth="512.0" />
-                  <Button styleClass="pixelButton" fx:id="startButton" mnemonicParsing="false" onAction="#onStartButtonClick" text="Start">
+                  <ListView fx:id="usersList" minWidth="400.0" prefHeight="200.0" prefWidth="512.0" stylesheets="/client/Stylesheets/ListView.css" />
+                  <Button fx:id="startButton" mnemonicParsing="false" onAction="#onStartButtonClick" styleClass="pixelButton" text="Start">
                      <font>
                         <Font name="Monospaced Bold" size="18.0" />
                      </font>
