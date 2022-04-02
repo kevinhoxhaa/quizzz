@@ -176,7 +176,7 @@
                                                         <Insets left="110.0" top="10.0" />
                                                     </HBox.margin>
                                                 </Text>
-                                                <Text fx:id="scoreTableUserSore" strokeType="OUTSIDE" strokeWidth="0.0" text="Score">
+                                                <Text fx:id="scoreTableUserScore" strokeType="OUTSIDE" strokeWidth="0.0" text="Score">
                                                     <font>
                                                         <Font name="Monospaced Regular" size="20.0" />
                                                     </font>
