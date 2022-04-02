@@ -286,11 +286,11 @@ public class GameController {
      * @return A response entity containing a game if the game index and the user ID are valid.
      */
     private ResponseEntity<Game> areGameAndUserValid(int gameIndex, long userId) {
-        if(gameIndex >= gameList.getGames().size() || gameIndex < 0) {
+        if(!gameList.getGames().containsKey((long) gameIndex)) {
             return ResponseEntity.badRequest().build();
         }
 
-        Game game = gameList.getGames().get(gameIndex);
+        Game game = gameList.getGames().get((long) gameIndex);
 
         if(!game.getUserIds().contains(userId)) {
             return ResponseEntity.badRequest().build();
