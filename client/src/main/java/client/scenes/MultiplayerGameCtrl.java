@@ -215,7 +215,6 @@ public class MultiplayerGameCtrl {
      */
     public List<MultiplayerUser> fetchCorrectUsers(Question answeredQuestion) throws WebApplicationException {
         if(isActiveDoublePoints){
-            setIsActiveDoublePoints(false);
             return server.answerDoublePointsQuestion(serverUrl, mainCtrl.getGameIndex(),
                     mainCtrl.getUser().id, answerCount, answeredQuestion);
         }
