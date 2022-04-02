@@ -14,7 +14,6 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -74,7 +73,7 @@
                                         </TextFlow>
                                         <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="296.0">
                                             <children>
-                                                <TextField fx:id="userInput" prefWidth="192.0" />
+                                                <TextField styleClass="pixelField" fx:id="userInput" prefWidth="192.0" />
                                                 <Button mnemonicParsing="false" onAction="#onSubmit">
                                                     <graphic>
                                                         <ImageView fx:id="submitButton" fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
@@ -268,7 +267,7 @@
                         </Text>
                     </children>
                 </TextFlow>
-                <Button fx:id="quitButton" layoutX="869.0" layoutY="18.0" mnemonicParsing="false" onAction="#onQuit" prefHeight="40.0" prefWidth="90.0" text="Quit">
+                <Button styleClass="pixelButton" fx:id="quitButton" layoutX="869.0" layoutY="18.0" mnemonicParsing="false" onAction="#onQuit" prefHeight="40.0" prefWidth="90.0" text="Quit">
                     <font>
                         <Font name="Monospaced Regular" size="20.0" />
                     </font>
