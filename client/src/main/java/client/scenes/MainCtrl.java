@@ -24,12 +24,14 @@ import commons.models.SoloGame;
 import commons.utils.QuestionType;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.application.Platform;
+import javafx.scene.ImageCursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -258,6 +260,11 @@ public class MainCtrl {
     public void showHome() {
         primaryStage.setTitle("Quizzz");
         primaryStage.setScene(home);
+        home.getStylesheets().add("client/stylesheets/homebuttons.css");
+        homeCtrl.setFonts();
+
+        Image image = new Image("client/images/arrowcursor.png");  //pass in the image path
+        home.setCursor(new ImageCursor(image));
     }
 
     /**
