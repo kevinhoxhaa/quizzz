@@ -522,6 +522,10 @@ public class MainCtrl {
         primaryStage.setScene(soloAnswer);
     }
 
+    /**
+     * Shows the Help page dialog component on the home page.
+     */
+
     public void showHelp(){
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);

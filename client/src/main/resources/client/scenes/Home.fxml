@@ -31,7 +31,7 @@
                          </Text>
                          <ImageView fx:id="bulbView" fitWidth="96.0" pickOnBounds="true" preserveRatio="true" rotate="24.0">
                              <image>
-                                 <Image url="@/client/icons/bulb.png" />
+                                 <Image url="@../icons/bulb.png" />
                              </image>
                          </ImageView>
                      </HBox>
@@ -76,7 +76,7 @@
                       <graphic>
                           <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
                               <image>
-                                  <Image url="@/client/icons/help.png" />
+                                  <Image url="@../icons/help.png" />
                               </image>
                           </ImageView>
                       </graphic>
