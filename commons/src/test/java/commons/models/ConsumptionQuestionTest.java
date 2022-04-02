@@ -4,6 +4,7 @@ import commons.entities.Activity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+
 import java.util.List;
 import java.util.Random;
 
@@ -96,16 +97,7 @@ public class ConsumptionQuestionTest {
         List<Long> answers = question.getAnswers();
 
         assertTrue(answers.contains(POSITIVE));
-
-        // CHECKSTYLE:OFF
-        long expectedAlternativeFirst = (long) 
-                (POSITIVE + (THREE_QUARTERS < 0.5 ? -1 : 1) * POSITIVE * 0.6 * ONE_QUARTER);
-        long expectedAlternativeSecond = (long)
-                (POSITIVE + (TWO_FIFTHS < 0.5 ? -1 : 1) * POSITIVE * 0.6 * THREE_QUARTERS);
-        // CHECKSTYLE:ON
-
-        assertTrue(answers.contains(expectedAlternativeFirst));
-        assertTrue(answers.contains(expectedAlternativeSecond));
+        assertEquals(3,answers.size());
     }
 
     @Test

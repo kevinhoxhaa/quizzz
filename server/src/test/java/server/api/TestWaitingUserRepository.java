@@ -143,8 +143,8 @@ public class TestWaitingUserRepository implements WaitingUserRepository {
 
     @Override
     public Optional<MultiplayerUser> findById(Long id) {
-        // TODO Auto-generated method stub
-        return null;
+        call("findById");
+        return find(id);
     }
 
     @Override

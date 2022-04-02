@@ -52,9 +52,9 @@ public abstract class AbstractAnswerCtrl extends QuestionNumController{
      *  - Starts the timer circle
      *
      * @param prevQuestion the corresponding question object
-     * @param points the number of points the user has
      */
-    protected void setup(Question prevQuestion, long points){
+    protected void setup(Question prevQuestion){
+        mainCtrl.addScore(mainCtrl.getUser(),prevQuestion);
         if (prevQuestion.hasCorrectUserAnswer()) {
             currentScore.setFill(Color.GREEN);
             this.answerResponse.setText("Well done!");
@@ -69,7 +69,7 @@ public abstract class AbstractAnswerCtrl extends QuestionNumController{
 
         questionText.setText(prevQuestion.generateQuestionText());
 
-        currentScore.setText(String.valueOf(points));
+        currentScore.setText(String.valueOf(mainCtrl.getUser().getPoints()));
 
         switch (prevQuestion.getType()) {
             case CONSUMPTION:
