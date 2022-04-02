@@ -351,7 +351,6 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
     @Override
     public void onQuit() {
         mainCtrl.quitGame(false, true);
-        mainCtrl.bindUser(null);
     }
 
     /**

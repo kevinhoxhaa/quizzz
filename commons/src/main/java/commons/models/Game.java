@@ -7,6 +7,7 @@ import java.util.Objects;
 public class Game {
     protected List<Long> userIds;
     protected List<Question> questions;
+    protected List<Long> restartUserIds;
 
     /**
      * Constructs a new game with an empty list of user
@@ -15,6 +16,7 @@ public class Game {
     public Game() {
         this.userIds = new ArrayList<>();
         this.questions = new ArrayList<>();
+        this.restartUserIds = new ArrayList<>();
     }
 
     /**
@@ -31,6 +33,14 @@ public class Game {
      */
     public List<Question> getQuestions() {
         return questions;
+    }
+
+    /**
+     * Returns the user ids of the users who want to have a rematch.
+     * @return The user ids of the users who want to have a rematch.
+     */
+    public List<Long> getRestartUserIds() {
+        return restartUserIds;
     }
 
     /**
@@ -70,7 +80,8 @@ public class Game {
             return false;
         }
         Game game = (Game) o;
-        return Objects.equals(userIds, game.userIds) && Objects.equals(questions, game.questions);
+        return Objects.equals(userIds, game.userIds) && Objects.equals(questions, game.questions)
+                && Objects.equals(restartUserIds, game.restartUserIds);
     }
 
     /**
