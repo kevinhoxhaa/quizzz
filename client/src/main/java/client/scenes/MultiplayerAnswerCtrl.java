@@ -48,9 +48,7 @@ public class MultiplayerAnswerCtrl extends AbstractAnswerCtrl implements EmojiCo
      * @param correctPlayers A list of all the players that answered the precious question correctly.
      */
     public void setup(Question prevQuestion, List<MultiplayerUser> correctPlayers) {
-
-        super.setup(prevQuestion, gameCtrl.getUser().points);
-
+        super.setup(prevQuestion);
         gameCtrl.enableEmojis(emojiPane);
         this.correctPlayers.getItems().clear();
         correctPlayers.forEach(u -> this.correctPlayers.getItems().add(u.username));
