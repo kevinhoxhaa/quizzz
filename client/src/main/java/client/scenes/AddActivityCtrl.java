@@ -24,6 +24,9 @@ public class AddActivityCtrl {
     @FXML
     private TextField imagePath;
 
+    @FXML
+    private TextField id;
+
     @Inject
     public AddActivityCtrl ( AdminPanelCtrl adminPanelCtrl ) {
         this.adminPanelCtrl = adminPanelCtrl;
@@ -35,12 +38,22 @@ public class AddActivityCtrl {
      */
     @FXML
     public void onOkButton () {
+
+        String idValue = id.getText();
+        int idInteger;
+        if ( idValue.isEmpty() ) {
+            idInteger = 0;
+        } else {
+            idInteger = Integer.parseInt(idValue);
+        }
+        
         adminPanelCtrl.addNewActivity(
                 identifier.getText(),
                 title.getText(),
                 Integer.parseInt( answer.getText() ),
                 source.getText(),
-                imagePath.getText()
+                imagePath.getText(),
+                idInteger
         );
         cancel();
     }

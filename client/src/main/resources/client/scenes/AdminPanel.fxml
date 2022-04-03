@@ -13,7 +13,7 @@
          <font>
             <Font size="14.0" />
          </font></Button>
-      <Button fx:id="addActivity" layoutX="17.0" layoutY="300.0" mnemonicParsing="false" onAction="#onAddActivityButton" onMouseClicked="#onAddActivityButton" prefHeight="71.0" prefWidth="116.0" text="Add Activity">
+      <Button fx:id="addActivity" layoutX="17.0" layoutY="300.0" mnemonicParsing="false" onAction="#onAddActivityButton" onMouseClicked="#onAddActivityButton" prefHeight="71.0" prefWidth="116.0" text="Add/Edit">
          <font>
             <Font size="15.0" />
          </font></Button>

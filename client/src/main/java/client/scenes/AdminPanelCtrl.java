@@ -10,7 +10,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.springframework.core.ReactiveTypeDescriptor;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -111,13 +110,24 @@ public class AdminPanelCtrl {
      * @param consumption the consumption answer
      * @param title the title of the activity
      * @param imagePath the path to the image
+     * @param identifier the identifier
+     * @param id the id of the activity
      */
 
-    public void addNewActivity ( String identifier, String source, int consumption, String title, String imagePath ) {
+    public void addNewActivity (
+            String identifier,
+            String source,
+            int consumption,
+            String title,
+            String imagePath,
+            int id) {
         Activity activity = new Activity ( identifier, title, consumption, source, imagePath );
-        System.out.println ( activity );
+        if ( id != 0 ) {
+            activity.setId( id );
+        }
+
         server.addActivityToRepo (
-                mainCtrl.getServerUrl(),
+                server.getURL(),
                 activity
         );
     }
