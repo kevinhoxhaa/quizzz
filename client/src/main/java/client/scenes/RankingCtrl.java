@@ -60,6 +60,7 @@ public class RankingCtrl extends AbstractRankingCtrl {
             }
             scoreColumn.setSortType ( TableColumn.SortType.DESCENDING );
             scoreTable.getSortOrder().add ( scoreColumn );
+            scoreTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             ranking1stPlayer.setText( users.get(0).username ) ;
             ranking2ndPlayer.setText( users.get(1).username ) ;
             ranking3rdPlayer.setText( users.get(2).username ) ;

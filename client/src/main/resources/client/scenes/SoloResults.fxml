@@ -158,15 +158,15 @@
                     <children>
                         <HBox alignment="CENTER" prefHeight="335.0" prefWidth="708.0">
                             <children>
-                                <VBox prefHeight="305.0" prefWidth="373.0">
+                                <VBox prefHeight="335.0" prefWidth="370.0">
                                     <children>
-                                        <TableView fx:id="scoreTable" maxHeight="282.0" maxWidth="375.0" minHeight="282.0" minWidth="206.0" prefHeight="282.0" prefWidth="339.0" stylesheets="@/client/Stylesheets/TableView.css">
+                                        <TableView fx:id="scoreTable" maxHeight="282.0" maxWidth="375.0" minHeight="282.0" minWidth="206.0" stylesheets="@/client/Stylesheets/TableView.css">
                                             <columns>
                                                 <TableColumn fx:id="tableUsers" prefWidth="240.66664123535156" text="Users" />
-                                                <TableColumn fx:id="tableScore" prefWidth="132.00006866455078" text="Score" />
+                                                <TableColumn fx:id="tableScore" prefWidth="130.66664123535156" text="Score" />
                                             </columns>
                                         </TableView>
-                                        <HBox prefHeight="59.0" prefWidth="373.0">
+                                        <HBox prefHeight="53.0" prefWidth="359.0">
                                             <children>
                                                 <Text fx:id="scoreTableUserName" strokeType="OUTSIDE" strokeWidth="0.0" text="You">
                                                     <font>

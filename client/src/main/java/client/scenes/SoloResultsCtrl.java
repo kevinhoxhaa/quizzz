@@ -9,6 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -27,6 +28,8 @@ public class SoloResultsCtrl extends AbstractRankingCtrl {
     private TableColumn<User, Long> tableScore;
     @FXML
     private TableView<SoloUser> scoreTable;
+    @FXML
+    private ScrollPane scrollPane;
 
 
     /**
@@ -89,6 +92,7 @@ public class SoloResultsCtrl extends AbstractRankingCtrl {
         this.users = FXCollections.observableList(server.getAllUsersByScore(server.getURL()));
 
         scoreTable.setItems(users);
+        scoreTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
     /**
      * Updates the number of the current question (e.g 11/20)

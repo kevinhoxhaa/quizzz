@@ -1,10 +1,20 @@
+.list-view{
+    -fx-font-family: Monospaced;
+    -fx-font-weight: bold;
+    -fx-border-color: black;
+}
+
+-lsit-cell{
+    -fx-border-color: black;
+    -fx-alignment: CENTER;
+}
 .list-cell:odd{
     -fx-background-color: #C3DBED;
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em;
 }
 .list-cell:even{
-    -fx-background-color: #60A1D1;
+    -fx-background-color: #87B8DC;
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em;
 }
