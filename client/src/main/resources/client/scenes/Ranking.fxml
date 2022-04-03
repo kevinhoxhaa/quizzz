@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
@@ -188,50 +189,35 @@
                                         </HBox>
                                     </children>
                                 </VBox>
-                                <VBox prefHeight="241.0" prefWidth="229.0">
-                                    <children>
-                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Leaderboard">
-                                            <font>
-                                                <Font name="Monospaced Regular" size="40.0" />
-                                            </font>
-                                            <VBox.margin>
-                                                <Insets left="25.0" />
-                                            </VBox.margin>
-                                        </Text>
-                                        <Text fx:id="ranking1stPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="1st player" textAlignment="CENTER" wrappingWidth="296.56768226623535">
-                                            <VBox.margin>
-                                                <Insets left="15.0" />
-                                            </VBox.margin>
-                                 <font>
-                                    <Font name="Monospaced Regular" size="14.0" />
-                                 </font>
-                                        </Text>
-                                        <Text fx:id="ranking2ndPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="2nd player" wrappingWidth="201.26686716079712">
-                                            <VBox.margin>
-                                                <Insets left="75.0" />
-                                            </VBox.margin>
-                                 <font>
-                                    <Font name="Monospaced Regular" size="14.0" />
-                                 </font>
-                                        </Text>
-                                        <Text fx:id="ranking3rdPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="3rd player" wrappingWidth="100.27007865905762">
-                                            <VBox.margin>
-                                                <Insets left="200.0" />
-                                            </VBox.margin>
-                                 <font>
-                                    <Font name="Monospaced Regular" size="14.0" />
-                                 </font>
-                                        </Text>
-                                        <ImageView fitHeight="201.0" fitWidth="260.0" pickOnBounds="true" preserveRatio="true">
+                        <Pane prefHeight="307.0" prefWidth="348.0">
+                           <children>
+                                        <ImageView fx:id="podium" fitHeight="201.0" fitWidth="260.0" layoutX="86.0" layoutY="92.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
                                                 <Image url="@../images/leaderboard.png" />
                                             </image>
-                                            <VBox.margin>
-                                                <Insets left="45.0" />
-                                            </VBox.margin>
                                         </ImageView>
-                                    </children>
-                                </VBox>
+                                        <Text layoutX="58.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Leaderboard">
+                                            <font>
+                                                <Font name="Monospaced Regular" size="40.0" />
+                                            </font>
+                                        </Text>
+                                        <Text fx:id="ranking3rdPlayer" layoutX="233.0" layoutY="202.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3rd player" wrappingWidth="100.27007865905762">
+                                 <font>
+                                    <Font name="Monospaced Regular" size="14.0" />
+                                 </font>
+                                        </Text>
+                                        <Text fx:id="ranking2ndPlayer" layoutX="58.0" layoutY="187.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2nd player" wrappingWidth="201.26686716079712">
+                                 <font>
+                                    <Font name="Monospaced Regular" size="14.0" />
+                                 </font>
+                                        </Text>
+                                        <Text fx:id="ranking1stPlayer" layoutX="42.0" layoutY="148.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1st player" textAlignment="CENTER" wrappingWidth="296.56768226623535">
+                                 <font>
+                                    <Font name="Monospaced Regular" size="14.0" />
+                                 </font>
+                                        </Text>
+                           </children>
+                        </Pane>
                             </children>
                         </HBox>
                     </children>
@@ -253,7 +239,7 @@
                         </ProgressIndicator>
                         <AnchorPane prefHeight="49.0" prefWidth="708.0">
                             <children>
-                                <Button styleClass="pixelButton" fx:id="quitButton" layoutX="327.0" layoutY="21.0" mnemonicParsing="false" onAction="#onQuit" prefHeight="40.0" prefWidth="90.0" text="Quit" AnchorPane.rightAnchor="28.200000000000045">
+                                <Button fx:id="quitButton" layoutX="327.0" layoutY="21.0" mnemonicParsing="false" onAction="#onQuit" prefHeight="40.0" prefWidth="90.0" styleClass="pixelButton" text="Quit" AnchorPane.rightAnchor="28.200000000000045">
                                     <font>
                                         <Font name="Monospaced Bold" size="20.0" />
                                     </font>

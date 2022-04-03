@@ -188,29 +188,29 @@
                                         </HBox>
                                     </children>
                                 </VBox>
-                                <Pane prefHeight="312.0" prefWidth="336.0">
+                                <Pane prefHeight="312.0" prefWidth="339.0">
                                     <children>
                                         <Text layoutX="35.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Leaderboard" textAlignment="CENTER">
                                             <font>
                                                 <Font name="Monospaced Bold" size="40.0" />
                                             </font>
                                         </Text>
-                                        <ImageView fitHeight="255.0" fitWidth="288.0" layoutX="24.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true">
+                                        <ImageView fx:id="podium" fitHeight="255.0" fitWidth="288.0" layoutX="48.0" layoutY="54.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
                                                 <Image url="@../images/leaderboard.png" />
                                             </image>
                                         </ImageView>
-                                        <Text fx:id="ranking1stPlayer" layoutX="116.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1st player" textAlignment="CENTER" wrappingWidth="103.76766681671143">
+                                        <Text fx:id="ranking1stPlayer" layoutX="129.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1st player" textAlignment="CENTER" wrappingWidth="103.76766681671143">
                                             <font>
                                                 <Font name="Monospaced Regular" size="17.0" />
                                             </font>
                                         </Text>
-                                        <Text fx:id="ranking2ndPlayer" layoutX="14.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2nd player" textAlignment="RIGHT" wrappingWidth="106.9676866531372">
+                                        <Text fx:id="ranking2ndPlayer" layoutX="8.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2nd player" textAlignment="RIGHT" wrappingWidth="106.9676866531372">
                                             <font>
                                                 <Font name="Monospaced Regular" size="17.0" />
                                             </font>
                                         </Text>
-                                        <Text fx:id="ranking3rdPlayer" layoutX="223.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3rd player" wrappingWidth="107.76778888702393">
+                                        <Text fx:id="ranking3rdPlayer" layoutX="233.0" layoutY="183.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3rd player" wrappingWidth="107.76778888702393">
                                             <font>
                                                 <Font name="Monospaced Regular" size="17.0" />
                                             </font>

@@ -44,3 +44,6 @@
 #questionMark{
     -fx-image: url("../icons/help.png");
 }
+#podium{
+    -fx-image: url("../images/leaderboard.png");
+}
