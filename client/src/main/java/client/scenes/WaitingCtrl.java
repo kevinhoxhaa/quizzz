@@ -84,6 +84,7 @@ public class WaitingCtrl {
 
             if (!users.contains(mainCtrl.getUser())) {
                 Integer gameIndex = server.findGameIndex(serverUrl, userId);
+                mainCtrl.setGameIndex(gameIndex);
                 mainCtrl.stopWaitingTimer();
                 mainCtrl.startMultiplayerGame(gameIndex);
             }
