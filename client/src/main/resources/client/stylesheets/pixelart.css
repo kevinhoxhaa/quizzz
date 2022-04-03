@@ -41,6 +41,10 @@
     -fx-padding: 10 20 10 20;
 }
 
+.arrowButton:hover {
+    -fx-background-color: #85C1E9;
+}
+
 .backArrowImage {
     -fx-image: url("../icons/back.png");
 }
