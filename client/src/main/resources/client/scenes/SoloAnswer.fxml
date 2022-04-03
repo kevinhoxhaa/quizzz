@@ -152,7 +152,7 @@
                         </TextFlow>
                     </children>
                 </HBox>
-                <VBox fx:id="answerPane" prefHeight="255.0" prefWidth="708.0" style="-fx-border-color: black;">
+                <VBox styleClass="rectangularPane" fx:id="answerPane" prefHeight="255.0" prefWidth="708.0" style="-fx-border-color: black;">
                     <children>
                         <HBox prefHeight="100.0" prefWidth="730.0">
                             <children>
