@@ -92,4 +92,101 @@ public class Activity {
     public String toString() {
         return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
     }
+
+    /**
+     * A getter for the identifier
+     * @return the identifier
+     */
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    /**
+     * A getter for the consumption
+     * @return the consumption
+     */
+    public long getConsumption() {
+        return consumption;
+    }
+
+    /**
+     * A getter for the image path
+     * @return the image path
+     */
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    /**
+     * A getter for the source
+     * @return the source
+     */
+    public String getSource() {
+        return source;
+    }
+
+    /**
+     * A getter for the id
+     * @return the id
+     */
+    public long getId() {
+        return id;
+    }
+
+    /**
+     * A getter for the title
+     * @return the title
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * A setter for the consumption
+     * @param consumption
+     */
+    public void setConsumption(long consumption) {
+        this.consumption = consumption;
+    }
+
+    /**
+     * A setter for the id
+     * @param id
+     */
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    /**
+     * A setter for the identifier
+     * @param identifier
+     */
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
+
+    /**
+     * A setter for the image path
+     * @param imagePath
+     */
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    /**
+     * A setter for the source
+     * @param source
+     */
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    /**
+     * A setter for the title
+     * @param title
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }
+

@@ -2,6 +2,8 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.entities.Activity;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -122,8 +124,11 @@ public class AdminPanelCtrl {
 
     @FXML
     public void showActivities() {
-        activityTable = new TableView();
         List<Activity> activityList = server.getActivities ( server.getURL() );
+
+        ObservableList<Activity> observableList = FXCollections.observableArrayList(activityList);
+        activityTable.setItems(observableList);
+
         id = new TableColumn ( "ID" );
         id.setCellValueFactory( new PropertyValueFactory<>( "id" ) );
         title = new TableColumn ( "Title" );
@@ -134,11 +139,8 @@ public class AdminPanelCtrl {
         source.setCellValueFactory( new PropertyValueFactory<>( "source" ) );
         imagePath = new TableColumn ( "Image Path" );
         imagePath.setCellValueFactory( new PropertyValueFactory<>( "imagePath" ) );
-        activityTable.getColumns().addAll ( id, title, consumption, source, imagePath );
-        for ( Activity activity : activityList ) {
-            activityTable.getItems().add ( activity );
-        }
-        System.out.println( activityList );
+
+        activityTable.getColumns().setAll ( id, title, consumption, source, imagePath );
     }
 
     /**
