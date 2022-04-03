@@ -321,6 +321,7 @@ public class MainCtrl {
         primaryStage.setTitle( "Admin Panel");
         primaryStage.setScene(adminPanel);
         primaryStage.show();
+        adminPanelCtrl.showActivities();
     }
 
     /**

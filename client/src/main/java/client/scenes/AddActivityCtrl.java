@@ -10,6 +10,9 @@ public class AddActivityCtrl {
     private AdminPanelCtrl adminPanelCtrl;
 
     @FXML
+    private TextField identifier;
+
+    @FXML
     private TextField title;
 
     @FXML
@@ -33,6 +36,7 @@ public class AddActivityCtrl {
     @FXML
     public void onOkButton () {
         adminPanelCtrl.addNewActivity(
+                identifier.getText(),
                 title.getText(),
                 Integer.parseInt( answer.getText() ),
                 source.getText(),
@@ -58,9 +62,11 @@ public class AddActivityCtrl {
      */
 
     private void clearFields() {
+        identifier.clear();
         title.clear();
         answer.clear();
         source.clear();
+        imagePath.clear();
     }
 
     public void keyPressed(KeyEvent e) {
