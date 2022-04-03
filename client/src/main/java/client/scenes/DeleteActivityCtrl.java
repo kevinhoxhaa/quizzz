@@ -30,6 +30,11 @@ public class DeleteActivityCtrl {
         cancel();
     }
 
+    /**
+     * Cancel button that clears the fields and closes the stage
+     *
+     */
+
     @FXML
     public void cancel() {
         clearFields();

@@ -105,12 +105,13 @@ public class AdminPanelCtrl {
      * @param source source of the information
      * @param consumption the consumption answer
      * @param title the title of the activity
+     * @param imagePath the path to the image
      */
 
-    public void addNewActivity ( String source, int consumption, String title ) {
+    public void addNewActivity ( String source, int consumption, String title, String imagePath ) {
         server.addActivityToRepo (
                 mainCtrl.getServerUrl(),
-                new Activity ( title, consumption, source  )
+                new Activity ( title, consumption, source, imagePath )
         );
     }
 
@@ -123,16 +124,28 @@ public class AdminPanelCtrl {
     public void showActivities() {
         activityTable = new TableView();
         List<Activity> activityList = server.getActivities ( server.getURL() );
+        id = new TableColumn ( "ID" );
         id.setCellValueFactory( new PropertyValueFactory<>( "id" ) );
+        title = new TableColumn ( "Title" );
         title.setCellValueFactory( new PropertyValueFactory<>( "title" ) );
+        consumption = new TableColumn ( "Consumption" );
         consumption.setCellValueFactory( new PropertyValueFactory<>( "consumption" ) );
+        source = new TableColumn ( "Source" );
         source.setCellValueFactory( new PropertyValueFactory<>( "source" ) );
+        imagePath = new TableColumn ( "Image Path" );
         imagePath.setCellValueFactory( new PropertyValueFactory<>( "imagePath" ) );
         activityTable.getColumns().addAll ( id, title, consumption, source, imagePath );
         for ( Activity activity : activityList ) {
             activityTable.getItems().add ( activity );
         }
+        System.out.println( activityList );
     }
+
+    /**
+     * Deletes the activity with the given id
+     *
+     * @param id the id of the activity to be deleted
+     */
 
 
     public void deleteActivity ( int id ) {
@@ -140,6 +153,14 @@ public class AdminPanelCtrl {
         server.deleteActivityFromRepo ( server.getURL(), activity );
     }
 
+    /**
+     * Returns to the home screen
+     *
+      */
 
+    @FXML
+    public void onQuit() {
+        mainCtrl.showHome();
+    }
 
 }

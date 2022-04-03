@@ -18,6 +18,9 @@ public class AddActivityCtrl {
     @FXML
     private TextField answer;
 
+    @FXML
+    private TextField imagePath;
+
     @Inject
     public AddActivityCtrl ( AdminPanelCtrl adminPanelCtrl ) {
         this.adminPanelCtrl = adminPanelCtrl;
@@ -32,11 +35,16 @@ public class AddActivityCtrl {
         adminPanelCtrl.addNewActivity(
                 title.getText(),
                 Integer.parseInt( answer.getText() ),
-                source.getText()
+                source.getText(),
+                imagePath.getText()
         );
         cancel();
     }
 
+    /**
+     * Cancel button that clears the fields and closes the stage
+     *
+     */
 
     @FXML
     public void cancel() {

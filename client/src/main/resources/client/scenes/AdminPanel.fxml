@@ -35,7 +35,7 @@
             <TableColumn fx:id="imagePath" prefWidth="178.0" text="Image Path" />
         </columns>
       </TableView>
-      <Button fx:id="quitButton" layoutX="828.0" layoutY="614.0" mnemonicParsing="false" prefHeight="59.0" prefWidth="125.0" text="Quit">
+      <Button fx:id="quitButton" layoutX="828.0" layoutY="614.0" mnemonicParsing="false" onAction="#onQuit" prefHeight="59.0" prefWidth="125.0" text="Quit">
          <font>
             <Font size="24.0" />
          </font></Button>
