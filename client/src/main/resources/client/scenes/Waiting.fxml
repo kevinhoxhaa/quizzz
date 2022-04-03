@@ -17,9 +17,9 @@
                 <Insets top="32.0" />
             </padding>
          <children>
-            <Label text="Waiting for other players to join..." textAlignment="CENTER" textOverrun="CLIP" wrapText="true" VBox.vgrow="ALWAYS">
+            <Label fx:id="waitingTitle" text="Waiting   for   others..." textAlignment="CENTER" textOverrun="CLIP" wrapText="true" VBox.vgrow="ALWAYS">
                <font>
-                  <Font name="Monospaced Bold" size="48.0" />
+                  <Font name="Monospaced Bold" size="64.0" />
                </font>
             </Label>
             <VBox alignment="TOP_CENTER" maxWidth="768.0" minWidth="512.0" prefHeight="224.0" spacing="16.0">

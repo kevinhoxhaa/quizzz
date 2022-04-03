@@ -62,6 +62,11 @@
     -fx-font-family: Monospaced;
 }
 
+#waitingTitle {
+    -fx-font-family: ARCADECLASSIC;
+
+}
+
 .leaderboardImage {
     -fx-image: url("../images/leaderboard.png");
 }
