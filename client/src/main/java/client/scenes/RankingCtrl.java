@@ -4,14 +4,11 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.entities.MultiplayerUser;
 import commons.models.Question;
-import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Modality;
 
 import java.util.List;
 
@@ -22,6 +19,10 @@ public class RankingCtrl extends AbstractRankingCtrl {
 
     @FXML
     private TableView<MultiplayerUser> scoreTable;
+    @FXML
+    private TableColumn<MultiplayerUser, String> usernameColumn;
+    @FXML
+    private TableColumn<MultiplayerUser, Long> pointsColumn;
 
     /**
      * Creates a controller for the ranking page screen, with the given server and mainCtrl parameters.
@@ -42,39 +43,28 @@ public class RankingCtrl extends AbstractRankingCtrl {
     }
 
     /**
-     * Fetches the users in the current waiting room and updates
-     * the list view and the users on the podium
-     * @param serverUrl the url of the server to fetch the users from
+     * Displays the ranked users on the table view according
+     * to their points
+     *
+     * @param users the ranked users to display
      */
-    public void fetchUsers(String serverUrl) {
-        scoreTable = new TableView();
-        try {
-            List<MultiplayerUser> users = server.getUsers(serverUrl);
-            TableColumn usersColumn = new TableColumn ( "Players" );
-            usersColumn.setCellValueFactory( new PropertyValueFactory<>( "username" ) );
-            TableColumn scoreColumn = new TableColumn ( "Score" );
-            scoreColumn.setCellValueFactory( new PropertyValueFactory<>( "points") );
-            scoreTable.getColumns().addAll( usersColumn, scoreColumn );
-            for(MultiplayerUser user : users) {
-                scoreTable.getItems().add(user);
-            }
-            scoreColumn.setSortType ( TableColumn.SortType.DESCENDING );
-            scoreTable.getSortOrder().add ( scoreColumn );
-            ranking1stPlayer.setText( users.get(0).username ) ;
-            ranking2ndPlayer.setText( users.get(1).username ) ;
-            ranking3rdPlayer.setText( users.get(2).username ) ;
+    public void setup(List<MultiplayerUser> users) {
+        scoreTableUserName.setText(String.format("%s", gameCtrl.getUser().username));
+        scoreTableUserScore.setText(String.format("%d", gameCtrl.getUser().points));
 
-        } catch (WebApplicationException e) {
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-            return;
-        }
+        usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
+        pointsColumn.setCellValueFactory(new PropertyValueFactory<>("points"));
+
+        ranking1stPlayer.setText(users.size() > 0 ? users.get(0).username : "");
+        ranking2ndPlayer.setText(users.size() > 1 ? users.get(1).username : "");
+        ranking3rdPlayer.setText(users.size() > 2 ? users.get(2).username : "");
+
+        gameCtrl.populateRanking(scoreTable, users);
     }
 
     /**
      * Sets the current game controller
+     *
      * @param gameCtrl the current game controller
      */
     public void setGameCtrl(MultiplayerGameCtrl gameCtrl) {
@@ -98,7 +88,6 @@ public class RankingCtrl extends AbstractRankingCtrl {
     @Override
     public void onQuit() {
         mainCtrl.quitGame(false, true);
-        mainCtrl.bindUser(null);
     }
 
     /**

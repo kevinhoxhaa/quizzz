@@ -12,6 +12,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -21,6 +22,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.util.Pair;
 import org.springframework.messaging.simp.stomp.StompSession;
 
@@ -30,6 +32,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MultiplayerGameCtrl {
+
 
     private List<Color> colors;
 
@@ -60,9 +63,10 @@ public class MultiplayerGameCtrl {
     private Scene ranking;
     private RankingCtrl rankingCtrl;
 
-    private boolean isActiveDoublePoints;
+    private Scene results;
+    private MultiplayerResultsCtrl resultsCtrl;
 
-    private boolean isAvailableRemoveIncorrect = true;
+    private boolean isActiveDoublePoints;
     private boolean isActiveRemoveIncorrect;
 
     private List<String> usedJokers;
@@ -86,12 +90,14 @@ public class MultiplayerGameCtrl {
      * @param answer the answer controller-scene pair
      * @param ranking the ranking controller-scene pair
      * @param gameIndex the index of the multiplayer game
+     * @param results The results controller-scene pair.
      */
     public MultiplayerGameCtrl(int gameIndex, MainCtrl mainCtrl, ServerUtils server,
                                Pair<MultiplayerQuestionCtrl, Scene> mcQuestion,
                                Pair<MultiplayerEstimationQuestionCtrl, Scene> estimationQuestion,
                                Pair<MultiplayerAnswerCtrl, Scene> answer,
-                               Pair<RankingCtrl, Scene> ranking) {
+                               Pair<RankingCtrl, Scene> ranking,
+                               Pair<MultiplayerResultsCtrl, Scene> results) {
         this.gameIndex = gameIndex;
         this.mainCtrl = mainCtrl;
 
@@ -124,6 +130,10 @@ public class MultiplayerGameCtrl {
         this.rankingCtrl = ranking.getKey();
         rankingCtrl.setGameCtrl(this);
         this.ranking = ranking.getValue();
+
+        this.resultsCtrl = results.getKey();
+        resultsCtrl.setGameCtrl(this);
+        this.results = results.getValue();
     }
 
     public MultiplayerGameCtrl(){
@@ -144,9 +154,12 @@ public class MultiplayerGameCtrl {
         registerForEmojis(answerCtrl);
         registerForEmojis(mcQuestionCtrl);
         registerForHalfTime();
+        resetAllJokers();
+        mainCtrl.resetStreak();
+        user.unansweredQuestions = 0;
+
         Question firstQuestion = fetchQuestion();
         showQuestion(firstQuestion);
-        resetAllJokers();
     }
 
     /**
@@ -164,15 +177,11 @@ public class MultiplayerGameCtrl {
      * - Gives double points if the joker isn't available
      * - Sets the joker as "available" after it is used,
      * even though it won't be possible to use it again
+     * Introduced a streak factor to the point calculation method
+     * to make the game more interesting and competitive.
      * @param answeredQuestion the answered question to post
      */
     public void postAnswer(Question answeredQuestion) {
-        if(getIsActiveDoublePoints()){
-            user.points += 2*answeredQuestion.calculatePoints();
-        }
-        else{
-            user.points += answeredQuestion.calculatePoints();
-        }
         answerTimer = new Timer();
         answerTimer.schedule(
                 new TimerTask() {
@@ -201,6 +210,7 @@ public class MultiplayerGameCtrl {
                 }, POLLING_DELAY, POLLING_INTERVAL);
     }
 
+
     /**
      * Returns the correct users to an answered question
      * @param answeredQuestion the answered question
@@ -210,7 +220,6 @@ public class MultiplayerGameCtrl {
      */
     public List<MultiplayerUser> fetchCorrectUsers(Question answeredQuestion) throws WebApplicationException {
         if(isActiveDoublePoints){
-            setIsActiveDoublePoints(false);
             return server.answerDoublePointsQuestion(serverUrl, gameIndex,
                     mainCtrl.getUser().id, answerCount, answeredQuestion);
         }
@@ -295,8 +304,7 @@ public class MultiplayerGameCtrl {
      * @return the ranked users
      */
     public List<MultiplayerUser> fetchRanking() {
-        // TODO: fetch users ranked by points from server
-        return new ArrayList<>();
+        return server.getRanking(serverUrl, gameIndex);
     }
 
     /**
@@ -304,10 +312,10 @@ public class MultiplayerGameCtrl {
      * @param rankedUsers the list of ranked users to display
      */
     public void showRanking(List<MultiplayerUser> rankedUsers) {
-        // TODO: handle passed multiplayer users
         mainCtrl.updateQuestionCounters(rankingCtrl, colors);
         mainCtrl.getPrimaryStage().setTitle("Ranking Screen");
         mainCtrl.getPrimaryStage().setScene(ranking);
+        rankingCtrl.setup(rankedUsers);
         rankingCtrl.startTimer();
     }
 
@@ -317,7 +325,11 @@ public class MultiplayerGameCtrl {
      * @param rankedUsers the list of ranked users to display
      */
     public void showResults(List<MultiplayerUser> rankedUsers) {
-        // TODO: display list of ranked users on results screen
+        resultsCtrl.setup(rankedUsers);
+        mainCtrl.updateQuestionCounters(resultsCtrl, colors);
+        mainCtrl.getPrimaryStage().setTitle("Results Screen");
+        mainCtrl.getPrimaryStage().setScene(results);
+        resultsCtrl.startTimer();
     }
 
     /**
@@ -482,6 +494,7 @@ public class MultiplayerGameCtrl {
      * Resets all jokers at the start of the game, so they can be used again.
      */
     public void resetAllJokers(){
+        this.usedJokers = new ArrayList<>();
         mcQuestionCtrl.resetDoublePoints();
         mcQuestionCtrl.resetReduceTime();
         multiplayerEstimationQuestionCtrl.resetDoublePoints();
@@ -523,7 +536,7 @@ public class MultiplayerGameCtrl {
                 String[] parts = e.getImage().getUrl().split("/");
                 String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
                 emojiPath = emojiPath.substring(
-                        "file:/".length(), emojiPath.length() - "classes/java/main/".length())
+                        0, emojiPath.length() - "classes/java/main/".length())
                         + "resources/main/client/images/" + parts[parts.length - 1];
 
                 e.setImage(new Image(emojiPath));
@@ -601,5 +614,36 @@ public class MultiplayerGameCtrl {
             halfTimeSubscription.unsubscribe();
         }
         halfTimeSubscription = null;
+    }
+
+    public void resetGameCtrl() {
+        mainCtrl.resetMainCtrl();
+        resetAllJokers();
+        hideEmojis();
+        this.answerCount = 0;
+        this.colors = new ArrayList<>();
+        this.user.resetScore();
+    }
+
+    /**
+     * Populates a given score table with a sorted list of users
+     * @param scoreTable the score table to populate
+     * @param users the list of users to populate
+     */
+    public void populateRanking(TableView<MultiplayerUser> scoreTable, List<MultiplayerUser> users) {
+        try {
+            scoreTable.getItems().clear();
+
+            for (MultiplayerUser user : users) {
+                scoreTable.getItems().add(user);
+            }
+
+        } catch (WebApplicationException e) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            return;
+        }
     }
 }

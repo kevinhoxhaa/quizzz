@@ -44,6 +44,7 @@ import java.util.TimerTask;
 
 public class MainCtrl {
 
+    public static final String STYLES_PATH = "client/stylesheets/pixelart.css";
     public static final double WIDTH = 1024.0;
     public static final double HEIGHT = 704.0;
     private static final double TIMEOUT = 8.0;
@@ -52,11 +53,14 @@ public class MainCtrl {
     private static final int MILLIS = 50;
     private static final int POLLING_DELAY = 0;
     private static final int POLLING_INTERVAL = 500;
-    private static final long ANSWER_TO_THE_ULTIMATE_QUESTION = 42;
-    private static final int STANDARD_PAGE_TIME = 15;
     private static final int QUESTIONS_PER_GAME = 20;
-    private static final int TOTAL_ANSWERS = 20;
-    private static final int HALFWAY_ANSWERS = 10;
+
+    //These are the variables used in the streak calculation formula
+    private static final long X1 = 1;
+    private static final long X2 = 4;
+    private static final long X3 = 17;
+    private static final long X4 = 20;
+    private static final long FACTOR = 300;
 
     private String serverUrl;
     private Timer waitingTimer;
@@ -111,28 +115,19 @@ public class MainCtrl {
     private double countdown;
     private int answerCount = 0;
 
-    private long soloScore = 0;
-    private int currentQuestion = 0;
-
-    public int getCurrentQuestion() {
-        return currentQuestion;
-    }
-
-    public void setCurrentQuestion(int currentQuestion) {
-        this.currentQuestion = currentQuestion;
-    }
+    private long streak = 0;
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home,
-            Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> multiplayerQuestion,
-            Pair<MultiplayerAnswerCtrl, Parent> multiplayerAnswer, Pair<RankingCtrl, Parent> ranking,
-            Pair<MultiplayerEstimationQuestionCtrl, Parent> multiplayerEstimation,
+                           Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home,
+                           Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> multiplayerQuestion,
+                           Pair<MultiplayerAnswerCtrl, Parent> multiplayerAnswer, Pair<RankingCtrl, Parent> ranking,
+                           Pair<MultiplayerEstimationQuestionCtrl, Parent> multiplayerEstimation,
                            Pair<SoloEstimationQuestionCtrl, Parent> soloEstimation,
                            Pair<SoloQuestionCtrl, Parent> soloQuestion,
                            Pair<SoloAnswerCtrl, Parent> soloAnswer,
                            Pair<SoloResultsCtrl, Parent> soloResults,
                            Pair<MultiplayerResultsCtrl, Parent> multiplayerResults
-                           ) {
+    ) {
         this.primaryStage = primaryStage;
         primaryStage.setMinHeight(HEIGHT);
         primaryStage.setMinWidth(WIDTH);
@@ -148,38 +143,49 @@ public class MainCtrl {
 
         this.multiplayerAnswerCtrl = multiplayerAnswer.getKey();
         this.multiplayerAnswer = new Scene(multiplayerAnswer.getValue());
+        this.multiplayerAnswer.getStylesheets().add(STYLES_PATH);
 
         this.homeCtrl = home.getKey();
         this.home = new Scene(home.getValue());
+        this.home.getStylesheets().add(STYLES_PATH);
 
         this.server = homeCtrl.getServer();
 
         this.multiplayerQuestionCtrl = multiplayerQuestion.getKey();
         this.multiplayerQuestion = new Scene(multiplayerQuestion.getValue());
+        this.multiplayerQuestion.getStylesheets().add(STYLES_PATH);
 
         this.waitingCtrl = waiting.getKey();
         this.waiting = new Scene(waiting.getValue());
+        this.waiting.getStylesheets().add(STYLES_PATH);
 
         this.rankingCtrl = ranking.getKey();
         this.ranking = new Scene(ranking.getValue());
+        this.ranking.getStylesheets().add(STYLES_PATH);
 
         this.multiplayerEstimationCtrl = multiplayerEstimation.getKey();
         this.multiplayerEstimation = new Scene(multiplayerEstimation.getValue());
+        this.multiplayerEstimation.getStylesheets().add(STYLES_PATH);
 
         this.soloEstimationCtrl = soloEstimation.getKey();
         this.soloEstimation = new Scene(soloEstimation.getValue());
+        this.soloEstimation.getStylesheets().add(STYLES_PATH);
 
         this.soloQuestionCtrl = soloQuestion.getKey();
         this.soloQuestion = new Scene(soloQuestion.getValue());
+        this.soloQuestion.getStylesheets().add(STYLES_PATH);
 
         this.soloAnswerCtrl = soloAnswer.getKey();
         this.soloAnswer = new Scene(soloAnswer.getValue());
+        this.soloAnswer.getStylesheets().add(STYLES_PATH);
 
         this.soloResultsCtrl = soloResults.getKey();
         this.soloResults = new Scene(soloResults.getValue());
+        this.soloResults.getStylesheets().add(STYLES_PATH);
 
         this.multiplayerResultsCtrl = multiplayerResults.getKey();
         this.multiplayerResults = new Scene(multiplayerResults.getValue());
+        this.multiplayerResults.getStylesheets().add(STYLES_PATH);
 
         countdown = START_TIME;
 
@@ -212,21 +218,47 @@ public class MainCtrl {
     }
 
     /**
-     * Returns the current game index
-     *
-     * @return the current game index
+     * This method resets the streak when an answer is incorrect.
+     * Since it is called after the postAnswers method, it also disables the isActiveDoublePoints
      */
-    public int getGameIndex() {
-        return gameIndex;
+    public void resetStreak(){
+        streak=0;
     }
 
     /**
-     * Sets the index of the multiplayer game a user participates in
-     *
-     * @param gameIndex the multiplayer game index
+     * This method increments the streak
      */
-    public void setGameIndex(int gameIndex) {
-        this.gameIndex = gameIndex;
+    public void incrementStreak(){
+        streak++;
+    }
+
+    /**
+     * This methods add the calculated score of the previous question to the user object
+     * @param user
+     * @param answeredQuestion
+     */
+    public void addScore(User user, Question answeredQuestion){
+        if(answeredQuestion.hasCorrectUserAnswer()){
+            incrementStreak();
+        }
+        else{
+            resetStreak();
+        }
+        int multiplyingFactor = (multiplayerCtrl!=null && multiplayerCtrl.getIsActiveDoublePoints()) ? 2 : 1;
+        if(multiplayerCtrl!=null && multiplayerCtrl.getIsActiveDoublePoints()) {
+            multiplayerCtrl.setIsActiveDoublePoints(false);
+        }
+        int correctFactor = answeredQuestion.hasCorrectUserAnswer() ? 1 : 0;
+
+        if(streak<X2){
+
+            user.incrementScore(multiplyingFactor * (answeredQuestion.calculatePoints() +
+                    correctFactor * Math.round(Math.pow(FACTOR,((double)(streak+X1)/X2)))));
+        }
+        else{
+            user.incrementScore(multiplyingFactor * (answeredQuestion.calculatePoints() +
+                    correctFactor * Math.round(Math.pow(FACTOR,((double)(streak+X3)/X4)))));
+        }
     }
 
     /**
@@ -235,14 +267,6 @@ public class MainCtrl {
      */
     public Stage getPrimaryStage() {
         return primaryStage;
-    }
-
-    /**
-     * add the score to the player's own score
-     * @param score the player score
-     */
-    public void addScore(long score) {
-        this.soloScore += score;
     }
 
     /**
@@ -260,7 +284,6 @@ public class MainCtrl {
     public void showHome() {
         primaryStage.setTitle("Quizzz");
         primaryStage.setScene(home);
-        home.getStylesheets().add("client/stylesheets/homebuttons.css");
         homeCtrl.setFonts();
 
         Image image = new Image("client/images/arrowcursor.png");  //pass in the image path
@@ -304,7 +327,8 @@ public class MainCtrl {
                 new Pair<>(this.multiplayerQuestionCtrl, this.multiplayerQuestion),
                 new Pair<>(this.multiplayerEstimationCtrl, this.multiplayerEstimation),
                 new Pair<>(this.multiplayerAnswerCtrl, this.multiplayerAnswer),
-                new Pair<>(this.rankingCtrl, this.ranking)
+                new Pair<>(this.rankingCtrl, this.ranking),
+                new Pair<>(this.multiplayerResultsCtrl, this.multiplayerResults)
         );
         multiplayerCtrl.startGame();
     }
@@ -413,16 +437,6 @@ public class MainCtrl {
     }
 
     /**
-     * Fetches a random question from the server. For now, it just returns a placeholder for testing.
-     *
-     * @return a random question
-     */
-    public Question getNextQuestion() {
-        return server.getQuestion(serverUrl, gameIndex, answerCount);
-    }
-
-
-    /**
      * Starts a particular countdown timer and initiates the
      * timer animation with a new thread
      *
@@ -486,6 +500,7 @@ public class MainCtrl {
 
         soloQuestionCtrl.resetCircleColor();
         soloAnswerCtrl.resetCircleColor();
+        resetStreak();
 
         SoloGame soloGame = server.getSoloGame(server.getURL(), QUESTIONS_PER_GAME);
         primaryStage.setTitle("Solo game");
@@ -581,16 +596,6 @@ public class MainCtrl {
     }
 
     /**
-     * Called after the last answer screen's timer is up, shows the solo results page
-     */
-    public void showMultiplayerResults() {
-        multiplayerResultsCtrl.setup();
-        updateQuestionCounters(multiplayerResultsCtrl, colors);
-        primaryStage.setTitle("Multiplayer results screen");
-        primaryStage.setScene(multiplayerResults);
-    }
-
-    /**
      * Shows a pop up on screen to confirm quitting the game
      * @param quitApp is used to decide whether the application should be closed or not
      *                  If quitApp is true: the application is closed
@@ -619,8 +624,8 @@ public class MainCtrl {
                     }
 
                     try {
-                        server.removeMultiplayerUser(serverUrl, user);
-                        user = null;
+                        server.removeMultiplayerUser(serverUrl, (MultiplayerUser) user);
+                        bindUser(null);
                         multiplayerEstimationCtrl.resetDoublePoints();
                         multiplayerQuestionCtrl.resetDoublePoints();
                         multiplayerQuestionCtrl.resetRemoveIncorrect();
@@ -655,5 +660,15 @@ public class MainCtrl {
             controller.resetHighlight();
             controller.highlightCurrentCircle();
         }
+    }
+
+    public void resetMainCtrl() {
+        multiplayerQuestionCtrl.resetCircleColor();
+        multiplayerAnswerCtrl.resetCircleColor();
+        rankingCtrl.resetCircleColor();
+        multiplayerResultsCtrl.resetCircleColor();
+        this.colors = new ArrayList<>();
+        this.answerCount = 0;
+        this.user.resetScore();
     }
 }

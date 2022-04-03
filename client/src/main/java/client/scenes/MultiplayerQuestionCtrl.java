@@ -26,7 +26,6 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
         implements EmojiController {
 
     private MultiplayerGameCtrl gameCtrl;
-
     private List<StackPane> jokers;
 
     @FXML
@@ -90,6 +89,7 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
         disabledAnswer = null;
         gameCtrl.enableEmojis(emojiPane);
         doublePointsImage.setVisible(false);
+        removeIncorrectImage.setVisible(false);
         reduceTimeImage.setVisible(false);
     }
 
@@ -351,7 +351,6 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
     @Override
     public void onQuit() {
         mainCtrl.quitGame(false, true);
-        mainCtrl.bindUser(null);
     }
 
     /**
