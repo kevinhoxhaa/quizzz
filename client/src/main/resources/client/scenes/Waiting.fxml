@@ -51,9 +51,9 @@
    <top>
       <VBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" onAction="#onBackButtonClick">
+            <Button styleClass="arrowButton" mnemonicParsing="false" onAction="#onBackButtonClick">
                <graphic>
-                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView styleClass="backArrowImage" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../icons/back.png" />
                      </image>

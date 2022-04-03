@@ -216,17 +216,11 @@
                                 <Cursor fx:constant="HAND" />
                             </cursor>
                         </Button>
-                        <TextFlow layoutX="14.0" layoutY="31.0" prefHeight="71.0" prefWidth="260.0">
+                        <TextFlow styleClass="scoreText" layoutX="14.0" layoutY="31.0" prefHeight="71.0" prefWidth="200.0">
                             <children>
                                 <Text text="Score: " wrappingWidth="187.242919921875">
-                                    <font>
-                                        <Font name="Monospaced Regular" size="32.0" />
-                                    </font>
                                 </Text>
                                 <Text fx:id="currentScore" text="0" wrappingWidth="187.242919921875">
-                                    <font>
-                                        <Font name="Monospaced Regular" size="32.0" />
-                                    </font>
                                 </Text>
                             </children>
                         </TextFlow>

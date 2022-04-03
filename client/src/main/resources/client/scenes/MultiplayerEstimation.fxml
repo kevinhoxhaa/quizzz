@@ -74,9 +74,9 @@
                                         <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="296.0">
                                             <children>
                                                 <TextField styleClass="pixelField" fx:id="userInput" prefWidth="192.0" />
-                                                <Button mnemonicParsing="false" onAction="#onSubmit">
+                                                <Button styleClass="arrowButton" mnemonicParsing="false" onAction="#onSubmit">
                                                     <graphic>
-                                                        <ImageView fx:id="submitButton" fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                                                        <ImageView styleClass="frontArrowImage" fx:id="submitButton" fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                                                             <image>
                                                                 <Image url="@../icons/front.png" />
                                                             </image>
@@ -253,17 +253,11 @@
     <bottom>
         <AnchorPane prefHeight="79.0" prefWidth="708.0" BorderPane.alignment="CENTER">
             <children>
-                <TextFlow layoutX="14.0" layoutY="31.0" prefHeight="71.0" prefWidth="200.0">
+                <TextFlow styleClass="scoreText" layoutX="14.0" layoutY="31.0" prefHeight="71.0" prefWidth="200.0">
                     <children>
                         <Text text="Score: " wrappingWidth="187.242919921875">
-                            <font>
-                                <Font name="Monospaced Regular" size="32.0" />
-                            </font>
                         </Text>
                         <Text fx:id="currentScore" text="0" wrappingWidth="187.242919921875">
-                            <font>
-                                <Font name="Monospaced Regular" size="32.0" />
-                            </font>
                         </Text>
                     </children>
                 </TextFlow>

@@ -9,10 +9,13 @@
 
 .pixelButton {
     -fx-background-image: url("../images/pixelborder.png");
+    -fx-font-family: ARCADECLASSIC;
     -fx-background-size: stretch;
     -fx-background-radius: 30;
     -fx-background-color: #D6EAF8;
     -fx-background-insets: 0,1,2,3,0;
+    -fx-font-size: 36;
+    -fx-min-width: 128;
     -fx-padding: 10 20 10 20;
 }
 
@@ -22,6 +25,29 @@
     -fx-padding: 10 20 10 20;
     -fx-background-color: #85C1E9;
     -fx-scale-y: -1;
+}
+
+.arrowButton {
+    -fx-background-image: url("../images/pixelborder.png");
+    -fx-background-size: stretch;
+    -fx-background-radius: 30;
+    -fx-background-color: #D6EAF8;
+    -fx-background-insets: 0,1,2,3,0;
+    -fx-min-width: 32;
+    -fx-padding: 10 20 10 20;
+}
+
+.backArrowImage {
+    -fx-image: url("../icons/back.png");
+}
+
+.frontArrowImage {
+    -fx-image: url("../icons/front.png");
+}
+
+.scoreText {
+    -fx-font-family: ARCADECLASSIC;
+    -fx-font-size: 40;
 }
 
 .root {

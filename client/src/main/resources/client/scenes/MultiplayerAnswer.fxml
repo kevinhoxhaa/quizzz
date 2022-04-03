@@ -312,20 +312,14 @@
                                 <Cursor fx:constant="HAND" />
                             </cursor>
                         </Button>
-                  <TextFlow layoutX="14.0" layoutY="31.0" prefHeight="71.0" prefWidth="375.0">
-                     <children>
-                        <Text text="Score: " wrappingWidth="187.242919921875">
-                           <font>
-                              <Font name="Monospaced Regular" size="32.0" />
-                           </font>
-                        </Text>
-                              <Text fx:id="currentScore" text="0" wrappingWidth="187.242919921875">
-                                  <font>
-                                      <Font name="Monospaced Regular" size="32.0" />
-                                  </font>
-                              </Text>
-                     </children>
-                  </TextFlow>
+                        <TextFlow styleClass="scoreText" layoutX="14.0" layoutY="31.0" prefHeight="71.0" prefWidth="200.0">
+                            <children>
+                                <Text text="Score: " wrappingWidth="187.242919921875">
+                                </Text>
+                                <Text fx:id="currentScore" text="0" wrappingWidth="187.242919921875">
+                                </Text>
+                            </children>
+                        </TextFlow>
                     </children>
                 </AnchorPane>
             </children>
