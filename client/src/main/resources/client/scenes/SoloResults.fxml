@@ -194,7 +194,7 @@
                                                 <Font name="Monospaced Bold" size="40.0" />
                                             </font>
                                         </Text>
-                                        <ImageView fitHeight="255.0" fitWidth="288.0" layoutX="24.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true">
+                                        <ImageView styleClass="leaderboardImage" fitHeight="255.0" fitWidth="288.0" layoutX="24.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
                                                 <Image url="@../images/leaderboard.png" />
                                             </image>

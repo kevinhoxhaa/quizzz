@@ -58,6 +58,14 @@
     -fx-background-color: #A9CCE3;
 }
 
+#scoreTable {
+    -fx-font-family: Monospaced;
+}
+
+.leaderboardImage {
+    -fx-image: url("../images/leaderboard.png");
+}
+
 #helpButton:hover {
     -fx-scale-y: -1;
 }
