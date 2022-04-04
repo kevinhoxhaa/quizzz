@@ -44,6 +44,7 @@ import java.util.TimerTask;
 
 public class MainCtrl {
 
+    public static final String STYLES_PATH = "client/stylesheets/pixelart.css";
     public static final double WIDTH = 1024.0;
     public static final double HEIGHT = 704.0;
     private static final double TIMEOUT = 8.0;
@@ -153,38 +154,49 @@ public class MainCtrl {
 
         this.multiplayerAnswerCtrl = multiplayerAnswer.getKey();
         this.multiplayerAnswer = new Scene(multiplayerAnswer.getValue());
+        this.multiplayerAnswer.getStylesheets().add(STYLES_PATH);
 
         this.homeCtrl = home.getKey();
         this.home = new Scene(home.getValue());
+        this.home.getStylesheets().add(STYLES_PATH);
 
         this.server = homeCtrl.getServer();
 
         this.multiplayerQuestionCtrl = multiplayerQuestion.getKey();
         this.multiplayerQuestion = new Scene(multiplayerQuestion.getValue());
+        this.multiplayerQuestion.getStylesheets().add(STYLES_PATH);
 
         this.waitingCtrl = waiting.getKey();
         this.waiting = new Scene(waiting.getValue());
+        this.waiting.getStylesheets().add(STYLES_PATH);
 
         this.rankingCtrl = ranking.getKey();
         this.ranking = new Scene(ranking.getValue());
+        this.ranking.getStylesheets().add(STYLES_PATH);
 
         this.multiplayerEstimationCtrl = multiplayerEstimation.getKey();
         this.multiplayerEstimation = new Scene(multiplayerEstimation.getValue());
+        this.multiplayerEstimation.getStylesheets().add(STYLES_PATH);
 
         this.soloEstimationCtrl = soloEstimation.getKey();
         this.soloEstimation = new Scene(soloEstimation.getValue());
+        this.soloEstimation.getStylesheets().add(STYLES_PATH);
 
         this.soloQuestionCtrl = soloQuestion.getKey();
         this.soloQuestion = new Scene(soloQuestion.getValue());
+        this.soloQuestion.getStylesheets().add(STYLES_PATH);
 
         this.soloAnswerCtrl = soloAnswer.getKey();
         this.soloAnswer = new Scene(soloAnswer.getValue());
+        this.soloAnswer.getStylesheets().add(STYLES_PATH);
 
         this.soloResultsCtrl = soloResults.getKey();
         this.soloResults = new Scene(soloResults.getValue());
+        this.soloResults.getStylesheets().add(STYLES_PATH);
 
         this.multiplayerResultsCtrl = multiplayerResults.getKey();
         this.multiplayerResults = new Scene(multiplayerResults.getValue());
+        this.multiplayerResults.getStylesheets().add(STYLES_PATH);
 
         this.adminPanelCtrl = adminPanel.getKey();
         this.adminPanel = new Scene( adminPanel.getValue() );
@@ -310,7 +322,6 @@ public class MainCtrl {
     public void showHome() {
         primaryStage.setTitle("Quizzz");
         primaryStage.setScene(home);
-        home.getStylesheets().add("client/stylesheets/homebuttons.css");
         homeCtrl.setFonts();
 
         Image image = new Image("client/images/arrowcursor.png");  //pass in the image path

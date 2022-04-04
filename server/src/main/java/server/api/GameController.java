@@ -590,4 +590,11 @@ public class GameController {
                           @RequestBody ComparisonQuestion answeredQuestion) {
         return postAnswer(gameIndex, userId, questionIndex, answeredQuestion);
     }
+
+    @GetMapping("/{gameIndex}/ranking")
+    public ResponseEntity<List<MultiplayerUser>> getRanking(@PathVariable("gameIndex") int gameIndex) {
+        List<MultiplayerUser> result = gameUserRepo.findByGameID((long) gameIndex);
+        result.sort((a, b) -> (int) (b.points - a.points));
+        return ResponseEntity.ok(result);
+    }
 }

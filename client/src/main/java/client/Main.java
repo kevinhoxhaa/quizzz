@@ -37,8 +37,10 @@ import client.scenes.RankingCtrl;
 import client.scenes.MultiplayerEstimationQuestionCtrl;
 import client.scenes.MainCtrl;
 import client.scenes.WaitingCtrl;
+import client.utils.ResourceUtils;
 import com.google.inject.Injector;
 import javafx.application.Application;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 
@@ -46,6 +48,7 @@ public class Main extends Application {
 
     private static final Injector INJECTOR = createInjector(new MyModule());
     private static final MyFXML FXML = new MyFXML(INJECTOR);
+    private static final int LABEL_SIZE = 36;
 
     public static void main(String[] args) throws URISyntaxException, IOException {
         launch();
@@ -53,6 +56,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+
+        Font.loadFont(
+                ResourceUtils.getClientResource("fonts/ARCADECLASSIC.TTF").getPath(),
+                LABEL_SIZE
+        );
 
         var adminPanel = FXML.load(
                 AdminPanelCtrl.class, "client", "scenes", "AdminPanel.fxml");

@@ -32,7 +32,7 @@ public class HomeCtrl {
     private static final int UNAUTHORIZED = 401;
     private static final int FORBIDDEN = 403;
     private static final int USERNAME_LENGTH = 15;
-    private static final int TITLE_SIZE = 45;
+    private static final int TITLE_SIZE = 84;
     private static final int BUTTON_TEXT_SIZE = 42;
 
     private final ServerUtils server;
