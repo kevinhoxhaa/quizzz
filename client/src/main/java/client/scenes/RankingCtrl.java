@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import commons.entities.MultiplayerUser;
 import commons.models.Question;
 import javafx.fxml.FXML;
+import javafx.scene.ImageCursor;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -104,5 +105,13 @@ public class RankingCtrl extends AbstractRankingCtrl {
     @Override
     public void highlightCurrentCircle() {
         highlightCurrentCircle(gameCtrl.getAnswerCount());
+    }
+
+    /**
+     * Sets up all hover cursors to hand
+     */
+    @Override
+    public void setupHoverCursor() {
+        quitButton.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
     }
 }

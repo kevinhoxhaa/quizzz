@@ -487,7 +487,6 @@ public class MultiplayerGameCtrl {
         joker.setBackground(new Background(
                 new BackgroundFill(Color.color(RGB_VALUE, RGB_VALUE, RGB_VALUE), CornerRadii.EMPTY, Insets.EMPTY)));
         joker.setOpacity(STANDARD_SIZE);
-        joker.setCursor(Cursor.HAND);
     }
 
     /**
@@ -531,7 +530,6 @@ public class MultiplayerGameCtrl {
             if(n instanceof ImageView) {
                 ImageView e = (ImageView) n;
                 e.setOnMouseClicked(event -> sendEmoji(e));
-                e.setCursor(Cursor.HAND);
 
                 String[] parts = e.getImage().getUrl().split("/");
                 String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));

@@ -63,6 +63,7 @@ public class MainCtrl {
     private static final long FACTOR = 300;
 
     private Image pointerCursor;
+    private Image handCursor;
 
     private String serverUrl;
     private Timer waitingTimer;
@@ -138,6 +139,7 @@ public class MainCtrl {
         primaryStage.setResizable(false);
 
         pointerCursor = new Image("client/images/arrowcursor.png");
+        handCursor = new Image("client/images/handcursor.png");
 
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -166,6 +168,7 @@ public class MainCtrl {
         this.waiting = new Scene(waiting.getValue());
         this.waiting.getStylesheets().add(STYLES_PATH);
         this.waiting.setCursor(new ImageCursor(pointerCursor));
+        this.waitingCtrl.setupHoverCursor();
 
         this.rankingCtrl = ranking.getKey();
         this.ranking = new Scene(ranking.getValue());
@@ -673,6 +676,10 @@ public class MainCtrl {
         }
     }
 
+    /**
+     * Resets the colors of the circles in the main
+     * controller
+     */
     public void resetMainCtrl() {
         multiplayerQuestionCtrl.resetCircleColor();
         multiplayerAnswerCtrl.resetCircleColor();
@@ -681,5 +688,13 @@ public class MainCtrl {
         this.colors = new ArrayList<>();
         this.answerCount = 0;
         this.user.resetScore();
+    }
+
+    /**
+     * Returns the application hand cursor
+     * @return the hand cursor
+     */
+    public Image getHandCursorImage() {
+        return handCursor;
     }
 }

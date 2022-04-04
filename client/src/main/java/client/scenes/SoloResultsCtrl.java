@@ -8,6 +8,7 @@ import commons.models.SoloGame;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.ImageCursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -105,5 +106,14 @@ public class SoloResultsCtrl extends AbstractRankingCtrl {
     @Override
     public void highlightCurrentCircle() {
         highlightCurrentCircle(game.getCurrentQuestionNum());
+    }
+
+    /**
+     * Sets the hover cursor to every button to hand
+     */
+    @Override
+    public void setupHoverCursor() {
+        quitButton.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+        restartButton.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
     }
 }
