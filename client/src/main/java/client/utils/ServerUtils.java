@@ -272,7 +272,7 @@ public class ServerUtils {
 
     public Activity deleteActivityFromRepo ( String serverUrl, Activity activity ) {
         return ClientBuilder.newClient ( new ClientConfig() )
-                .target(serverUrl).path("/api/activities/" + activity.identifier )
+                .target(serverUrl).path("/api/activities/" + activity.id )
                 .request( APPLICATION_JSON )
                 .accept ( APPLICATION_JSON )
                 .delete ( Activity.class );
