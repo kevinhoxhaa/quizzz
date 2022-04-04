@@ -116,9 +116,9 @@ public class AdminPanelCtrl {
 
     public void addNewActivity (
             String identifier,
-            String source,
-            int consumption,
             String title,
+            int consumption,
+            String source,
             String imagePath,
             int id) {
         Activity activity = new Activity ( identifier, title, consumption, source, imagePath );

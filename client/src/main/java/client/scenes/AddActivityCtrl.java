@@ -46,7 +46,7 @@ public class AddActivityCtrl {
         } else {
             idInteger = Integer.parseInt(idValue);
         }
-        
+
         adminPanelCtrl.addNewActivity(
                 identifier.getText(),
                 title.getText(),
