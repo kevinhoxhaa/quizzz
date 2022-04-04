@@ -36,17 +36,17 @@
                              </image>
                          </ImageView>
                      </HBox>
-                     <TextField fx:id="usernameField" prefWidth="256.0" promptText="Username" style="-fx-font-size: 1.5em; -fx-font-family: Monospaced; -fx-pref-width: 28em;">
+                     <TextField styleClass="pixelField" fx:id="usernameField" prefWidth="256.0" promptText="Username" style="-fx-font-size: 1.5em; -fx-font-family: Monospaced; -fx-pref-width: 28em;">
                <font>
                   <Font name="Monospaced Regular" size="12.0" />
                </font></TextField>
-                     <TextField fx:id="urlField" prefHeight="35.0" prefWidth="566.0" promptText="Server URL" style="-fx-font-size: 1.5em; -fx-font-family: Monospaced; -fx-pref-width: 28em;">
+                     <TextField styleClass="pixelField" fx:id="urlField" prefHeight="35.0" prefWidth="566.0" promptText="Server URL" style="-fx-font-size: 1.5em; -fx-font-family: Monospaced; -fx-pref-width: 28em;">
                <font>
                   <Font name="Monospaced Regular" size="12.0" />
                </font></TextField>
             <Pane prefHeight="271.0" prefWidth="412.0">
                <children>
-                             <Button fx:id="soloButton" layoutX="37.0" layoutY="51.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onSoloButtonClick" onMouseEntered="#onButtonHover" prefHeight="66.0" prefWidth="326.0" textAlignment="CENTER">
+                             <Button styleClass="pixelButton" fx:id="soloButton" layoutX="37.0" layoutY="51.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onSoloButtonClick" onMouseEntered="#onButtonHover" prefHeight="66.0" prefWidth="326.0" textAlignment="CENTER">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
@@ -61,7 +61,7 @@
                         </Text>
                      </graphic>
                         </Button>
-                             <Button fx:id="multiplayerButton" layoutX="35.0" layoutY="143.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onMultiplayerButtonClick" onMouseEntered="#onButtonHover" prefHeight="66.0" prefWidth="326.0" textAlignment="CENTER">
+                             <Button styleClass="pixelButton" fx:id="multiplayerButton" layoutX="35.0" layoutY="143.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onMultiplayerButtonClick" onMouseEntered="#onButtonHover" prefHeight="66.0" prefWidth="326.0" textAlignment="CENTER">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>

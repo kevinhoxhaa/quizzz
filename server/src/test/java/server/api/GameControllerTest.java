@@ -420,4 +420,11 @@ public class GameControllerTest {
                 new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random));
         assertEquals(HttpStatus.EXPECTATION_FAILED, actual.getStatusCode());
     }
+
+    @Test
+    public void getRankingReturnsSortedUsers() {
+        sut.startGame((int) NUMBER);
+        var actual = sut.getRanking(0);
+        assertNotNull(actual.getBody());
+    }
 }
