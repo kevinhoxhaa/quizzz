@@ -23,6 +23,11 @@ The game consists of two game modes - solo and multiplayer. Both modes
 consist of questions sequentially shown to the player with their answers
 in between.
 
+The player can choose the mode they want to play in the application
+home page:
+
+![Home](./docs/assets/homeScreen.png)
+
 Each question is timed, which means that users have a limited time
 to answer the question before they are shown the answer. The application
 uses regular polling for the visualisation of questions and game statistics.
@@ -58,7 +63,7 @@ the user has equal chance of getting any activity or question type.
 The question modes are visualised on the respective question screens
 as described above:
 
-[Images of question screens]
+![Multiple-choice](./docs/assets/mcSoloScreen.png) ![Estimation](./docs/assets/estimationSoloScreen.png)
 
 A user who answers more than three consecutive questions correctly
 gets a streak, which gives them more points for each consecutive
@@ -67,14 +72,12 @@ correctly answered question after that.
 After the time on the given question screen runs out, the user is
 shown an answer screen:
 
-[Image of answer screen]
+![Answer](./docs/assets/answerSoloScreen.png)
 
 After the game ends, the user score is saved on the server and
 the user is added to the global solo game ranking. The ranking is
 then fetched from the server in the form of a list and displayed as
-a table:
-
-[Image of solo results]
+a table.
 
 #### Multiplayer
 
@@ -83,7 +86,7 @@ The multiplayer game mode is structured in the following way:
 When a user opts to play in multiplayer, they are put in a waiting
 room for the server that they have chosen on the home page:
 
-[Image of waiting room]
+![Waiting](./docs/assets/waitingScreen.png)
 
 Each server has only one waiting room. As soon as a player in a multiplayer
 waiting room clicks the start button, all players in that room are removed
@@ -96,22 +99,18 @@ After the time on the question screen runs out, the list of correctly answered
 users is continuously polled form the server until the server sends a valid response,
 indicating that the time has run out for every player in that game.
 
-[Image of question screens]
+![Multiple-choice](./docs/assets/mcMultiplayerScreen.png) ![Estimation](./docs/assets/estimationMultiplayerScreen.png)
 
 The answer screen contains a list of all users that have answered a question
 correctly:
 
-[Image of answer screen]
+![Answer](./docs/assets/multiplayerAnswerScreen.png)
 
 After the 10th question, a ranking screen is shown, which includes a table
 with all players in the game ranked by their scores.
 
-[Ranking page image]
-
 After the 20th question, a results' page is shown, which includes a similar
 table with all players in the game ranked by their scores.
-
-[Results page image]
 
 There are two new features present in the multiplayer game - emojis and jokers.
 
@@ -153,13 +152,13 @@ display the emoji or decrease the time for that user if necessary.
 The project depends on the following libraries
 and frameworks:
 
-- [Gradle]()
-- [Spring]()
-- [JavaFX]()
-- [Jackson]()
-- [Gson]()
-- [JUnit]()
-- [Mockito]()
+- [Gradle](https://gradle.org/)
+- [Spring](https://spring.io/)
+- [JavaFX](https://openjfx.io/)
+- [Jackson](https://github.com/FasterXML/jackson)
+- [Gson](https://github.com/google/gson)
+- [JUnit](https://junit.org/junit5/)
+- [Mockito](https://site.mockito.org/)
 
 ## How to run it
 
@@ -214,11 +213,11 @@ the repository as described in the "How to run it"
 section, install the required dependencies and
 open your local repository copy in a suitable IDE.
 
-To work on an issue, you need to [create your own issue]()
-or choose an [active issue]() to work on. Be sure
+To work on an issue, you need to [create your own issue](https://gitlab.ewi.tudelft.nl/cse1105/2021-2022/team-repositories/oopp-group-49/repository-template/-/issues)
+or choose an [active issue](https://gitlab.ewi.tudelft.nl/cse1105/2021-2022/team-repositories/oopp-group-49/repository-template/-/issues) to work on. Be sure
 to inform the project maintainers about this.
 
-You can fork the project to your [Gitlab]() profile
+You can fork the project to your [Gitlab](https://about.gitlab.com/) profile
 and start working on your issue in a separate branch.
 Branches for issues are named using the following
 convention:
