@@ -177,7 +177,6 @@ public abstract class AbstractMultichoiceQuestionCtrl extends AbstractQuestionCt
                     new BackgroundFill(Color.web("#D2B4DE"), CornerRadii.EMPTY, Insets.EMPTY)));
 
             resetAnswerButtonHighlights();
-            answerButton.getChildren().get(0).setStyle("-fx-font-weight: bold");
             answerButton.setStyle("-fx-border-width: 5; -fx-border-color: black");
         }
     }
@@ -283,7 +282,6 @@ public abstract class AbstractMultichoiceQuestionCtrl extends AbstractQuestionCt
             answerBtn.setBackground(new Background(
                     new BackgroundFill(Color.web("#D6EAF8"), CornerRadii.EMPTY, Insets.EMPTY)));
             answerBtn.setStyle("-fx-border-width: 4; -fx-border-color: black");
-            answerBtn.getChildren().get(0).setStyle("-fx-font-weight: normal");
         }
     }
 
@@ -294,7 +292,6 @@ public abstract class AbstractMultichoiceQuestionCtrl extends AbstractQuestionCt
     private void resetAnswerButtonHighlights() {
         for (StackPane answerBtn : answerButtons) {
             answerBtn.setStyle("-fx-border-width: 4; -fx-border-color: black");
-            answerBtn.getChildren().get(0).setStyle("-fx-font-weight: normal");
         }
     }
 }
