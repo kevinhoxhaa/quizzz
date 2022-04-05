@@ -175,7 +175,7 @@
                                     <children>
                                         <VBox maxWidth="312.0" minWidth="312.0" prefHeight="149.0" prefWidth="312.0" HBox.hgrow="ALWAYS">
                                             <children>
-                                                <StackPane fx:id="answerTop" maxWidth="312.0" minWidth="312.0" onMouseClicked="#onAnswerTopClicked" onMouseEntered="#enterAnswerTop" onMouseExited="#exitAnswerTop" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;" styleClass="answerButton">
+                                                <StackPane fx:id="answerTop" maxWidth="312.0" minWidth="312.0" onMouseClicked="#onAnswerTopClicked" onMouseEntered="#enterAnswerTop" onMouseExited="#exitAnswerTop" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;">
                                                     <VBox.margin>
                                                         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                                     </VBox.margin>
@@ -196,7 +196,7 @@
                                                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                                                     </padding>
                                                 </StackPane>
-                                                <StackPane fx:id="answerMid" maxWidth="312.0" minWidth="312.0" onMouseClicked="#onAnswerMidClicked" onMouseEntered="#enterAnswerMid" onMouseExited="#exitAnswerMid" prefHeight="150.0" prefWidth="190.0" style="-fx-border-color: black;" styleClass="answerButton">
+                                                <StackPane fx:id="answerMid" maxWidth="312.0" minWidth="312.0" onMouseClicked="#onAnswerMidClicked" onMouseEntered="#enterAnswerMid" onMouseExited="#exitAnswerMid" prefHeight="150.0" prefWidth="190.0" style="-fx-border-color: black;">
                                                     <opaqueInsets>
                                                         <Insets />
                                                     </opaqueInsets>
@@ -217,7 +217,7 @@
                                                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                                                     </padding>
                                                 </StackPane>
-                                                <StackPane fx:id="answerBot" maxWidth="312.0" minWidth="312.0" onMouseClicked="#onAnswerBotClicked" onMouseEntered="#enterAnswerBot" onMouseExited="#exitAnswerBot" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;" styleClass="answerButton">
+                                                <StackPane fx:id="answerBot" maxWidth="312.0" minWidth="312.0" onMouseClicked="#onAnswerBotClicked" onMouseEntered="#enterAnswerBot" onMouseExited="#exitAnswerBot" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;">
                                                     <VBox.margin>
                                                         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                                     </VBox.margin>
