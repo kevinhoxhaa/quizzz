@@ -238,7 +238,7 @@
                                         </Text>
                                     </children>
                                 </Pane>
-                                <ListView fx:id="correctPlayers" prefHeight="194.0" prefWidth="245.0" style="-fx-border-color: black;" stylesheets="/client/Stylesheets/ListView.css" />
+                                <ListView fx:id="correctPlayers" prefHeight="194.0" prefWidth="245.0" style="-fx-border-color: black;" />
                             </children>
                         </VBox>
                         <VBox alignment="CENTER" prefHeight="223.0" prefWidth="360.0" spacing="8.0">
