@@ -194,7 +194,7 @@
                                                 <Font name="Monospaced Regular" size="17.0" />
                                             </font>
                                         </Text>
-                                        <ImageView fx:id="halfTime" fitHeight="58.0" fitWidth="52.0" layoutX="4.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true">
+                                        <ImageView fx:id="halfTime" fitHeight="42.0" fitWidth="49.0" layoutX="7.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
                                                 <Image url="@../images/half-time.png" />
                                             </image>
@@ -288,7 +288,7 @@
                                 <Image url="@../images/removechoice.png" />
                             </image>
                         </ImageView>
-                        <ImageView fx:id="reduceTimeImage" fitHeight="70.0" fitWidth="70.0" layoutX="152.0" layoutY="-11.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                        <ImageView fx:id="reduceTimeImage" fitHeight="43.0" fitWidth="46.0" layoutX="169.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true" visible="false">
                             <image>
                                 <Image url="@../images/half-time.png" />
                             </image>
