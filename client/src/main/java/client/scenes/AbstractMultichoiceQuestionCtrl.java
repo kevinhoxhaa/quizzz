@@ -274,7 +274,7 @@ public abstract class AbstractMultichoiceQuestionCtrl extends AbstractQuestionCt
     protected void resetAnswerColors(StackPane answerBtn) {
         if (answerBtn.equals(selectedAnswerButton)) {
             answerBtn.setBackground(new Background(
-                    new BackgroundFill(Color.LIGHTSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+                    new BackgroundFill(Color.web("#D2B4DE"), CornerRadii.EMPTY, Insets.EMPTY)));
         } else if (answerBtn.equals(disabledAnswer)) {
             answerBtn.setBackground(new Background(
                     new BackgroundFill(Color.web("#F5B7B1"), CornerRadii.EMPTY, Insets.EMPTY)));

@@ -16,10 +16,6 @@
     -fx-background-color: #D6EAF8;
 }
 
-.answerButton:hover {
-    -fx-background-color: #85C1E9;
-}
-
 .pixelButton {
     -fx-background-image: url("../images/pixelborder.png");
     -fx-font-family: ARCADECLASSIC;
