@@ -12,6 +12,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -21,6 +22,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.util.Pair;
 import org.springframework.messaging.simp.stomp.StompSession;
 
@@ -302,8 +304,7 @@ public class MultiplayerGameCtrl {
      * @return the ranked users
      */
     public List<MultiplayerUser> fetchRanking() {
-        // TODO: fetch users ranked by points from server
-        return new ArrayList<>();
+        return server.getRanking(serverUrl, gameIndex);
     }
 
     /**
@@ -311,10 +312,10 @@ public class MultiplayerGameCtrl {
      * @param rankedUsers the list of ranked users to display
      */
     public void showRanking(List<MultiplayerUser> rankedUsers) {
-        // TODO: handle passed multiplayer users
         mainCtrl.updateQuestionCounters(rankingCtrl, colors);
         mainCtrl.getPrimaryStage().setTitle("Ranking Screen");
         mainCtrl.getPrimaryStage().setScene(ranking);
+        rankingCtrl.setup(rankedUsers);
         rankingCtrl.startTimer();
     }
 
@@ -324,8 +325,7 @@ public class MultiplayerGameCtrl {
      * @param rankedUsers the list of ranked users to display
      */
     public void showResults(List<MultiplayerUser> rankedUsers) {
-        // TODO: display list of ranked users on results screen
-        resultsCtrl.setup();
+        resultsCtrl.setup(rankedUsers);
         mainCtrl.updateQuestionCounters(resultsCtrl, colors);
         mainCtrl.getPrimaryStage().setTitle("Results Screen");
         mainCtrl.getPrimaryStage().setScene(results);
@@ -624,5 +624,27 @@ public class MultiplayerGameCtrl {
         this.answerCount = 0;
         this.colors = new ArrayList<>();
         this.user.resetScore();
+    }
+
+    /**
+     * Populates a given score table with a sorted list of users
+     * @param scoreTable the score table to populate
+     * @param users the list of users to populate
+     */
+    public void populateRanking(TableView<MultiplayerUser> scoreTable, List<MultiplayerUser> users) {
+        try {
+            scoreTable.getItems().clear();
+
+            for (MultiplayerUser user : users) {
+                scoreTable.getItems().add(user);
+            }
+
+        } catch (WebApplicationException e) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            return;
+        }
     }
 }
