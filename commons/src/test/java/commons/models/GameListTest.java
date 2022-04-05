@@ -24,7 +24,7 @@ public class GameListTest {
     }
 
     @Test
-    public void getGamesReturnsList() {
+    public void getGamesReturnsMap() {
         assertEquals(new HashMap<>(), gameList.getGames());
     }
 

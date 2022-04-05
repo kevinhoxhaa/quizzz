@@ -9,7 +9,7 @@ public class GameList {
 
     /**
      * Constructs a new game state object
-     * with an empty list of games
+     * with an empty map (long -> game) of games
      */
     public GameList() {
         this.games = new HashMap();
@@ -65,7 +65,7 @@ public class GameList {
     }
 
     /**
-     * Adds a game to the game list
+     * Adds a game to the game map
      * @param game the game to add
      */
     public void add(Game game){
@@ -73,9 +73,9 @@ public class GameList {
     }
 
     /**
-     * Removes the game at the given index from the list
-     * @param key the index of the game in the list
-     * @return whether the list has been changed
+     * Removes the game with the given index from the map
+     * @param key the key of the game in the map (the game index)
+     * @return whether the map has been changed
      */
     public Game remove(long key){
         return games.remove(Long.valueOf(key));
