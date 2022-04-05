@@ -112,6 +112,7 @@ public class MainCtrl {
     private Scene multiplayerResults;
 
     private User user;
+    private int gameIndex;
     private List<Color> colors;
     private Thread timerThread;
     private double countdown;
@@ -333,10 +334,10 @@ public class MainCtrl {
     /**
      * Initialises the multiplayer game controller and starts
      * a multiplayer game
-     * @param gameIndex the game index
+     * @param gameIndex the index of the multiplayer game
      */
     public void startMultiplayerGame(int gameIndex) {
-        multiplayerCtrl = new MultiplayerGameCtrl( this, gameIndex, server,
+        multiplayerCtrl = new MultiplayerGameCtrl( this, server,
                 new Pair<>(this.multiplayerQuestionCtrl, this.multiplayerQuestion),
                 new Pair<>(this.multiplayerEstimationCtrl, this.multiplayerEstimation),
                 new Pair<>(this.multiplayerAnswerCtrl, this.multiplayerAnswer),
@@ -639,11 +640,9 @@ public class MainCtrl {
 
                     try {
                         if(quitApp) {
-                            server.removeMultiplayerUser(
-                                    serverUrl, multiplayerCtrl.getGameIndex(), (MultiplayerUser) user
-                            );
+                            server.removeMultiplayerUser(serverUrl, gameIndex, (MultiplayerUser) user);
                         } else {
-                            server.removeMultiplayerUserFromGame(serverUrl, multiplayerCtrl.getGameIndex(), user.id);
+                            server.removeMultiplayerUserFromGame(serverUrl, gameIndex, user.id);
                         }
                         bindUser(null);
                         multiplayerEstimationCtrl.resetDoublePoints();
@@ -697,11 +696,19 @@ public class MainCtrl {
     }
 
     /**
+     * A getter for the game index
+     * @return the game index
+     */
+    public int getGameIndex() {
+        return gameIndex;
+    }
+
+    /**
      * A setter for the game index
      * @param gameIndex the game index to set
      */
     public void setGameIndex(int gameIndex) {
-        multiplayerCtrl.setGameIndex(gameIndex);
+        this.gameIndex = gameIndex;
     }
 
     /**
