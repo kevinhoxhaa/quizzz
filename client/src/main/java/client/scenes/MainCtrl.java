@@ -56,7 +56,7 @@ public class MainCtrl {
     private static final int MILLIS = 50;
     private static final int POLLING_DELAY = 0;
     private static final int POLLING_INTERVAL = 500;
-    private static final int QUESTIONS_PER_GAME = 2;
+    private static final int QUESTIONS_PER_GAME = 20;
     private static final double ALERT_POSITION_Y = 250;
     private static final double ALERT_POSITION_X = 387;
 
