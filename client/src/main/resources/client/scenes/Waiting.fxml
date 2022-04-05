@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="694.0" maxWidth="1014.0" minHeight="694.0" minWidth="1014.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.WaitingCtrl">
+<BorderPane maxHeight="694.0" maxWidth="1014.0" minHeight="694.0" minWidth="1014.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.WaitingCtrl">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -22,9 +17,9 @@
                 <Insets top="32.0" />
             </padding>
          <children>
-            <Label text="Waiting for other players to join..." textAlignment="CENTER" textOverrun="CLIP" wrapText="true" VBox.vgrow="ALWAYS">
+            <Label fx:id="waitingTitle" text="Waiting   for   others..." textAlignment="CENTER" textOverrun="CLIP" wrapText="true" VBox.vgrow="ALWAYS">
                <font>
-                  <Font name="Monospaced Bold" size="48.0" />
+                  <Font name="Monospaced Bold" size="64.0" />
                </font>
             </Label>
             <VBox alignment="TOP_CENTER" maxWidth="768.0" minWidth="512.0" prefHeight="224.0" spacing="16.0">
@@ -34,7 +29,12 @@
                         <Font name="Monospaced Regular" size="24.0" />
                      </font>
                   </Label>
-                  <ListView fx:id="usersList" minWidth="400.0" prefHeight="200.0" prefWidth="512.0" />
+                   <VBox style="-fx-background-color: black" alignment="CENTER" minWidth="768.0" prefHeight="200.0" prefWidth="768.0">
+                       <padding>
+                           <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                       </padding>
+                       <ListView fx:id="usersList" minWidth="748.0" prefHeight="180.0" prefWidth="748.0" />
+                   </VBox>
                   <Button fx:id="startButton" mnemonicParsing="false" onAction="#onStartButtonClick" styleClass="pixelButton" text="Start">
                      <font>
                         <Font name="Monospaced Bold" size="18.0" />
@@ -51,9 +51,9 @@
    <top>
       <VBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" onAction="#onBackButtonClick">
+            <Button mnemonicParsing="false" onAction="#onBackButtonClick" styleClass="arrowButton">
                <graphic>
-                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" styleClass="backArrowImage">
                      <image>
                         <Image url="@../icons/back.png" />
                      </image>

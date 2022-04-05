@@ -57,12 +57,12 @@ public class SoloResultsCtrl extends AbstractRankingCtrl {
         scoreTableUserScore.setText(String.format("%d", mainCtrl.getSoloScore()));
         server.addUserSolo(mainCtrl.getServerUrl(), (SoloUser) mainCtrl.getUser());
 
-        scoreTableUserName.setText( String.format( "%s", mainCtrl.getUser().username) );
-        scoreTableUserScore.setText( String.format( "%d", mainCtrl.getSoloScore()) );
+        scoreTableUserName.setText(String.format("%s", mainCtrl.getUser().username));
+        scoreTableUserScore.setText(String.format("%d", mainCtrl.getSoloScore()));
         setTable();
-        ranking1stPlayer.setText(users.get ( 0 ).username );
-        ranking2ndPlayer.setText(users.get ( 1 ).username );
-        ranking3rdPlayer.setText(users.get ( 2 ).username );
+        ranking1stPlayer.setText(users.size() > 0 ? users.get(0).username : "");
+        ranking2ndPlayer.setText(users.size() > 1 ? users.get(1).username : "");
+        ranking3rdPlayer.setText(users.size() > 2 ? users.get(2).username : "");
         //TODO : add personal best to server side and link it
     }
 
@@ -94,11 +94,12 @@ public class SoloResultsCtrl extends AbstractRankingCtrl {
         scoreTable.setItems(users);
         scoreTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
+
     /**
      * Updates the number of the current question (e.g 11/20)
      */
     @Override
-    public void updateQuestionNumber(){
+    public void updateQuestionNumber() {
         questionNum.setText("" + (game.getCurrentQuestionNum()));
     }
 
