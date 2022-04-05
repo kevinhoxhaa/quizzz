@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.ResourceUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.entities.MultiplayerUser;
@@ -7,10 +8,17 @@ import commons.entities.SoloUser;
 import commons.entities.User;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.ImageCursor;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.DialogPane;
+import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -26,17 +34,31 @@ public class HomeCtrl {
     private static final int USERNAME_LENGTH = 15;
     private static final int TITLE_SIZE = 84;
     private static final int BUTTON_TEXT_SIZE = 42;
-    private static final double ALERT_POSITION_Y = 250;
-    private static final double ALERT_POSITION_X = 387;
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
     private Stage dialog;
-    private DialogPane dialogPane;
 
     @FXML
     private ImageView bulbView;
+    @FXML
+    private Text logoTitle;
+
+    @FXML
+    private Text soloText;
+
+    @FXML
+    private Text multiplayerText;
+
+    @FXML
+    private Button soloButton;
+
+    @FXML
+    private Button multiplayerButton;
+
+    @FXML
+    private Button helpButton;
 
     @FXML
     private TextField usernameField;
@@ -64,8 +86,28 @@ public class HomeCtrl {
      * @throws IOException in case the static how-to layout file is not found
      */
     @FXML
-    protected void onHelpButtonClick() {
-        mainCtrl.showHelp();
+    protected void onHelpButtonClick() throws IOException {
+        if (dialog != null) {
+            dialog.show();
+            return;
+        }
+
+        dialog = new Stage();
+        dialog.setMinHeight(HELP_HEIGHT);
+        dialog.setMinWidth(HELP_WIDTH);
+        dialog.setMaxHeight(HELP_HEIGHT);
+        dialog.setMaxWidth(HELP_WIDTH);
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.setResizable(false);
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/client/scenes/Help.fxml"));
+        loader.setController(this);
+
+        ScrollPane dialogPane = loader.load();
+        Scene dialogScene = new Scene(dialogPane);
+        dialog.setScene(dialogScene);
+        dialog.show();
     }
 
     /**
@@ -123,7 +165,6 @@ public class HomeCtrl {
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
-            alert = mainCtrl.setAlertStyle(alert);
 
             switch (e.getResponse().getStatus()) {
                 case FORBIDDEN:
@@ -139,7 +180,6 @@ public class HomeCtrl {
             invalidURL();
             return;
         }
-
         mainCtrl.startSoloGame();
     }
 
@@ -158,8 +198,7 @@ public class HomeCtrl {
             mainCtrl.setServerUrl(serverUrl.toLowerCase(Locale.ROOT));
             mainCtrl.bindUser(server.addUserMultiplayer(serverUrl, user));
         } catch (WebApplicationException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert = mainCtrl.setAlertStyle(alert);
+            var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
 
             switch (e.getResponse().getStatus()) {
@@ -188,7 +227,6 @@ public class HomeCtrl {
     private void invalidURL() {
         var alert = new Alert(Alert.AlertType.ERROR);
         alert.initModality(Modality.APPLICATION_MODAL);
-        alert = mainCtrl.setAlertStyle(alert);
         alert.setContentText("Invalid server URL!");
         alert.showAndWait();
         return;
@@ -202,12 +240,44 @@ public class HomeCtrl {
     private boolean isValidUsername(User user) {
         if (user.username.contains(" ") || user.username.length() > USERNAME_LENGTH) {
             var alert = new Alert(Alert.AlertType.ERROR);
-            alert = mainCtrl.setAlertStyle(alert);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText("Invalid username!");
             alert.showAndWait();
             return false;
         }
         return true;
+    }
+
+    /**
+     * Configures the fonts of the home page to the specified
+     * pixel-art font resource
+     */
+    public void setFonts() {
+
+        soloText.setFont(Font.loadFont(
+                ResourceUtils.getClientResource("fonts/arcadeclassic.ttf").getPath(),
+                BUTTON_TEXT_SIZE
+        ));
+
+        multiplayerText.setFont(Font.loadFont(
+                ResourceUtils.getClientResource("fonts/arcadeclassic.ttf").getPath(),
+                BUTTON_TEXT_SIZE
+        ));
+
+        logoTitle.setFont(Font.loadFont(
+                ResourceUtils.getClientResource("fonts/ka1.ttf").getPath(),
+                TITLE_SIZE
+        ));
+    }
+
+    /**
+     * This method sets the hand cursor when the mouse is hovering the buttons
+     */
+    @FXML
+    public void onButtonHover(){
+        Image image = new Image("client/images/handcursor.png");  //pass in the image path
+        soloButton.setCursor(new ImageCursor(image));
+        multiplayerButton.setCursor(new ImageCursor(image));
+        helpButton.setCursor(new ImageCursor(image));
     }
 }
