@@ -8,12 +8,9 @@ import commons.entities.SoloUser;
 import commons.entities.User;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.ImageCursor;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -86,28 +83,8 @@ public class HomeCtrl {
      * @throws IOException in case the static how-to layout file is not found
      */
     @FXML
-    protected void onHelpButtonClick() throws IOException {
-        if (dialog != null) {
-            dialog.show();
-            return;
-        }
-
-        dialog = new Stage();
-        dialog.setMinHeight(HELP_HEIGHT);
-        dialog.setMinWidth(HELP_WIDTH);
-        dialog.setMaxHeight(HELP_HEIGHT);
-        dialog.setMaxWidth(HELP_WIDTH);
-        dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.setResizable(false);
-
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/client/scenes/Help.fxml"));
-        loader.setController(this);
-
-        ScrollPane dialogPane = loader.load();
-        Scene dialogScene = new Scene(dialogPane);
-        dialog.setScene(dialogScene);
-        dialog.show();
+    protected void onHelpButtonClick() {
+       mainCtrl.showHelp();
     }
 
     /**
@@ -164,6 +141,7 @@ public class HomeCtrl {
             mainCtrl.bindUser(getSoloUser());
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
+            alert = mainCtrl.setAlertStyle(alert);
             alert.initModality(Modality.APPLICATION_MODAL);
 
             switch (e.getResponse().getStatus()) {
@@ -199,6 +177,7 @@ public class HomeCtrl {
             mainCtrl.bindUser(server.addUserMultiplayer(serverUrl, user));
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
+            alert = mainCtrl.setAlertStyle(alert);
             alert.initModality(Modality.APPLICATION_MODAL);
 
             switch (e.getResponse().getStatus()) {
@@ -227,6 +206,7 @@ public class HomeCtrl {
     private void invalidURL() {
         var alert = new Alert(Alert.AlertType.ERROR);
         alert.initModality(Modality.APPLICATION_MODAL);
+        alert = mainCtrl.setAlertStyle(alert);
         alert.setContentText("Invalid server URL!");
         alert.showAndWait();
         return;
@@ -241,6 +221,7 @@ public class HomeCtrl {
         if (user.username.contains(" ") || user.username.length() > USERNAME_LENGTH) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
+            alert = mainCtrl.setAlertStyle(alert);
             alert.setContentText("Invalid username!");
             alert.showAndWait();
             return false;
