@@ -540,7 +540,7 @@ public class MainCtrl {
                     () -> {
                         sceneController.redirect();
                         if (text != null) {
-                            text.setText("Timeout");
+                            text.setText("Waiting...");
                         }
                     });
         });
