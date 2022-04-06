@@ -7,6 +7,8 @@ import commons.models.Emoji;
 import commons.models.Question;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.ImageCursor;
+import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -27,6 +29,9 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
 
     private MultiplayerGameCtrl gameCtrl;
     private List<StackPane> jokers;
+
+    @FXML
+    private Button quitButton;
 
     @FXML
     private GridPane emojiPane;
@@ -208,7 +213,7 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
     private void enterJoker(StackPane jokerBtn) {
         if (!gameCtrl.getUsedJokers().contains(jokerBtn.idProperty().getValue())) {
             jokerBtn.setBackground(new Background(
-                    new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+                    new BackgroundFill(Color.web("#85C1E9"), CornerRadii.EMPTY, Insets.EMPTY)));
         }
     }
 
@@ -221,7 +226,7 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
         for (StackPane joker : jokers) {
             if (!gameCtrl.getUsedJokers().contains(joker.idProperty().getValue())) {
                 joker.setBackground(new Background(
-                        new BackgroundFill(Color.color(gameCtrl.RGB_VALUE,gameCtrl.RGB_VALUE,gameCtrl.RGB_VALUE),
+                        new BackgroundFill(Color.web("#D6EAF8"),
                                 CornerRadii.EMPTY, Insets.EMPTY)));
             }
         }
@@ -394,4 +399,26 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
         this.gameCtrl = gameCtrl;
     }
 
+    /**
+     * Sets hover cursors to all buttons to hand
+     */
+    @Override
+    public void setupHoverCursor() {
+        answerTop.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+        answerMid.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+        answerBot.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+
+        doublePoints.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+        removeIncorrect.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+        reduceTime.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+
+        emojiPane.getChildren().forEach(c -> {
+            if(c instanceof ImageView) {
+                c.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+                System.out.println("Setting cursors...");
+            }
+        });
+
+        quitButton.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+    }
 }

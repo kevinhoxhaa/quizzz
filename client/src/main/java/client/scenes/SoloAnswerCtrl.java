@@ -5,10 +5,15 @@ import commons.models.Question;
 import commons.models.SoloGame;
 import commons.utils.QuestionType;
 import javafx.fxml.FXML;
+import javafx.scene.ImageCursor;
+import javafx.scene.control.Button;
 
 
 public class SoloAnswerCtrl extends AbstractAnswerCtrl{
     private SoloGame game;
+
+    @FXML
+    private Button quitButton;
 
     /**
      * Creates a controller for the multiplayer answer screen, with the given server and main controller.
@@ -86,5 +91,13 @@ public class SoloAnswerCtrl extends AbstractAnswerCtrl{
     @FXML
     public void onQuit(){
         mainCtrl.quitGame(false, false);
+    }
+
+    /**
+     * Sets all buttons hover cursors to hand
+     */
+    @Override
+    public void setupHoverCursor() {
+        quitButton.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
     }
 }
