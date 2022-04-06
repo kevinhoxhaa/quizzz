@@ -345,10 +345,15 @@ public class MainCtrl {
     }
 
     public void showAdminPanel() {
+        try {
+            adminPanelCtrl.refreshActivities();
+        } catch (Exception e) {
+            invalidURL();
+            return;
+        }
         primaryStage.setTitle( "Admin Panel");
         primaryStage.setScene(adminPanel);
         primaryStage.show();
-        adminPanelCtrl.refreshActivities();
     }
 
     /**

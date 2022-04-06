@@ -128,7 +128,7 @@ public class AdminPanelCtrl {
         }
 
         server.addActivityToRepo (
-                server.getURL(),
+                mainCtrl.getServerUrl(),
                 activity
         );
         refreshActivities();
@@ -149,7 +149,7 @@ public class AdminPanelCtrl {
 
     @FXML
     public void refreshActivities() {
-        List<Activity> activityList = server.getActivities ( server.getURL() );
+        List<Activity> activityList = server.getActivities (mainCtrl.getServerUrl());
 
         ObservableList<Activity> observableList = FXCollections.observableArrayList(activityList);
         activityTable.setItems(observableList);
@@ -178,8 +178,8 @@ public class AdminPanelCtrl {
 
 
     public void deleteActivity ( int id ) {
-        Activity activity = server.findActivityByID ( server.getURL(), id );
-        server.deleteActivityFromRepo ( server.getURL(), activity );
+        Activity activity = server.findActivityByID (mainCtrl.getServerUrl(), id );
+        server.deleteActivityFromRepo (mainCtrl.getServerUrl(), activity );
         refreshActivities();
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.initModality(Modality.APPLICATION_MODAL);
