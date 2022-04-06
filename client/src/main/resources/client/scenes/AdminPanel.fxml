@@ -9,7 +9,7 @@
 
 <AnchorPane minHeight="694.0" minWidth="1014.0" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminPanelCtrl">
    <children>
-      <Button layoutX="17.0" layoutY="186.0" mnemonicParsing="false" onAction="#refreshActivities" prefHeight="71.0" prefWidth="125.0" text="Refresh Activities">
+      <Button layoutX="17.0" layoutY="186.0" mnemonicParsing="false" onAction="#refreshActivities" prefHeight="71.0" prefWidth="125.0" text="Refresh">
          <font>
             <Font size="14.0" />
          </font></Button>
@@ -17,7 +17,7 @@
          <font>
             <Font size="15.0" />
          </font></Button>
-      <Button layoutX="17.0" layoutY="425.0" mnemonicParsing="false" onAction="#onDeleteActivityButton" prefHeight="71.0" prefWidth="125.0" text="Delete Activity">
+      <Button layoutX="17.0" layoutY="425.0" mnemonicParsing="false" onAction="#onDeleteActivityButton" prefHeight="71.0" prefWidth="125.0" text="Delete">
          <font>
             <Font size="15.0" />
          </font></Button>
