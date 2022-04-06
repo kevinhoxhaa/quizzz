@@ -101,4 +101,7 @@
                  </children>
              </VBox>
    </center>
+   <bottom>
+      <Button fx:id="adminPanelButton" alignment="CENTER" centerShape="false" mnemonicParsing="false" onAction="#onAdminPanelClick" prefHeight="24.0" prefWidth="89.0" text="Admin Panel" BorderPane.alignment="CENTER" />
+   </bottom>
 </BorderPane>

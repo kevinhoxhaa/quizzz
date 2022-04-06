@@ -150,6 +150,17 @@ public class HomeCtrl {
     }
 
     /**
+     * Opens the adminPanel
+     */
+
+    @FXML
+    public void onAdminPanelClick() {
+        String serverUrl = urlField.getText();
+        mainCtrl.setServerUrl(serverUrl.toLowerCase(Locale.ROOT));
+        mainCtrl.showAdminPanel();
+    }
+
+    /**
      * Adds the user to the database and redirects them to the first solo game question scene.
      * An error will occur when the filled in server URL or username are invalid.
      */

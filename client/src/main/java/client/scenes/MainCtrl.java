@@ -112,6 +112,15 @@ public class MainCtrl {
     private MultiplayerResultsCtrl multiplayerResultsCtrl;
     private Scene multiplayerResults;
 
+    private AdminPanelCtrl adminPanelCtrl;
+    private Scene adminPanel;
+
+    private AddActivityCtrl addActivityCtrl;
+    private Scene addActivity;
+
+    private DeleteActivityCtrl deleteActivityCtrl;
+    private Scene deleteActivity;
+
     private User user;
     private int gameIndex;
     private List<Color> colors;
@@ -130,8 +139,10 @@ public class MainCtrl {
                            Pair<SoloQuestionCtrl, Parent> soloQuestion,
                            Pair<SoloAnswerCtrl, Parent> soloAnswer,
                            Pair<SoloResultsCtrl, Parent> soloResults,
-                           Pair<MultiplayerResultsCtrl, Parent> multiplayerResults
-    ) {
+                           Pair<MultiplayerResultsCtrl, Parent> multiplayerResults,
+                           Pair<AdminPanelCtrl, Parent> adminPanel,
+                           Pair<AddActivityCtrl, Parent> addActivity,
+                           Pair<DeleteActivityCtrl, Parent> deleteActivity ) {
         this.primaryStage = primaryStage;
         primaryStage.setMinHeight(HEIGHT);
         primaryStage.setMinWidth(WIDTH);
@@ -205,6 +216,15 @@ public class MainCtrl {
         this.multiplayerResults = new Scene(multiplayerResults.getValue());
         this.multiplayerResults.getStylesheets().add(STYLES_PATH);
         this.multiplayerResults.setCursor(new ImageCursor(pointerCursor));
+
+        this.adminPanelCtrl = adminPanel.getKey();
+        this.adminPanel = new Scene( adminPanel.getValue() );
+
+        this.addActivityCtrl = addActivity.getKey();
+        this.addActivity = new Scene( addActivity.getValue() );
+
+        this.deleteActivityCtrl = deleteActivity.getKey();
+        this.deleteActivity = new Scene( deleteActivity.getValue() );
 
         countdown = START_TIME;
 
@@ -297,6 +317,24 @@ public class MainCtrl {
     }
 
     /**
+     * Returns the addActivityScene
+     * @return the addActivityScene
+     */
+
+    public Scene getAddActivityScene() {
+        return this.addActivity;
+    }
+
+    /**
+     * Returns the deleteActivityScene
+     * @return the deleteActivityScene
+     */
+
+    public Scene getDeleteActivityScene() {
+        return this.deleteActivity;
+    }
+
+    /**
      * Shows the home page of the quiz application on the primary
      * stage
      */
@@ -304,6 +342,18 @@ public class MainCtrl {
         primaryStage.setTitle("Quizzz");
         primaryStage.setScene(home);
         homeCtrl.setFonts();
+    }
+
+    public void showAdminPanel() {
+        try {
+            adminPanelCtrl.refreshActivities();
+        } catch (Exception e) {
+            invalidURL();
+            return;
+        }
+        primaryStage.setTitle( "Admin Panel");
+        primaryStage.setScene(adminPanel);
+        primaryStage.show();
     }
 
     /**
