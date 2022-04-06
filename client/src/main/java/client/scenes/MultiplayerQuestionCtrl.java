@@ -294,7 +294,7 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
             if(answer.equals(answerToRemove)){
                 button.setDisable(true);
                 button.setBackground(new Background(
-                        new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+                        new BackgroundFill(Color.web("#F5B7B1"), CornerRadii.EMPTY, Insets.EMPTY)));
                 disabledAnswer = button;
             }
         }
@@ -332,6 +332,9 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
      * Enables interaction with the answer buttons.
      */
     public void enableAnswers() {
+        answerTop.setOnMouseEntered(event -> enterAnswerTop());
+        answerMid.setOnMouseEntered(event -> enterAnswerMid());
+        answerBot.setOnMouseEntered(event -> enterAnswerBot());
         answerTop.setOnMouseClicked(event -> onAnswerTopClicked());
         answerMid.setOnMouseClicked(event -> onAnswerMidClicked());
         answerBot.setOnMouseClicked(event -> onAnswerBotClicked());
@@ -415,7 +418,6 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
         emojiPane.getChildren().forEach(c -> {
             if(c instanceof ImageView) {
                 c.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
-                System.out.println("Setting cursors...");
             }
         });
 
