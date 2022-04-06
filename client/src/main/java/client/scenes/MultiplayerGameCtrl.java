@@ -75,7 +75,6 @@ public class MultiplayerGameCtrl {
     private static final int POLLING_INTERVAL = 500;
     private static final double OPACITY = 0.5;
     private static final double STANDARD_SIZE = 1.0;
-    public static final double RGB_VALUE = (double) 244/255;
     protected static final int KICK_AT_X_QUESTIONS = 3;
 
     // TODO: add results and resultsCtrl
@@ -485,7 +484,7 @@ public class MultiplayerGameCtrl {
      */
     public void enableJoker(StackPane joker){
         joker.setBackground(new Background(
-                new BackgroundFill(Color.color(RGB_VALUE, RGB_VALUE, RGB_VALUE), CornerRadii.EMPTY, Insets.EMPTY)));
+                new BackgroundFill(Color.web("#D6EAF8"), CornerRadii.EMPTY, Insets.EMPTY)));
         joker.setOpacity(STANDARD_SIZE);
     }
 

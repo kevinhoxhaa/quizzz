@@ -216,7 +216,7 @@ public class MultiplayerEstimationQuestionCtrl extends AbstractEstimationQuestio
         for (StackPane joker : jokers) {
             if (!gameCtrl.getUsedJokers().contains(joker.idProperty().getValue()) && joker != removeIncorrect) {
                 joker.setBackground(new Background(
-                        new BackgroundFill(Color.color(gameCtrl.RGB_VALUE,gameCtrl.RGB_VALUE,gameCtrl.RGB_VALUE),
+                        new BackgroundFill(Color.web("#D6EAF8"),
                                 CornerRadii.EMPTY, Insets.EMPTY)));
             }
         }
