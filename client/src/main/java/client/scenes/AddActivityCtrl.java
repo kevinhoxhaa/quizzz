@@ -1,8 +1,10 @@
 package client.scenes;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Modality;
 
 import javax.inject.Inject;
 
@@ -38,24 +40,34 @@ public class AddActivityCtrl {
      */
     @FXML
     public void onOkButton () {
-
-        String idValue = id.getText();
-        int idInteger;
-        if ( idValue.isEmpty() ) {
-            idInteger = 0;
+        if ( identifier.getText().isEmpty() ||
+             title.getText().isEmpty() ||
+             answer.getText().isEmpty() ||
+             source.getText().isEmpty() ||
+             imagePath.getText().isEmpty() ) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText ( "All fields ( except id ) have to be completed!" );
+            alert.showAndWait();
         } else {
-            idInteger = Integer.parseInt(idValue);
-        }
+            String idValue = id.getText();
+            int idInteger;
+            if (idValue.isEmpty()) {
+                idInteger = 0;
+            } else {
+                idInteger = Integer.parseInt(idValue);
+            }
 
-        adminPanelCtrl.addNewActivity(
-                identifier.getText(),
-                title.getText(),
-                Integer.parseInt( answer.getText() ),
-                source.getText(),
-                imagePath.getText(),
-                idInteger
-        );
-        cancel();
+            adminPanelCtrl.addNewActivity(
+                    identifier.getText(),
+                    title.getText(),
+                    Integer.parseInt(answer.getText()),
+                    source.getText(),
+                    imagePath.getText(),
+                    idInteger
+            );
+            cancel();
+        }
     }
 
     /**
