@@ -29,13 +29,20 @@ public class DeleteActivityCtrl {
         if ( id.getText().isEmpty() ) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText("All fields ( except id ) have to be completed!");
+            alert.setContentText (" ID field can't be empty" );
             alert.showAndWait();
         } else {
-            adminPanelCtrl.deleteActivity(
-                    Integer.parseInt(id.getText())
-            );
-            cancel();
+            try {
+                adminPanelCtrl.deleteActivity(
+                        Integer.parseInt(id.getText())
+                );
+                cancel();
+            } catch ( Exception e ) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setContentText ( "This ID does not exist");
+                alert.showAndWait();
+            }
         }
     }
 

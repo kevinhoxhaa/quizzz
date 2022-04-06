@@ -57,16 +57,25 @@ public class AddActivityCtrl {
             } else {
                 idInteger = Integer.parseInt(idValue);
             }
-
-            adminPanelCtrl.addNewActivity(
-                    identifier.getText(),
-                    title.getText(),
-                    Integer.parseInt(answer.getText()),
-                    source.getText(),
-                    imagePath.getText(),
-                    idInteger
-            );
-            cancel();
+            
+            int consumption;
+            try {
+                consumption = Integer.parseInt(answer.getText());
+                adminPanelCtrl.addNewActivity(
+                        identifier.getText(),
+                        title.getText(),
+                        consumption,
+                        source.getText(),
+                        imagePath.getText(),
+                        idInteger
+                );
+                cancel();
+            } catch ( Exception e ){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setContentText ( "The answer must be a number!" );
+                alert.showAndWait();
+            }
         }
     }
 

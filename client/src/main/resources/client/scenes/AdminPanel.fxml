@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane minHeight="694.0" minWidth="1014.0" onMouseClicked="#onAddActivityButton" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminPanelCtrl">
+<AnchorPane minHeight="694.0" minWidth="1014.0" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminPanelCtrl">
    <children>
       <Button layoutX="17.0" layoutY="186.0" mnemonicParsing="false" onAction="#showActivities" prefHeight="71.0" prefWidth="116.0" text="Show Activities">
          <font>
