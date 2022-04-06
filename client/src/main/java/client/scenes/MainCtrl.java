@@ -119,6 +119,15 @@ public class MainCtrl {
     private MultiplayerResultsCtrl multiplayerResultsCtrl;
     private Scene multiplayerResults;
 
+    private AdminPanelCtrl adminPanelCtrl;
+    private Scene adminPanel;
+
+    private AddActivityCtrl addActivityCtrl;
+    private Scene addActivity;
+
+    private DeleteActivityCtrl deleteActivityCtrl;
+    private Scene deleteActivity;
+
     private HelpCtrl helpCtrl;
     private Scene help;
 
@@ -143,6 +152,9 @@ public class MainCtrl {
                            Pair<SoloAnswerCtrl, Parent> soloAnswer,
                            Pair<SoloResultsCtrl, Parent> soloResults,
                            Pair<MultiplayerResultsCtrl, Parent> multiplayerResults,
+                           Pair<AdminPanelCtrl, Parent> adminPanel,
+                           Pair<AddActivityCtrl, Parent> addActivity,
+                           Pair<DeleteActivityCtrl, Parent> deleteActivity ) {
                            Pair<HelpCtrl, Parent> help
                            ) {
         this.primaryStage = primaryStage;
@@ -218,6 +230,15 @@ public class MainCtrl {
         this.multiplayerResults = new Scene(multiplayerResults.getValue());
         this.multiplayerResults.getStylesheets().add(STYLES_PATH);
         this.multiplayerResults.setCursor(new ImageCursor(pointerCursor));
+
+        this.adminPanelCtrl = adminPanel.getKey();
+        this.adminPanel = new Scene( adminPanel.getValue() );
+
+        this.addActivityCtrl = addActivity.getKey();
+        this.addActivity = new Scene( addActivity.getValue() );
+
+        this.deleteActivityCtrl = deleteActivity.getKey();
+        this.deleteActivity = new Scene( deleteActivity.getValue() );
 
         this.helpCtrl = help.getKey();
         this.help = new Scene(help.getValue());
@@ -313,6 +334,24 @@ public class MainCtrl {
     }
 
     /**
+     * Returns the addActivityScene
+     * @return the addActivityScene
+     */
+
+    public Scene getAddActivityScene() {
+        return this.addActivity;
+    }
+
+    /**
+     * Returns the deleteActivityScene
+     * @return the deleteActivityScene
+     */
+
+    public Scene getDeleteActivityScene() {
+        return this.deleteActivity;
+    }
+
+    /**
      * Shows the home page of the quiz application on the primary
      * stage
      */
@@ -320,6 +359,18 @@ public class MainCtrl {
         primaryStage.setTitle("Quizzz");
         primaryStage.setScene(home);
         homeCtrl.setFonts();
+    }
+
+    public void showAdminPanel() {
+        try {
+            adminPanelCtrl.refreshActivities();
+        } catch (Exception e) {
+            invalidURL();
+            return;
+        }
+        primaryStage.setTitle( "Admin Panel");
+        primaryStage.setScene(adminPanel);
+        primaryStage.show();
     }
 
     /**
@@ -525,23 +576,39 @@ public class MainCtrl {
      * Resets the state of the solo game
      */
     public void startSoloGame() {
-        answerCount = 0;
-        getUser().resetScore();
-        colors = new ArrayList<>();
+        try {
+            answerCount = 0;
+            getUser().resetScore();
+            colors = new ArrayList<>();
 
-        soloQuestionCtrl.resetCircleColor();
-        soloAnswerCtrl.resetCircleColor();
-        resetStreak();
+            soloQuestionCtrl.resetCircleColor();
+            soloAnswerCtrl.resetCircleColor();
+            resetStreak();
 
-        SoloGame soloGame = server.getSoloGame(server.getURL(), QUESTIONS_PER_GAME);
-        primaryStage.setTitle("Solo game");
+            SoloGame soloGame = server.getSoloGame(serverUrl, QUESTIONS_PER_GAME);
+            primaryStage.setTitle("Solo game");
 
-        if(soloGame.loadCurrentQuestion().getType() == QuestionType.ESTIMATION){
-            showSoloEstimationQuestion(soloGame);
+            if(soloGame.loadCurrentQuestion().getType() == QuestionType.ESTIMATION){
+                showSoloEstimationQuestion(soloGame);
+            }
+            else {
+                showSoloQuestion(soloGame);
+            }
+        } catch (Exception e) {
+            invalidURL();
+            return;
         }
-        else {
-            showSoloQuestion(soloGame);
-        }
+    }
+
+    /**
+     * Alerts the user about the invalid URL
+     */
+    protected void invalidURL() {
+        var alert = new Alert(Alert.AlertType.ERROR);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setContentText("Invalid server URL!");
+        alert.showAndWait();
+        return;
     }
 
     /**
