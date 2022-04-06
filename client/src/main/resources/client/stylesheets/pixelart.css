@@ -99,3 +99,15 @@
 #questionMark{
     -fx-image: url("../icons/help.png");
 }
+#x2Points,
+#doublePointsImage{
+    -fx-image: url("../images/x2points.png");
+}
+#minusOne,
+#removeIncorrectImage{
+    -fx-image: url("../images/removechoice.png");
+}
+#halfTime,
+#reduceTimeImage{
+    -fx-image: url("../images/half-time.png");
+}
