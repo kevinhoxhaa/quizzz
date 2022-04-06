@@ -332,7 +332,7 @@ public class MainCtrl {
         primaryStage.setTitle( "Admin Panel");
         primaryStage.setScene(adminPanel);
         primaryStage.show();
-        adminPanelCtrl.showActivities();
+        adminPanelCtrl.refreshActivities();
     }
 
     /**
@@ -547,7 +547,7 @@ public class MainCtrl {
         soloAnswerCtrl.resetCircleColor();
         resetStreak();
 
-        SoloGame soloGame = server.getSoloGame(server.getURL(), QUESTIONS_PER_GAME);
+        SoloGame soloGame = server.getSoloGame(getServerUrl(), QUESTIONS_PER_GAME);
         primaryStage.setTitle("Solo game");
 
         if(soloGame.loadCurrentQuestion().getType() == QuestionType.ESTIMATION){

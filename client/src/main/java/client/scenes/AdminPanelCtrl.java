@@ -130,6 +130,7 @@ public class AdminPanelCtrl {
                 server.getURL(),
                 activity
         );
+        refreshActivities();
     }
 
     /**
@@ -138,7 +139,7 @@ public class AdminPanelCtrl {
      */
 
     @FXML
-    public void showActivities() {
+    public void refreshActivities() {
         List<Activity> activityList = server.getActivities ( server.getURL() );
 
         ObservableList<Activity> observableList = FXCollections.observableArrayList(activityList);
@@ -170,6 +171,7 @@ public class AdminPanelCtrl {
     public void deleteActivity ( int id ) {
         Activity activity = server.findActivityByID ( server.getURL(), id );
         server.deleteActivityFromRepo ( server.getURL(), activity );
+        refreshActivities();
     }
 
     /**

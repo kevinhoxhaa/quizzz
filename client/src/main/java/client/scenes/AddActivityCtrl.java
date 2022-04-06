@@ -69,6 +69,7 @@ public class AddActivityCtrl {
                         imagePath.getText(),
                         idInteger
                 );
+
                 cancel();
             } catch ( Exception e ){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
