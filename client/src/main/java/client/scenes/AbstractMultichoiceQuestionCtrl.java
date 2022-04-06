@@ -51,6 +51,8 @@ public abstract class AbstractMultichoiceQuestionCtrl extends AbstractQuestionCt
     @FXML
     protected Label answerBotText;
 
+    private static final double TIMER_LENGTH = 10.0;
+
     /**
      * Creates a controller for the question screen, with the given server and main controller.
      *
@@ -293,5 +295,14 @@ public abstract class AbstractMultichoiceQuestionCtrl extends AbstractQuestionCt
         for (StackPane answerBtn : answerButtons) {
             answerBtn.setStyle("-fx-border-width: 4; -fx-border-color: black");
         }
+    }
+
+    /**
+     * Returns the length of the timer in this scene
+     * @return the length of the timer in this scene
+     */
+    @Override
+    public double getTimerLength(){
+        return TIMER_LENGTH;
     }
 }

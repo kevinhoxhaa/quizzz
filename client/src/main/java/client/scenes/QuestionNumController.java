@@ -90,4 +90,10 @@ public abstract class QuestionNumController{
     public void redirect(){}
 
     public void onQuit(){}
+
+    /**
+     * Returns the length of the timer in this scene
+     * @return the length of the timer in this scene
+     */
+    public abstract double getTimerLength();
 }

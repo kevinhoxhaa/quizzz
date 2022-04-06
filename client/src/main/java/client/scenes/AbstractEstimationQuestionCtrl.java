@@ -15,6 +15,8 @@ public abstract class AbstractEstimationQuestionCtrl extends AbstractQuestionCtr
     @FXML
     protected Text yourAnswer;
 
+    private static final double TIMER_LENGTH = 12.0;
+
     /**
      * Creates a controller for the estimation question screen,
      * with the given server and main controller
@@ -55,6 +57,12 @@ public abstract class AbstractEstimationQuestionCtrl extends AbstractQuestionCtr
         }
     }
 
-
-
+    /**
+     * Returns the length of the timer in this scene
+     * @return the length of the timer in this scene
+     */
+    @Override
+    public double getTimerLength(){
+        return TIMER_LENGTH;
+    }
 }

@@ -30,6 +30,8 @@ public abstract class AbstractAnswerCtrl extends QuestionNumController{
     @FXML
     protected ProgressIndicator countdownCircle;
 
+    private static final double TIMER_LENGTH = 6.0;
+
     /**
      * A constructor for this class
      * @param mainCtrl
@@ -148,4 +150,13 @@ public abstract class AbstractAnswerCtrl extends QuestionNumController{
      * Starts the timer circle
      */
     protected abstract void startTimer();
+
+    /**
+     * Returns the length of the timer in this scene
+     * @return the length of the timer in this scene
+     */
+    @Override
+    public double getTimerLength(){
+        return TIMER_LENGTH;
+    }
 }
