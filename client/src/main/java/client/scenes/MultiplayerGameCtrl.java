@@ -300,7 +300,7 @@ public class MultiplayerGameCtrl {
      * @return the ranked users
      */
     public List<MultiplayerUser> fetchRanking() {
-        return server.getRanking(serverUrl, gameIndex);
+        return server.getRanking(serverUrl, mainCtrl.getGameIndex());
     }
 
     /**
