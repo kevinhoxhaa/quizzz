@@ -33,6 +33,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
@@ -59,6 +60,8 @@ public class MainCtrl {
     private static final int QUESTIONS_PER_GAME = 20;
     private static final double ALERT_POSITION_Y = 250;
     private static final double ALERT_POSITION_X = 387;
+    private static final double ALERT_SIZE = 50;
+
 
     //These are the variables used in the streak calculation formula
     private static final long X1 = 1;
@@ -704,6 +707,36 @@ public class MainCtrl {
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setY(ALERT_POSITION_Y);
         alert.setX(ALERT_POSITION_X);
+        switch(alert.getAlertType()){
+            case ERROR:
+                ImageView error =
+                        new ImageView(this.getClass().getResource("/client/images/thonk.png").toString());
+                error.setFitHeight(ALERT_SIZE);
+                error.setFitWidth(ALERT_SIZE);
+                alert.setGraphic(error);
+                break;
+            case WARNING:
+                ImageView warning =
+                        new ImageView(this.getClass().getResource("/client/images/warning_alert.png").toString());
+                warning.setFitHeight(ALERT_SIZE);
+                warning.setFitWidth(ALERT_SIZE);
+                alert.setGraphic(warning);
+                break;
+            case CONFIRMATION:
+                ImageView confirmation =
+                        new ImageView(this.getClass().getResource("/client/images/confirmation.png").toString());
+                confirmation.setFitHeight(ALERT_SIZE);
+                confirmation.setFitWidth(ALERT_SIZE);
+                alert.setGraphic(confirmation);
+                break;
+            case INFORMATION:
+                ImageView information =
+                        new ImageView(this.getClass().getResource("/client/images/info.png").toString());
+                information.setFitHeight(ALERT_SIZE);
+                information.setFitWidth(ALERT_SIZE);
+                alert.setGraphic(information);
+                break;
+        }
         return alert;
     }
 
