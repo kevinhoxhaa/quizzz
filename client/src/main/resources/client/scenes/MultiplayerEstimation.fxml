@@ -60,20 +60,14 @@
                                         <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="296.0">
                                             <children>
                                                 <TextField fx:id="userInput" prefWidth="192.0" styleClass="pixelField" />
-                                                <Button mnemonicParsing="false" onAction="#onSubmit" styleClass="arrowButton">
+                                                <Button fx:id="submitButton" mnemonicParsing="false" onAction="#onSubmit" styleClass="arrowButton">
                                                     <graphic>
-                                                        <ImageView fx:id="submitButton" fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true" styleClass="frontArrowImage">
+                                                        <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true" styleClass="frontArrowImage">
                                                             <image>
                                                                 <Image url="@../icons/front.png" />
                                                             </image>
-                                                            <cursor>
-                                                                <Cursor fx:constant="HAND" />
-                                                            </cursor>
                                                         </ImageView>
                                                     </graphic>
-                                                    <cursor>
-                                                        <Cursor fx:constant="HAND" />
-                                                    </cursor>
                                                 </Button>
                                             </children>
                                         </HBox>
@@ -118,7 +112,7 @@
                 </HBox>
                 <VBox prefHeight="149.0" prefWidth="175.0">
                     <children>
-                        <StackPane fx:id="doublePoints" onMouseClicked="#useDoublePoints" onMouseEntered="#enterDoublePoints" onMouseExited="#resetJokerColors" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;" styleClass="rectangularPane" VBox.vgrow="ALWAYS">
+                        <StackPane fx:id="doublePoints" onMouseClicked="#useDoublePoints" onMouseEntered="#enterDoublePoints" onMouseExited="#resetJokerColors" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;" styleClass="answerButton" VBox.vgrow="ALWAYS">
                             <VBox.margin>
                                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                             </VBox.margin>
@@ -138,11 +132,8 @@
                                     </children>
                                 </AnchorPane>
                             </children>
-                            <cursor>
-                                <Cursor fx:constant="HAND" />
-                            </cursor>
                         </StackPane>
-                        <StackPane fx:id="removeIncorrect" onMouseEntered="#enterRemoveIncorrect" onMouseExited="#resetJokerColors" prefHeight="150.0" prefWidth="271.0" style="-fx-border-color: black;" styleClass="rectangularPane" VBox.vgrow="ALWAYS">
+                        <StackPane fx:id="removeIncorrect" onMouseEntered="#enterRemoveIncorrect" onMouseExited="#resetJokerColors" prefHeight="150.0" prefWidth="271.0" style="-fx-border-color: black;" styleClass="answerButton" VBox.vgrow="ALWAYS">
                             <opaqueInsets>
                                 <Insets />
                             </opaqueInsets>
@@ -165,11 +156,8 @@
                                     </children>
                                 </AnchorPane>
                             </children>
-                            <cursor>
-                                <Cursor fx:constant="HAND" />
-                            </cursor>
                         </StackPane>
-                        <StackPane fx:id="reduceTime" onMouseEntered="#enterReduceTime" onMouseExited="#resetJokerColors" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;" styleClass="rectangularPane" VBox.vgrow="ALWAYS">
+                        <StackPane fx:id="reduceTime" onMouseEntered="#enterReduceTime" onMouseExited="#resetJokerColors" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;" styleClass="answerButton" VBox.vgrow="ALWAYS">
                             <VBox.margin>
                                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                             </VBox.margin>
@@ -189,9 +177,6 @@
                                     </children>
                                 </AnchorPane>
                             </children>
-                            <cursor>
-                                <Cursor fx:constant="HAND" />
-                            </cursor>
                         </StackPane>
                     </children>
                 </VBox>
@@ -259,9 +244,6 @@
                     <font>
                         <Font name="Monospaced Regular" size="20.0" />
                     </font>
-                    <cursor>
-                        <Cursor fx:constant="HAND" />
-                    </cursor>
                 </Button>
                 <Pane layoutX="240.0" layoutY="14.0" prefHeight="52.0" prefWidth="228.0">
                     <children>

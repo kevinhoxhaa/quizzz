@@ -199,9 +199,9 @@
                                         <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="296.0">
                                             <children>
                                                 <TextField styleClass="pixelField" fx:id="userInput" prefWidth="256.0" />
-                                                <Button styleClass="arrowButton" mnemonicParsing="false" onAction="#onSubmit">
+                                                <Button fx:id="submitButton" styleClass="arrowButton" mnemonicParsing="false" onAction="#onSubmit">
                                                     <graphic>
-                                                        <ImageView styleClass="frontArrowImage" fx:id="submitButton" fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                                                        <ImageView styleClass="frontArrowImage" fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                                                             <image>
                                                                 <Image url="@../icons/front.png" />
                                                             </image>
