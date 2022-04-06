@@ -34,6 +34,7 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -494,23 +495,39 @@ public class MainCtrl {
      * Resets the state of the solo game
      */
     public void startSoloGame() {
-        answerCount = 0;
-        getUser().resetScore();
-        colors = new ArrayList<>();
+        try {
+            answerCount = 0;
+            getUser().resetScore();
+            colors = new ArrayList<>();
 
-        soloQuestionCtrl.resetCircleColor();
-        soloAnswerCtrl.resetCircleColor();
-        resetStreak();
+            soloQuestionCtrl.resetCircleColor();
+            soloAnswerCtrl.resetCircleColor();
+            resetStreak();
 
-        SoloGame soloGame = server.getSoloGame(server.getURL(), QUESTIONS_PER_GAME);
-        primaryStage.setTitle("Solo game");
+            SoloGame soloGame = server.getSoloGame(serverUrl, QUESTIONS_PER_GAME);
+            primaryStage.setTitle("Solo game");
 
-        if(soloGame.loadCurrentQuestion().getType() == QuestionType.ESTIMATION){
-            showSoloEstimationQuestion(soloGame);
+            if(soloGame.loadCurrentQuestion().getType() == QuestionType.ESTIMATION){
+                showSoloEstimationQuestion(soloGame);
+            }
+            else {
+                showSoloQuestion(soloGame);
+            }
+        } catch (Exception e) {
+            invalidURL();
+            return;
         }
-        else {
-            showSoloQuestion(soloGame);
-        }
+    }
+
+    /**
+     * Alerts the user about the invalid URL
+     */
+    protected void invalidURL() {
+        var alert = new Alert(Alert.AlertType.ERROR);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setContentText("Invalid server URL!");
+        alert.showAndWait();
+        return;
     }
 
     /**
