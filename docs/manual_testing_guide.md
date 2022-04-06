@@ -1,11 +1,11 @@
 ## Introduction
 
-This is a brief description of all the funtionality that we expect of the client side of the app. If the user finds that everything in the app is in accordance with this document, that means that the app has passed manual testing.
+This is a brief description of all the functionality that we expect from the client side of the app. If the user finds that everything in the app is in accordance with this document, that means that the app has passed manual testing.
 
 ## Visual design
 
 On all screens...
-- The visual design shoul revolve around pixel-art
+- The visual design should revolve around pixel-art
 - Texts should use either a pixel-art, or a monospace typeface
 - There should be custom cursors, at least one for clickable and one for non-clickable surfaces
 
@@ -29,6 +29,7 @@ On the given screen, the user should…
 - Be able to edit an existing activity
 - Be able to delete an activity
 - Be able to refresh the list of activities
+- Be able to return to the home screen
 
 ### Solo question screen
 - See the text corresponding to the current question
@@ -39,7 +40,8 @@ On the given screen, the user should…
 - See their current score, which should be the same as the score shown on the previous answer screen, or 0 for the first question
 - Be able to change the color of the buttons by hovering over them
 - Be able to select an answer and have its color changed
-- See a timer that is counting down until the time when the user is redirected to the answer page
+- See a timer that is counting down to zero, after which the user will be redirected to the answer page
+- Be able to leave the game, after confirming that's what they want to do
 
 ### Solo estimation screen
 - See the text corresponding to the current question
@@ -49,7 +51,8 @@ On the given screen, the user should…
 - See their current score, which should be the same as the score shown on the previous answer screen, or 0 for the first question
 - Be able to enter an answer
 - After clicking the arrow button, see their last answer - the one that will be submitted
-- See a timer that is counting down until the time when the user is redirected to the answer page
+- See a timer that is counting down to zero, after which the user will be redirected to the answer page
+- Be able to leave the game, after confirming that's what they want to do
 
 ### Solo answer screen
 - See the text corresponding to the previous question
@@ -59,7 +62,8 @@ On the given screen, the user should…
 - See the number of the current question, starting at 1
 - See the red/green/grey circles, corresponding to each of the questions in the game
 - See their current score, which should be the sum of the score shown on the previous question screen and the score the user got for that question
-- See a timer that is counting down until the time when the user is redirected to the next question or the results page
+- See a timer that is counting down to zero, after which the user will be redirected to the next question or the results page
+- Be able to leave the game, after confirming that's what they want to do
 
 ### Solo results screen
 - See their own username with their score
@@ -73,14 +77,15 @@ On the given screen, the user should…
 - See the number of users currently in the waiting room
 - See the usernames of users currently in the waiting room
 - Be able to start a multiplayer game
+- Be able to return to the home page
 
 ### Multiplayer question/estimation screen
 - Have all of the functionality of the solo question/estimation screen
 - Be able to use the time reduction joker
 - Be able to use the double points joker
-- Be able to use the disable incorrect answer joker (only for multichoice questions)
+- Be able to use the disable incorrect answer joker (only for multiple choice questions)
 - Have the used jokers disabled for the rest of the game
-- Have the disabled incorrect answer visually signified and not clickable (only for multichoice questions)
+- Have the disabled incorrect answer visually signified and not clickable (only for multiple choice questions)
 - See an icon when they are currently using a joker
 - Be able to click emojis to send them to all players in the current game
 - See emojis sent by other players in the current game
@@ -94,15 +99,16 @@ On the given screen, the user should…
 ### Ranking screen
 - See the number of the last question (10)
 - See the red/green/grey circles, corresponding to each of the questions in the game
-- See a timer that is counting down until the time when the user is redirected to the next question
+- See a timer that is counting down to zero, after which the user will be redirected to the next question
 - See the users in the game with their corresponding scores, ordered by scores
 - See the top 3 users on a podium
 - Have their own username and score highlighted below the ranking table
+- Be able to leave the game, after confirming that's what they want to do
 
 ### Multiplayer results screen
 - See the number of the last question (20)
 - See the red/green circles, corresponding to each of the questions in the game
-- See a timer that is counting down the time when the user is able to sign up for a rematch
+- See a timer that is counting down to zero, after which the user is unable to sign up for a rematch
 - See the users in the game with their corresponding scores, ordered by scores
 - See the top 3 users on a podium
 - Have their own username and score highlighted below the ranking table
