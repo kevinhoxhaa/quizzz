@@ -7,6 +7,14 @@
     -fx-padding: 10 20 10 20;
 }
 
+.pixelField:hover {
+    -fx-background-color: #D4E6F1;
+}
+
+.answerButton {
+    -fx-border-width: 4;
+}
+
 .pixelButton {
     -fx-background-image: url("../images/pixelborder.png");
     -fx-font-family: ARCADECLASSIC;
@@ -91,6 +99,15 @@
 #questionMark{
     -fx-image: url("../icons/help.png");
 }
-#podium{
-    -fx-image: url("../images/leaderboard.png");
+#x2Points,
+#doublePointsImage{
+    -fx-image: url("../images/x2points.png");
+}
+#minusOne,
+#removeIncorrectImage{
+    -fx-image: url("../images/removechoice.png");
+}
+#halfTime,
+#reduceTimeImage{
+    -fx-image: url("../images/half-time.png");
 }

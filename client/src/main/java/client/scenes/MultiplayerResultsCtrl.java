@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.ImageCursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableColumn;
@@ -171,5 +172,14 @@ public class MultiplayerResultsCtrl extends AbstractRankingCtrl {
     @Override
     public void highlightCurrentCircle() {
         highlightCurrentCircle(gameCtrl.getAnswerCount());
+    }
+
+    /**
+     * Sets the hover cursors to all buttons to hand
+     */
+    @Override
+    public void setupHoverCursor() {
+        quitButton.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+        rematchButton.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
     }
 }

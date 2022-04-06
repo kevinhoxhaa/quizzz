@@ -172,31 +172,31 @@ public class GameControllerTest {
     @Test
     public void deleteUserReturnsBadRequestOnInvalidGameIndex() {
         Integer gameIndex = sut.startGame((int) NUMBER).getBody();
-        assertTrue(sut.deleteUser(gameIndex+1, 1).getStatusCode().is4xxClientError());
+        assertTrue(sut.deleteUserFromGame(gameIndex+1, 1).getStatusCode().is4xxClientError());
     }
 
     @Test
     public void deleteUserReturnsBadRequestOnNegativeGameIndex() {
         Integer gameIndex = sut.startGame((int) NUMBER).getBody();
-        assertTrue(sut.deleteUser(-1, 1).getStatusCode().is4xxClientError());
+        assertTrue(sut.deleteUserFromGame(-1, 1).getStatusCode().is4xxClientError());
     }
 
     @Test
     public void deleteUserReturnsBadRequestOnInvalidUserId() {
         Integer gameIndex = sut.startGame((int) NUMBER).getBody();
-        assertTrue(sut.deleteUser(gameIndex, NUMBER).getStatusCode().is4xxClientError());
+        assertTrue(sut.deleteUserFromGame(gameIndex, NUMBER).getStatusCode().is4xxClientError());
     }
 
     @Test
     public void deleteUserReturnsBadRequestOnNegativeUserId() {
         Integer gameIndex = sut.startGame((int) NUMBER).getBody();
-        assertTrue(sut.deleteUser(gameIndex, -1).getStatusCode().is4xxClientError());
+        assertTrue(sut.deleteUserFromGame(gameIndex, -1).getStatusCode().is4xxClientError());
     }
 
     @Test
     public void deleteUserReturnsOkRequestOnValidParameters() {
         Integer gameIndex = sut.startGame((int) NUMBER).getBody();
-        assertTrue(sut.deleteUser(gameIndex, NUMBER-1).getStatusCode().is2xxSuccessful());
+        assertTrue(sut.deleteUserFromGame(gameIndex, NUMBER-1).getStatusCode().is2xxSuccessful());
     }
 
     @Test
@@ -206,7 +206,7 @@ public class GameControllerTest {
         for (int i = 0; i < NUMBER-1; i++) {
             expected.add((long) i);
         }
-        assertEquals(expected, sut.deleteUser(gameIndex, NUMBER-1).getBody());
+        assertEquals(expected, sut.deleteUserFromGame(gameIndex, NUMBER-1).getBody());
     }
 
     @Test
@@ -250,13 +250,14 @@ public class GameControllerTest {
         sut.addRestartUser(gameIndex, 1);
         sut.addRestartUser(gameIndex, 2);
         sut.restartGame(gameIndex, (int) NUMBER, 1);
-        assertEquals(List.of((long) 2), sut.getGameList().getBody().getGames().get(gameIndex).getRestartUserIds());
+        assertEquals(List.of((long) 2), sut.getGameList().getBody().getGames()
+                .get((long) gameIndex).getRestartUserIds());
     }
 
     @Test
     public void restartGameSetsNewQuestionsOnFirstRequest() {
         Integer gameIndex = sut.startGame((int) NUMBER).getBody();
-        Game game = sut.getGameList().getBody().getGames().get(gameIndex);
+        Game game = sut.getGameList().getBody().getGames().get((long) gameIndex);
         List<Question> oldQuestions = game.getQuestions();
         sut.addRestartUser(gameIndex, 1);
         sut.restartGame(gameIndex, (int) NUMBER, 1);
@@ -266,7 +267,7 @@ public class GameControllerTest {
     @Test
     public void restartGameDoesNotSetNewQuestionsOnSecondRequest() {
         Integer gameIndex = sut.startGame((int) NUMBER).getBody();
-        Game game = sut.getGameList().getBody().getGames().get(gameIndex);
+        Game game = sut.getGameList().getBody().getGames().get((long) gameIndex);
         sut.addRestartUser(gameIndex, 1);
         sut.addRestartUser(gameIndex, 2);
         sut.restartGame(gameIndex, (int) NUMBER, 1);
@@ -278,7 +279,7 @@ public class GameControllerTest {
     @Test
     public void restartGameSetsNewQuestionsOnSecondRestart() {
         Integer gameIndex = sut.startGame((int) NUMBER).getBody();
-        Game game = sut.getGameList().getBody().getGames().get(gameIndex);
+        Game game = sut.getGameList().getBody().getGames().get((long) gameIndex);
         sut.addRestartUser(gameIndex, 1);
         sut.restartGame(gameIndex, (int) NUMBER, 1);
         List<Question> oldQuestions = game.getQuestions();
@@ -290,7 +291,7 @@ public class GameControllerTest {
     @Test
     public void restartGameReturnsFirstQuestion() {
         Integer gameIndex = sut.startGame((int) NUMBER).getBody();
-        Game game = sut.getGameList().getBody().getGames().get(gameIndex);
+        Game game = sut.getGameList().getBody().getGames().get((long) gameIndex);
         sut.addRestartUser(gameIndex, 1);
         Question returned = sut.restartGame(gameIndex, (int) NUMBER, 1).getBody();
         Question expected = game.getQuestions().get(0);
