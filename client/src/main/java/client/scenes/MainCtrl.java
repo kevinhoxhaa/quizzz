@@ -193,6 +193,7 @@ public class MainCtrl {
         this.soloAnswerCtrl = soloAnswer.getKey();
         this.soloAnswer = new Scene(soloAnswer.getValue());
         this.soloAnswer.getStylesheets().add(STYLES_PATH);
+        this.soloAnswer.setCursor(new ImageCursor(pointerCursor));
 
         this.soloResultsCtrl = soloResults.getKey();
         this.soloResults = new Scene(soloResults.getValue());
@@ -623,6 +624,7 @@ public class MainCtrl {
         alert.setContentText("Are you sure you want to quit?");
         ButtonType okButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
         ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
+        alert.getDialogPane().setCursor(new ImageCursor(new Image("client/images/arrowcursor.png")));
         alert.getButtonTypes().setAll(okButton, noButton);
         alert.showAndWait().ifPresent(type -> {
             if (type == okButton) {

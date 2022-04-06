@@ -107,6 +107,7 @@ public class HomeCtrl {
         ScrollPane dialogPane = loader.load();
         Scene dialogScene = new Scene(dialogPane);
         dialog.setScene(dialogScene);
+        dialog.getScene().setCursor(new ImageCursor(new Image("client/images/arrowcursor.png")));
         dialog.show();
     }
 
