@@ -155,13 +155,8 @@ public class HomeCtrl {
 
     @FXML
     public void onAdminPanelClick() {
-        try {
-            String serverUrl = urlField.getText();
-            mainCtrl.setServerUrl(serverUrl.toLowerCase(Locale.ROOT));
-        } catch (Exception e) {
-            invalidURL();
-            return;
-        }
+        String serverUrl = urlField.getText();
+        mainCtrl.setServerUrl(serverUrl.toLowerCase(Locale.ROOT));
         mainCtrl.showAdminPanel();
     }
 
