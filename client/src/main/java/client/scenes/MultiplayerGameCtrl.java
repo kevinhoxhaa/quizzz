@@ -45,7 +45,6 @@ public class MultiplayerGameCtrl {
     private MainCtrl mainCtrl;
     private ServerUtils server;
 
-    private int gameIndex;
     private MultiplayerUser user;
 
     private String serverUrl;
@@ -88,16 +87,14 @@ public class MultiplayerGameCtrl {
      * @param estimationQuestion the estimation question controller-scene pair
      * @param answer the answer controller-scene pair
      * @param ranking the ranking controller-scene pair
-     * @param gameIndex the index of the multiplayer game
      * @param results The results controller-scene pair.
      */
-    public MultiplayerGameCtrl(int gameIndex, MainCtrl mainCtrl, ServerUtils server,
+    public MultiplayerGameCtrl(MainCtrl mainCtrl, ServerUtils server,
                                Pair<MultiplayerQuestionCtrl, Scene> mcQuestion,
                                Pair<MultiplayerEstimationQuestionCtrl, Scene> estimationQuestion,
                                Pair<MultiplayerAnswerCtrl, Scene> answer,
                                Pair<RankingCtrl, Scene> ranking,
                                Pair<MultiplayerResultsCtrl, Scene> results) {
-        this.gameIndex = gameIndex;
         this.mainCtrl = mainCtrl;
 
         this.server = server;
@@ -167,7 +164,7 @@ public class MultiplayerGameCtrl {
      * @return the next question
      */
     public Question fetchQuestion() {
-        return server.getQuestion(serverUrl, gameIndex, answerCount);
+        return server.getQuestion(serverUrl, mainCtrl.getGameIndex(), answerCount);
     }
 
     /**
@@ -219,11 +216,11 @@ public class MultiplayerGameCtrl {
      */
     public List<MultiplayerUser> fetchCorrectUsers(Question answeredQuestion) throws WebApplicationException {
         if(isActiveDoublePoints){
-            return server.answerDoublePointsQuestion(serverUrl, gameIndex,
+            return server.answerDoublePointsQuestion(serverUrl, mainCtrl.getGameIndex(),
                     mainCtrl.getUser().id, answerCount, answeredQuestion);
         }
         else{
-            return server.answerQuestion(serverUrl, gameIndex,
+            return server.answerQuestion(serverUrl, mainCtrl.getGameIndex(),
                     mainCtrl.getUser().id, answerCount, answeredQuestion);
         }
     }
@@ -303,7 +300,7 @@ public class MultiplayerGameCtrl {
      * @return the ranked users
      */
     public List<MultiplayerUser> fetchRanking() {
-        return server.getRanking(serverUrl, gameIndex);
+        return server.getRanking(serverUrl, mainCtrl.getGameIndex());
     }
 
     /**
@@ -388,7 +385,7 @@ public class MultiplayerGameCtrl {
      * @return the game index
      */
     public int getGameIndex() {
-        return gameIndex;
+        return mainCtrl.getGameIndex();
     }
 
     /**
@@ -397,14 +394,14 @@ public class MultiplayerGameCtrl {
      */
     public void registerForEmojis(EmojiController ctrl) {
         emojiSubscription = server.registerForMessages(
-                "/topic/emoji/" + gameIndex,
+                "/topic/emoji/" + mainCtrl.getGameIndex(),
                 Emoji.class,
                 ctrl::displayEmoji
         );
     }
 
     public void registerForHalfTime () {
-        halfTimeSubscription = server.registerForMessages( "/topic/halfTime/" + gameIndex,
+        halfTimeSubscription = server.registerForMessages( "/topic/halfTime/" + mainCtrl.getGameIndex(),
                 MultiplayerUser.class ,
                 (user) -> mainCtrl.halfTime(user) );
     }
@@ -418,7 +415,7 @@ public class MultiplayerGameCtrl {
         String imageName = imageComponents[imageComponents.length - 1];
         String username = user.username;
         server.send(
-                "/app/emoji/" + gameIndex,
+                "/app/emoji/" + mainCtrl.getGameIndex(),
                 new Emoji(imageName, username)
         );
     }
@@ -575,7 +572,7 @@ public class MultiplayerGameCtrl {
             user.unansweredQuestions++;
             if (user.unansweredQuestions == KICK_AT_X_QUESTIONS) {
                 try {
-                    server.removeMultiplayerUser(server.getURL(), user);
+                    server.removeMultiplayerUserFromGame(server.getURL(), mainCtrl.getGameIndex(), user.id);
                 } catch(WebApplicationException e) {
                     System.out.println("User to remove not found!");
                 }

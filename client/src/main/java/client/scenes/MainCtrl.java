@@ -337,8 +337,7 @@ public class MainCtrl {
      * @param gameIndex the index of the multiplayer game
      */
     public void startMultiplayerGame(int gameIndex) {
-        multiplayerCtrl = new MultiplayerGameCtrl(
-                gameIndex, this, server,
+        multiplayerCtrl = new MultiplayerGameCtrl( this, server,
                 new Pair<>(this.multiplayerQuestionCtrl, this.multiplayerQuestion),
                 new Pair<>(this.multiplayerEstimationCtrl, this.multiplayerEstimation),
                 new Pair<>(this.multiplayerAnswerCtrl, this.multiplayerAnswer),
@@ -640,7 +639,11 @@ public class MainCtrl {
                     }
 
                     try {
-                        server.removeMultiplayerUser(serverUrl, (MultiplayerUser) user);
+                        if(quitApp) {
+                            server.removeMultiplayerUser(serverUrl, gameIndex, (MultiplayerUser) user);
+                        } else {
+                            server.removeMultiplayerUserFromGame(serverUrl, gameIndex, user.id);
+                        }
                         bindUser(null);
                         multiplayerEstimationCtrl.resetDoublePoints();
                         multiplayerQuestionCtrl.resetDoublePoints();
@@ -690,6 +693,22 @@ public class MainCtrl {
         this.colors = new ArrayList<>();
         this.answerCount = 0;
         this.user.resetScore();
+    }
+
+    /**
+     * A getter for the game index
+     * @return the game index
+     */
+    public int getGameIndex() {
+        return gameIndex;
+    }
+
+    /**
+     * A setter for the game index
+     * @param gameIndex the game index to set
+     */
+    public void setGameIndex(int gameIndex) {
+        this.gameIndex = gameIndex;
     }
 
     /**
