@@ -5,6 +5,7 @@ import commons.entities.Activity;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -131,6 +132,14 @@ public class AdminPanelCtrl {
                 activity
         );
         refreshActivities();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        if ( id != 0 ) {
+            alert.setContentText("The activity has been edited successfully!");
+        } else {
+            alert.setContentText("The activity has been edited successfully!");
+        }
+        alert.showAndWait();
     }
 
     /**
@@ -172,6 +181,10 @@ public class AdminPanelCtrl {
         Activity activity = server.findActivityByID ( server.getURL(), id );
         server.deleteActivityFromRepo ( server.getURL(), activity );
         refreshActivities();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setContentText ( "The activity has been deleted successfully!" );
+        alert.showAndWait();
     }
 
     /**
