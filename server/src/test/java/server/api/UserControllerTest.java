@@ -115,20 +115,20 @@ public class UserControllerTest {
     
     @Test
     public void cannotDeleteNegativeID() {
-        var actual = sut.deleteMultiplayerUser(-1);
+        var actual = sut.deleteWaitingUser(-1);
         assertEquals(BAD_REQUEST, actual.getStatusCode());
     }
     
     @Test
     public void cannotDeleteNonExistingPerson() {
-        var actual = sut.deleteMultiplayerUser(getMultiplayerUser("q1").id);
+        var actual = sut.deleteWaitingUser(getMultiplayerUser("q1").id);
         assertEquals(BAD_REQUEST, actual.getStatusCode());
     }
     
     @Test
     public void deleteRightPerson() {
         var savedUser = sut.addMultiplayerUser(getMultiplayerUser("q1"));
-        var actual = sut.deleteMultiplayerUser(savedUser.getBody().id);
+        var actual = sut.deleteWaitingUser(savedUser.getBody().id);
         assertTrue(actual.getStatusCode().is2xxSuccessful());
         assertFalse(waitingRepo.existsById(savedUser.getBody().id));
     }

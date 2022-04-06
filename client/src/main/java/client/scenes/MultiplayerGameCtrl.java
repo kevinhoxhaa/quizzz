@@ -45,7 +45,6 @@ public class MultiplayerGameCtrl {
     private MainCtrl mainCtrl;
     private ServerUtils server;
 
-    private int gameIndex;
     private MultiplayerUser user;
 
     private String serverUrl;
@@ -75,7 +74,6 @@ public class MultiplayerGameCtrl {
     private static final int POLLING_INTERVAL = 500;
     private static final double OPACITY = 0.5;
     private static final double STANDARD_SIZE = 1.0;
-    public static final double RGB_VALUE = (double) 244/255;
     protected static final int KICK_AT_X_QUESTIONS = 3;
 
     // TODO: add results and resultsCtrl
@@ -89,16 +87,14 @@ public class MultiplayerGameCtrl {
      * @param estimationQuestion the estimation question controller-scene pair
      * @param answer the answer controller-scene pair
      * @param ranking the ranking controller-scene pair
-     * @param gameIndex the index of the multiplayer game
      * @param results The results controller-scene pair.
      */
-    public MultiplayerGameCtrl(int gameIndex, MainCtrl mainCtrl, ServerUtils server,
+    public MultiplayerGameCtrl(MainCtrl mainCtrl, ServerUtils server,
                                Pair<MultiplayerQuestionCtrl, Scene> mcQuestion,
                                Pair<MultiplayerEstimationQuestionCtrl, Scene> estimationQuestion,
                                Pair<MultiplayerAnswerCtrl, Scene> answer,
                                Pair<RankingCtrl, Scene> ranking,
                                Pair<MultiplayerResultsCtrl, Scene> results) {
-        this.gameIndex = gameIndex;
         this.mainCtrl = mainCtrl;
 
         this.server = server;
@@ -168,7 +164,7 @@ public class MultiplayerGameCtrl {
      * @return the next question
      */
     public Question fetchQuestion() {
-        return server.getQuestion(serverUrl, gameIndex, answerCount);
+        return server.getQuestion(serverUrl, mainCtrl.getGameIndex(), answerCount);
     }
 
     /**
@@ -220,11 +216,11 @@ public class MultiplayerGameCtrl {
      */
     public List<MultiplayerUser> fetchCorrectUsers(Question answeredQuestion) throws WebApplicationException {
         if(isActiveDoublePoints){
-            return server.answerDoublePointsQuestion(serverUrl, gameIndex,
+            return server.answerDoublePointsQuestion(serverUrl, mainCtrl.getGameIndex(),
                     mainCtrl.getUser().id, answerCount, answeredQuestion);
         }
         else{
-            return server.answerQuestion(serverUrl, gameIndex,
+            return server.answerQuestion(serverUrl, mainCtrl.getGameIndex(),
                     mainCtrl.getUser().id, answerCount, answeredQuestion);
         }
     }
@@ -304,7 +300,7 @@ public class MultiplayerGameCtrl {
      * @return the ranked users
      */
     public List<MultiplayerUser> fetchRanking() {
-        return server.getRanking(serverUrl, gameIndex);
+        return server.getRanking(serverUrl, mainCtrl.getGameIndex());
     }
 
     /**
@@ -389,7 +385,7 @@ public class MultiplayerGameCtrl {
      * @return the game index
      */
     public int getGameIndex() {
-        return gameIndex;
+        return mainCtrl.getGameIndex();
     }
 
     /**
@@ -398,14 +394,14 @@ public class MultiplayerGameCtrl {
      */
     public void registerForEmojis(EmojiController ctrl) {
         emojiSubscription = server.registerForMessages(
-                "/topic/emoji/" + gameIndex,
+                "/topic/emoji/" + mainCtrl.getGameIndex(),
                 Emoji.class,
                 ctrl::displayEmoji
         );
     }
 
     public void registerForHalfTime () {
-        halfTimeSubscription = server.registerForMessages( "/topic/halfTime/" + gameIndex,
+        halfTimeSubscription = server.registerForMessages( "/topic/halfTime/" + mainCtrl.getGameIndex(),
                 MultiplayerUser.class ,
                 (user) -> mainCtrl.halfTime(user) );
     }
@@ -419,7 +415,7 @@ public class MultiplayerGameCtrl {
         String imageName = imageComponents[imageComponents.length - 1];
         String username = user.username;
         server.send(
-                "/app/emoji/" + gameIndex,
+                "/app/emoji/" + mainCtrl.getGameIndex(),
                 new Emoji(imageName, username)
         );
     }
@@ -485,9 +481,8 @@ public class MultiplayerGameCtrl {
      */
     public void enableJoker(StackPane joker){
         joker.setBackground(new Background(
-                new BackgroundFill(Color.color(RGB_VALUE, RGB_VALUE, RGB_VALUE), CornerRadii.EMPTY, Insets.EMPTY)));
+                new BackgroundFill(Color.web("#D6EAF8"), CornerRadii.EMPTY, Insets.EMPTY)));
         joker.setOpacity(STANDARD_SIZE);
-        joker.setCursor(Cursor.HAND);
     }
 
     /**
@@ -531,7 +526,6 @@ public class MultiplayerGameCtrl {
             if(n instanceof ImageView) {
                 ImageView e = (ImageView) n;
                 e.setOnMouseClicked(event -> sendEmoji(e));
-                e.setCursor(Cursor.HAND);
 
                 String[] parts = e.getImage().getUrl().split("/");
                 String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
@@ -578,7 +572,7 @@ public class MultiplayerGameCtrl {
             user.unansweredQuestions++;
             if (user.unansweredQuestions == KICK_AT_X_QUESTIONS) {
                 try {
-                    server.removeMultiplayerUser(server.getURL(), user);
+                    server.removeMultiplayerUserFromGame(server.getURL(), mainCtrl.getGameIndex(), user.id);
                 } catch(WebApplicationException e) {
                     System.out.println("User to remove not found!");
                 }

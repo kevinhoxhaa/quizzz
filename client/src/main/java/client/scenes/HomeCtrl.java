@@ -107,6 +107,7 @@ public class HomeCtrl {
         ScrollPane dialogPane = loader.load();
         Scene dialogScene = new Scene(dialogPane);
         dialog.setScene(dialogScene);
+        dialog.getScene().setCursor(new ImageCursor(new Image("client/images/arrowcursor.png")));
         dialog.show();
     }
 
@@ -170,32 +171,13 @@ public class HomeCtrl {
      */
     @FXML
     protected void onSoloButtonClick() {
-        try {
-            String serverUrl = urlField.getText();
-            SoloUser user = getSoloUser();
-            if (!isValidUsername(user)) {
-                return;
-            }
-            mainCtrl.setServerUrl(serverUrl);
-            mainCtrl.bindUser(getSoloUser());
-        } catch (WebApplicationException e) {
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-
-            switch (e.getResponse().getStatus()) {
-                case FORBIDDEN:
-                    alert.setContentText("Username cannot be null or empty!");
-                    break;
-                default:
-                    alert.setContentText(e.getMessage());
-            }
-
-            alert.showAndWait();
-            return;
-        } catch (Exception e) {
-            invalidURL();
+        String serverUrl = urlField.getText();
+        SoloUser user = getSoloUser();
+        if (!isValidUsername(user)) {
             return;
         }
+        mainCtrl.setServerUrl(serverUrl);
+        mainCtrl.bindUser(getSoloUser());
         mainCtrl.startSoloGame();
     }
 
@@ -231,21 +213,10 @@ public class HomeCtrl {
             alert.showAndWait();
             return;
         } catch (Exception e) {
-            invalidURL();
+            mainCtrl.invalidURL();
             return;
         }
         mainCtrl.showWaiting();
-    }
-
-    /**
-     * Alerts the user about the invalid URL
-     */
-    private void invalidURL() {
-        var alert = new Alert(Alert.AlertType.ERROR);
-        alert.initModality(Modality.APPLICATION_MODAL);
-        alert.setContentText("Invalid server URL!");
-        alert.showAndWait();
-        return;
     }
 
     /**
@@ -254,10 +225,14 @@ public class HomeCtrl {
      * @return a boolean representation of the username's validity
      */
     private boolean isValidUsername(User user) {
-        if (user.username.contains(" ") || user.username.length() > USERNAME_LENGTH) {
+        if (user.username.contains(" ") || user.username.isEmpty() || user.username.length() > USERNAME_LENGTH ) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText("Invalid username!");
+            if (user.username.length() > USERNAME_LENGTH) {
+                alert.setContentText("Username is too long!");
+            } else {
+                alert.setContentText("Username cannot be null or empty!");
+            }
             alert.showAndWait();
             return false;
         }

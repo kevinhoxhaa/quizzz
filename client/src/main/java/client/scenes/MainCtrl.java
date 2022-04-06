@@ -34,6 +34,7 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -61,6 +62,9 @@ public class MainCtrl {
     private static final long X3 = 17;
     private static final long X4 = 20;
     private static final long FACTOR = 300;
+
+    private Image pointerCursor;
+    private Image handCursor;
 
     private String serverUrl;
     private Timer waitingTimer;
@@ -146,6 +150,9 @@ public class MainCtrl {
         primaryStage.setMaxWidth(WIDTH);
         primaryStage.setResizable(false);
 
+        pointerCursor = new Image("client/images/arrowcursor.png");
+        handCursor = new Image("client/images/handcursor.png");
+
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
 
@@ -155,48 +162,60 @@ public class MainCtrl {
         this.multiplayerAnswerCtrl = multiplayerAnswer.getKey();
         this.multiplayerAnswer = new Scene(multiplayerAnswer.getValue());
         this.multiplayerAnswer.getStylesheets().add(STYLES_PATH);
+        this.multiplayerAnswer.setCursor(new ImageCursor(pointerCursor));
 
         this.homeCtrl = home.getKey();
         this.home = new Scene(home.getValue());
         this.home.getStylesheets().add(STYLES_PATH);
+        this.home.setCursor(new ImageCursor(pointerCursor));
 
         this.server = homeCtrl.getServer();
 
         this.multiplayerQuestionCtrl = multiplayerQuestion.getKey();
         this.multiplayerQuestion = new Scene(multiplayerQuestion.getValue());
         this.multiplayerQuestion.getStylesheets().add(STYLES_PATH);
+        this.multiplayerQuestion.setCursor(new ImageCursor(pointerCursor));
 
         this.waitingCtrl = waiting.getKey();
         this.waiting = new Scene(waiting.getValue());
         this.waiting.getStylesheets().add(STYLES_PATH);
+        this.waiting.setCursor(new ImageCursor(pointerCursor));
+        this.waitingCtrl.setupHoverCursor();
 
         this.rankingCtrl = ranking.getKey();
         this.ranking = new Scene(ranking.getValue());
         this.ranking.getStylesheets().add(STYLES_PATH);
+        this.ranking.setCursor(new ImageCursor(pointerCursor));
 
         this.multiplayerEstimationCtrl = multiplayerEstimation.getKey();
         this.multiplayerEstimation = new Scene(multiplayerEstimation.getValue());
         this.multiplayerEstimation.getStylesheets().add(STYLES_PATH);
+        this.multiplayerEstimation.setCursor(new ImageCursor(pointerCursor));
 
         this.soloEstimationCtrl = soloEstimation.getKey();
         this.soloEstimation = new Scene(soloEstimation.getValue());
         this.soloEstimation.getStylesheets().add(STYLES_PATH);
+        this.soloEstimation.setCursor(new ImageCursor(pointerCursor));
 
         this.soloQuestionCtrl = soloQuestion.getKey();
         this.soloQuestion = new Scene(soloQuestion.getValue());
         this.soloQuestion.getStylesheets().add(STYLES_PATH);
+        this.soloQuestion.setCursor(new ImageCursor(pointerCursor));
 
         this.soloAnswerCtrl = soloAnswer.getKey();
         this.soloAnswer = new Scene(soloAnswer.getValue());
         this.soloAnswer.getStylesheets().add(STYLES_PATH);
+        this.soloAnswer.setCursor(new ImageCursor(pointerCursor));
 
         this.soloResultsCtrl = soloResults.getKey();
         this.soloResults = new Scene(soloResults.getValue());
         this.soloResults.getStylesheets().add(STYLES_PATH);
+        this.soloResults.setCursor(new ImageCursor(pointerCursor));
 
         this.multiplayerResultsCtrl = multiplayerResults.getKey();
         this.multiplayerResults = new Scene(multiplayerResults.getValue());
         this.multiplayerResults.getStylesheets().add(STYLES_PATH);
+        this.multiplayerResults.setCursor(new ImageCursor(pointerCursor));
 
         this.adminPanelCtrl = adminPanel.getKey();
         this.adminPanel = new Scene( adminPanel.getValue() );
@@ -323,9 +342,6 @@ public class MainCtrl {
         primaryStage.setTitle("Quizzz");
         primaryStage.setScene(home);
         homeCtrl.setFonts();
-
-        Image image = new Image("client/images/arrowcursor.png");  //pass in the image path
-        home.setCursor(new ImageCursor(image));
     }
 
     public void showAdminPanel() {
@@ -367,8 +383,7 @@ public class MainCtrl {
      * @param gameIndex the index of the multiplayer game
      */
     public void startMultiplayerGame(int gameIndex) {
-        multiplayerCtrl = new MultiplayerGameCtrl(
-                gameIndex, this, server,
+        multiplayerCtrl = new MultiplayerGameCtrl( this, server,
                 new Pair<>(this.multiplayerQuestionCtrl, this.multiplayerQuestion),
                 new Pair<>(this.multiplayerEstimationCtrl, this.multiplayerEstimation),
                 new Pair<>(this.multiplayerAnswerCtrl, this.multiplayerAnswer),
@@ -539,23 +554,39 @@ public class MainCtrl {
      * Resets the state of the solo game
      */
     public void startSoloGame() {
-        answerCount = 0;
-        getUser().resetScore();
-        colors = new ArrayList<>();
+        try {
+            answerCount = 0;
+            getUser().resetScore();
+            colors = new ArrayList<>();
 
-        soloQuestionCtrl.resetCircleColor();
-        soloAnswerCtrl.resetCircleColor();
-        resetStreak();
+            soloQuestionCtrl.resetCircleColor();
+            soloAnswerCtrl.resetCircleColor();
+            resetStreak();
 
-        SoloGame soloGame = server.getSoloGame(getServerUrl(), QUESTIONS_PER_GAME);
-        primaryStage.setTitle("Solo game");
+            SoloGame soloGame = server.getSoloGame(serverUrl, QUESTIONS_PER_GAME);
+            primaryStage.setTitle("Solo game");
 
-        if(soloGame.loadCurrentQuestion().getType() == QuestionType.ESTIMATION){
-            showSoloEstimationQuestion(soloGame);
+            if(soloGame.loadCurrentQuestion().getType() == QuestionType.ESTIMATION){
+                showSoloEstimationQuestion(soloGame);
+            }
+            else {
+                showSoloQuestion(soloGame);
+            }
+        } catch (Exception e) {
+            invalidURL();
+            return;
         }
-        else {
-            showSoloQuestion(soloGame);
-        }
+    }
+
+    /**
+     * Alerts the user about the invalid URL
+     */
+    protected void invalidURL() {
+        var alert = new Alert(Alert.AlertType.ERROR);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setContentText("Invalid server URL!");
+        alert.showAndWait();
+        return;
     }
 
     /**
@@ -654,6 +685,7 @@ public class MainCtrl {
         alert.setContentText("Are you sure you want to quit?");
         ButtonType okButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
         ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
+        alert.getDialogPane().setCursor(new ImageCursor(new Image("client/images/arrowcursor.png")));
         alert.getButtonTypes().setAll(okButton, noButton);
         alert.showAndWait().ifPresent(type -> {
             if (type == okButton) {
@@ -669,7 +701,11 @@ public class MainCtrl {
                     }
 
                     try {
-                        server.removeMultiplayerUser(serverUrl, (MultiplayerUser) user);
+                        if(quitApp) {
+                            server.removeMultiplayerUser(serverUrl, gameIndex, (MultiplayerUser) user);
+                        } else {
+                            server.removeMultiplayerUserFromGame(serverUrl, gameIndex, user.id);
+                        }
                         bindUser(null);
                         multiplayerEstimationCtrl.resetDoublePoints();
                         multiplayerQuestionCtrl.resetDoublePoints();
@@ -707,6 +743,10 @@ public class MainCtrl {
         }
     }
 
+    /**
+     * Resets the colors of the circles in the main
+     * controller
+     */
     public void resetMainCtrl() {
         multiplayerQuestionCtrl.resetCircleColor();
         multiplayerAnswerCtrl.resetCircleColor();
@@ -715,5 +755,29 @@ public class MainCtrl {
         this.colors = new ArrayList<>();
         this.answerCount = 0;
         this.user.resetScore();
+    }
+
+    /**
+     * A getter for the game index
+     * @return the game index
+     */
+    public int getGameIndex() {
+        return gameIndex;
+    }
+
+    /**
+     * A setter for the game index
+     * @param gameIndex the game index to set
+     */
+    public void setGameIndex(int gameIndex) {
+        this.gameIndex = gameIndex;
+    }
+
+    /**
+     * Returns the application hand cursor
+     * @return the hand cursor
+     */
+    public Image getHandCursorImage() {
+        return handCursor;
     }
 }

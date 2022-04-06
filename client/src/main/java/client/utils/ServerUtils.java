@@ -67,9 +67,11 @@ public class ServerUtils {
             System.out.println(line);
         }
     }
+
     public String getURL(){
         return SERVER;
     }
+
     public List<Quote> getQuotes() {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/quotes") //
@@ -295,13 +297,15 @@ public class ServerUtils {
     /**
      * A method that removes a multiplayer user from the repository
      * @param serverUrl
+     * @param gameIndex should be -1 if the user is not in a game
      * @param user
      * @return The user that has been deleted.
      */
-    public MultiplayerUser removeMultiplayerUser(String serverUrl, MultiplayerUser user) {
-        if (user.gameID != null) {
-            removeMultiplayerUserID(serverUrl, (int) ((long) user.gameID), user.id);
+    public MultiplayerUser removeMultiplayerUser(String serverUrl, int gameIndex, MultiplayerUser user) {
+        if(gameIndex != -1){
+            removeMultiplayerUserFromGame(serverUrl, gameIndex, user.id);
         }
+
         return ClientBuilder.newClient(new ClientConfig())
                 .target(serverUrl).path("api/users/"+user.id)
                 .request(APPLICATION_JSON)
@@ -366,7 +370,7 @@ public class ServerUtils {
      * @param userId The ID of the user that should be removed.
      * @return A list with all ID's of the users that are still left in the game.
      */
-    private List<Long> removeMultiplayerUserID(String serverUrl, int gameIndex, Long userId) {
+    public List<Long> removeMultiplayerUserFromGame(String serverUrl, int gameIndex, Long userId) {
         String path = String.format("/api/games/%d/%d", gameIndex, userId);
         return ClientBuilder.newClient(new ClientConfig())
                 .target(serverUrl).path(path)
