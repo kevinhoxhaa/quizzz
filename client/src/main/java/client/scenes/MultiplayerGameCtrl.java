@@ -12,6 +12,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -21,6 +22,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.util.Pair;
 import org.springframework.messaging.simp.stomp.StompSession;
 
@@ -72,7 +74,6 @@ public class MultiplayerGameCtrl {
     private static final int POLLING_INTERVAL = 500;
     private static final double OPACITY = 0.5;
     private static final double STANDARD_SIZE = 1.0;
-    public static final double RGB_VALUE = (double) 244/255;
     protected static final int KICK_AT_X_QUESTIONS = 3;
 
     // TODO: add results and resultsCtrl
@@ -300,8 +301,7 @@ public class MultiplayerGameCtrl {
      * @return the ranked users
      */
     public List<MultiplayerUser> fetchRanking() {
-        // TODO: fetch users ranked by points from server
-        return new ArrayList<>();
+        return server.getRanking(serverUrl, gameIndex);
     }
 
     /**
@@ -309,10 +309,10 @@ public class MultiplayerGameCtrl {
      * @param rankedUsers the list of ranked users to display
      */
     public void showRanking(List<MultiplayerUser> rankedUsers) {
-        // TODO: handle passed multiplayer users
         mainCtrl.updateQuestionCounters(rankingCtrl, colors);
         mainCtrl.getPrimaryStage().setTitle("Ranking Screen");
         mainCtrl.getPrimaryStage().setScene(ranking);
+        rankingCtrl.setup(rankedUsers);
         rankingCtrl.startTimer();
     }
 
@@ -322,8 +322,7 @@ public class MultiplayerGameCtrl {
      * @param rankedUsers the list of ranked users to display
      */
     public void showResults(List<MultiplayerUser> rankedUsers) {
-        // TODO: display list of ranked users on results screen
-        resultsCtrl.setup();
+        resultsCtrl.setup(rankedUsers);
         mainCtrl.updateQuestionCounters(resultsCtrl, colors);
         mainCtrl.getPrimaryStage().setTitle("Results Screen");
         mainCtrl.getPrimaryStage().setScene(results);
@@ -491,9 +490,8 @@ public class MultiplayerGameCtrl {
      */
     public void enableJoker(StackPane joker){
         joker.setBackground(new Background(
-                new BackgroundFill(Color.color(RGB_VALUE, RGB_VALUE, RGB_VALUE), CornerRadii.EMPTY, Insets.EMPTY)));
+                new BackgroundFill(Color.web("#D6EAF8"), CornerRadii.EMPTY, Insets.EMPTY)));
         joker.setOpacity(STANDARD_SIZE);
-        joker.setCursor(Cursor.HAND);
     }
 
     /**
@@ -537,7 +535,6 @@ public class MultiplayerGameCtrl {
             if(n instanceof ImageView) {
                 ImageView e = (ImageView) n;
                 e.setOnMouseClicked(event -> sendEmoji(e));
-                e.setCursor(Cursor.HAND);
 
                 String[] parts = e.getImage().getUrl().split("/");
                 String emojiPath = String.valueOf(ServerUtils.class.getClassLoader().getResource(""));
@@ -629,5 +626,27 @@ public class MultiplayerGameCtrl {
         this.answerCount = 0;
         this.colors = new ArrayList<>();
         this.user.resetScore();
+    }
+
+    /**
+     * Populates a given score table with a sorted list of users
+     * @param scoreTable the score table to populate
+     * @param users the list of users to populate
+     */
+    public void populateRanking(TableView<MultiplayerUser> scoreTable, List<MultiplayerUser> users) {
+        try {
+            scoreTable.getItems().clear();
+
+            for (MultiplayerUser user : users) {
+                scoreTable.getItems().add(user);
+            }
+
+        } catch (WebApplicationException e) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            return;
+        }
     }
 }

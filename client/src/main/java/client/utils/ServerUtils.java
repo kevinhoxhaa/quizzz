@@ -337,6 +337,20 @@ public class ServerUtils {
     }
 
     /**
+     * Returns a list of sorted users by points
+     * @param serverUrl the server url
+     * @param gameIndex the game the users belong to
+     * @return the list of sorted users
+     */
+    public List<MultiplayerUser> getRanking(String serverUrl, int gameIndex) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUrl).path("api/games/" + gameIndex + "/ranking")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<MultiplayerUser>>() {});
+    }
+
+    /**
      * Initiates the websocket connection with the server
      * and sets the current session
      * @param httpUrl the url of the http server to connect to

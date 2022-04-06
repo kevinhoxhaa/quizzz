@@ -11,6 +11,7 @@ import javafx.animation.PauseTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.SequentialTransition;
 import javafx.fxml.FXML;
+import javafx.scene.ImageCursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -31,6 +32,8 @@ public class WaitingCtrl {
 
     @FXML
     private Button startButton;
+    @FXML
+    private Button backButton;
 
     @FXML
     private ListView usersList;
@@ -132,5 +135,14 @@ public class WaitingCtrl {
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }
+    }
+
+    /**
+     * Sets the cursor to hover to all buttons
+     * in the respective question num controller
+     */
+    public void setupHoverCursor() {
+        startButton.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+        backButton.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
     }
 }

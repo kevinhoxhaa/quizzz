@@ -29,8 +29,10 @@ import client.scenes.SoloEstimationQuestionCtrl;
 import client.scenes.SoloQuestionCtrl;
 import client.scenes.SoloResultsCtrl;
 import client.scenes.WaitingCtrl;
+import client.utils.ResourceUtils;
 import com.google.inject.Injector;
 import javafx.application.Application;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -42,6 +44,7 @@ public class Main extends Application {
 
     private static final Injector INJECTOR = createInjector(new MyModule());
     private static final MyFXML FXML = new MyFXML(INJECTOR);
+    private static final int LABEL_SIZE = 36;
 
     public static void main(String[] args) throws URISyntaxException, IOException {
         launch();
@@ -49,6 +52,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+
+        Font.loadFont(
+                ResourceUtils.getClientResource("fonts/ARCADECLASSIC.TTF").getPath(),
+                LABEL_SIZE
+        );
 
         var overview = FXML.load(
                 QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");

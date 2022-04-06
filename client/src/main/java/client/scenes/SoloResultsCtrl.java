@@ -8,6 +8,7 @@ import commons.models.SoloGame;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.ImageCursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -54,12 +55,12 @@ public class SoloResultsCtrl extends AbstractRankingCtrl {
         scoreTableUserScore.setText(String.format("%d", mainCtrl.getSoloScore()));
         server.addUserSolo(mainCtrl.getServerUrl(), (SoloUser) mainCtrl.getUser());
 
-        scoreTableUserName.setText( String.format( "%s", mainCtrl.getUser().username) );
-        scoreTableUserScore.setText( String.format( "%d", mainCtrl.getSoloScore()) );
+        scoreTableUserName.setText(String.format("%s", mainCtrl.getUser().username));
+        scoreTableUserScore.setText(String.format("%d", mainCtrl.getSoloScore()));
         setTable();
-        ranking1stPlayer.setText(users.get ( 0 ).username );
-        ranking2ndPlayer.setText(users.get ( 1 ).username );
-        ranking3rdPlayer.setText(users.get ( 2 ).username );
+        ranking1stPlayer.setText(users.size() > 0 ? users.get(0).username : "");
+        ranking2ndPlayer.setText(users.size() > 1 ? users.get(1).username : "");
+        ranking3rdPlayer.setText(users.size() > 2 ? users.get(2).username : "");
         //TODO : add personal best to server side and link it
     }
 
@@ -90,11 +91,12 @@ public class SoloResultsCtrl extends AbstractRankingCtrl {
 
         scoreTable.setItems(users);
     }
+
     /**
      * Updates the number of the current question (e.g 11/20)
      */
     @Override
-    public void updateQuestionNumber(){
+    public void updateQuestionNumber() {
         questionNum.setText("" + (game.getCurrentQuestionNum()));
     }
 
@@ -104,5 +106,14 @@ public class SoloResultsCtrl extends AbstractRankingCtrl {
     @Override
     public void highlightCurrentCircle() {
         highlightCurrentCircle(game.getCurrentQuestionNum());
+    }
+
+    /**
+     * Sets the hover cursor to every button to hand
+     */
+    @Override
+    public void setupHoverCursor() {
+        quitButton.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+        restartButton.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
     }
 }
