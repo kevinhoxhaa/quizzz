@@ -154,9 +154,8 @@ public class MainCtrl {
                            Pair<MultiplayerResultsCtrl, Parent> multiplayerResults,
                            Pair<AdminPanelCtrl, Parent> adminPanel,
                            Pair<AddActivityCtrl, Parent> addActivity,
-                           Pair<DeleteActivityCtrl, Parent> deleteActivity ) {
-                           Pair<HelpCtrl, Parent> help
-                           ) {
+                           Pair<DeleteActivityCtrl, Parent> deleteActivity,
+                           Pair<HelpCtrl, Parent> help) {
         this.primaryStage = primaryStage;
         primaryStage.setMinHeight(HEIGHT);
         primaryStage.setMinWidth(WIDTH);
@@ -605,6 +604,7 @@ public class MainCtrl {
      */
     protected void invalidURL() {
         var alert = new Alert(Alert.AlertType.ERROR);
+        alert = setAlertStyle(alert);
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setContentText("Invalid server URL!");
         alert.showAndWait();

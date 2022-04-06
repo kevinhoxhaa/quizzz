@@ -10,6 +10,7 @@ import javax.inject.Inject;
 
 public class DeleteActivityCtrl {
     private AdminPanelCtrl adminPanelCtrl;
+    private MainCtrl mainCtrl;
 
     @FXML
     private TextField id;
@@ -28,6 +29,7 @@ public class DeleteActivityCtrl {
     public void onOkButton () {
         if ( id.getText().isEmpty() ) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert = mainCtrl.setAlertStyle(alert);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText (" ID field can't be empty" );
             alert.showAndWait();
@@ -39,6 +41,7 @@ public class DeleteActivityCtrl {
                 cancel();
             } catch ( Exception e ) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert = mainCtrl.setAlertStyle(alert);
                 alert.initModality(Modality.APPLICATION_MODAL);
                 alert.setContentText ( "This ID does not exist");
                 alert.showAndWait();

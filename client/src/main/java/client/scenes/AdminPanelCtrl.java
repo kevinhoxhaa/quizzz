@@ -133,6 +133,7 @@ public class AdminPanelCtrl {
         );
         refreshActivities();
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert = mainCtrl.setAlertStyle(alert);
         alert.initModality(Modality.APPLICATION_MODAL);
         if ( id != 0 ) {
             alert.setContentText("The activity has been edited successfully!");
@@ -182,6 +183,7 @@ public class AdminPanelCtrl {
         server.deleteActivityFromRepo (mainCtrl.getServerUrl(), activity );
         refreshActivities();
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert = mainCtrl.setAlertStyle(alert);
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setContentText ( "The activity has been deleted successfully!" );
         alert.showAndWait();

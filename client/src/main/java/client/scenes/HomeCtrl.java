@@ -199,6 +199,7 @@ public class HomeCtrl {
     private boolean isValidUsername(User user) {
         if (user.username.contains(" ") || user.username.isEmpty() || user.username.length() > USERNAME_LENGTH ) {
             var alert = new Alert(Alert.AlertType.ERROR);
+            alert = mainCtrl.setAlertStyle(alert);
             alert.initModality(Modality.APPLICATION_MODAL);
             if (user.username.length() > USERNAME_LENGTH) {
                 alert.setContentText("Username is too long!");

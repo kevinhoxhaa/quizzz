@@ -112,6 +112,6 @@ public class Main extends Application {
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, overview, add, home, waiting, multiplayerQuestion,
                 multiplayerAnswer, ranking, multiplayerEstimation, soloEstimation, soloQuestion,
-                soloAnswer, soloResults, multiplayerResults, adminPanel, addActivity, deleteActivity );
+                soloAnswer, soloResults, multiplayerResults, adminPanel, addActivity, deleteActivity, help );
     }
 }
