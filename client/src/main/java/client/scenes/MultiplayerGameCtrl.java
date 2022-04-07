@@ -152,6 +152,8 @@ public class MultiplayerGameCtrl {
         registerForHalfTime();
         resetAllJokers();
         mainCtrl.resetStreak();
+        mainCtrl.setStreakScore(0L);
+        setIsActiveDoublePoints(false);
         user.unansweredQuestions = 0;
 
         Question firstQuestion = fetchQuestion();
@@ -185,6 +187,7 @@ public class MultiplayerGameCtrl {
                     @Override
                     public void run() {
                         try {
+                            System.out.println("STREAK: "+ mainCtrl.getStreakScore());
                             List<MultiplayerUser> correctUsers = fetchCorrectUsers(answeredQuestion);
 
                             Platform.runLater(() -> {
@@ -216,12 +219,16 @@ public class MultiplayerGameCtrl {
      */
     public List<MultiplayerUser> fetchCorrectUsers(Question answeredQuestion) throws WebApplicationException {
         if(isActiveDoublePoints){
+            System.out.println("UTILS: "+mainCtrl.getStreakScore());
+                setIsActiveDoublePoints(false);
             return server.answerDoublePointsQuestion(serverUrl, mainCtrl.getGameIndex(),
-                    mainCtrl.getUser().id, answerCount, answeredQuestion);
+                    mainCtrl.getUser().id, answerCount, answeredQuestion,
+                    mainCtrl.getStreakScore());
         }
         else{
             return server.answerQuestion(serverUrl, mainCtrl.getGameIndex(),
-                    mainCtrl.getUser().id, answerCount, answeredQuestion);
+                    mainCtrl.getUser().id, answerCount, answeredQuestion,
+                    mainCtrl.getStreakScore());
         }
     }
 

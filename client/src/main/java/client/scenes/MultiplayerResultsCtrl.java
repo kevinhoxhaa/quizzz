@@ -118,6 +118,8 @@ public class MultiplayerResultsCtrl extends AbstractRankingCtrl {
     public void redirect() {
         if (rematch) {
             gameCtrl.resetGameCtrl();
+            mainCtrl.resetStreak();
+            mainCtrl.setStreakScore(0L);
             rematch = false;
             rematchButton.setBackground(new Background(
                     new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));

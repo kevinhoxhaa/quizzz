@@ -127,6 +127,7 @@ public class MultiplayerEstimationQuestionCtrl extends AbstractEstimationQuestio
         }
 
         gameCtrl.disableEmojis(emojiPane);
+        mainCtrl.addScore(mainCtrl.getUser(),currentQuestion);
         gameCtrl.postAnswer(currentQuestion);
     }
 

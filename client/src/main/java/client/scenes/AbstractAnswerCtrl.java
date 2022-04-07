@@ -54,7 +54,6 @@ public abstract class AbstractAnswerCtrl extends QuestionNumController{
      * @param prevQuestion the corresponding question object
      */
     protected void setup(Question prevQuestion){
-        mainCtrl.addScore(mainCtrl.getUser(),prevQuestion);
         if (prevQuestion.hasCorrectUserAnswer()) {
             currentScore.setFill(Color.GREEN);
             this.answerResponse.setText("Well done!");

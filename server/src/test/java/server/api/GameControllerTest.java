@@ -335,7 +335,7 @@ public class GameControllerTest {
     @Test
     public void postAnswerReturnsValidResponse() {
         sut.startGame((int) NUMBER);
-        assertNotNull(sut.postAnswer(0, 0, 0,
+        assertNotNull(sut.postAnswer(0, 0, 0,0L,
                 new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random)));
     }
 
@@ -343,7 +343,7 @@ public class GameControllerTest {
     public void postAnswerReturnsErrorOnInvalidGame() {
         sut.startGame((int) NUMBER);
         ResponseEntity<List<MultiplayerUser>> actual = (ResponseEntity<List<MultiplayerUser>>) sut.postAnswer(
-                (int) NUMBER, 0, 0,
+                (int) NUMBER, 0, 0,0L,
                 new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random));
         assertTrue(actual.getStatusCode().is4xxClientError());
     }
@@ -352,7 +352,7 @@ public class GameControllerTest {
     public void postAnswerReturnsErrorOnInvalidUser() {
         sut.startGame((int) NUMBER);
         ResponseEntity<List<MultiplayerUser>> actual = (ResponseEntity<List<MultiplayerUser>>) sut.postAnswer(
-                0, NUMBER, 0,
+                0, NUMBER, 0,0L,
                 new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random));
         assertTrue(actual.getStatusCode().is4xxClientError());
     }
@@ -361,7 +361,7 @@ public class GameControllerTest {
     public void postAnswerReturnsErrorOnInvalidQuestion() {
         sut.startGame((int) NUMBER);
         ResponseEntity<List<MultiplayerUser>> actual = (ResponseEntity<List<MultiplayerUser>>) sut.postAnswer(
-                0, 0, (int) NUMBER,
+                0, 0, (int) NUMBER,0L,
                 new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random));
         assertTrue(actual.getStatusCode().is4xxClientError());
     }
@@ -370,7 +370,7 @@ public class GameControllerTest {
     public void postAnswerReturnsExpectationFailedIfNotAllUsersHaveAnswered() {
         sut.startGame((int) NUMBER);
         ResponseEntity<List<MultiplayerUser>> actual = (ResponseEntity<List<MultiplayerUser>>) sut.postAnswer(
-                0, 0, 1,
+                0, 0, 1,0L,
                 new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random));
         assertEquals(HttpStatus.EXPECTATION_FAILED, actual.getStatusCode());
     }
@@ -378,7 +378,7 @@ public class GameControllerTest {
     @Test
     public void postDoublePointsAnswerReturnsValidResponse() {
         sut.startGame((int) NUMBER);
-        assertNotNull(sut.postDoublePointsAnswer(0, 0, 0,
+        assertNotNull(sut.postDoublePointsAnswer(0, 0, 0,0L,
                 new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random)));
     }
 
@@ -387,7 +387,7 @@ public class GameControllerTest {
         sut.startGame((int) NUMBER);
         ResponseEntity<List<MultiplayerUser>> actual =
                 (ResponseEntity<List<MultiplayerUser>>) sut.postDoublePointsAnswer(
-                (int) NUMBER, 0, 0,
+                (int) NUMBER, 0, 0,0L,
                 new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random));
         assertTrue(actual.getStatusCode().is4xxClientError());
     }
@@ -397,7 +397,7 @@ public class GameControllerTest {
         sut.startGame((int) NUMBER);
         ResponseEntity<List<MultiplayerUser>> actual =
                 (ResponseEntity<List<MultiplayerUser>>) sut.postDoublePointsAnswer(
-                0, NUMBER, 0,
+                0, NUMBER, 0,0L,
                 new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random));
         assertTrue(actual.getStatusCode().is4xxClientError());
     }
@@ -407,7 +407,7 @@ public class GameControllerTest {
         sut.startGame((int) NUMBER);
         ResponseEntity<List<MultiplayerUser>> actual =
                 (ResponseEntity<List<MultiplayerUser>>) sut.postDoublePointsAnswer(
-                0, 0, (int) NUMBER,
+                0, 0, (int) NUMBER,0L,
                 new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random));
         assertTrue(actual.getStatusCode().is4xxClientError());
     }
@@ -417,7 +417,7 @@ public class GameControllerTest {
         sut.startGame((int) NUMBER);
         ResponseEntity<List<MultiplayerUser>> actual =
                 (ResponseEntity<List<MultiplayerUser>>) sut.postDoublePointsAnswer(
-                0, 0, 1,
+                0, 0, 1,0L,
                 new ConsumptionQuestion(getActivity("title", NUMBER, "src"), random));
         assertEquals(HttpStatus.EXPECTATION_FAILED, actual.getStatusCode());
     }
