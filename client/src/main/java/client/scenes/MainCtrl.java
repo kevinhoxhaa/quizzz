@@ -30,12 +30,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
@@ -54,6 +57,10 @@ public class MainCtrl {
     private static final int POLLING_DELAY = 0;
     private static final int POLLING_INTERVAL = 500;
     private static final int QUESTIONS_PER_GAME = 20;
+    private static final double ALERT_POSITION_Y = 250;
+    private static final double ALERT_POSITION_X = 517;
+    private static final double ALERT_SIZE = 50;
+
 
     //These are the variables used in the streak calculation formula
     private static final long X1 = 1;
@@ -120,6 +127,11 @@ public class MainCtrl {
     private DeleteActivityCtrl deleteActivityCtrl;
     private Scene deleteActivity;
 
+    private HelpCtrl helpCtrl;
+    private Scene help;
+
+    private DialogPane dialogPane;
+
     private User user;
     private int gameIndex;
     private List<Color> colors;
@@ -141,7 +153,8 @@ public class MainCtrl {
                            Pair<MultiplayerResultsCtrl, Parent> multiplayerResults,
                            Pair<AdminPanelCtrl, Parent> adminPanel,
                            Pair<AddActivityCtrl, Parent> addActivity,
-                           Pair<DeleteActivityCtrl, Parent> deleteActivity ) {
+                           Pair<DeleteActivityCtrl, Parent> deleteActivity,
+                           Pair<HelpCtrl, Parent> help) {
         this.primaryStage = primaryStage;
         primaryStage.setMinHeight(HEIGHT);
         primaryStage.setMinWidth(WIDTH);
@@ -224,6 +237,9 @@ public class MainCtrl {
 
         this.deleteActivityCtrl = deleteActivity.getKey();
         this.deleteActivity = new Scene( deleteActivity.getValue() );
+
+        this.helpCtrl = help.getKey();
+        this.help = new Scene(help.getValue());
 
         countdown = multiplayerQuestionCtrl.getTimerLength();
 
@@ -587,6 +603,7 @@ public class MainCtrl {
      */
     protected void invalidURL() {
         var alert = new Alert(Alert.AlertType.ERROR);
+        alert = setAlertStyle(alert);
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setContentText("Invalid server URL!");
         alert.showAndWait();
@@ -608,6 +625,18 @@ public class MainCtrl {
         soloAnswerCtrl.setup(game);
         updateQuestionCounters(soloAnswerCtrl, colors);
         primaryStage.setScene(soloAnswer);
+    }
+
+    /**
+     * Shows the Help page dialog component on the home page.
+     */
+
+    public void showHelp(){
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.setScene(help);
+        stage.show();
     }
 
     /**
@@ -685,6 +714,7 @@ public class MainCtrl {
      */
     public void quitGame(boolean quitApp, boolean isMultiplayer){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert = setAlertStyle(alert);
         alert.setTitle("Quit solo game");
         alert.setContentText("Are you sure you want to quit?");
         ButtonType okButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
@@ -745,6 +775,54 @@ public class MainCtrl {
             controller.resetHighlight();
             controller.highlightCurrentCircle();
         }
+    }
+
+    /**
+     * Sets the given alert's style in the way described in the Dialog.css file.
+     * @param alert
+     * @return alert with style
+     */
+
+    public Alert setAlertStyle(Alert alert){
+        alert.initStyle(StageStyle.UNDECORATED);
+        dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().add(
+                getClass().getResource("/client/Stylesheets/Dialog.css").toExternalForm());
+        dialogPane.getStyleClass().add("dialog");
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setY(ALERT_POSITION_Y);
+        alert.setX(ALERT_POSITION_X);
+        switch(alert.getAlertType()){
+            case ERROR:
+                ImageView error =
+                        new ImageView(this.getClass().getResource("/client/images/thonk.png").toString());
+                error.setFitHeight(ALERT_SIZE);
+                error.setFitWidth(ALERT_SIZE);
+                alert.setGraphic(error);
+                break;
+            case WARNING:
+                ImageView warning =
+                        new ImageView(this.getClass().getResource("/client/images/warning_alert.png").toString());
+                warning.setFitHeight(ALERT_SIZE);
+                warning.setFitWidth(ALERT_SIZE);
+                alert.setGraphic(warning);
+                break;
+            case CONFIRMATION:
+                ImageView confirmation =
+                        new ImageView(this.getClass().getResource("/client/images/confirmation.png").toString());
+                confirmation.setFitHeight(ALERT_SIZE);
+                confirmation.setFitWidth(ALERT_SIZE);
+                alert.setGraphic(confirmation);
+                break;
+            case INFORMATION:
+                ImageView information =
+                        new ImageView(this.getClass().getResource("/client/images/info.png").toString());
+                information.setFitHeight(ALERT_SIZE);
+                information.setFitWidth(ALERT_SIZE);
+                alert.setGraphic(information);
+                break;
+        }
+        return alert;
     }
 
     /**

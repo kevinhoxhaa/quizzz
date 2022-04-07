@@ -25,6 +25,7 @@ import client.scenes.AdminPanelCtrl;
 import client.scenes.DeleteActivityCtrl;
 import client.scenes.QuoteOverviewCtrl;
 import client.scenes.AddQuoteCtrl;
+import client.scenes.HelpCtrl;
 import client.scenes.HomeCtrl;
 import client.scenes.MultiplayerResultsCtrl;
 import client.scenes.MultiplayerQuestionCtrl;
@@ -106,9 +107,11 @@ public class Main extends Application {
         var multiplayerResults = FXML.load(
                 MultiplayerResultsCtrl.class, "client", "scenes", "MultiplayerResults.fxml");
 
+        var help = FXML.load(HelpCtrl.class, "client", "scenes", "Help.fxml");
+
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, overview, add, home, waiting, multiplayerQuestion,
                 multiplayerAnswer, ranking, multiplayerEstimation, soloEstimation, soloQuestion,
-                soloAnswer, soloResults, multiplayerResults, adminPanel, addActivity, deleteActivity );
+                soloAnswer, soloResults, multiplayerResults, adminPanel, addActivity, deleteActivity, help );
     }
 }

@@ -1,0 +1,13 @@
+.dialog{
+    -fx-font-family: Monospaced;
+    -fx-font-size: 12pt;
+    -fx-pref-height: 185px;
+    -fx-pref-width: 505px;
+    -fx-border-color: black;
+
+}
+.dialog > *.button-bar > *.container{
+    -fx-background-radius: 30;
+}
+
+

@@ -132,6 +132,7 @@ public class WaitingCtrl {
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
+            alert = mainCtrl.setAlertStyle(alert);
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }

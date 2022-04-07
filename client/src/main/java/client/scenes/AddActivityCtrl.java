@@ -10,6 +10,7 @@ import javax.inject.Inject;
 
 public class AddActivityCtrl {
     private AdminPanelCtrl adminPanelCtrl;
+    private MainCtrl mainCtrl;
 
     @FXML
     private TextField identifier;
@@ -46,6 +47,7 @@ public class AddActivityCtrl {
              source.getText().isEmpty() ||
              imagePath.getText().isEmpty() ) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert = mainCtrl.setAlertStyle(alert);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText ( "All fields ( except id ) have to be completed!" );
             alert.showAndWait();
@@ -73,6 +75,7 @@ public class AddActivityCtrl {
                 cancel();
             } catch ( Exception e ){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert = mainCtrl.setAlertStyle(alert);
                 alert.initModality(Modality.APPLICATION_MODAL);
                 alert.setContentText ( "The answer must be a number!" );
                 alert.showAndWait();
