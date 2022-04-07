@@ -17,8 +17,10 @@ public class DeleteActivityCtrl {
 
 
     @Inject
-    public DeleteActivityCtrl ( AdminPanelCtrl adminPanelCtrl ) {
+    public DeleteActivityCtrl ( AdminPanelCtrl adminPanelCtrl, MainCtrl mainCtrl ) {
+
         this.adminPanelCtrl = adminPanelCtrl;
+        this.mainCtrl = mainCtrl;
     }
 
     /**

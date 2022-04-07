@@ -31,8 +31,10 @@ public class AddActivityCtrl {
     private TextField id;
 
     @Inject
-    public AddActivityCtrl ( AdminPanelCtrl adminPanelCtrl ) {
+    public AddActivityCtrl ( AdminPanelCtrl adminPanelCtrl, MainCtrl mainCtrl ) {
+
         this.adminPanelCtrl = adminPanelCtrl;
+        this.mainCtrl = mainCtrl;
     }
 
     /**
