@@ -652,22 +652,31 @@ public class MultiplayerGameCtrl {
                 if(joker.idProperty().getValue().equals("doublePoints")){
                     if(check){
                         joker.setOnMouseClicked(event -> mcQuestionCtrl.useDoublePoints());
+                        joker.setOnMouseEntered(event -> mcQuestionCtrl.enterDoublePoints());
                     }
                     else{
                         joker.setOnMouseClicked(event -> multiplayerEstimationQuestionCtrl.useDoublePoints());
+                        joker.setOnMouseEntered(event -> multiplayerEstimationQuestionCtrl.enterDoublePoints());
                     }
                 }
                 if(joker.idProperty().getValue().equals("reduceTime")){
                     if(check){
                         joker.setOnMouseClicked(event -> mcQuestionCtrl.useReduceTime());
+                        joker.setOnMouseEntered(event -> mcQuestionCtrl.enterReduceTime());
                     }
                     else{
                         joker.setOnMouseClicked(event -> multiplayerEstimationQuestionCtrl.useReduceTime());
+                        joker.setOnMouseEntered(event -> multiplayerEstimationQuestionCtrl.enterReduceTime());
                     }
                 }
                 if(joker.idProperty().getValue().equals("removeIncorrect")){
                     if(check){
                         joker.setOnMouseClicked(event -> mcQuestionCtrl.useRemoveIncorrect());
+                        joker.setOnMouseEntered(event -> mcQuestionCtrl.enterRemoveIncorrect());
+                    }
+                    else{
+                        joker.setOnMouseClicked(event -> multiplayerEstimationQuestionCtrl.useReduceTime());
+                        joker.setOnMouseEntered(event -> multiplayerEstimationQuestionCtrl.enterRemoveIncorrect());
                     }
                 }
             }

@@ -95,6 +95,8 @@ public class MultiplayerEstimationQuestionCtrl extends AbstractEstimationQuestio
         super.setup(gameCtrl.getUser().points);
 
         doublePointsImage.setVisible(false);
+        removeIncorrectImage.setVisible(false);
+        reduceTimeImage.setVisible(false);
     }
 
     /**
@@ -306,5 +308,9 @@ public class MultiplayerEstimationQuestionCtrl extends AbstractEstimationQuestio
         doublePoints.setOnMouseClicked(null);
         removeIncorrect.setOnMouseClicked(null);
         reduceTime.setOnMouseClicked(null);
+
+        doublePoints.setOnMouseEntered(null);
+        removeIncorrect.setOnMouseEntered(null);
+        reduceTime.setOnMouseEntered(null);
     }
 }

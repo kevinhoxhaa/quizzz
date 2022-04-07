@@ -342,6 +342,9 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
         doublePoints.setOnMouseClicked(null);
         removeIncorrect.setOnMouseClicked(null);
         reduceTime.setOnMouseClicked(null);
+        doublePoints.setOnMouseEntered(null);
+        removeIncorrect.setOnMouseEntered(null);
+        reduceTime.setOnMouseEntered(null);
     }
 
     /**
