@@ -1,30 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.text.TextFlow?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<ScrollPane prefHeight="384.0" prefWidth="512.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<ScrollPane prefHeight="443.0" prefWidth="512.0" styleClass="dialog" stylesheets="@/client/Stylesheets/TextFormat.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.HelpCtrl">
    <content>
       <VBox fillWidth="false" prefHeight="364.0" prefWidth="492.0" spacing="5.0">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
          <children>
-            <TextFlow maxHeight="1.7976931348623157E308" minWidth="492.0" prefHeight="200.0" prefWidth="200.0">
-               <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to Quizzzz! &#13;Raise your energy consumption awareness by playing a fast-paced quiz game. &#13;Enter your username and the server URL. &#13;Start a solo game and answer questions consecutively. &#13;Start a multiplayer game, join a waiting room and compete with your friends! &#13;Be quick to answer though, points are based on correctness and time. &#13;Pick one of the three jokers to boost your gameplay: &#13;- Remove one wrong answer &#13;- Double your points for that activity &#13;- Shorten the time for everyone else &#13;Show your emotions to other players by using our list of emojis. &#13;What are you waiting for? Fun is one click away!">
-                     <font>
-                        <Font name="Monospaced Regular" size="16.0" />
-                     </font></Text>
-               </children>
+            <TextFlow maxHeight="1.7976931348623157E308" minWidth="492.0" prefHeight="324.0" prefWidth="469.0">
                <padding>
                   <Insets left="8.0" top="8.0" />
                </padding>
+               <children>
+                  <VBox prefHeight="250.0" prefWidth="501.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h1" text="Welcome to Quizzzz!">
+                           <VBox.margin>
+                              <Insets left="115.0" top="10.0" />
+                           </VBox.margin>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2" text="Raise your energy consumption awareness by playing a fast-paced quiz game. " wrappingWidth="477.9427490234375">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h3" text="Enter your username and the server URL. Start a solo game and answer questions consecutively. Start a multiplayer game, join a waiting room and compete with your friends! Be quick to answer though, points are based on correctness and time. " wrappingWidth="466.18292236328125">
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2" text="Pick one of the three jokers to boost your gameplay: " wrappingWidth="451.80987548828125">
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h3" text="- Remove one wrong answer ">
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin></Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h3" text="- Double your points for that activity " />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h3" text="- Shorten the time for everyone else " />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h3" text="Show your emotions to other players by using our list of emojis." wrappingWidth="442.72222900390625">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2" text=" What are you waiting for? Fun is one click away!">
+                           <VBox.margin>
+                              <Insets left="5.0" top="5.0" />
+                           </VBox.margin>
+                        </Text>
+                     </children>
+                  </VBox>
+               </children>
             </TextFlow>
+            <Button fx:id="closeHelpButton" mnemonicParsing="false" onAction="#closeHelp" text="OK">
+               <VBox.margin>
+                  <Insets left="460.0" top="10.0" />
+               </VBox.margin>
+            </Button>
          </children>
       </VBox>
    </content>
