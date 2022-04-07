@@ -51,8 +51,7 @@ public class MainCtrl {
     public static final String STYLES_PATH = "client/stylesheets/pixelart.css";
     public static final double WIDTH = 1024.0;
     public static final double HEIGHT = 704.0;
-    private static final double TIMEOUT = 8.0;
-    private static final double START_TIME = 7.95;
+    private static final double START_TIME_DELAY = 0.05;
     private static final double INTERVAL = 0.05;
     private static final int MILLIS = 50;
     private static final int POLLING_DELAY = 0;
@@ -243,7 +242,7 @@ public class MainCtrl {
         this.helpCtrl = help.getKey();
         this.help = new Scene(help.getValue());
 
-        countdown = START_TIME;
+        countdown = multiplayerQuestionCtrl.getTimerLength();
 
         showHome();
         primaryStage.show();
@@ -549,12 +548,12 @@ public class MainCtrl {
             timerThread.interrupt();
         }
         timerThread = new Thread(() -> {
-            countdown = START_TIME;
+            countdown = sceneController.getTimerLength() - START_TIME_DELAY;
             while (countdown >= 0.0) {
                 try {
                     double finalCountdown = countdown;
                     Platform.runLater(() -> {
-                        countdownCircle.setProgress(finalCountdown / TIMEOUT);
+                        countdownCircle.setProgress(finalCountdown / sceneController.getTimerLength());
                         if (text != null) {
                             text.setText(Math.round(finalCountdown) + "s");
                         }
