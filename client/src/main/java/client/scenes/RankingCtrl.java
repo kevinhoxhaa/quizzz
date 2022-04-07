@@ -61,6 +61,7 @@ public class RankingCtrl extends AbstractRankingCtrl {
         ranking3rdPlayer.setText(users.size() > 2 ? users.get(2).username : "");
 
         gameCtrl.populateRanking(scoreTable, users);
+        scoreTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
     /**

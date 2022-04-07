@@ -244,7 +244,7 @@
                                     </children>
                                 </Pane>
                                 <VBox alignment="CENTER" prefHeight="194.0" prefWidth="245.0" style="-fx-background-color: black;">
-                                    <ListView fx:id="correctPlayers" prefHeight="194.0" prefWidth="245.0" style="-fx-border-color: black;" />
+                                    <ListView fx:id="correctPlayers" prefHeight="194.0" prefWidth="245.0" style="-fx-border-color: black;" stylesheets="/client/stylesheets/ListView.css" />
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>

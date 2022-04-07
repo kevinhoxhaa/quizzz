@@ -67,6 +67,7 @@ public class MultiplayerResultsCtrl extends AbstractRankingCtrl {
         pointsColumn.setCellValueFactory(new PropertyValueFactory<>("points"));
 
         gameCtrl.populateRanking(scoreTable, users);
+        scoreTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
     /**
