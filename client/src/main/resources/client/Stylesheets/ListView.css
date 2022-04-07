@@ -5,7 +5,7 @@
     -fx-background-color: #C3DBED;
 }
 
--lsit-cell{
+-list-cell{
     -fx-border-color: black;
     -fx-alignment: CENTER;
 }
