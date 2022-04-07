@@ -350,6 +350,7 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
         disableAnswers();
         gameCtrl.disableEmojis(emojiPane);
         gameCtrl.redirectFromQuestion();
+        mainCtrl.addScore(mainCtrl.getUser(),currentQuestion);
         gameCtrl.postAnswer(currentQuestion);
     }
 

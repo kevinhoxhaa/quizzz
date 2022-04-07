@@ -359,7 +359,6 @@ public class ServerUtils {
                 questionIndex,
                 streakPoints
         );
-
         return ClientBuilder.newClient(new ClientConfig())
                 .target(serverUrl).path(path)
                 .request(APPLICATION_JSON)

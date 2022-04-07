@@ -129,6 +129,7 @@ public class MainCtrl {
     private int answerCount = 0;
 
     private long streak = 0;
+    private long streakScore=0;
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home,
@@ -265,6 +266,22 @@ public class MainCtrl {
     }
 
     /**
+     * Sets the streak score to this value
+     * @param score
+     */
+    public void setStreakScore(Long score){
+        streakScore=score;
+    }
+
+    /**
+     * Gets the streak score
+     * @return  streakScore
+     */
+    public Long getStreakScore(){
+        return this.streakScore;
+    }
+
+    /**
      * This method increments the streak
      */
     public void incrementStreak(){
@@ -283,40 +300,20 @@ public class MainCtrl {
         else{
             resetStreak();
         }
-
-        user.incrementScore((getMultiplyingFactor() * (answeredQuestion.calculatePoints())) +
-                getStreakPoints(answeredQuestion,getMultiplyingFactor()));
-
-        System.out.println(getStreakPoints(answeredQuestion,getMultiplyingFactor()));
-
-        if(multiplayerCtrl!=null && multiplayerCtrl.getIsActiveDoublePoints()) {
-            multiplayerCtrl.setIsActiveDoublePoints(false);
-        }
-
-    }
-
-    /**
-     * Method that returns the multiplying factor, which depends on the active double points boolean
-     * @return 1 or 2
-     */
-    public int getMultiplyingFactor(){
-        return (multiplayerCtrl!=null && multiplayerCtrl.getIsActiveDoublePoints()) ? 2 : 1;
-    }
-
-    /**
-     * This method gets the extra points added by the streak
-     * @param answeredQuestion
-     * @param multiplyingFactor
-     * @return extra streak points
-     */
-    public Long getStreakPoints(Question answeredQuestion,int multiplyingFactor){
         int correctFactor = answeredQuestion.hasCorrectUserAnswer() ? 1 : 0;
+        int multiplyingFactor = (multiplayerCtrl!=null && multiplayerCtrl.getIsActiveDoublePoints()) ? 2 : 1;
+
         if(streak<X2){
-            return multiplyingFactor * correctFactor * Math.round(Math.pow(FACTOR,((double)(streak+X1)/X2)));
+             setStreakScore(multiplyingFactor * correctFactor * Math.round(Math.pow(FACTOR,((double)(streak+X1)/X2))));
         }
         else{
-            return multiplyingFactor * correctFactor * Math.round(Math.pow(FACTOR,((double)(streak+X3)/X4)));
+             setStreakScore(multiplyingFactor * correctFactor * Math.round(Math.pow(FACTOR,((double)(streak+X3)/X4))));
         }
+
+        user.incrementScore((multiplyingFactor * (answeredQuestion.calculatePoints())) +
+                getStreakScore());
+
+        System.out.println(getStreakScore());
     }
 
     /**
@@ -586,6 +583,7 @@ public class MainCtrl {
             soloQuestionCtrl.resetCircleColor();
             soloAnswerCtrl.resetCircleColor();
             resetStreak();
+            setStreakScore(0L);
 
             SoloGame soloGame = server.getSoloGame(serverUrl, QUESTIONS_PER_GAME);
             primaryStage.setTitle("Solo game");
@@ -718,6 +716,7 @@ public class MainCtrl {
                         multiplayerCtrl.unregisterForEmojis();
                         multiplayerCtrl.unregisterForHalfTime();
                         multiplayerCtrl.hideEmojis();
+                        multiplayerCtrl.setIsActiveDoublePoints(false);
                     }
 
                     if(server.getSession() != null && server.getSession().isConnected()) {
