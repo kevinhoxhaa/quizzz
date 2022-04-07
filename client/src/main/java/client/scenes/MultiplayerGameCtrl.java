@@ -648,4 +648,45 @@ public class MultiplayerGameCtrl {
             return;
         }
     }
-}
+
+    /**
+     * Enables interaction with the joker buttons.
+     * @param jokers are the list of unused jokers which should be enabled
+     * @param check is true if it is a multichoice question and false if it is an estimation question
+     */
+    public void enableJokers(List<StackPane>jokers,boolean check) {
+        for(StackPane joker:jokers){
+            System.out.println(joker.idProperty().getValue());
+                if(joker.idProperty().getValue().equals("doublePoints")){
+                    if(check){
+                        joker.setOnMouseClicked(event -> mcQuestionCtrl.useDoublePoints());
+                        joker.setOnMouseEntered(event -> mcQuestionCtrl.enterDoublePoints());
+                    }
+                    else{
+                        joker.setOnMouseClicked(event -> multiplayerEstimationQuestionCtrl.useDoublePoints());
+                        joker.setOnMouseEntered(event -> multiplayerEstimationQuestionCtrl.enterDoublePoints());
+                    }
+                }
+                if(joker.idProperty().getValue().equals("reduceTime")){
+                    if(check){
+                        joker.setOnMouseClicked(event -> mcQuestionCtrl.useReduceTime());
+                        joker.setOnMouseEntered(event -> mcQuestionCtrl.enterReduceTime());
+                    }
+                    else{
+                        joker.setOnMouseClicked(event -> multiplayerEstimationQuestionCtrl.useReduceTime());
+                        joker.setOnMouseEntered(event -> multiplayerEstimationQuestionCtrl.enterReduceTime());
+                    }
+                }
+                if(joker.idProperty().getValue().equals("removeIncorrect")){
+                    if(check){
+                        joker.setOnMouseClicked(event -> mcQuestionCtrl.useRemoveIncorrect());
+                        joker.setOnMouseEntered(event -> mcQuestionCtrl.enterRemoveIncorrect());
+                    }
+                    else{
+                        joker.setOnMouseClicked(event -> multiplayerEstimationQuestionCtrl.useReduceTime());
+                        joker.setOnMouseEntered(event -> multiplayerEstimationQuestionCtrl.enterRemoveIncorrect());
+                    }
+                }
+            }
+        }
+    }

@@ -75,6 +75,8 @@ public class MultiplayerEstimationQuestionCtrl extends AbstractEstimationQuestio
         jokers.add(doublePoints);
         jokers.add(removeIncorrect);
         jokers.add(reduceTime);
+
+        List<StackPane> availableJokers=new ArrayList<>();
         removeIncorrect.setDisable(true);
         removeIncorrect.setBackground(new Background(
                 new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -83,12 +85,18 @@ public class MultiplayerEstimationQuestionCtrl extends AbstractEstimationQuestio
             if(gameCtrl.getUsedJokers().contains(joker.idProperty().getValue())){
                 gameCtrl.disableJokerButton(joker);
             }
+            else{
+                availableJokers.add(joker);
+            }
         }
 
+        gameCtrl.enableJokers(availableJokers,false);
         currentQuestion = question;
         super.setup(gameCtrl.getUser().points);
 
         doublePointsImage.setVisible(false);
+        removeIncorrectImage.setVisible(false);
+        reduceTimeImage.setVisible(false);
     }
 
     /**
@@ -126,6 +134,7 @@ public class MultiplayerEstimationQuestionCtrl extends AbstractEstimationQuestio
             System.out.println("Enter a number!");
         }
 
+        disableJokers();
         gameCtrl.disableEmojis(emojiPane);
         mainCtrl.addScore(mainCtrl.getUser(),currentQuestion);
         gameCtrl.postAnswer(currentQuestion);
@@ -291,5 +300,18 @@ public class MultiplayerEstimationQuestionCtrl extends AbstractEstimationQuestio
 
         quitButton.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
         submitButton.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+    }
+
+    /**
+     * Disables all interaction with the jokers buttons.
+     */
+    public void disableJokers() {
+        doublePoints.setOnMouseClicked(null);
+        removeIncorrect.setOnMouseClicked(null);
+        reduceTime.setOnMouseClicked(null);
+
+        doublePoints.setOnMouseEntered(null);
+        removeIncorrect.setOnMouseEntered(null);
+        reduceTime.setOnMouseEntered(null);
     }
 }

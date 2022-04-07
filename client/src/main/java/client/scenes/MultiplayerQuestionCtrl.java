@@ -80,9 +80,14 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
         jokers.add(removeIncorrect);
         jokers.add(reduceTime);
 
+        List<StackPane> availableJokers=new ArrayList<>();
+
         for(StackPane joker:jokers){
             if(gameCtrl.getUsedJokers().contains(joker.idProperty().getValue())){
                 gameCtrl.disableJokerButton(joker);
+            }
+            else{
+                availableJokers.add(joker);
             }
         }
 
@@ -93,6 +98,7 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
         resetAnswerClickability();
         disabledAnswer = null;
         gameCtrl.enableEmojis(emojiPane);
+        gameCtrl.enableJokers(availableJokers,true);
         doublePointsImage.setVisible(false);
         removeIncorrectImage.setVisible(false);
         reduceTimeImage.setVisible(false);
@@ -253,6 +259,7 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
         gameCtrl.useJoker( reduceTime, reduceTimeImage );
     }
 
+
     /**
      * This method resets the double point jokers so that it can be used again when another game starts
      */
@@ -329,6 +336,18 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
     }
 
     /**
+     * Disables all interaction with the jokers buttons.
+     */
+    public void disableJokers() {
+        doublePoints.setOnMouseClicked(null);
+        removeIncorrect.setOnMouseClicked(null);
+        reduceTime.setOnMouseClicked(null);
+        doublePoints.setOnMouseEntered(null);
+        removeIncorrect.setOnMouseEntered(null);
+        reduceTime.setOnMouseEntered(null);
+    }
+
+    /**
      * Enables interaction with the answer buttons.
      */
     public void enableAnswers() {
@@ -348,6 +367,7 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
     @Override
     public void redirect() {
         disableAnswers();
+        disableJokers();
         gameCtrl.disableEmojis(emojiPane);
         gameCtrl.redirectFromQuestion();
         mainCtrl.addScore(mainCtrl.getUser(),currentQuestion);
