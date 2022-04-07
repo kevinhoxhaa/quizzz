@@ -16,6 +16,7 @@
 package client;
 
 import client.scenes.AddQuoteCtrl;
+import client.scenes.AdminPanelCtrl;
 import client.scenes.MultiplayerEstimationQuestionCtrl;
 import client.scenes.HomeCtrl;
 import client.scenes.MainCtrl;
@@ -55,5 +56,6 @@ public class MyModule implements Module {
         binder.bind(SoloResultsCtrl.class).in(Scopes.SINGLETON);
         binder.bind(WaitingCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ServerUtils.class).in(Scopes.SINGLETON);
+        binder.bind(AdminPanelCtrl.class).in(Scopes.SINGLETON);
     }
 }

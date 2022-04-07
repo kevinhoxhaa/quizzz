@@ -11,7 +11,6 @@ import javafx.fxml.FXML;
 import javafx.scene.ImageCursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -32,14 +31,11 @@ public class HomeCtrl {
     private static final int USERNAME_LENGTH = 15;
     private static final int TITLE_SIZE = 84;
     private static final int BUTTON_TEXT_SIZE = 42;
-    private static final double ALERT_POSITION_Y = 250;
-    private static final double ALERT_POSITION_X = 387;
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
     private Stage dialog;
-    private DialogPane dialogPane;
 
     @FXML
     private ImageView bulbView;
@@ -88,7 +84,7 @@ public class HomeCtrl {
      */
     @FXML
     protected void onHelpButtonClick() {
-        mainCtrl.showHelp();
+       mainCtrl.showHelp();
     }
 
     /**
@@ -130,38 +126,29 @@ public class HomeCtrl {
     }
 
     /**
+     * Opens the adminPanel
+     */
+
+    @FXML
+    public void onAdminPanelClick() {
+        String serverUrl = urlField.getText();
+        mainCtrl.setServerUrl(serverUrl.toLowerCase(Locale.ROOT));
+        mainCtrl.showAdminPanel();
+    }
+
+    /**
      * Adds the user to the database and redirects them to the first solo game question scene.
      * An error will occur when the filled in server URL or username are invalid.
      */
     @FXML
     protected void onSoloButtonClick() {
-        try {
-            String serverUrl = urlField.getText();
-            SoloUser user = getSoloUser();
-            if (!isValidUsername(user)) {
-                return;
-            }
-            mainCtrl.setServerUrl(serverUrl);
-            mainCtrl.bindUser(getSoloUser());
-        } catch (WebApplicationException e) {
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert = mainCtrl.setAlertStyle(alert);
-
-            switch (e.getResponse().getStatus()) {
-                case FORBIDDEN:
-                    alert.setContentText("Username cannot be null or empty!");
-                    break;
-                default:
-                    alert.setContentText(e.getMessage());
-            }
-
-            alert.showAndWait();
-            return;
-        } catch (Exception e) {
-            invalidURL();
+        String serverUrl = urlField.getText();
+        SoloUser user = getSoloUser();
+        if (!isValidUsername(user)) {
             return;
         }
+        mainCtrl.setServerUrl(serverUrl);
+        mainCtrl.bindUser(getSoloUser());
         mainCtrl.startSoloGame();
     }
 
@@ -180,7 +167,7 @@ public class HomeCtrl {
             mainCtrl.setServerUrl(serverUrl.toLowerCase(Locale.ROOT));
             mainCtrl.bindUser(server.addUserMultiplayer(serverUrl, user));
         } catch (WebApplicationException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
+            var alert = new Alert(Alert.AlertType.ERROR);
             alert = mainCtrl.setAlertStyle(alert);
             alert.initModality(Modality.APPLICATION_MODAL);
 
@@ -198,22 +185,10 @@ public class HomeCtrl {
             alert.showAndWait();
             return;
         } catch (Exception e) {
-            invalidURL();
+            mainCtrl.invalidURL();
             return;
         }
         mainCtrl.showWaiting();
-    }
-
-    /**
-     * Alerts the user about the invalid URL
-     */
-    private void invalidURL() {
-        var alert = new Alert(Alert.AlertType.ERROR);
-        alert.initModality(Modality.APPLICATION_MODAL);
-        alert = mainCtrl.setAlertStyle(alert);
-        alert.setContentText("Invalid server URL!");
-        alert.showAndWait();
-        return;
     }
 
     /**
@@ -222,11 +197,15 @@ public class HomeCtrl {
      * @return a boolean representation of the username's validity
      */
     private boolean isValidUsername(User user) {
-        if (user.username.contains(" ") || user.username.length() > USERNAME_LENGTH) {
+        if (user.username.contains(" ") || user.username.isEmpty() || user.username.length() > USERNAME_LENGTH ) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert = mainCtrl.setAlertStyle(alert);
             alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText("Invalid username!");
+            if (user.username.length() > USERNAME_LENGTH) {
+                alert.setContentText("Username is too long!");
+            } else {
+                alert.setContentText("Username cannot be null or empty!");
+            }
             alert.showAndWait();
             return false;
         }

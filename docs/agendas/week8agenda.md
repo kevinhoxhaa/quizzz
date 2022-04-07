@@ -5,7 +5,7 @@ Datum: 		    29-03-2022
 Time: 		    16:45 - 17:30
 Attendees:		Alican Ekşi, Calin Georgescu, Boris Goranov, Kevin Hoxha, Varga Pál Patrik, Bink Boëtius, Nada Mouman  
 Chair: 	        Varga Pál Patrik 
-Notetaker:	    Kevin Hoxha
+Notetaker:	    Boris Goranov
 
 ## Agenda items
 

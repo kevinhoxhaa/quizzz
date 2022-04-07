@@ -33,6 +33,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
@@ -56,9 +57,11 @@ public class MainCtrl {
     private static final int MILLIS = 50;
     private static final int POLLING_DELAY = 0;
     private static final int POLLING_INTERVAL = 500;
-    private static final int QUESTIONS_PER_GAME = 2;
+    private static final int QUESTIONS_PER_GAME = 20;
     private static final double ALERT_POSITION_Y = 250;
-    private static final double ALERT_POSITION_X = 387;
+    private static final double ALERT_POSITION_X = 517;
+    private static final double ALERT_SIZE = 50;
+
 
     //These are the variables used in the streak calculation formula
     private static final long X1 = 1;
@@ -116,6 +119,15 @@ public class MainCtrl {
     private MultiplayerResultsCtrl multiplayerResultsCtrl;
     private Scene multiplayerResults;
 
+    private AdminPanelCtrl adminPanelCtrl;
+    private Scene adminPanel;
+
+    private AddActivityCtrl addActivityCtrl;
+    private Scene addActivity;
+
+    private DeleteActivityCtrl deleteActivityCtrl;
+    private Scene deleteActivity;
+
     private HelpCtrl helpCtrl;
     private Scene help;
 
@@ -140,8 +152,10 @@ public class MainCtrl {
                            Pair<SoloAnswerCtrl, Parent> soloAnswer,
                            Pair<SoloResultsCtrl, Parent> soloResults,
                            Pair<MultiplayerResultsCtrl, Parent> multiplayerResults,
-                           Pair<HelpCtrl, Parent> help
-                           ) {
+                           Pair<AdminPanelCtrl, Parent> adminPanel,
+                           Pair<AddActivityCtrl, Parent> addActivity,
+                           Pair<DeleteActivityCtrl, Parent> deleteActivity,
+                           Pair<HelpCtrl, Parent> help) {
         this.primaryStage = primaryStage;
         primaryStage.setMinHeight(HEIGHT);
         primaryStage.setMinWidth(WIDTH);
@@ -215,6 +229,15 @@ public class MainCtrl {
         this.multiplayerResults = new Scene(multiplayerResults.getValue());
         this.multiplayerResults.getStylesheets().add(STYLES_PATH);
         this.multiplayerResults.setCursor(new ImageCursor(pointerCursor));
+
+        this.adminPanelCtrl = adminPanel.getKey();
+        this.adminPanel = new Scene( adminPanel.getValue() );
+
+        this.addActivityCtrl = addActivity.getKey();
+        this.addActivity = new Scene( addActivity.getValue() );
+
+        this.deleteActivityCtrl = deleteActivity.getKey();
+        this.deleteActivity = new Scene( deleteActivity.getValue() );
 
         this.helpCtrl = help.getKey();
         this.help = new Scene(help.getValue());
@@ -310,6 +333,24 @@ public class MainCtrl {
     }
 
     /**
+     * Returns the addActivityScene
+     * @return the addActivityScene
+     */
+
+    public Scene getAddActivityScene() {
+        return this.addActivity;
+    }
+
+    /**
+     * Returns the deleteActivityScene
+     * @return the deleteActivityScene
+     */
+
+    public Scene getDeleteActivityScene() {
+        return this.deleteActivity;
+    }
+
+    /**
      * Shows the home page of the quiz application on the primary
      * stage
      */
@@ -317,6 +358,18 @@ public class MainCtrl {
         primaryStage.setTitle("Quizzz");
         primaryStage.setScene(home);
         homeCtrl.setFonts();
+    }
+
+    public void showAdminPanel() {
+        try {
+            adminPanelCtrl.refreshActivities();
+        } catch (Exception e) {
+            invalidURL();
+            return;
+        }
+        primaryStage.setTitle( "Admin Panel");
+        primaryStage.setScene(adminPanel);
+        primaryStage.show();
     }
 
     /**
@@ -522,23 +575,40 @@ public class MainCtrl {
      * Resets the state of the solo game
      */
     public void startSoloGame() {
-        answerCount = 0;
-        getUser().resetScore();
-        colors = new ArrayList<>();
+        try {
+            answerCount = 0;
+            getUser().resetScore();
+            colors = new ArrayList<>();
 
-        soloQuestionCtrl.resetCircleColor();
-        soloAnswerCtrl.resetCircleColor();
-        resetStreak();
+            soloQuestionCtrl.resetCircleColor();
+            soloAnswerCtrl.resetCircleColor();
+            resetStreak();
 
-        SoloGame soloGame = server.getSoloGame(server.getURL(), QUESTIONS_PER_GAME);
-        primaryStage.setTitle("Solo game");
+            SoloGame soloGame = server.getSoloGame(serverUrl, QUESTIONS_PER_GAME);
+            primaryStage.setTitle("Solo game");
 
-        if(soloGame.loadCurrentQuestion().getType() == QuestionType.ESTIMATION){
-            showSoloEstimationQuestion(soloGame);
+            if(soloGame.loadCurrentQuestion().getType() == QuestionType.ESTIMATION){
+                showSoloEstimationQuestion(soloGame);
+            }
+            else {
+                showSoloQuestion(soloGame);
+            }
+        } catch (Exception e) {
+            invalidURL();
+            return;
         }
-        else {
-            showSoloQuestion(soloGame);
-        }
+    }
+
+    /**
+     * Alerts the user about the invalid URL
+     */
+    protected void invalidURL() {
+        var alert = new Alert(Alert.AlertType.ERROR);
+        alert = setAlertStyle(alert);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setContentText("Invalid server URL!");
+        alert.showAndWait();
+        return;
     }
 
     /**
@@ -557,6 +627,10 @@ public class MainCtrl {
         updateQuestionCounters(soloAnswerCtrl, colors);
         primaryStage.setScene(soloAnswer);
     }
+
+    /**
+     * Shows the Help page dialog component on the home page.
+     */
 
     public void showHelp(){
         Stage stage = new Stage();
@@ -719,6 +793,36 @@ public class MainCtrl {
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setY(ALERT_POSITION_Y);
         alert.setX(ALERT_POSITION_X);
+        switch(alert.getAlertType()){
+            case ERROR:
+                ImageView error =
+                        new ImageView(this.getClass().getResource("/client/images/thonk.png").toString());
+                error.setFitHeight(ALERT_SIZE);
+                error.setFitWidth(ALERT_SIZE);
+                alert.setGraphic(error);
+                break;
+            case WARNING:
+                ImageView warning =
+                        new ImageView(this.getClass().getResource("/client/images/warning_alert.png").toString());
+                warning.setFitHeight(ALERT_SIZE);
+                warning.setFitWidth(ALERT_SIZE);
+                alert.setGraphic(warning);
+                break;
+            case CONFIRMATION:
+                ImageView confirmation =
+                        new ImageView(this.getClass().getResource("/client/images/confirmation.png").toString());
+                confirmation.setFitHeight(ALERT_SIZE);
+                confirmation.setFitWidth(ALERT_SIZE);
+                alert.setGraphic(confirmation);
+                break;
+            case INFORMATION:
+                ImageView information =
+                        new ImageView(this.getClass().getResource("/client/images/info.png").toString());
+                information.setFitHeight(ALERT_SIZE);
+                information.setFitWidth(ALERT_SIZE);
+                alert.setGraphic(information);
+                break;
+        }
         return alert;
     }
 
