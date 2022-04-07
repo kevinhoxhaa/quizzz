@@ -416,14 +416,16 @@ public class GameController {
      * @param userId the id of the answering user
      * @param questionIndex the question index
      * @param answeredQuestion the answered question with recorded points
+     * @param streakPoints the points from the streak
      * @return the list of users who have answered the last question
      * correctly
      */
-    @PostMapping(path =  "/{gameIndex}/user/{userId}/question/{questionIndex}")
+    @PostMapping(path =  "/{gameIndex}/user/{userId}/question/{questionIndex}/{streakPoints}")
     public ResponseEntity<List<MultiplayerUser>>
     postAnswer(@PathVariable(name = "gameIndex") int gameIndex,
                @PathVariable(name = "userId") long userId,
                @PathVariable(name = "questionIndex") int questionIndex,
+               @PathVariable(name = "streakPoints") Long streakPoints,
                @RequestBody Question answeredQuestion) {
 
         if(!gameUserRepo.existsById(userId)) {
@@ -443,7 +445,8 @@ public class GameController {
         MultiplayerUser user = gameUserRepo.findById(userId).get();
 
         if(user.totalAnswers <= questionIndex) {
-            user.points += answeredQuestion.calculatePoints();
+            user.points += (answeredQuestion.calculatePoints())+streakPoints;
+            System.out.println("STREAK: "+streakPoints);
             user.totalAnswers += 1;
             user.correctAnswers += answeredQuestion.calculatePoints() == 0 ? 0 : 1;
             user.lastAnswerCorrect = answeredQuestion.hasCorrectUserAnswer();
@@ -461,14 +464,16 @@ public class GameController {
      * @param userId the id of the answering user
      * @param questionIndex the question index
      * @param answeredQuestion the answered question with recorded points
+     * @param streakPoints the points from the streak
      * @return the list of users who have answered the last question
      * correctly
      */
-    @PostMapping(path =  "/{gameIndex}/user/{userId}/question/{questionIndex}/doublePoints")
+    @PostMapping(path =  "/{gameIndex}/user/{userId}/question/{questionIndex}/{streakPoints}/doublePoints")
     public ResponseEntity<List<MultiplayerUser>>
     postDoublePointsAnswer(@PathVariable(name = "gameIndex") int gameIndex,
                @PathVariable(name = "userId") long userId,
                @PathVariable(name = "questionIndex") int questionIndex,
+               @PathVariable(name = "streakPoints") Long streakPoints,
                @RequestBody Question answeredQuestion) {
 
         if(!gameUserRepo.existsById(userId)) {
@@ -488,7 +493,8 @@ public class GameController {
         MultiplayerUser user = gameUserRepo.findById(userId).get();
 
         if(user.totalAnswers <= questionIndex) {
-            user.points += 2 * answeredQuestion.calculatePoints();
+            user.points += (2 * answeredQuestion.calculatePoints())+streakPoints;
+            System.out.println("STREAK: "+streakPoints);
             user.totalAnswers += 1;
             user.correctAnswers += answeredQuestion.calculatePoints() == 0 ? 0 : 1;
             user.lastAnswerCorrect = answeredQuestion.hasCorrectUserAnswer();
@@ -529,16 +535,18 @@ public class GameController {
      * @param userId the id of the answering user
      * @param questionIndex the question index
      * @param answeredQuestion the answered question with recorded points
+     * @param streakPoints the points from the streak
      * @return the list of users who have answered the last question
      * correctly
      */
-    @PostMapping(path =  "/{gameIndex}/user/{userId}/consumption/{questionIndex}")
+    @PostMapping(path =  "/{gameIndex}/user/{userId}/consumption/{questionIndex}/{streakPoints}")
     public ResponseEntity<List<MultiplayerUser>>
     postConsumptionAnswer(@PathVariable(name = "gameIndex") int gameIndex,
                @PathVariable(name = "userId") long userId,
                @PathVariable(name = "questionIndex") int questionIndex,
+                          @PathVariable(name = "streakPoints") Long streakPoints,
                @RequestBody ConsumptionQuestion answeredQuestion) {
-        return postAnswer(gameIndex, userId, questionIndex, answeredQuestion);
+        return postAnswer(gameIndex, userId, questionIndex, streakPoints,answeredQuestion);
     }
 
     /**
@@ -549,16 +557,18 @@ public class GameController {
      * @param userId the id of the answering user
      * @param questionIndex the question index
      * @param answeredQuestion the answered question with recorded points
+     * @param streakPoints the points from the streak
      * @return the list of users who have answered the last question
      * correctly
      */
-    @PostMapping(path =  "/{gameIndex}/user/{userId}/estimation/{questionIndex}")
+    @PostMapping(path =  "/{gameIndex}/user/{userId}/estimation/{questionIndex}/{streakPoints}")
     public ResponseEntity<List<MultiplayerUser>>
     postEstimationAnswer(@PathVariable(name = "gameIndex") int gameIndex,
                           @PathVariable(name = "userId") long userId,
                           @PathVariable(name = "questionIndex") int questionIndex,
+                         @PathVariable(name = "streakPoints") Long streakPoints,
                           @RequestBody EstimationQuestion answeredQuestion) {
-        return postAnswer(gameIndex, userId, questionIndex, answeredQuestion);
+        return postAnswer(gameIndex, userId, questionIndex, streakPoints,answeredQuestion);
     }
 
     /**
@@ -569,16 +579,18 @@ public class GameController {
      * @param userId the id of the answering user
      * @param questionIndex the question index
      * @param answeredQuestion the answered question with recorded points
+     * @param streakPoints the points from the streak
      * @return the list of users who have answered the last question
      * correctly
      */
-    @PostMapping(path =  "/{gameIndex}/user/{userId}/choice/{questionIndex}")
+    @PostMapping(path =  "/{gameIndex}/user/{userId}/choice/{questionIndex}/{streakPoints}")
     public ResponseEntity<List<MultiplayerUser>>
     postChoiceAnswer(@PathVariable(name = "gameIndex") int gameIndex,
                           @PathVariable(name = "userId") long userId,
                           @PathVariable(name = "questionIndex") int questionIndex,
+                          @PathVariable(name = "streakPoints") Long streakPoints,
                           @RequestBody ChoiceQuestion answeredQuestion) {
-        return postAnswer(gameIndex, userId, questionIndex, answeredQuestion);
+        return postAnswer(gameIndex, userId, questionIndex, streakPoints,answeredQuestion);
     }
 
     /**
@@ -589,16 +601,18 @@ public class GameController {
      * @param userId the id of the answering user
      * @param questionIndex the question index
      * @param answeredQuestion the answered question with recorded points
+     * @param streakPoints the points from the streak
      * @return the list of users who have answered the last question
      * correctly
      */
-    @PostMapping(path =  "/{gameIndex}/user/{userId}/comparison/{questionIndex}")
+    @PostMapping(path =  "/{gameIndex}/user/{userId}/comparison/{questionIndex}/{streakPoints}")
     public ResponseEntity<List<MultiplayerUser>>
     postComparisonAnswer(@PathVariable(name = "gameIndex") int gameIndex,
                           @PathVariable(name = "userId") long userId,
                           @PathVariable(name = "questionIndex") int questionIndex,
+                         @PathVariable(name = "streakPoints") Long streakPoints,
                           @RequestBody ComparisonQuestion answeredQuestion) {
-        return postAnswer(gameIndex, userId, questionIndex, answeredQuestion);
+        return postAnswer(gameIndex, userId, questionIndex, streakPoints,answeredQuestion);
     }
 
     @GetMapping("/{gameIndex}/ranking")

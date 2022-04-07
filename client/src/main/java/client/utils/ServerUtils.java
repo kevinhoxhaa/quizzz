@@ -320,15 +320,17 @@ public class ServerUtils {
      * @param userId
      * @param questionIndex
      * @param question
+     * @param streakPoints
      * @return list of the users who got the question right
      */
     public List<MultiplayerUser> answerQuestion(String serverUrl, int gameIndex,
-                                                long userId, int questionIndex, Question question) {
+                                                long userId, int questionIndex, Question question,Long streakPoints) {
         String path = String.format(
-                "api/games/%d/user/%d/question/%d",
+                "api/games/%d/user/%d/question/%d/%d",
                 gameIndex,
                 userId,
-                questionIndex
+                questionIndex,
+                streakPoints
         );
 
         return ClientBuilder.newClient(new ClientConfig())
@@ -345,15 +347,17 @@ public class ServerUtils {
      * @param userId
      * @param questionIndex
      * @param question
+     * @param streakPoints
      * @return list of the users who got the question right
      */
     public List<MultiplayerUser> answerDoublePointsQuestion(String serverUrl, int gameIndex,
-                                                long userId, int questionIndex, Question question) {
+                                                long userId, int questionIndex, Question question, Long streakPoints) {
         String path = String.format(
-                "api/games/%d/user/%d/question/%d/doublePoints",
+                "api/games/%d/user/%d/question/%d/%d/doublePoints",
                 gameIndex,
                 userId,
-                questionIndex
+                questionIndex,
+                streakPoints
         );
 
         return ClientBuilder.newClient(new ClientConfig())
