@@ -25,8 +25,30 @@ public class EstimationQuestionTest {
     }
 
     @Test
+    public void defaultConstructorConstructsValidObject() {
+        assertNotNull(new EstimationQuestion());
+    }
+
+    @Test
     public void getActivityReturnsActivity() {
         assertEquals(activity, question.getActivity());
+    }
+
+    @Test
+    public void setActivitySetsActivity() {
+        Activity newActivity = new Activity("", TOTAL, "");
+        question.setActivity(newActivity);
+        assertEquals(newActivity, question.getActivity());
+    }
+
+    @Test
+    public void generateQuestionTextReturnsQuestionText() {
+        assertEquals("How much energy do you think act consumes?", question.generateQuestionText());
+    }
+
+    @Test
+    public void generateCorrectAnswerReturnsNotNull() {
+        assertNotNull(question.generateCorrectAnswer());
     }
 
     @Test

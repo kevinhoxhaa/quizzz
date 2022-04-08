@@ -1,10 +1,12 @@
 package commons.models;
 
 import commons.entities.Activity;
+import commons.utils.QuestionType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -53,6 +55,11 @@ public class ConsumptionQuestionTest {
     }
 
     @Test
+    public void defaultConstructorConstructsValidObject() {
+        assertNotNull(new ConsumptionQuestion());
+    }
+
+    @Test
     public void getActivityReturnsActivity() {
         assertEquals(activity, question.getActivity());
     }
@@ -98,6 +105,34 @@ public class ConsumptionQuestionTest {
 
         assertTrue(answers.contains(POSITIVE));
         assertEquals(3,answers.size());
+    }
+
+    @Test
+    public void setActivitySetsActivity() {
+        activity.setConsumption(TOTAL + TOTAL);
+        question.setActivity(activity);
+        assertEquals(activity, question.getActivity());
+    }
+
+    @Test
+    public void setAnswersSetAnswers() {
+        question.setAnswers(new ArrayList<>());
+        assertEquals(new ArrayList<>(), question.getAnswers());
+    }
+
+    @Test
+    public void generateQuestionTextReturnsQuestionText() {
+        assertEquals("How much energy does act consume?", question.generateQuestionText());
+    }
+
+    @Test
+    public void getTypeReturnsQuestionType() {
+        assertEquals(QuestionType.CONSUMPTION, question.getType());
+    }
+
+    @Test
+    public void generateCorrectAnswerNotNull() {
+        assertNotNull(question.generateCorrectAnswer());
     }
 
     @Test

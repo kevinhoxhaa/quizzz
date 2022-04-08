@@ -17,9 +17,7 @@ package client.utils;
 
 import commons.entities.Activity;
 import commons.entities.MultiplayerUser;
-import commons.entities.Quote;
 import commons.entities.SoloUser;
-import commons.models.GameList;
 import commons.models.Question;
 import commons.models.SoloGame;
 import jakarta.ws.rs.client.ClientBuilder;
@@ -36,13 +34,10 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import javax.imageio.ImageIO;
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.net.URL;
 import java.util.Base64;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -51,42 +46,9 @@ import java.util.function.Consumer;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
-
-    private static final String SERVER = "http://localhost:8080/";
-    private static final long MAGICNUMBER = 42;
     private static final int QUESTIONS_PER_GAME = 20;
 
     private StompSession session;
-
-    public void getQuotesTheHardWay() throws IOException {
-        var url = new URL("http://localhost:8080/api/quotes");
-        var is = url.openConnection().getInputStream();
-        var br = new BufferedReader(new InputStreamReader(is));
-        String line;
-        while ((line = br.readLine()) != null) {
-            System.out.println(line);
-        }
-    }
-
-    public String getURL(){
-        return SERVER;
-    }
-
-    public List<Quote> getQuotes() {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/quotes") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(new GenericType<List<Quote>>() {});
-    }
-
-    public Quote addQuote(Quote quote) {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/quotes") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
-    }
 
     public List<MultiplayerUser> getUsers(String serverUrl) {
         return ClientBuilder.newClient(new ClientConfig())
@@ -94,19 +56,6 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(new GenericType<List<MultiplayerUser>>() {});
-    }
-
-    /**
-     * Gets the games that are currently on the server.
-     * @param serverUrl The server where the games should be fetched from.
-     * @return A GameList object containing all the games on the server.
-     */
-    public GameList getGames(String serverUrl) {
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(serverUrl).path("api/games")
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(GameList.class);
     }
 
     /**
@@ -181,23 +130,6 @@ public class ServerUtils {
     }
 
     /**
-     * Adds a new activity to the database of the game
-     * @param serverUrl The server URL of the game the user is in
-     * @param gameIndex the game index
-     * @param activity the activity to be added
-     * @return an activity
-     */
-
-    public Activity addActivity ( String serverUrl, int gameIndex, Activity activity ) {
-        String path = String.format("/api/games/%d/activity", gameIndex);
-        return ClientBuilder.newClient ( new ClientConfig() )
-                .target(serverUrl).path(path)
-                .request( APPLICATION_JSON )
-                .accept ( APPLICATION_JSON )
-                .post ( Entity.entity ( activity, APPLICATION_JSON ), Activity.class );
-    }
-
-    /**
      * Adds a new activity to the repo
      *
      * @param serverUrl the current server
@@ -248,30 +180,12 @@ public class ServerUtils {
     }
 
     /**
-     * Deletes an activity
-     * @param serverUrl The server URL of the game the user is in
-     * @param gameIndex the game index
-     * @param activity the activity to be removed
-     * @return an activity
-     */
-
-    public Activity deleteActivity ( String serverUrl, int gameIndex, Activity activity ) {
-        String path = String.format("/api/games/%d/activity/%s", gameIndex, activity.identifier );
-        return ClientBuilder.newClient ( new ClientConfig() )
-                .target(serverUrl).path(path)
-                .request( APPLICATION_JSON )
-                .accept ( APPLICATION_JSON )
-                .delete ( Activity.class );
-    }
-
-    /**
      * Deletes an activity from the repo
      *
      * @param serverUrl the server url
      * @param activity the activity to be deleted
      * @return the deleted activity
      */
-
     public Activity deleteActivityFromRepo ( String serverUrl, Activity activity ) {
         return ClientBuilder.newClient ( new ClientConfig() )
                 .target(serverUrl).path("/api/activities/" + activity.id )

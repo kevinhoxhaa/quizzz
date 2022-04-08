@@ -10,14 +10,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class GameTest {
+public class SoloGameTest {
     private static final long ID = 1L;
 
-    private Game game;
+    private SoloGame game;
 
     @BeforeEach
     public void startup() {
-        game = new Game();
+        game = new SoloGame();
     }
 
     @Test
@@ -57,6 +57,28 @@ public class GameTest {
     public void setGameIdSetsGameId() {
         game.setGameID(ID);
         assertEquals(ID, game.getGameID());
+    }
+
+    @Test
+    public void getAnswersReturnsList() {
+        assertEquals(new ArrayList<>(), game.getAnswers());
+    }
+
+    @Test
+    public void getCurrentQuestionNumReturnsCurrentQuestionNum() {
+        assertEquals(0, game.getCurrentQuestionNum());
+    }
+
+    @Test
+    public void incrementCurrentQuestionNumSetsCurrentQuestionNum() {
+        game.incrementCurrentQuestionNum();
+        assertEquals(1, game.getCurrentQuestionNum());
+    }
+
+    @Test
+    public void loadCurrentQuestionLoadsCurrentQuestion() {
+        game.getQuestions().add(new ConsumptionQuestion());
+        assertNotNull(game.loadCurrentQuestion());
     }
 
     @Test

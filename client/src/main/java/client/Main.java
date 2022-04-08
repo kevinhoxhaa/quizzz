@@ -23,8 +23,6 @@ import java.net.URISyntaxException;
 import client.scenes.AddActivityCtrl;
 import client.scenes.AdminPanelCtrl;
 import client.scenes.DeleteActivityCtrl;
-import client.scenes.QuoteOverviewCtrl;
-import client.scenes.AddQuoteCtrl;
 import client.scenes.HelpCtrl;
 import client.scenes.HomeCtrl;
 import client.scenes.MultiplayerResultsCtrl;
@@ -72,11 +70,6 @@ public class Main extends Application {
         var deleteActivity = FXML.load (
                 DeleteActivityCtrl.class, "client", "scenes", "DeleteActivity.fxml");
 
-        var overview = FXML.load(
-                QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
-
-        var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
-
         var multiplayerAnswer = FXML.load(
                 MultiplayerAnswerCtrl.class, "client", "scenes", "MultiplayerAnswer.fxml");
 
@@ -110,7 +103,7 @@ public class Main extends Application {
         var help = FXML.load(HelpCtrl.class, "client", "scenes", "Help.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, overview, add, home, waiting, multiplayerQuestion,
+        mainCtrl.initialize(primaryStage, home, waiting, multiplayerQuestion,
                 multiplayerAnswer, ranking, multiplayerEstimation, soloEstimation, soloQuestion,
                 soloAnswer, soloResults, multiplayerResults, adminPanel, addActivity, deleteActivity, help );
     }

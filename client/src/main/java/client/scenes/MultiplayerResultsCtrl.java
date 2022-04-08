@@ -98,14 +98,14 @@ public class MultiplayerResultsCtrl extends AbstractRankingCtrl {
     protected void onRematchButton() {
         rematch = !rematch;
         if (rematch) {
-            server.addRestartUserID(server.getURL(), gameCtrl.getGameIndex(), gameCtrl.getUser().id);
+            server.addRestartUserID(gameCtrl.getServerUrl(), gameCtrl.getGameIndex(), gameCtrl.getUser().id);
             rematchButton.setStyle("-fx-background-radius: 30;\n" +
                     "    -fx-background-insets: 0,1,2,3,0;\n" +
                     "    -fx-padding: 10 20 10 20;\n" +
                     "    -fx-background-color: #5e8f7b;\n" +
                     "    -fx-scale-y: -1;");
         } else {
-            server.removeRestartUserID(server.getURL(), gameCtrl.getGameIndex(), gameCtrl.getUser().id);
+            server.removeRestartUserID(gameCtrl.getServerUrl(), gameCtrl.getGameIndex(), gameCtrl.getUser().id);
             resetRematchButton();
         }
     }
@@ -118,7 +118,7 @@ public class MultiplayerResultsCtrl extends AbstractRankingCtrl {
     public void onQuit() {
         if (rematch) {
             rematch = false;
-            server.removeRestartUserID(server.getURL(), gameCtrl.getGameIndex(), gameCtrl.getUser().id);
+            server.removeRestartUserID(gameCtrl.getServerUrl(), gameCtrl.getGameIndex(), gameCtrl.getUser().id);
         }
         mainCtrl.quitGame(false, true);
     }

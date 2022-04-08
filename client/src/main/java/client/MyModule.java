@@ -15,7 +15,6 @@
  */
 package client;
 
-import client.scenes.AddQuoteCtrl;
 import client.scenes.AdminPanelCtrl;
 import client.scenes.MultiplayerEstimationQuestionCtrl;
 import client.scenes.HomeCtrl;
@@ -24,7 +23,6 @@ import client.scenes.MultiplayerAnswerCtrl;
 import client.scenes.MultiplayerGameCtrl;
 import client.scenes.MultiplayerQuestionCtrl;
 import client.scenes.MultiplayerResultsCtrl;
-import client.scenes.QuoteOverviewCtrl;
 import client.scenes.RankingCtrl;
 import client.scenes.SoloAnswerCtrl;
 import client.scenes.SoloEstimationQuestionCtrl;
@@ -41,8 +39,6 @@ public class MyModule implements Module {
     @Override
     public void configure(Binder binder) {
         binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(AddQuoteCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(QuoteOverviewCtrl.class).in(Scopes.SINGLETON);
         binder.bind(MultiplayerEstimationQuestionCtrl.class).in(Scopes.SINGLETON);
         binder.bind(HomeCtrl.class).in(Scopes.SINGLETON);
         binder.bind(MultiplayerAnswerCtrl.class).in(Scopes.SINGLETON);

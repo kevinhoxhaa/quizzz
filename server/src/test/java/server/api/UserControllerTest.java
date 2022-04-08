@@ -76,6 +76,23 @@ public class UserControllerTest {
     }
 
     @Test
+    public void getAllReturnsAllUsers() {
+        MultiplayerUser user = getMultiplayerUser("q1");
+        var actual = sut.addMultiplayerUser(user);
+        assertTrue(sut.getAll().contains(actual.getBody()));
+    }
+
+    @Test
+    public void getByIdReturnsUserById() {
+        MultiplayerUser user = getMultiplayerUser("q1");
+        var actual = sut.addMultiplayerUser(user);
+        assertEquals(
+                actual.getBody(),
+                sut.getById(actual.getBody().id).getBody().get()
+        );
+    }
+
+    @Test
     public void putUpdatesDatabase() {
         MultiplayerUser user = getMultiplayerUser("q1");
         var added = sut.addMultiplayerUser(user);

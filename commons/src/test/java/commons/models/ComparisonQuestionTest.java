@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class ComparisonQuestionTest {
@@ -26,6 +27,11 @@ public class ComparisonQuestionTest {
     @Test
     public void constructorConstructsValidObject() {
         assertNotNull(question);
+    }
+
+    @Test
+    public void defaultConstructorConstructsValidObject() {
+        assertNotNull(new ComparisonQuestion());
     }
 
     @Test
@@ -65,6 +71,32 @@ public class ComparisonQuestionTest {
     public void getPointsReturnsPoints() {
         question.setUserAnswer(new Answer(CompareType.SMALLER), POSITIVE);
         assertEquals(TOTAL, question.calculatePoints());
+    }
+
+    @Test
+    public void equalsReturnsFalseIfDifferentType() {
+        assertNotEquals("str", question);
+    }
+
+    @Test
+    public void equalsReturnsFalseIfDifferentFields() {
+        assertNotEquals(new ComparisonQuestion(secondActivity, firstActivity), question);
+    }
+
+    @Test
+    public void equalsReturnsTrueIfEqualFields() {
+        ComparisonQuestion expected = new ComparisonQuestion(firstActivity, secondActivity);
+        assertEquals(expected, question);
+    }
+
+    @Test
+    public void generateCorrectAnswerReturnsNotNull() {
+        assertNotNull(question.generateCorrectAnswer());
+    }
+
+    @Test
+    public void generateQuestionTextReturnsQuestionText() {
+        assertEquals("Which one consumes more energy?", question.generateQuestionText());
     }
 
     @Test

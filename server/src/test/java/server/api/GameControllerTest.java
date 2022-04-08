@@ -148,6 +148,11 @@ public class GameControllerTest {
     }
 
     @Test
+    public void startSoloGameReturnsSoloGame() {
+        assertNotNull(sut.startSoloGame((int) NUMBER).getBody());
+    }
+
+    @Test
     public void deleteRestartUserReturnsBadRequestOnNegativeUserId() {
         Integer gameIndex = sut.startGame((int) NUMBER).getBody();
         sut.addRestartUser(gameIndex, 1);

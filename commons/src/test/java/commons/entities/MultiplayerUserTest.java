@@ -15,6 +15,13 @@ public class MultiplayerUserTest {
     }
 
     @Test
+    public void resetScoreResetsScore() {
+        var u = new MultiplayerUser("f");
+        u.resetScore();
+        assertEquals(0, u.unansweredQuestions);
+    }
+
+    @Test
     public void equalsTrue() {
         var a = new MultiplayerUser("a");
         var b = new MultiplayerUser("a");

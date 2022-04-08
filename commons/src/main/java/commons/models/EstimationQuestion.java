@@ -15,7 +15,7 @@ public class EstimationQuestion extends Question {
     private Activity activity;
 
     @SuppressWarnings("unused")
-    private EstimationQuestion() {
+    public EstimationQuestion() {
         super(QuestionType.ESTIMATION);
         // for object mapper
     }
