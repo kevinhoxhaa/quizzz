@@ -15,6 +15,11 @@ public class EmojiTest {
     }
 
     @Test
+    public void defaultConstructorConstructsValidObject() {
+        assertNotNull(new Emoji());
+    }
+
+    @Test
     public void constructorConstructsValidObject() {
         assertNotNull(emoji);
     }

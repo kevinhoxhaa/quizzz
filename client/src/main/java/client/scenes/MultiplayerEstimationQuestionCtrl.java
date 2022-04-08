@@ -7,6 +7,8 @@ import commons.models.Emoji;
 import commons.models.EstimationQuestion;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.ImageCursor;
+import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -22,6 +24,11 @@ import java.util.List;
 public class MultiplayerEstimationQuestionCtrl extends AbstractEstimationQuestionCtrl implements EmojiController {
     private MultiplayerGameCtrl gameCtrl;
     private List<StackPane> jokers;
+
+    @FXML
+    private Button quitButton;
+    @FXML
+    private Button submitButton;
 
     @FXML
     private StackPane doublePoints;
@@ -68,20 +75,28 @@ public class MultiplayerEstimationQuestionCtrl extends AbstractEstimationQuestio
         jokers.add(doublePoints);
         jokers.add(removeIncorrect);
         jokers.add(reduceTime);
+
+        List<StackPane> availableJokers=new ArrayList<>();
         removeIncorrect.setDisable(true);
         removeIncorrect.setBackground(new Background(
-                new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+                new BackgroundFill(Color.web("#85C1E9"), CornerRadii.EMPTY, Insets.EMPTY)));
 
         for(StackPane joker:jokers){
             if(gameCtrl.getUsedJokers().contains(joker.idProperty().getValue())){
                 gameCtrl.disableJokerButton(joker);
             }
+            else{
+                availableJokers.add(joker);
+            }
         }
 
+        gameCtrl.enableJokers(availableJokers,false);
         currentQuestion = question;
         super.setup(gameCtrl.getUser().points);
 
         doublePointsImage.setVisible(false);
+        removeIncorrectImage.setVisible(false);
+        reduceTimeImage.setVisible(false);
     }
 
     /**
@@ -119,7 +134,9 @@ public class MultiplayerEstimationQuestionCtrl extends AbstractEstimationQuestio
             System.out.println("Enter a number!");
         }
 
+        disableJokers();
         gameCtrl.disableEmojis(emojiPane);
+        mainCtrl.addScore(mainCtrl.getUser(),currentQuestion);
         gameCtrl.postAnswer(currentQuestion);
     }
 
@@ -194,7 +211,7 @@ public class MultiplayerEstimationQuestionCtrl extends AbstractEstimationQuestio
     private void enterJoker(StackPane jokerBtn) {
         if (!gameCtrl.getUsedJokers().contains(jokerBtn.idProperty().getValue())) {
             jokerBtn.setBackground(new Background(
-                    new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+                    new BackgroundFill(Color.web("#85C1E9"), CornerRadii.EMPTY, Insets.EMPTY)));
         }
     }
 
@@ -209,7 +226,7 @@ public class MultiplayerEstimationQuestionCtrl extends AbstractEstimationQuestio
         for (StackPane joker : jokers) {
             if (!gameCtrl.getUsedJokers().contains(joker.idProperty().getValue()) && joker != removeIncorrect) {
                 joker.setBackground(new Background(
-                        new BackgroundFill(Color.color(gameCtrl.RGB_VALUE,gameCtrl.RGB_VALUE,gameCtrl.RGB_VALUE),
+                        new BackgroundFill(Color.web("#D6EAF8"),
                                 CornerRadii.EMPTY, Insets.EMPTY)));
             }
         }
@@ -266,4 +283,35 @@ public class MultiplayerEstimationQuestionCtrl extends AbstractEstimationQuestio
         gameCtrl.enableJoker(reduceTime);
     }
 
+    /**
+     * Sets all buttons hover cursors to hand
+     */
+    @Override
+    public void setupHoverCursor() {
+        doublePoints.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+        removeIncorrect.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+        reduceTime.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+
+        emojiPane.getChildren().forEach(c -> {
+            if(c instanceof ImageView) {
+                c.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+            }
+        });
+
+        quitButton.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+        submitButton.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+    }
+
+    /**
+     * Disables all interaction with the jokers buttons.
+     */
+    public void disableJokers() {
+        doublePoints.setOnMouseClicked(null);
+        removeIncorrect.setOnMouseClicked(null);
+        reduceTime.setOnMouseClicked(null);
+
+        doublePoints.setOnMouseEntered(null);
+        removeIncorrect.setOnMouseEntered(null);
+        reduceTime.setOnMouseEntered(null);
+    }
 }

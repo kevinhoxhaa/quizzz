@@ -1,4 +1,4 @@
-# Notes: week 7 (21.03 - 28.03)
+# Notes: week 8 (21.03 - 28.03)
 
 Location: 		Drebbelweg  
 Datum: 		    29-03-2022  
@@ -13,7 +13,7 @@ Notetaker:	    Boris Goranov
 
 The meeting started in 16:45 as planned.
 
-### Check-in: 
+### Check-in:
 
 > Stand up and inform each other on how thing are going.
 
@@ -29,7 +29,7 @@ Kevin: completed the double points joker and created a joker code template, whic
 
 Patrik: completed the emojis and activity image loading with Boris and fixed some minor application bugs.
 
-### Discussion: 
+### Discussion:
 
 > Big-picture visual design choices
 
@@ -39,7 +39,7 @@ Kevin: a better solution would be to just fix the game window to a certain dimen
 
 The other team members agreed with this approach and Boris took the task to implement the aforementioned design changes.
 
-### Tips and Tops: 
+### Tips and Tops:
 
 > Give feedback to each other or to the whole team.
 
@@ -59,7 +59,7 @@ The other team members agreed with this approach and Boris took the task to impl
 
 **Tip to Kevin:** although it is great to find bugs in the game, try to identify where the bug might come from, instead of just stating that there is a bug. It is true that the person who generated that bug may be more informed, but it would be much more of a constructive feedback if you show that you have actually spent some time thinking about what might cause the issue.
 
-### Question round: 
+### Question round:
 
 > Ask others or group TA any questions from the past week (final presentation, coding deadline, etc.).
 
@@ -75,7 +75,7 @@ Patrik: can we use the thonk emoji as an error image?
 
 Nada: it is ok to use the thonk emoji as the default error image.
 
-### Feedback round: 
+### Feedback round:
 
 > Ask group TA for feedback on the group progress.
 
@@ -116,7 +116,7 @@ Patrik: the video will be discussed on Thursday - a draft transcript could be gi
 
 Boris: will take the `README` issue and complete it by the beginning of next week.
 
-### Task distribution: 
+### Task distribution:
 
 > Distribute the tasks for the last week of actual coding and choosing a live coding session time.
 

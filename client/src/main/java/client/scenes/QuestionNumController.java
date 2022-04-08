@@ -31,6 +31,8 @@ public abstract class QuestionNumController{
      * @param colors Is the list of colors of previous answers(green/red depending on their correctness)
      */
     public void updateCircleColor(List<Color> colors) {
+        setupHoverCursor();
+
         for (int i = 0; i < colors.size(); i++) {
             Circle c = (Circle) circles.getChildren().get(i);
             c.setFill(colors.get(i));
@@ -77,7 +79,21 @@ public abstract class QuestionNumController{
         }
     }
 
+    /**
+     * Sets the cursor to hover to all buttons
+     * in the respective question num controller
+     */
+    public void setupHoverCursor() {
+
+    }
+
     public void redirect(){}
 
     public void onQuit(){}
+
+    /**
+     * Returns the length of the timer in this scene
+     * @return the length of the timer in this scene
+     */
+    public abstract double getTimerLength();
 }

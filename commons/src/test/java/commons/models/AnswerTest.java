@@ -29,56 +29,87 @@ public class AnswerTest {
     @Test
     public void constructor(){
         assertNotNull(longAnswer);
-        assertNotNull(activityAnswer);
-        assertNotNull(compareTypeAnswer);
     }
 
     @Test
     public void getAnswerReturnsGoodValues(){
         assertEquals(POSITIVE, longAnswer.generateAnswer());
-        assertEquals(activity, activityAnswer.generateAnswer());
-        assertEquals(CompareType.SMALLER, compareTypeAnswer.generateAnswer());
     }
 
     @Test
-    public void setter(){
+    public void generateAnswerReturnsCompareAnswer() {
         longAnswer.setCompareAnswer(CompareType.LARGER);
         assertEquals(CompareType.LARGER, longAnswer.generateAnswer());
+    }
+
+    @Test
+    public void generateAnswerReturnsLongAnswer() {
         activityAnswer.setLongAnswer(POSITIVE+POSITIVE);
         assertEquals(POSITIVE+POSITIVE, activityAnswer.generateAnswer());
+    }
+
+    @Test
+    public void generateAnswerReturnsActivityAnswer() {
         compareTypeAnswer.setActivityAnswer(activity);
         assertEquals(activity, compareTypeAnswer.generateAnswer());
     }
 
     @Test
-    public void answerTypeConstruction(){
+    public void getAnswerTypeReturnsAnswerType(){
         assertEquals(AnswerType.LONG, longAnswer.getAnswerType());
-        assertEquals(AnswerType.ACTIVITY, activityAnswer.getAnswerType());
-        assertEquals(AnswerType.COMPARETYPE, compareTypeAnswer.getAnswerType());
     }
 
     @Test
-    public void setterAnswerType(){
-        longAnswer.setCompareAnswer(CompareType.LARGER);
-        assertEquals(AnswerType.COMPARETYPE, longAnswer.getAnswerType());
+    public void setLongAnswerSetsLongAnswer() {
         activityAnswer.setLongAnswer(POSITIVE+POSITIVE);
         assertEquals(AnswerType.LONG, activityAnswer.getAnswerType());
+    }
+
+    @Test
+    public void getActivityReturnsActivity() {
+        assertEquals(activity, activityAnswer.getActivity());
+    }
+
+    @Test
+    public void getCompareTypeReturnsCompareType() {
+        assertEquals(CompareType.SMALLER, compareTypeAnswer.getCompareType());
+    }
+
+    @Test
+    public void getLongAnswerReturnsLongAnswer() {
+        assertEquals(POSITIVE, longAnswer.getLongAnswer());
+    }
+
+    @Test
+    public void setActivityAnswerReturnsActivityAnswer() {
         compareTypeAnswer.setActivityAnswer(activity);
         assertEquals(AnswerType.ACTIVITY, compareTypeAnswer.getAnswerType());
     }
 
     @Test
-    public void equalsItself(){
-        assertEquals(longAnswer,longAnswer);
-        assertEquals(activityAnswer,activityAnswer);
-        assertEquals(compareTypeAnswer,compareTypeAnswer);
+    public void setCompareTypeAnswerReturnsCompareAnswer() {
+        longAnswer.setCompareAnswer(CompareType.LARGER);
+        assertEquals(AnswerType.COMPARETYPE, longAnswer.getAnswerType());
     }
 
     @Test
-    public void equalsTrue(){
+    public void equalsReturnsTrueLongAnswer() {
         assertEquals(longAnswer, new Answer(POSITIVE));
+    }
+
+    @Test
+    public void equalsReturnsTrueActivityAnswer() {
         assertEquals(activityAnswer, new Answer(activity));
+    }
+
+    @Test
+    public void equalsReturnsTrueCompareAnswer() {
         assertEquals(compareTypeAnswer, new Answer(CompareType.SMALLER));
+    }
+
+    @Test
+    public void equalsReturnsTrueSameObjects() {
+        assertEquals(compareTypeAnswer, compareTypeAnswer);
     }
 
     @Test
@@ -90,15 +121,36 @@ public class AnswerTest {
     @Test
     public void equalsDifferentType(){
         assertNotEquals(longAnswer, activityAnswer);
-        assertNotEquals(longAnswer, compareTypeAnswer);
-        assertNotEquals(compareTypeAnswer, activityAnswer);
     }
 
     @Test
-    public void equalsSameTypeDifferentContent(){
+    public void equalsReturnsFalseLongAnswer() {
         assertNotEquals(longAnswer, new Answer(Long.valueOf(POSITIVE+POSITIVE)));
+    }
+
+    @Test
+    public void equalsReturnsFalseActivityAnswer() {
         assertNotEquals(activityAnswer, new Answer(
                 new Activity("title", POSITIVE+POSITIVE, "src")));
+    }
+
+    @Test
+    public void equalsReturnsFalseCompareAnswer() {
         assertNotEquals(compareTypeAnswer, new Answer(CompareType.EQUAL));
+    }
+
+    @Test
+    public void hashCodeSameEqualsLongAnswer() {
+        assertEquals(longAnswer.hashCode(), longAnswer.hashCode());
+    }
+
+    @Test
+    public void hashCodeSameEqualsCompareTypeAnswer() {
+        assertEquals(compareTypeAnswer.hashCode(), compareTypeAnswer.hashCode());
+    }
+
+    @Test
+    public void hashCodeSameEqualsActivityAnswer() {
+        assertEquals(activityAnswer.hashCode(), activityAnswer.hashCode());
     }
 }

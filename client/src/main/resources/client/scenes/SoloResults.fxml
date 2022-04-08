@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 
-<BorderPane maxHeight="694.0" maxWidth="1014.0" minHeight="694.0" minWidth="1014.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SoloResultsCtrl">
+<BorderPane maxHeight="694.0" maxWidth="1014.0" minHeight="694.0" minWidth="1014.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SoloResultsCtrl">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -149,10 +158,10 @@
                     <children>
                         <HBox alignment="CENTER" prefHeight="335.0" prefWidth="708.0">
                             <children>
-                                <VBox prefHeight="305.0" prefWidth="373.0">
+                                <VBox prefHeight="335.0" prefWidth="370.0">
                                     <children>
-                                        <VBox alignment="CENTER" prefHeight="277.0" prefWidth="167.0" style="-fx-background-color: black;">
-                                            <TableView fx:id="scoreTable" prefHeight="277.0" prefWidth="167.0">
+                                        <VBox alignment="CENTER" prefHeight="277.0" prefWidth="167.0">
+                                            <TableView fx:id="scoreTable" prefHeight="277.0" prefWidth="167.0" stylesheets="/client/stylesheets/TableView.css">
                                                 <columns>
                                                     <TableColumn fx:id="tableUsers" prefWidth="240.66664123535156" text="Users" />
                                                     <TableColumn fx:id="tableScore" prefWidth="132.00006866455078" text="Score" />
@@ -187,29 +196,29 @@
                                         </HBox>
                                     </children>
                                 </VBox>
-                                <Pane prefHeight="312.0" prefWidth="336.0">
+                                <Pane prefHeight="312.0" prefWidth="339.0">
                                     <children>
                                         <Text layoutX="35.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Leaderboard" textAlignment="CENTER">
                                             <font>
                                                 <Font name="Monospaced Bold" size="40.0" />
                                             </font>
                                         </Text>
-                                        <ImageView styleClass="leaderboardImage" fitHeight="255.0" fitWidth="288.0" layoutX="24.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true">
+                                        <ImageView fx:id="leaderboardImage" fitHeight="255.0" fitWidth="288.0" layoutX="48.0" layoutY="54.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
                                                 <Image url="@../images/leaderboard.png" />
                                             </image>
                                         </ImageView>
-                                        <Text fx:id="ranking1stPlayer" layoutX="116.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1st player" textAlignment="CENTER" wrappingWidth="103.76766681671143">
+                                        <Text fx:id="ranking1stPlayer" layoutX="129.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1st player" textAlignment="CENTER" wrappingWidth="103.76766681671143">
                                             <font>
                                                 <Font name="Monospaced Regular" size="17.0" />
                                             </font>
                                         </Text>
-                                        <Text fx:id="ranking2ndPlayer" layoutX="14.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2nd player" textAlignment="RIGHT" wrappingWidth="106.9676866531372">
+                                        <Text fx:id="ranking2ndPlayer" layoutX="8.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2nd player" textAlignment="RIGHT" wrappingWidth="106.9676866531372">
                                             <font>
                                                 <Font name="Monospaced Regular" size="17.0" />
                                             </font>
                                         </Text>
-                                        <Text fx:id="ranking3rdPlayer" layoutX="223.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3rd player" wrappingWidth="107.76778888702393">
+                                        <Text fx:id="ranking3rdPlayer" layoutX="233.0" layoutY="183.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3rd player" wrappingWidth="107.76778888702393">
                                             <font>
                                                 <Font name="Monospaced Regular" size="17.0" />
                                             </font>

@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import commons.entities.MultiplayerUser;
 import commons.models.Question;
 import javafx.fxml.FXML;
+import javafx.scene.ImageCursor;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -49,6 +50,7 @@ public class RankingCtrl extends AbstractRankingCtrl {
      * @param users the ranked users to display
      */
     public void setup(List<MultiplayerUser> users) {
+
         scoreTableUserName.setText(String.format("%s", gameCtrl.getUser().username));
         scoreTableUserScore.setText(String.format("%d", gameCtrl.getUser().points));
 
@@ -60,6 +62,7 @@ public class RankingCtrl extends AbstractRankingCtrl {
         ranking3rdPlayer.setText(users.size() > 2 ? users.get(2).username : "");
 
         gameCtrl.populateRanking(scoreTable, users);
+        scoreTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
     /**
@@ -95,7 +98,7 @@ public class RankingCtrl extends AbstractRankingCtrl {
      */
     @Override
     public void updateQuestionNumber() {
-        questionNum.setText("" + (mainCtrl.getAnswerCount()));
+        questionNum.setText("" + (gameCtrl.getAnswerCount()));
     }
 
     /**
@@ -104,5 +107,13 @@ public class RankingCtrl extends AbstractRankingCtrl {
     @Override
     public void highlightCurrentCircle() {
         highlightCurrentCircle(gameCtrl.getAnswerCount());
+    }
+
+    /**
+     * Sets up all hover cursors to hand
+     */
+    @Override
+    public void setupHoverCursor() {
+        quitButton.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
     }
 }

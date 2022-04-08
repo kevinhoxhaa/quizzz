@@ -4,13 +4,13 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.entities.MultiplayerUser;
 import commons.entities.User;
-import commons.models.Question;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.animation.Animation;
 import javafx.animation.PauseTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.SequentialTransition;
 import javafx.fxml.FXML;
+import javafx.scene.ImageCursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -31,6 +31,8 @@ public class WaitingCtrl {
 
     @FXML
     private Button startButton;
+    @FXML
+    private Button backButton;
 
     @FXML
     private ListView usersList;
@@ -84,6 +86,7 @@ public class WaitingCtrl {
 
             if (!users.contains(mainCtrl.getUser())) {
                 Integer gameIndex = server.findGameIndex(serverUrl, userId);
+                mainCtrl.setGameIndex(gameIndex);
                 mainCtrl.stopWaitingTimer();
                 mainCtrl.startMultiplayerGame(gameIndex);
             }
@@ -104,7 +107,7 @@ public class WaitingCtrl {
     @FXML
     protected void onBackButtonClick() {
         User user = mainCtrl.getUser();
-        server.removeMultiplayerUser(server.getURL(), (MultiplayerUser) user);
+        server.removeMultiplayerUser(mainCtrl.getServerUrl(), -1, (MultiplayerUser) user);
         mainCtrl.bindUser(null);
         mainCtrl.showHome();
         mainCtrl.stopWaitingTimer();
@@ -120,15 +123,24 @@ public class WaitingCtrl {
         try {
             String serverUrl = mainCtrl.getServerUrl();
             Integer gameIndex = server.startGame(serverUrl);
-            Question firstQuestion = server.getQuestion(serverUrl, gameIndex, 0);
-            System.out.println(firstQuestion);
+            mainCtrl.setGameIndex(gameIndex);
             mainCtrl.stopWaitingTimer();
             mainCtrl.startMultiplayerGame(gameIndex);
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
+            alert = mainCtrl.setAlertStyle(alert);
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }
+    }
+
+    /**
+     * Sets the cursor to hover to all buttons
+     * in the respective question num controller
+     */
+    public void setupHoverCursor() {
+        startButton.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+        backButton.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
     }
 }

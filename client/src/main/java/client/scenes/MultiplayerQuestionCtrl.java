@@ -7,6 +7,8 @@ import commons.models.Emoji;
 import commons.models.Question;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.ImageCursor;
+import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -27,6 +29,9 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
 
     private MultiplayerGameCtrl gameCtrl;
     private List<StackPane> jokers;
+
+    @FXML
+    private Button quitButton;
 
     @FXML
     private GridPane emojiPane;
@@ -75,9 +80,14 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
         jokers.add(removeIncorrect);
         jokers.add(reduceTime);
 
+        List<StackPane> availableJokers=new ArrayList<>();
+
         for(StackPane joker:jokers){
             if(gameCtrl.getUsedJokers().contains(joker.idProperty().getValue())){
                 gameCtrl.disableJokerButton(joker);
+            }
+            else{
+                availableJokers.add(joker);
             }
         }
 
@@ -88,6 +98,7 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
         resetAnswerClickability();
         disabledAnswer = null;
         gameCtrl.enableEmojis(emojiPane);
+        gameCtrl.enableJokers(availableJokers,true);
         doublePointsImage.setVisible(false);
         removeIncorrectImage.setVisible(false);
         reduceTimeImage.setVisible(false);
@@ -208,7 +219,7 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
     private void enterJoker(StackPane jokerBtn) {
         if (!gameCtrl.getUsedJokers().contains(jokerBtn.idProperty().getValue())) {
             jokerBtn.setBackground(new Background(
-                    new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+                    new BackgroundFill(Color.web("#85C1E9"), CornerRadii.EMPTY, Insets.EMPTY)));
         }
     }
 
@@ -221,7 +232,7 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
         for (StackPane joker : jokers) {
             if (!gameCtrl.getUsedJokers().contains(joker.idProperty().getValue())) {
                 joker.setBackground(new Background(
-                        new BackgroundFill(Color.color(gameCtrl.RGB_VALUE,gameCtrl.RGB_VALUE,gameCtrl.RGB_VALUE),
+                        new BackgroundFill(Color.web("#D6EAF8"),
                                 CornerRadii.EMPTY, Insets.EMPTY)));
             }
         }
@@ -247,6 +258,7 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
         server.send ( "/app/halfTime/" + gameCtrl.getGameIndex(), mainCtrl.getUser() );
         gameCtrl.useJoker( reduceTime, reduceTimeImage );
     }
+
 
     /**
      * This method resets the double point jokers so that it can be used again when another game starts
@@ -289,7 +301,7 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
             if(answer.equals(answerToRemove)){
                 button.setDisable(true);
                 button.setBackground(new Background(
-                        new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+                        new BackgroundFill(Color.web("#F5B7B1"), CornerRadii.EMPTY, Insets.EMPTY)));
                 disabledAnswer = button;
             }
         }
@@ -324,9 +336,24 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
     }
 
     /**
+     * Disables all interaction with the jokers buttons.
+     */
+    public void disableJokers() {
+        doublePoints.setOnMouseClicked(null);
+        removeIncorrect.setOnMouseClicked(null);
+        reduceTime.setOnMouseClicked(null);
+        doublePoints.setOnMouseEntered(null);
+        removeIncorrect.setOnMouseEntered(null);
+        reduceTime.setOnMouseEntered(null);
+    }
+
+    /**
      * Enables interaction with the answer buttons.
      */
     public void enableAnswers() {
+        answerTop.setOnMouseEntered(event -> enterAnswerTop());
+        answerMid.setOnMouseEntered(event -> enterAnswerMid());
+        answerBot.setOnMouseEntered(event -> enterAnswerBot());
         answerTop.setOnMouseClicked(event -> onAnswerTopClicked());
         answerMid.setOnMouseClicked(event -> onAnswerMidClicked());
         answerBot.setOnMouseClicked(event -> onAnswerBotClicked());
@@ -340,8 +367,10 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
     @Override
     public void redirect() {
         disableAnswers();
+        disableJokers();
         gameCtrl.disableEmojis(emojiPane);
         gameCtrl.redirectFromQuestion();
+        mainCtrl.addScore(mainCtrl.getUser(),currentQuestion);
         gameCtrl.postAnswer(currentQuestion);
     }
 
@@ -394,4 +423,25 @@ public class MultiplayerQuestionCtrl extends AbstractMultichoiceQuestionCtrl
         this.gameCtrl = gameCtrl;
     }
 
+    /**
+     * Sets hover cursors to all buttons to hand
+     */
+    @Override
+    public void setupHoverCursor() {
+        answerTop.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+        answerMid.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+        answerBot.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+
+        doublePoints.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+        removeIncorrect.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+        reduceTime.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+
+        emojiPane.getChildren().forEach(c -> {
+            if(c instanceof ImageView) {
+                c.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+            }
+        });
+
+        quitButton.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+    }
 }

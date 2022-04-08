@@ -76,6 +76,23 @@ public class UserControllerTest {
     }
 
     @Test
+    public void getAllReturnsAllUsers() {
+        MultiplayerUser user = getMultiplayerUser("q1");
+        var actual = sut.addMultiplayerUser(user);
+        assertTrue(sut.getAll().contains(actual.getBody()));
+    }
+
+    @Test
+    public void getByIdReturnsUserById() {
+        MultiplayerUser user = getMultiplayerUser("q1");
+        var actual = sut.addMultiplayerUser(user);
+        assertEquals(
+                actual.getBody(),
+                sut.getById(actual.getBody().id).getBody().get()
+        );
+    }
+
+    @Test
     public void putUpdatesDatabase() {
         MultiplayerUser user = getMultiplayerUser("q1");
         var added = sut.addMultiplayerUser(user);
@@ -115,20 +132,20 @@ public class UserControllerTest {
     
     @Test
     public void cannotDeleteNegativeID() {
-        var actual = sut.deleteMultiplayerUser(-1);
+        var actual = sut.deleteWaitingUser(-1);
         assertEquals(BAD_REQUEST, actual.getStatusCode());
     }
     
     @Test
     public void cannotDeleteNonExistingPerson() {
-        var actual = sut.deleteMultiplayerUser(getMultiplayerUser("q1").id);
+        var actual = sut.deleteWaitingUser(getMultiplayerUser("q1").id);
         assertEquals(BAD_REQUEST, actual.getStatusCode());
     }
     
     @Test
     public void deleteRightPerson() {
         var savedUser = sut.addMultiplayerUser(getMultiplayerUser("q1"));
-        var actual = sut.deleteMultiplayerUser(savedUser.getBody().id);
+        var actual = sut.deleteWaitingUser(savedUser.getBody().id);
         assertTrue(actual.getStatusCode().is2xxSuccessful());
         assertFalse(waitingRepo.existsById(savedUser.getBody().id));
     }

@@ -8,7 +8,9 @@ import commons.models.SoloGame;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.ImageCursor;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -27,6 +29,8 @@ public class SoloResultsCtrl extends AbstractRankingCtrl {
     private TableColumn<User, Long> tableScore;
     @FXML
     private TableView<SoloUser> scoreTable;
+    @FXML
+    private ScrollPane scrollPane;
 
 
     /**
@@ -86,9 +90,10 @@ public class SoloResultsCtrl extends AbstractRankingCtrl {
     public void setTable() {
         tableUsers.setCellValueFactory(new PropertyValueFactory<User, String>("username"));
         tableScore.setCellValueFactory(new PropertyValueFactory<User, Long>("points"));
-        this.users = FXCollections.observableList(server.getAllUsersByScore(server.getURL()));
+        this.users = FXCollections.observableList(server.getAllUsersByScore(mainCtrl.getServerUrl()));
 
         scoreTable.setItems(users);
+        scoreTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
     /**
@@ -105,5 +110,14 @@ public class SoloResultsCtrl extends AbstractRankingCtrl {
     @Override
     public void highlightCurrentCircle() {
         highlightCurrentCircle(game.getCurrentQuestionNum());
+    }
+
+    /**
+     * Sets the hover cursor to every button to hand
+     */
+    @Override
+    public void setupHoverCursor() {
+        quitButton.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+        restartButton.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
     }
 }

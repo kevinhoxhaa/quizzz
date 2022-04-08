@@ -10,12 +10,12 @@ import java.util.Objects;
 public class EstimationQuestion extends Question {
     private static final long POINTS = 1000;
     private static final long TIME_FACTOR = 800;
-    private static final double ERROR_MARGIN = 0.05;
+    private static final double ERROR_MARGIN = 0.15;
 
     private Activity activity;
 
     @SuppressWarnings("unused")
-    private EstimationQuestion() {
+    public EstimationQuestion() {
         super(QuestionType.ESTIMATION);
         // for object mapper
     }
@@ -67,7 +67,7 @@ public class EstimationQuestion extends Question {
     }
 
     /**
-     * Checks whether the user's answer is within 5% range of the correct
+     * Checks whether the user's answer is within 15% range of the correct
      * one, which is the game's criteria for a correct estimation
      * question answer
      * @return true if the answer is close to the correct one

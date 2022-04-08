@@ -5,9 +5,16 @@ import com.google.inject.Inject;
 import commons.models.EstimationQuestion;
 import commons.models.SoloGame;
 import javafx.fxml.FXML;
+import javafx.scene.ImageCursor;
+import javafx.scene.control.Button;
 
 public class SoloEstimationQuestionCtrl extends AbstractEstimationQuestionCtrl{
     private SoloGame game;
+
+    @FXML
+    private Button quitButton;
+    @FXML
+    private Button submitButton;
 
     /**
      * Creates a controller for the estimation question screen,
@@ -48,6 +55,7 @@ public class SoloEstimationQuestionCtrl extends AbstractEstimationQuestionCtrl{
      */
     @Override
     public void redirect() {
+        mainCtrl.addScore(mainCtrl.getUser(),currentQuestion);
         mainCtrl.showSoloAnswerPage(game);
     }
 
@@ -74,5 +82,14 @@ public class SoloEstimationQuestionCtrl extends AbstractEstimationQuestionCtrl{
     @FXML
     public void onQuit(){
         mainCtrl.quitGame(false, false);
+    }
+
+    /**
+     * Sets the buttons hover cursor to hand
+     */
+    @Override
+    public void setupHoverCursor() {
+        quitButton.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+        submitButton.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
     }
 }

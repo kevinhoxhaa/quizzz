@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<?import javafx.scene.Cursor?>
+<AnchorPane prefHeight="216.0" prefWidth="524.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.DeleteActivityCtrl">
+
+    <children>
+        <Button fx:id="okButton" layoutX="419.0" layoutY="105.0" mnemonicParsing="false" onAction="#onOkButton" text="Ok">
+        <cursor>
+            <Cursor fx:constant="HAND" />
+        </cursor>
+        </Button>
+        <Button layoutX="350.0" layoutY="105.0" mnemonicParsing="false" onAction="#cancel" text="Cancel">
+        <cursor>
+            <Cursor fx:constant="HAND" />
+        </cursor>
+        </Button>
+
+        <TextField fx:id="id" layoutX="112.0" layoutY="43.0" prefHeight="26.0" prefWidth="345.0" />
+        <Label fx:id="Source" layoutX="39.0" layoutY="48.0" text="id" />
+    </children>
+
+</AnchorPane>

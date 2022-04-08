@@ -15,19 +15,26 @@
  */
 package client;
 
-import client.scenes.AddQuoteCtrl;
+import static com.google.inject.Guice.createInjector;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+
+import client.scenes.AddActivityCtrl;
+import client.scenes.AdminPanelCtrl;
+import client.scenes.DeleteActivityCtrl;
+import client.scenes.HelpCtrl;
 import client.scenes.HomeCtrl;
-import client.scenes.MainCtrl;
-import client.scenes.MultiplayerAnswerCtrl;
-import client.scenes.MultiplayerEstimationQuestionCtrl;
-import client.scenes.MultiplayerQuestionCtrl;
 import client.scenes.MultiplayerResultsCtrl;
-import client.scenes.QuoteOverviewCtrl;
-import client.scenes.RankingCtrl;
+import client.scenes.MultiplayerQuestionCtrl;
+import client.scenes.MultiplayerAnswerCtrl;
 import client.scenes.SoloAnswerCtrl;
 import client.scenes.SoloEstimationQuestionCtrl;
 import client.scenes.SoloQuestionCtrl;
 import client.scenes.SoloResultsCtrl;
+import client.scenes.RankingCtrl;
+import client.scenes.MultiplayerEstimationQuestionCtrl;
+import client.scenes.MainCtrl;
 import client.scenes.WaitingCtrl;
 import client.utils.ResourceUtils;
 import com.google.inject.Injector;
@@ -35,10 +42,6 @@ import javafx.application.Application;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-
-import static com.google.inject.Guice.createInjector;
 
 public class Main extends Application {
 
@@ -58,10 +61,14 @@ public class Main extends Application {
                 LABEL_SIZE
         );
 
-        var overview = FXML.load(
-                QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
+        var adminPanel = FXML.load(
+                AdminPanelCtrl.class, "client", "scenes", "AdminPanel.fxml");
 
-        var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
+        var addActivity = FXML.load (
+                AddActivityCtrl.class, "client", "scenes", "AddActivity.fxml");
+
+        var deleteActivity = FXML.load (
+                DeleteActivityCtrl.class, "client", "scenes", "DeleteActivity.fxml");
 
         var multiplayerAnswer = FXML.load(
                 MultiplayerAnswerCtrl.class, "client", "scenes", "MultiplayerAnswer.fxml");
@@ -93,9 +100,11 @@ public class Main extends Application {
         var multiplayerResults = FXML.load(
                 MultiplayerResultsCtrl.class, "client", "scenes", "MultiplayerResults.fxml");
 
+        var help = FXML.load(HelpCtrl.class, "client", "scenes", "Help.fxml");
+
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, overview, add, home, waiting, multiplayerQuestion,
+        mainCtrl.initialize(primaryStage, home, waiting, multiplayerQuestion,
                 multiplayerAnswer, ranking, multiplayerEstimation, soloEstimation, soloQuestion,
-                soloAnswer, soloResults, multiplayerResults);
+                soloAnswer, soloResults, multiplayerResults, adminPanel, addActivity, deleteActivity, help );
     }
 }

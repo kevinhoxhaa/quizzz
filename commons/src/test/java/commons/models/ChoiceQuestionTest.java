@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ChoiceQuestionTest {
     private static final long POSITIVE = 40;
@@ -32,6 +34,11 @@ public class ChoiceQuestionTest {
     @Test
     public void constructorConstructsValidObject() {
         assertNotNull(question);
+    }
+
+    @Test
+    public void defaultConstructorConstructsValidObject() {
+        assertNotNull(new ChoiceQuestion());
     }
 
     @Test
@@ -92,8 +99,53 @@ public class ChoiceQuestionTest {
     }
 
     @Test
+    public void setAnswerSetsQuestionAnswer() {
+        Activity activity = new Activity("sdf", POSITIVE, "sajdl");
+        question.setAnswer(activity);
+        assertEquals(activity, question.getAnswer());
+    }
+
+    @Test
+    public void getIncorrectActivitiesReturnsIncorrectList() {
+        assertTrue(question.getIncorrectActivities().size() > 0);
+    }
+
+    @Test
+    public void setComparedActivitySetsComparedActivity() {
+        Activity activity = new Activity("sdf", POSITIVE, "sajdl");
+        question.setComparedActivity(activity);
+        assertEquals(activity, question.getComparedActivity());
+    }
+
+    @Test
+    public void generateQuestionTextReturnsQuestionText() {
+        assertEquals(
+                "What could you do instead of q2 to consume less energy?",
+                question.generateQuestionText()
+        );
+    }
+
+    @Test
+    public void generateCorrectAnswerNotNull() {
+        assertNotNull(question.generateCorrectAnswer());
+    }
+
+    @Test
     public void equalsReturnsTrueIfSame() {
         assertEquals(question, question);
+    }
+
+    @Test
+    public void equalsReturnsTrueIfEqualFields() {
+        ChoiceQuestion equalQuestion = new ChoiceQuestion(activities);
+        question = new ChoiceQuestion(activities);
+        assertEquals(equalQuestion, question);
+    }
+
+    @Test
+    public void equalsReturnsFalseIfDifferentInstances() {
+        ConsumptionQuestion notEqual = new ConsumptionQuestion();
+        assertNotEquals(notEqual, question);
     }
 
     @Test

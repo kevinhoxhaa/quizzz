@@ -5,11 +5,16 @@ import com.google.inject.Inject;
 import commons.models.Question;
 import commons.models.SoloGame;
 import javafx.fxml.FXML;
+import javafx.scene.ImageCursor;
+import javafx.scene.control.Button;
 
 
 public class SoloQuestionCtrl extends AbstractMultichoiceQuestionCtrl {
 
     private SoloGame game;
+
+    @FXML
+    private Button quitButton;
 
     /**
      * Creates a controller for the solo question screen, with the given server and main controller.
@@ -50,6 +55,7 @@ public class SoloQuestionCtrl extends AbstractMultichoiceQuestionCtrl {
      */
     @Override
     public void redirect() {
+        mainCtrl.addScore(mainCtrl.getUser(),currentQuestion);
         mainCtrl.showSoloAnswerPage(game);
     }
 
@@ -76,5 +82,16 @@ public class SoloQuestionCtrl extends AbstractMultichoiceQuestionCtrl {
     @FXML
     public void onQuit(){
         mainCtrl.quitGame(false, false);
+    }
+
+    /**
+     * Sets up the buttons hover cursors
+     */
+    @Override
+    public void setupHoverCursor() {
+        answerTop.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+        answerMid.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+        answerBot.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+        quitButton.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
     }
 }

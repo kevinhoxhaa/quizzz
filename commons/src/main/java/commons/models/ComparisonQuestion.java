@@ -5,9 +5,6 @@ import commons.entities.Activity;
 import commons.utils.CompareType;
 import commons.utils.QuestionType;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 
 @JsonTypeName(value = "comparison")
@@ -71,41 +68,6 @@ public class ComparisonQuestion extends Question {
      */
     public void setSecondActivity(Activity secondActivity) {
         this.secondActivity = secondActivity;
-    }
-
-    /**
-     * Checks whether the user answer matches the correct answer
-     * @return true if user answer is correct
-     */
-    private boolean answerIsCorrect() {
-        return userAnswer != null && (
-                (userAnswer.generateAnswer().equals(CompareType.EQUAL)
-                        && firstActivity.consumption == secondActivity.consumption)
-                || (userAnswer.generateAnswer().equals(CompareType.SMALLER)
-                        && firstActivity.consumption < secondActivity.consumption)
-                || (userAnswer.generateAnswer().equals(CompareType.LARGER)
-                        && firstActivity.consumption > secondActivity.consumption)
-        );
-    }
-
-    /**
-     * A method that returns the incorrect answers for the question in a List of CompareType entities
-     * @return a list of CompareType entities
-     */
-
-    public List<CompareType> getincorrectAnswers(){
-        ArrayList<CompareType> incorrectAnswers = new ArrayList<>();
-        if(!(firstActivity.consumption == secondActivity.consumption)){
-            incorrectAnswers.add(CompareType.EQUAL);
-        }
-        if(!(firstActivity.consumption < secondActivity.consumption)){
-            incorrectAnswers.add(CompareType.SMALLER);
-        }
-        if(!(firstActivity.consumption > secondActivity.consumption)){
-            incorrectAnswers.add(CompareType.LARGER);
-        }
-        Collections.shuffle(incorrectAnswers);
-        return incorrectAnswers;
     }
 
     /**

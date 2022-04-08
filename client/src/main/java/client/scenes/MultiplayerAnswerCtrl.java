@@ -5,6 +5,8 @@ import commons.entities.MultiplayerUser;
 import commons.models.Emoji;
 import commons.models.Question;
 import javafx.fxml.FXML;
+import javafx.scene.ImageCursor;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -15,6 +17,9 @@ import java.util.List;
 public class MultiplayerAnswerCtrl extends AbstractAnswerCtrl implements EmojiController {
 
     private MultiplayerGameCtrl gameCtrl;
+
+    @FXML
+    private Button quitButton;
 
     @FXML
     private ListView<String> correctPlayers;
@@ -133,5 +138,19 @@ public class MultiplayerAnswerCtrl extends AbstractAnswerCtrl implements EmojiCo
     @Override
     public void highlightCurrentCircle() {
         highlightCurrentCircle(gameCtrl.getAnswerCount());
+    }
+
+    /**
+     * Sets all hover cursors to the buttons to hand
+     */
+    @Override
+    public void setupHoverCursor() {
+        emojiPane.getChildren().forEach(c -> {
+            if(c instanceof ImageView) {
+                c.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+            }
+        });
+
+        quitButton.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
     }
 }

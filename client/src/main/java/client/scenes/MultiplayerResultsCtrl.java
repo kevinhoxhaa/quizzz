@@ -6,16 +6,12 @@ import commons.entities.MultiplayerUser;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
+import javafx.scene.ImageCursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Color;
 
 import java.util.List;
 
@@ -54,6 +50,8 @@ public class MultiplayerResultsCtrl extends AbstractRankingCtrl {
      */
     public void setup(List<MultiplayerUser> users) {
 
+        resetRematchButton();
+
         enableRematchButton();
         scoreTableUserName.setText(String.format("%s", gameCtrl.getUser().username));
         scoreTableUserScore.setText(String.format("%d", gameCtrl.getUser().points));
@@ -66,6 +64,22 @@ public class MultiplayerResultsCtrl extends AbstractRankingCtrl {
         pointsColumn.setCellValueFactory(new PropertyValueFactory<>("points"));
 
         gameCtrl.populateRanking(scoreTable, users);
+        scoreTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    }
+
+    /**
+     * This method resets the rematch button to look unselected
+     */
+    public void resetRematchButton(){
+        rematchButton.setStyle(
+                "    -fx-font-family: ARCADECLASSIC;\n" +
+                        "    -fx-background-size: stretch;\n" +
+                        "    -fx-background-radius: 30;\n" +
+                        "    -fx-background-color: #D6EAF8;\n" +
+                        "    -fx-background-insets: 0,1,2,3,0;\n" +
+                        "    -fx-font-size: 36;\n" +
+                        "    -fx-min-width: 128;\n" +
+                        "    -fx-padding: 10 20 10 20;");
     }
 
     /**
@@ -84,13 +98,15 @@ public class MultiplayerResultsCtrl extends AbstractRankingCtrl {
     protected void onRematchButton() {
         rematch = !rematch;
         if (rematch) {
-            server.addRestartUserID(server.getURL(), gameCtrl.getGameIndex(), gameCtrl.getUser().id);
-            rematchButton.setBackground(new Background(
-                    new BackgroundFill(Color.DARKCYAN, CornerRadii.EMPTY, Insets.EMPTY)));
+            server.addRestartUserID(gameCtrl.getServerUrl(), gameCtrl.getGameIndex(), gameCtrl.getUser().id);
+            rematchButton.setStyle("-fx-background-radius: 30;\n" +
+                    "    -fx-background-insets: 0,1,2,3,0;\n" +
+                    "    -fx-padding: 10 20 10 20;\n" +
+                    "    -fx-background-color: #5e8f7b;\n" +
+                    "    -fx-scale-y: -1;");
         } else {
-            server.removeRestartUserID(server.getURL(), gameCtrl.getGameIndex(), gameCtrl.getUser().id);
-            rematchButton.setBackground(new Background(
-                    new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+            server.removeRestartUserID(gameCtrl.getServerUrl(), gameCtrl.getGameIndex(), gameCtrl.getUser().id);
+            resetRematchButton();
         }
     }
 
@@ -102,9 +118,7 @@ public class MultiplayerResultsCtrl extends AbstractRankingCtrl {
     public void onQuit() {
         if (rematch) {
             rematch = false;
-            server.removeRestartUserID(server.getURL(), gameCtrl.getGameIndex(), gameCtrl.getUser().id);
-            rematchButton.setBackground(new Background(
-                    new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+            server.removeRestartUserID(gameCtrl.getServerUrl(), gameCtrl.getGameIndex(), gameCtrl.getUser().id);
         }
         mainCtrl.quitGame(false, true);
     }
@@ -117,9 +131,9 @@ public class MultiplayerResultsCtrl extends AbstractRankingCtrl {
     public void redirect() {
         if (rematch) {
             gameCtrl.resetGameCtrl();
+            mainCtrl.resetStreak();
+            mainCtrl.setStreakScore(0L);
             rematch = false;
-            rematchButton.setBackground(new Background(
-                    new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
             String serverUrl = mainCtrl.getServerUrl();
             gameCtrl.showQuestion(server.restartGame(serverUrl, gameCtrl.getGameIndex(),
                     gameCtrl.getUser().id));
@@ -150,6 +164,25 @@ public class MultiplayerResultsCtrl extends AbstractRankingCtrl {
     }
 
     /**
+     * A general method for setting a joker button's background color upon the cursor enters it,
+     * according to whether it is already used.
+     */
+    public void enterRematch() {
+        if(!rematch){
+            rematchButton.setStyle("-fx-background-radius: 30;\n" +
+                    "    -fx-background-insets: 0,1,2,3,0;\n" +
+                    "    -fx-padding: 10 20 10 20;\n" +
+                    "    -fx-background-color: #85C1E9;\n" +
+                    "    -fx-scale-y: -1;");
+        }
+    }
+
+    public void exitRematch(){
+        if(!rematch){
+            resetRematchButton();
+        }
+    }
+    /**
      * Initiates the timer countdown and animation
      */
     public void startTimer() {
@@ -170,5 +203,14 @@ public class MultiplayerResultsCtrl extends AbstractRankingCtrl {
     @Override
     public void highlightCurrentCircle() {
         highlightCurrentCircle(gameCtrl.getAnswerCount());
+    }
+
+    /**
+     * Sets the hover cursors to all buttons to hand
+     */
+    @Override
+    public void setupHoverCursor() {
+        quitButton.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
+        rematchButton.setCursor(new ImageCursor(mainCtrl.getHandCursorImage()));
     }
 }
