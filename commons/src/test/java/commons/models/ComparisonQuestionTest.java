@@ -30,6 +30,11 @@ public class ComparisonQuestionTest {
     }
 
     @Test
+    public void defaultConstructorConstructsValidObject() {
+        assertNotNull(new ComparisonQuestion());
+    }
+
+    @Test
     public void getFirstActivityReturnsFirstActivity() {
         assertEquals(firstActivity, question.getFirstActivity());
     }

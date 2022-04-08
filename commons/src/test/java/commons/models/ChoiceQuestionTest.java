@@ -37,6 +37,11 @@ public class ChoiceQuestionTest {
     }
 
     @Test
+    public void defaultConstructorConstructsValidObject() {
+        assertNotNull(new ChoiceQuestion());
+    }
+
+    @Test
     public void getActivitiesReturnsActivities() {
         assertEquals(activities, question.getActivities());
     }
