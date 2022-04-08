@@ -58,6 +58,9 @@ public class HomeCtrl {
     private Button helpButton;
 
     @FXML
+    private Button adminPanelButton;
+
+    @FXML
     private TextField usernameField;
 
     @FXML
@@ -242,6 +245,7 @@ public class HomeCtrl {
         Image image = new Image("client/images/handcursor.png");  //pass in the image path
         soloButton.setCursor(new ImageCursor(image));
         multiplayerButton.setCursor(new ImageCursor(image));
+        adminPanelButton.setCursor(new ImageCursor(image));
         helpButton.setCursor(new ImageCursor(image));
     }
 }

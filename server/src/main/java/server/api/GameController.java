@@ -446,7 +446,6 @@ public class GameController {
 
         if(user.totalAnswers <= questionIndex) {
             user.points += (answeredQuestion.calculatePoints())+streakPoints;
-            System.out.println("STREAK: "+streakPoints);
             user.totalAnswers += 1;
             user.correctAnswers += answeredQuestion.calculatePoints() == 0 ? 0 : 1;
             user.lastAnswerCorrect = answeredQuestion.hasCorrectUserAnswer();
@@ -494,7 +493,6 @@ public class GameController {
 
         if(user.totalAnswers <= questionIndex) {
             user.points += (2 * answeredQuestion.calculatePoints())+streakPoints;
-            System.out.println("STREAK: "+streakPoints);
             user.totalAnswers += 1;
             user.correctAnswers += answeredQuestion.calculatePoints() == 0 ? 0 : 1;
             user.lastAnswerCorrect = answeredQuestion.hasCorrectUserAnswer();

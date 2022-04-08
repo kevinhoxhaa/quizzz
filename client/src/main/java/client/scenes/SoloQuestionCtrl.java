@@ -55,6 +55,7 @@ public class SoloQuestionCtrl extends AbstractMultichoiceQuestionCtrl {
      */
     @Override
     public void redirect() {
+        mainCtrl.addScore(mainCtrl.getUser(),currentQuestion);
         mainCtrl.showSoloAnswerPage(game);
     }
 
