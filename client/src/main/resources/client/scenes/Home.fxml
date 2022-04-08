@@ -79,11 +79,9 @@
                </children>
             </Pane>
                      <Region VBox.vgrow="ALWAYS" />
-            <VBox alignment="BOTTOM_LEFT" minHeight="108.0" prefHeight="108.0" prefWidth="978.0">
-               <padding>
-                  <Insets top="16.0" />
-               </padding>
+            <Pane prefHeight="186.0" prefWidth="974.0">
                <children>
+                  <Button fx:id="adminPanelButton" alignment="CENTER" centerShape="false" layoutX="349.0" layoutY="45.0" mnemonicParsing="false" onAction="#onAdminPanelClick" onMouseEntered="#onButtonHover" prefHeight="25.0" prefWidth="262.0" styleClass="pixelButton" text="Admin  Panel" />
                   <Button fx:id="helpButton" mnemonicParsing="false" onAction="#onHelpButtonClick" onMouseEntered="#onButtonHover" prefHeight="96.0" prefWidth="168.0" style="-fx-background-color: transparent;">
                       <cursor>
                           <Cursor fx:constant="HAND" />
@@ -97,11 +95,8 @@
                      </graphic>
                   </Button>
                </children>
-            </VBox>
+            </Pane>
                  </children>
              </VBox>
    </center>
-   <bottom>
-      <Button fx:id="adminPanelButton" alignment="CENTER" centerShape="false" mnemonicParsing="false" onAction="#onAdminPanelClick" onMouseEntered="#onButtonHover" prefHeight="25.0" prefWidth="262.0" styleClass="pixelButton" text="Admin  Panel" BorderPane.alignment="CENTER" />
-   </bottom>
 </BorderPane>
