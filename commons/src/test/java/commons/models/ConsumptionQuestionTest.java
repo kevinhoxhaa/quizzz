@@ -1,6 +1,7 @@
 package commons.models;
 
 import commons.entities.Activity;
+import commons.utils.QuestionType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -122,6 +123,11 @@ public class ConsumptionQuestionTest {
     @Test
     public void generateQuestionTextReturnsQuestionText() {
         assertEquals("How much energy does act consume?", question.generateQuestionText());
+    }
+
+    @Test
+    public void getTypeReturnsQuestionType() {
+        assertEquals(QuestionType.CONSUMPTION, question.getType());
     }
 
     @Test

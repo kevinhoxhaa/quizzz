@@ -3,7 +3,7 @@ package commons.models;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SoloGame extends Game{
+public class SoloGame extends Game {
     private List<Boolean> answers;
     private int currentQuestionNum;
 
