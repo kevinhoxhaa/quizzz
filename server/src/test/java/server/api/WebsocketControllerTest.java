@@ -1,5 +1,6 @@
 package server.api;
 
+import commons.entities.MultiplayerUser;
 import commons.models.Emoji;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,5 +19,11 @@ public class WebsocketControllerTest{
     public void addEmojiReturnsEmoji(){
         Emoji emoji = new Emoji("image", "user");
         assertEquals(emoji, websocketController.addEmoji(emoji, "42"));
+    }
+
+    @Test
+    public void halfTimeReturnsMultiplayerUser() {
+        MultiplayerUser user = new MultiplayerUser("urs");
+        assertEquals(user, websocketController.halfTime(user, "game"));
     }
 }
