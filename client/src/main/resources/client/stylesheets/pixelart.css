@@ -79,7 +79,7 @@
 
 }
 
-.leaderboardImage {
+#leaderboardImage {
     -fx-image: url("../images/leaderboard.png");
 }
 

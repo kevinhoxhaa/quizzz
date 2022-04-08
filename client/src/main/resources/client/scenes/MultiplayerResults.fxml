@@ -228,7 +228,7 @@
                                                 <Font name="Monospaced Regular" size="14.0" />
                                             </font>
                                         </Text>
-                                        <ImageView fitHeight="201.0" fitWidth="260.0" pickOnBounds="true" preserveRatio="true" styleClass="leaderboardImage">
+                                        <ImageView fx:id="leaderboardImage" fitHeight="201.0" fitWidth="260.0" pickOnBounds="true" preserveRatio="true" styleClass="leaderboardImage">
                                             <image>
                                                 <Image url="@../images/leaderboard.png" />
                                             </image>
