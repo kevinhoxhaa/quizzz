@@ -18,7 +18,6 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.entities.MultiplayerUser;
 import commons.entities.User;
-import commons.models.EstimationQuestion;
 import commons.models.Question;
 import commons.models.SoloGame;
 import commons.utils.QuestionType;
@@ -76,12 +75,6 @@ public class MainCtrl {
     private Timer waitingTimer;
     private Stage primaryStage;
     private ServerUtils server;
-
-    private QuoteOverviewCtrl overviewCtrl;
-    private Scene overview;
-
-    private AddQuoteCtrl addCtrl;
-    private Scene add;
 
     private MultiplayerAnswerCtrl multiplayerAnswerCtrl;
     private Scene multiplayerAnswer;
@@ -142,8 +135,7 @@ public class MainCtrl {
     private long streak = 0;
     private long streakScore=0;
 
-    public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-                           Pair<AddQuoteCtrl, Parent> add, Pair<HomeCtrl, Parent> home,
+    public void initialize(Stage primaryStage, Pair<HomeCtrl, Parent> home,
                            Pair<WaitingCtrl, Parent> waiting, Pair<MultiplayerQuestionCtrl, Parent> multiplayerQuestion,
                            Pair<MultiplayerAnswerCtrl, Parent> multiplayerAnswer, Pair<RankingCtrl, Parent> ranking,
                            Pair<MultiplayerEstimationQuestionCtrl, Parent> multiplayerEstimation,
@@ -165,12 +157,6 @@ public class MainCtrl {
 
         pointerCursor = new Image("client/images/arrowcursor.png");
         handCursor = new Image("client/images/handcursor.png");
-
-        this.overviewCtrl = overview.getKey();
-        this.overview = new Scene(overview.getValue());
-
-        this.addCtrl = add.getKey();
-        this.add = new Scene(add.getValue());
 
         this.multiplayerAnswerCtrl = multiplayerAnswer.getKey();
         this.multiplayerAnswer = new Scene(multiplayerAnswer.getValue());
@@ -437,18 +423,6 @@ public class MainCtrl {
         waitingTimer.cancel();
     }
 
-    public void showOverview() {
-        primaryStage.setTitle("Quotes: Overview");
-        primaryStage.setScene(overview);
-        overviewCtrl.refresh();
-    }
-
-    public void showAdd() {
-        primaryStage.setTitle("Quotes: Adding Quote");
-        primaryStage.setScene(add);
-        add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
-    }
-
     /**
      * Sets the multiplayer answer screen as the scene in the primary stage
      * and gives the primary stage a corresponding title.
@@ -483,32 +457,6 @@ public class MainCtrl {
         correctPlayers.add(new MultiplayerUser("Bink"));
         correctPlayers.add(new MultiplayerUser("Boris"));
         return correctPlayers;
-    }
-
-    /**
-     * Sets the scene in the primary stage to the one corresponding to a ranking screen.
-     */
-    public void showRanking() {
-        updateQuestionCounters(rankingCtrl, colors);
-        primaryStage.setTitle("Ranking Screen");
-        primaryStage.setScene(ranking);
-        rankingCtrl.startTimer();
-    }
-
-    /**
-     * Sets the scene in the primary stage to the estimation screen
-     *
-     * @param question the estimation question to visualise
-     */
-    public void showEstimationQuestion(EstimationQuestion question) {
-        primaryStage.setTitle("Estimation");
-        primaryStage.setScene(multiplayerEstimation);
-
-        multiplayerEstimationCtrl.startTimer();
-        multiplayerEstimationCtrl.setup(question);
-
-        primaryStage.setScene(multiplayerEstimation);
-        multiplayerEstimationCtrl.startTimer();
     }
 
     /**

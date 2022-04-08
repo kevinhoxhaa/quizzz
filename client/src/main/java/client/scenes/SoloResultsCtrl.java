@@ -90,7 +90,7 @@ public class SoloResultsCtrl extends AbstractRankingCtrl {
     public void setTable() {
         tableUsers.setCellValueFactory(new PropertyValueFactory<User, String>("username"));
         tableScore.setCellValueFactory(new PropertyValueFactory<User, Long>("points"));
-        this.users = FXCollections.observableList(server.getAllUsersByScore(server.getURL()));
+        this.users = FXCollections.observableList(server.getAllUsersByScore(mainCtrl.getServerUrl()));
 
         scoreTable.setItems(users);
         scoreTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);

@@ -86,11 +86,11 @@ public class MultiplayerResultsCtrl extends AbstractRankingCtrl {
     protected void onRematchButton() {
         rematch = !rematch;
         if (rematch) {
-            server.addRestartUserID(server.getURL(), gameCtrl.getGameIndex(), gameCtrl.getUser().id);
+            server.addRestartUserID(gameCtrl.getServerUrl(), gameCtrl.getGameIndex(), gameCtrl.getUser().id);
             rematchButton.setBackground(new Background(
                     new BackgroundFill(Color.DARKCYAN, CornerRadii.EMPTY, Insets.EMPTY)));
         } else {
-            server.removeRestartUserID(server.getURL(), gameCtrl.getGameIndex(), gameCtrl.getUser().id);
+            server.removeRestartUserID(gameCtrl.getServerUrl(), gameCtrl.getGameIndex(), gameCtrl.getUser().id);
             rematchButton.setBackground(new Background(
                     new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
         }
@@ -104,7 +104,7 @@ public class MultiplayerResultsCtrl extends AbstractRankingCtrl {
     public void onQuit() {
         if (rematch) {
             rematch = false;
-            server.removeRestartUserID(server.getURL(), gameCtrl.getGameIndex(), gameCtrl.getUser().id);
+            server.removeRestartUserID(gameCtrl.getServerUrl(), gameCtrl.getGameIndex(), gameCtrl.getUser().id);
             rematchButton.setBackground(new Background(
                     new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
         }
