@@ -50,6 +50,7 @@ public class RankingCtrl extends AbstractRankingCtrl {
      * @param users the ranked users to display
      */
     public void setup(List<MultiplayerUser> users) {
+
         scoreTableUserName.setText(String.format("%s", gameCtrl.getUser().username));
         scoreTableUserScore.setText(String.format("%d", gameCtrl.getUser().points));
 
@@ -97,7 +98,7 @@ public class RankingCtrl extends AbstractRankingCtrl {
      */
     @Override
     public void updateQuestionNumber() {
-        questionNum.setText("" + (mainCtrl.getAnswerCount()));
+        questionNum.setText("" + (gameCtrl.getAnswerCount()));
     }
 
     /**
