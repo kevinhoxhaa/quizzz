@@ -10,7 +10,7 @@ public class Emoji {
      * A private constructor for object mapping
      */
     @SuppressWarnings("unused")
-    private Emoji() {
+    public Emoji() {
         // for object mapper
     }
 
