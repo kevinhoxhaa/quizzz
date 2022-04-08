@@ -79,7 +79,7 @@ public class MultiplayerEstimationQuestionCtrl extends AbstractEstimationQuestio
         List<StackPane> availableJokers=new ArrayList<>();
         removeIncorrect.setDisable(true);
         removeIncorrect.setBackground(new Background(
-                new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+                new BackgroundFill(Color.web("#85C1E9"), CornerRadii.EMPTY, Insets.EMPTY)));
 
         for(StackPane joker:jokers){
             if(gameCtrl.getUsedJokers().contains(joker.idProperty().getValue())){
@@ -211,7 +211,7 @@ public class MultiplayerEstimationQuestionCtrl extends AbstractEstimationQuestio
     private void enterJoker(StackPane jokerBtn) {
         if (!gameCtrl.getUsedJokers().contains(jokerBtn.idProperty().getValue())) {
             jokerBtn.setBackground(new Background(
-                    new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+                    new BackgroundFill(Color.web("#85C1E9"), CornerRadii.EMPTY, Insets.EMPTY)));
         }
     }
 
