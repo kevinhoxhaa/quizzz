@@ -87,12 +87,21 @@ public class MultiplayerResultsCtrl extends AbstractRankingCtrl {
         rematch = !rematch;
         if (rematch) {
             server.addRestartUserID(server.getURL(), gameCtrl.getGameIndex(), gameCtrl.getUser().id);
-            rematchButton.setBackground(new Background(
-                    new BackgroundFill(Color.DARKCYAN, CornerRadii.EMPTY, Insets.EMPTY)));
+            rematchButton.setStyle("-fx-background-radius: 30;\n" +
+                    "    -fx-background-insets: 0,1,2,3,0;\n" +
+                    "    -fx-padding: 10 20 10 20;\n" +
+                    "    -fx-background-color: #5e8f7b;\n" +
+                    "    -fx-scale-y: -1;");
         } else {
             server.removeRestartUserID(server.getURL(), gameCtrl.getGameIndex(), gameCtrl.getUser().id);
-            rematchButton.setBackground(new Background(
-                    new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+            rematchButton.setStyle("-fx-font-family: ARCADECLASSIC;\n" +
+                    "    -fx-background-size: stretch;\n" +
+                    "    -fx-background-radius: 30;\n" +
+                    "    -fx-background-color: #D6EAF8;\n" +
+                    "    -fx-background-insets: 0,1,2,3,0;\n" +
+                    "    -fx-font-size: 36;\n" +
+                    "    -fx-min-width: 128;\n" +
+                    "    -fx-padding: 10 20 10 20;");
         }
     }
 
@@ -153,6 +162,33 @@ public class MultiplayerResultsCtrl extends AbstractRankingCtrl {
         rematchButton.setDisable(false);
     }
 
+    /**
+     * A general method for setting a joker button's background color upon the cursor enters it,
+     * according to whether it is already used.
+     */
+    public void enterRematch() {
+        if(!rematch){
+            rematchButton.setStyle("-fx-background-radius: 30;\n" +
+                    "    -fx-background-insets: 0,1,2,3,0;\n" +
+                    "    -fx-padding: 10 20 10 20;\n" +
+                    "    -fx-background-color: #85C1E9;\n" +
+                    "    -fx-scale-y: -1;");
+        }
+    }
+
+    public void exitRematch(){
+        if(!rematch){
+            rematchButton.setStyle(
+                    "    -fx-font-family: ARCADECLASSIC;\n" +
+                            "    -fx-background-size: stretch;\n" +
+                            "    -fx-background-radius: 30;\n" +
+                            "    -fx-background-color: #D6EAF8;\n" +
+                            "    -fx-background-insets: 0,1,2,3,0;\n" +
+                            "    -fx-font-size: 36;\n" +
+                            "    -fx-min-width: 128;\n" +
+                            "    -fx-padding: 10 20 10 20;");
+        }
+    }
     /**
      * Initiates the timer countdown and animation
      */
