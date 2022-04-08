@@ -194,50 +194,35 @@
                                         </HBox>
                                     </children>
                                 </VBox>
-                                <VBox alignment="TOP_CENTER" prefHeight="241.0" prefWidth="229.0">
-                                    <children>
-                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Leaderboard">
-                                            <font>
-                                                <Font name="Monospaced Bold" size="40.0" />
-                                            </font>
-                                            <VBox.margin>
-                                                <Insets />
-                                            </VBox.margin>
-                                        </Text>
-                                        <Text fx:id="ranking1stPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="1st player" textAlignment="CENTER" wrappingWidth="296.56768226623535">
-                                            <VBox.margin>
-                                                <Insets left="15.0" />
-                                            </VBox.margin>
-                                            <font>
-                                                <Font name="Monospaced Regular" size="14.0" />
-                                            </font>
-                                        </Text>
-                                        <Text fx:id="ranking2ndPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="2nd player" wrappingWidth="226.866903424263">
-                                            <VBox.margin>
-                                                <Insets left="75.0" />
-                                            </VBox.margin>
-                                            <font>
-                                                <Font name="Monospaced Regular" size="14.0" />
-                                            </font>
-                                        </Text>
-                                        <Text fx:id="ranking3rdPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="3rd player" wrappingWidth="101.87011528015137">
-                                            <VBox.margin>
-                                                <Insets left="200.0" />
-                                            </VBox.margin>
-                                            <font>
-                                                <Font name="Monospaced Regular" size="14.0" />
-                                            </font>
-                                        </Text>
-                                        <ImageView fx:id="leaderboardImage" fitHeight="201.0" fitWidth="260.0" pickOnBounds="true" preserveRatio="true" styleClass="leaderboardImage">
-                                            <image>
-                                                <Image url="@../images/leaderboard.png" />
-                                            </image>
-                                            <VBox.margin>
-                                                <Insets left="45.0" />
-                                            </VBox.margin>
-                                        </ImageView>
-                                    </children>
-                                </VBox>
+                        <Pane prefHeight="312.0" prefWidth="339.0">
+                           <children>
+                              <Text layoutX="35.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Leaderboard" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Monospaced Bold" size="40.0" />
+                                 </font>
+                              </Text>
+                              <ImageView fx:id="leaderboardImage" fitHeight="255.0" fitWidth="288.0" layoutX="48.0" layoutY="54.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/leaderboard.png" />
+                                 </image>
+                              </ImageView>
+                              <Text fx:id="ranking1stPlayer" layoutX="129.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1st player" textAlignment="CENTER" wrappingWidth="103.76766681671143">
+                                 <font>
+                                    <Font name="Monospaced Regular" size="17.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="ranking2ndPlayer" layoutX="8.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2nd player" textAlignment="RIGHT" wrappingWidth="106.9676866531372">
+                                 <font>
+                                    <Font name="Monospaced Regular" size="17.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="ranking3rdPlayer" layoutX="233.0" layoutY="183.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3rd player" wrappingWidth="107.76778888702393">
+                                 <font>
+                                    <Font name="Monospaced Regular" size="17.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </Pane>
                             </children>
                         </HBox>
                         <Region VBox.vgrow="ALWAYS" />
