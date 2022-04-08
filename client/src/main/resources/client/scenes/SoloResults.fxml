@@ -203,7 +203,7 @@
                                                 <Font name="Monospaced Bold" size="40.0" />
                                             </font>
                                         </Text>
-                                        <ImageView fx:id="podium" fitHeight="255.0" fitWidth="288.0" layoutX="48.0" layoutY="54.0" pickOnBounds="true" preserveRatio="true">
+                                        <ImageView fx:id="leaderboardImage" fitHeight="255.0" fitWidth="288.0" layoutX="48.0" layoutY="54.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
                                                 <Image url="@../images/leaderboard.png" />
                                             </image>

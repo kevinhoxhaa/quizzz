@@ -55,6 +55,7 @@ public class SoloEstimationQuestionCtrl extends AbstractEstimationQuestionCtrl{
      */
     @Override
     public void redirect() {
+        mainCtrl.addScore(mainCtrl.getUser(),currentQuestion);
         mainCtrl.showSoloAnswerPage(game);
     }
 

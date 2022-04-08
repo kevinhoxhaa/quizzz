@@ -4,7 +4,6 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.entities.MultiplayerUser;
 import commons.entities.User;
-import commons.models.Question;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.animation.Animation;
 import javafx.animation.PauseTransition;
@@ -125,8 +124,6 @@ public class WaitingCtrl {
             String serverUrl = mainCtrl.getServerUrl();
             Integer gameIndex = server.startGame(serverUrl);
             mainCtrl.setGameIndex(gameIndex);
-            Question firstQuestion = server.getQuestion(serverUrl, gameIndex, 0);
-            System.out.println(firstQuestion);
             mainCtrl.stopWaitingTimer();
             mainCtrl.startMultiplayerGame(gameIndex);
         } catch (WebApplicationException e) {
